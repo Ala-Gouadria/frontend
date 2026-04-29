@@ -1,0 +1,273 @@
+.card {
+  width: 418px;
+  min-height: 490px;
+  padding: 18px 18px 20px;
+  border-radius: 20px;
+  border: 2px solid #b4b4b4;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.16);
+  color: #191919;
+  display: grid;
+  gap: 14px;
+  animation: trafficEntrance 700ms ease both;
+}
+
+.cardHeader,
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.96rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 0.7rem;
+  color: #bebebe;
+}
+
+.status {
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d9eb54 0%, #8bb40c 100%);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sourceMeta {
+  display: grid;
+  gap: 2px;
+}
+
+.sourceLabel {
+  font-size: 0.84rem;
+}
+
+.sourceValue {
+  font-size: 0.96rem;
+  color: #7da20a;
+}
+
+.sparkline {
+  width: 192px;
+  height: 50px;
+}
+
+.sparkLine {
+  fill: none;
+  stroke: #90ad17;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Source mix ── */
+
+.mixSection {
+  display: grid;
+  gap: 10px;
+}
+
+.mixTitle {
+  font-size: 0.88rem;
+}
+
+.mixList {
+  display: grid;
+  gap: 12px;
+}
+
+.mixRow {
+  display: grid;
+  gap: 6px;
+  opacity: 0;
+  animation: rowFadeIn 420ms ease both;
+}
+
+.mixHead {
+  display: flex;
+  justify-content: space-between;
+  color: #3e3e3e;
+  font-size: 0.84rem;
+}
+
+.mixValues {
+  display: inline-flex;
+  gap: 22px;
+}
+
+/* ── Progress bar track ── */
+
+.mixTrack {
+  height: 16px;
+  border-radius: 999px;
+  background: #d8e4b8;
+  overflow: visible;
+  position: relative;
+}
+
+/* Tooltip via CSS – appears above the bar on hover */
+.mixTrack[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2d2d2d;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 20;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+/* Small arrow beneath the tooltip bubble */
+.mixTrack[data-tooltip]:hover::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #2d2d2d;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* ── Progress bar fill – white-stripe-on-green with barber-pole flow ── */
+
+.mixFill {
+  height: 100%;
+  border-radius: inherit;
+  /*
+   * Layer 1 (top): repeating -45deg white-stripe overlay
+   * Layer 2 (bottom): solid green base
+   * background-size on layer 1 must match the stripe repeat pitch (14px × 14px)
+   * so background-position animation actually moves the pattern.
+   */
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.22) 0px,
+    rgba(255, 255, 255, 0.22) 5px,
+    transparent 5px,
+    transparent 10px
+  );
+  background-color: #8bc34a;
+  background-size: 14px 14px;
+
+  /* grow in from 0, then run barber-pole indefinitely */
+  animation:
+    trafficFillGrow 900ms ease both,
+    barberpole 1.2s linear infinite;
+}
+
+/* ── Growth text colours ── */
+
+.positive {
+  color: #1ab363;
+}
+
+.negative {
+  color: #ff4f5f;
+}
+
+/* ── AI Insight ── */
+
+.insight {
+  display: grid;
+  gap: 6px;
+}
+
+.insightHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6d8dff;
+  font-size: 0.92rem;
+}
+
+.insightLogo {
+  width: 29px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.insight p {
+  margin: 0;
+  color: #7d9cff;
+  font-size: 0.82rem;
+  line-height: 1.28;
+}
+
+/* ── CTA ── */
+
+.cta {
+  height: 40px;
+  border-radius: 999px;
+  border: 1.6px solid #2f79ff;
+  background: transparent;
+  color: #84a8ff;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+.cta:hover {
+  background: rgba(47, 121, 255, 0.06);
+}
+
+/* ── Keyframes ── */
+
+@keyframes trafficEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Each row fades in from the left; delay is set via inline style on the element */
+@keyframes rowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Bar grows from 0 to its target width; delay keeps it in sync with the row stagger */
+@keyframes trafficFillGrow {
+  from {
+    width: 0;
+  }
+}
+
+/* Barber-pole: shift the repeating stripe pattern continuously */
+@keyframes barberpole {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 28px 0;
+  }
+}

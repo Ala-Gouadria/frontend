@@ -1,0 +1,27 @@
+@import "./Login.css";
+.auth-panel--signup .auth-logo {
+  width: 190px;  /* changed from 248px to match Login */
+}
+.auth-name-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.auth-helper {
+  margin: -7px 0 20px;
+  color: #111016;
+  font-size: 13px;
+}
+
+.auth-panel--signup .auth-field {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 640px) {
+  .auth-name-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+

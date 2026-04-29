@@ -1,0 +1,87 @@
+import { useState } from 'react'
+import Login from '../pages/auth/Login'
+import RestPassword from '../pages/auth/restPassword'
+import Signup from '../pages/auth/Signup'
+import IntelligenceMap from '../pages/intelligence/IntelligenceMap'
+import Integrate from '../pages/integrate/Integrate'
+import OnboardingFlow from '../pages/onboarding/OnboardingFlow'
+import Setup from '../pages/onboarding/Setup'
+import ReportsPage from '../pages/reports/ReportsPage'
+import Settings from '../pages/settings/Settings'
+
+export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [authView, setAuthView] = useState('login')
+  const [view, setView] = useState('setup')
+
+  const handleNavigation = (id) => {
+    if (id === 'layers') {
+      setView('reports')
+      return
+    }
+
+    if (id === 'connect') {
+      setView('integrate')
+      return
+    }
+
+    if (id === 'database') {
+      setView('onboarding')
+      return
+    }
+
+    if (id === 'settings') {
+      setView('settings')
+      return
+    }
+
+    if (id === 'stars') {
+      setView('map')
+    }
+  }
+
+  const enterApp = () => {
+    setIsAuthenticated(true)
+    setView('setup')
+  }
+
+  if (!isAuthenticated) {
+    if (authView === 'signup') {
+      return <Signup onSuccess={enterApp} onLogin={() => setAuthView('login')} />
+    }
+
+    if (authView === 'reset-password') {
+      return <RestPassword onLogin={() => setAuthView('login')} />
+    }
+
+    return (
+      <Login
+        onSuccess={enterApp}
+        onSignup={() => setAuthView('signup')}
+        onResetPassword={() => setAuthView('reset-password')}
+      />
+    )
+  }
+
+  if (view === 'settings') {
+    return <Settings onNavigate={handleNavigation} />
+  }
+
+  if (view === 'integrate') {
+    return <Integrate activeNavId="connect" onNavigate={handleNavigation} />
+  }
+
+  if (view === 'onboarding') {
+    return <OnboardingFlow activeNavId="database" onNavigate={handleNavigation} />
+  }
+
+  if (view === 'reports') {
+    return <ReportsPage onNavigate={handleNavigation} />
+  }
+
+  if (view === 'setup') {
+    return <Setup onComplete={() => setView('map')} />
+  }
+
+  return <IntelligenceMap activeNavId="stars" onNavigate={handleNavigation} />
+}

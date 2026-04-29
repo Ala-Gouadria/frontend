@@ -1,0 +1,175 @@
+.card {
+  width: 418px;
+  min-height: 628px;
+  padding: 18px 18px 20px;
+  border-radius: 20px;
+  border: 2px solid #b4b4b4;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.16);
+  color: #191919;
+  display: grid;
+  gap: 14px;
+  animation: opportunityEnter 720ms ease both;
+}
+
+.cardHeader,
+.topRow,
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.96rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 0.7rem;
+  color: #bebebe;
+}
+
+.status {
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d9eb54 0%, #8bb40c 100%);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.topMeta {
+  display: grid;
+  gap: 2px;
+}
+
+.topLabel {
+  font-size: 0.84rem;
+}
+
+.topValue {
+  font-size: 0.96rem;
+  color: #0da454;
+}
+
+.sparkline {
+  width: 190px;
+  height: 46px;
+}
+
+.sparkFill {
+  filter: drop-shadow(0 8px 10px rgba(201, 228, 91, 0.18));
+}
+
+.sparkLine {
+  fill: none;
+  stroke: #88a80b;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.opportunityPanel {
+  overflow: hidden;
+  border-radius: 14px;
+  border: 2px solid #7ea114;
+  box-shadow: 0 10px 20px rgba(126, 161, 20, 0.18);
+}
+
+.panelHeader {
+  padding: 8px 10px;
+  background: linear-gradient(180deg, #bedb2b 0%, #8ead11 100%);
+  color: #243302;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.panelBody {
+  padding: 12px 10px 12px;
+  background: #fff;
+  display: grid;
+  gap: 14px;
+}
+
+.opportunityItem {
+  display: grid;
+  gap: 6px;
+}
+
+.itemHeader {
+  color: #6d9200;
+  font-size: 0.84rem;
+}
+
+.reasonPanel {
+  overflow: hidden;
+  border-radius: 14px;
+  border: 2px solid #e17b1e;
+  box-shadow: 0 10px 20px rgba(227, 127, 29, 0.18);
+}
+
+.reasonHeader {
+  padding: 8px 10px;
+  background: linear-gradient(180deg, #ffaa52 0%, #ff7710 100%);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.reasonBody {
+  background: #fff;
+  padding: 12px 12px 14px;
+  font-size: 0.86rem;
+  line-height: 1.28;
+}
+
+.insight {
+  display: grid;
+  gap: 6px;
+}
+
+.insightHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6d8dff;
+  font-size: 0.92rem;
+}
+
+.insightLogo {
+  width: 29px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.insight p {
+  margin: 0;
+  color: #7d9cff;
+  font-size: 0.82rem;
+  line-height: 1.28;
+}
+
+.cta {
+  height: 40px;
+  border-radius: 999px;
+  border: 1.6px solid #2f79ff;
+  background: transparent;
+  color: #84a8ff;
+  font-size: 0.88rem;
+}
+
+@keyframes opportunityEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

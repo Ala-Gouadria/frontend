@@ -1,0 +1,335 @@
+.card {
+  width: 418px;
+  min-height: 566px;
+  padding: 18px 18px 20px;
+  border-radius: 20px;
+  border: 2px solid #b4b4b4;
+  background: linear-gradient(180deg, #fff 0%, #f7f7f7 100%);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.16);
+  color: #191919;
+  display: grid;
+  gap: 14px;
+  animation: systemMonEnter 0.72s ease both;
+}
+
+.cardHeader,
+.sectionHead,
+.serviceTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 0.7rem;
+  color: #bebebe;
+}
+
+.status {
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d9eb54 0%, #8bb40c 100%);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  box-shadow: 0 0 14px rgba(170, 213, 36, 0.22);
+  animation: statusPulse 3s ease-in-out infinite;
+}
+
+.pulseSection {
+  display: grid;
+  gap: 2px;
+}
+
+.pulseLabel,
+.sectionHead {
+  font-size: 0.84rem;
+}
+
+.pulseValue {
+  color: #79a10b;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.panel {
+  padding: 2px;
+  border-radius: 15px;
+  background: linear-gradient(180deg, #ffb15a 0%, #ff7a15 100%);
+  box-shadow: 0 10px 18px rgba(227, 127, 29, 0.2);
+  animation: panelRise 620ms 80ms ease both;
+}
+
+.panelInner {
+  overflow: hidden;
+  border-radius: 13px;
+  background: #fff;
+}
+
+.panelHeader {
+  padding: 8px 10px;
+  background: linear-gradient(180deg, #ffaa52 0%, #ff7710 100%);
+  font-size: 0.84rem;
+  font-weight: 500;
+}
+
+.panelBody {
+  padding: 10px 10px 8px;
+  background: #fff;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.metric {
+  display: grid;
+  gap: 3px;
+}
+
+.metricLabel {
+  font-size: 0.8rem;
+}
+
+.metricValue {
+  font-size: 0.88rem;
+  color: #5a5a5a;
+}
+
+.metricChartShell {
+  position: relative;
+  min-height: 34px;
+}
+
+.metricTooltip {
+  position: absolute;
+  top: -12px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  width: max-content;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 160, 71, 0.14);
+  color: #7a4a0b;
+  font-size: 0.68rem;
+  pointer-events: none;
+  box-shadow: 0 4px 10px rgba(255, 160, 71, 0.14);
+}
+
+.metricBars {
+  width: 100%;
+  height: 34px;
+}
+
+.barDot {
+  transition: opacity 160ms ease;
+}
+
+.barDotVisible {
+  fill: #6d7076;
+  opacity: 0;
+  animation: dotReveal 420ms ease forwards;
+  animation-delay: calc(var(--dot-index) * 36ms);
+}
+
+.barDotHidden {
+  fill: rgba(109, 112, 118, 0.12);
+}
+
+.barDotDimmed {
+  opacity: 0.22;
+}
+
+.metricHitArea {
+  fill: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.serviceSection,
+.serviceList {
+  display: grid;
+  gap: 10px;
+}
+
+.serviceItem {
+  display: grid;
+  gap: 6px;
+}
+
+.serviceInfo {
+  display: grid;
+  gap: 2px;
+}
+
+.serviceInfo strong {
+  font-size: 0.84rem;
+}
+
+.serviceInfo span {
+  font-size: 0.8rem;
+}
+
+.healthy,
+.stable {
+  color: #9d9d9d;
+}
+
+.slow {
+  color: #c28230;
+}
+
+.serviceStats {
+  display: grid;
+  gap: 2px;
+  text-align: right;
+  font-size: 0.82rem;
+}
+
+.latencyValue {
+  color: #2072ff;
+}
+
+.latencyAlert {
+  color: #c28230;
+}
+
+.blockRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.block {
+  height: 18px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.24);
+}
+
+.active {
+  background: repeating-linear-gradient(-60deg, #68a7ff 0, #68a7ff 4px, #2977ec 4px, #2977ec 8px);
+  animation: blockFill 520ms ease both;
+  animation-delay: calc(var(--block-index) * 60ms);
+}
+
+.inactive {
+  background: linear-gradient(180deg, #dce9fb 0%, #c9dcf5 100%);
+}
+
+.insight {
+  display: grid;
+  gap: 6px;
+}
+
+.insightHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+}
+
+.insightLogo {
+  width: 29px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.insightTitle {
+  background: linear-gradient(90deg, #64b5f6 0%, #8ca4ff 46%, #ba68c8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 600;
+}
+
+.insight p {
+  margin: 0;
+  color: #7d9cff;
+  font-size: 0.78rem;
+  line-height: 1.22;
+}
+
+.cta {
+  height: 40px;
+  border-radius: 999px;
+  border: 1.6px solid #2f79ff;
+  background: transparent;
+  color: #84a8ff;
+  font-size: 0.84rem;
+  transition: box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease;
+}
+
+.cta:hover {
+  transform: translateY(-1px);
+  border-color: #4b8dff;
+  box-shadow: 0 10px 16px rgba(47, 121, 255, 0.12);
+}
+
+@keyframes systemMonEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes statusPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.88;
+  }
+}
+
+@keyframes panelRise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dotReveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 0.78;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blockFill {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

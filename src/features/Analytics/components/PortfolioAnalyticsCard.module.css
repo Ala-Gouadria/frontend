@@ -1,0 +1,343 @@
+.card {
+  width: 418px;
+  min-height: 558px;
+  padding: 18px 18px 20px;
+  border-radius: 20px;
+  border: 2px solid #b4b4b4;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.16);
+  color: #191919;
+  display: grid;
+  gap: 14px;
+  animation: portfolioEntrance 720ms ease both;
+}
+
+.cardHeader,
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 0.7rem;
+  color: #bebebe;
+}
+
+.status {
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d9eb54 0%, #8bb40c 100%);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  box-shadow: 0 6px 14px rgba(147, 188, 18, 0.22);
+}
+
+.growthMeta {
+  display: grid;
+  gap: 2px;
+}
+
+.growthLabel {
+  font-size: 0.82rem;
+}
+
+.growthValue {
+  font-size: 0.9rem;
+  color: #7da20a;
+}
+
+.sparkline {
+  width: 192px;
+  height: 50px;
+}
+
+.sparkFill {
+  filter: drop-shadow(0 6px 8px rgba(202, 230, 88, 0.12));
+}
+
+.sparkLine {
+  fill: none;
+  stroke: #90ad17;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  animation: portfolioStrokeDraw 920ms ease forwards;
+}
+
+.summaryPanel {
+  padding: 2px;
+  border-radius: 15px;
+  background: linear-gradient(180deg, #ffb15a 0%, #ff7a15 100%);
+  box-shadow: 0 10px 18px rgba(227, 127, 29, 0.2);
+  animation: summaryRise 620ms 80ms ease both;
+}
+
+.summaryPanelInner {
+  overflow: hidden;
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+.panelHeader {
+  padding: 8px 10px;
+  background: linear-gradient(180deg, #ffaa52 0%, #ff7710 100%);
+  font-size: 0.84rem;
+  font-weight: 500;
+}
+
+.summaryInner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 10px 10px 8px;
+  background: #fff;
+}
+
+.summaryItem {
+  display: grid;
+  gap: 3px;
+}
+
+.summaryLabel {
+  font-size: 0.8rem;
+  line-height: 1.1;
+}
+
+.summaryValue {
+  font-size: 0.88rem;
+  color: #5a5a5a;
+}
+
+.summaryChartShell {
+  position: relative;
+  min-height: 34px;
+}
+
+.summaryTooltip {
+  position: absolute;
+  top: -12px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  width: max-content;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 160, 71, 0.14);
+  color: #7a4a0b;
+  font-size: 0.68rem;
+  pointer-events: none;
+  box-shadow: 0 4px 10px rgba(255, 160, 71, 0.14);
+}
+
+.summaryBars,
+.summaryLineChart {
+  width: 100%;
+  height: 34px;
+}
+
+.summaryDot {
+  transition: opacity 160ms ease;
+}
+
+.summaryDotVisible {
+  fill: #6d7076;
+  opacity: 0;
+  animation: summaryDotsReveal 420ms ease forwards;
+  animation-delay: calc(var(--dot-index) * 36ms);
+}
+
+.summaryDotHidden {
+  fill: rgba(109, 112, 118, 0.12);
+}
+
+.summaryDotDimmed {
+  opacity: 0.22;
+}
+
+.summaryHitArea {
+  fill: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.summaryLineFill {
+  fill: url(#portfolio-assets-fill);
+  filter: drop-shadow(0 8px 10px rgba(188, 223, 31, 0.14));
+}
+
+.summaryLine {
+  fill: none;
+  stroke: #8baa13;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: portfolioStrokeDraw 880ms ease forwards;
+}
+
+.gaugeSection {
+  display: grid;
+  gap: 8px;
+}
+
+.gaugeTitle {
+  font-size: 0.84rem;
+}
+
+.gaugeWrap {
+  position: relative;
+  margin-top: 2px;
+}
+
+.gauge {
+  width: 100%;
+  height: 176px;
+}
+
+.gaugeGlowTrack {
+  fill: none;
+  stroke: rgba(210, 232, 123, 0.22);
+  stroke-width: 26;
+  filter: blur(8px);
+}
+
+.gaugeTrack {
+  fill: none;
+  stroke: rgba(237, 243, 224, 0.96);
+  stroke-width: 18;
+  stroke-linecap: round;
+}
+
+.gaugeProgress {
+  fill: none;
+  stroke: var(--gauge-progress);
+  stroke-width: 16;
+  stroke-linecap: round;
+  filter: drop-shadow(0 8px 12px var(--gauge-shadow));
+  transition: stroke-dasharray 120ms ease-out;
+}
+
+.gaugeCap {
+  fill: var(--gauge-progress);
+  stroke: #ffffff;
+  stroke-width: 3;
+  filter: drop-shadow(0 6px 10px var(--gauge-shadow));
+  transition: cx 120ms ease-out, cy 120ms ease-out, transform 120ms ease-out;
+}
+
+.gaugeValue {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding-top: 40px;
+  color: var(--gauge-value);
+  font-size: 1.02rem;
+  font-weight: 800;
+}
+
+.insight {
+  display: grid;
+  gap: 6px;
+}
+
+.insightHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+}
+
+.insightLogo {
+  width: 29px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.insightTitle {
+  background: linear-gradient(90deg, #64b5f6 0%, #8ca4ff 46%, #ba68c8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 600;
+}
+
+.insight p {
+  margin: 0;
+  color: #8aa8ff;
+  font-size: 0.78rem;
+  line-height: 1.22;
+}
+
+.cta {
+  height: 40px;
+  border-radius: 999px;
+  border: 1.6px solid #2f79ff;
+  background: transparent;
+  color: #84a8ff;
+  font-size: 0.84rem;
+  transition: box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease;
+}
+
+.cta:hover {
+  transform: translateY(-1px);
+  border-color: #4b8dff;
+  box-shadow: 0 10px 16px rgba(47, 121, 255, 0.12);
+}
+
+@keyframes portfolioEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes portfolioStrokeDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes summaryRise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes summaryDotsReveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 0.78;
+    transform: translateY(0);
+  }
+}

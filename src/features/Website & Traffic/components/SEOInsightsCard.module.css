@@ -1,0 +1,465 @@
+.card {
+  width: 418px;
+  min-height: 620px;
+  padding: 18px 18px 20px;
+  border-radius: 20px;
+  border: 2px solid #b4b4b4;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.16);
+  color: #191919;
+  display: grid;
+  gap: 14px;
+  animation: seoEnter 720ms ease both;
+}
+
+.cardHeader,
+.topRow,
+.trendValueRow,
+.keywordHeader,
+.keywordTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.96rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 0.7rem;
+  color: #bebebe;
+}
+
+.status {
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d9eb54 0%, #8bb40c 100%);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: 0 0 14px rgba(170, 213, 36, 0.22);
+  animation: statusPulse 3s ease-in-out infinite;
+}
+
+.trendMeta {
+  display: grid;
+  gap: 2px;
+}
+
+.trendLabel,
+.keywordHeader {
+  font-size: 0.88rem;
+}
+
+.trendValue {
+  max-width: 176px;
+  color: #79a10b;
+}
+
+.trendDelta {
+  color: #7ea13a;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.sparklineWrap {
+  position: relative;
+  width: 140px;
+  height: 40px;
+}
+
+.sparklineWrap::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  z-index: 8;
+  padding: 5px 8px;
+  border-radius: 7px;
+  background: #222831;
+  color: #ffffff;
+  font-size: 0.68rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.sparklineWrap::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  z-index: 9;
+  border: 5px solid transparent;
+  border-top-color: #222831;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.sparklineWrap:hover::after,
+.sparklineWrap:hover::before {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.sparkline {
+  width: 100%;
+  height: 40px;
+}
+
+.sparkFill {
+  filter: drop-shadow(0 8px 10px rgba(201, 228, 91, 0.18));
+}
+
+.sparkLine {
+  fill: none;
+  stroke: #88a80b;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 340;
+  stroke-dashoffset: 340;
+  animation: sparkDraw 1.2s ease both 180ms;
+}
+
+.gaugeWrap {
+  position: relative;
+}
+
+.gauge {
+  width: 100%;
+  height: 188px;
+}
+
+.gaugeBack {
+  fill: none;
+  stroke: rgba(225, 235, 201, 0.38);
+  stroke-width: 24;
+}
+
+.gaugeFront {
+  fill: none;
+  stroke: rgba(221, 236, 199, 0.72);
+  stroke-width: 12;
+}
+
+.gaugeProgress {
+  fill: none;
+  stroke: #98b814;
+  stroke-width: 18;
+  stroke-linecap: round;
+  filter: drop-shadow(0 10px 16px rgba(187, 220, 48, 0.24));
+  animation: seoGauge 1.4s ease both;
+}
+
+.gaugeCap {
+  fill: #a9c514;
+  stroke: #ffffff;
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: drop-shadow(0 6px 10px rgba(187, 220, 48, 0.24));
+  animation: capPulse 2.4s ease-in-out infinite;
+}
+
+.gaugeValue {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding-top: 36px;
+  text-align: center;
+}
+
+.gaugeValue strong {
+  color: #6f9a00;
+  font-size: 1.4rem;
+}
+
+.gaugeValue span {
+  font-size: 1rem;
+}
+
+.keywordSection,
+.keywordList,
+.keywordItem {
+  display: grid;
+  gap: 10px;
+}
+
+.keywordHeader {
+  color: #404040;
+}
+
+.keywordItem {
+  --keyword-color: #97b814;
+  --keyword-color-strong: #79a10b;
+  --keyword-color-soft: rgba(151, 184, 20, 0.16);
+  opacity: 0;
+  animation: keywordRowIn 520ms ease both;
+  animation-delay: var(--keyword-delay);
+}
+
+.greenKeyword {
+  --keyword-color: #97b814;
+  --keyword-color-strong: #79a10b;
+  --keyword-color-soft: rgba(151, 184, 20, 0.16);
+}
+
+.blueKeyword {
+  --keyword-color: #2f79ff;
+  --keyword-color-strong: #2072ff;
+  --keyword-color-soft: rgba(47, 121, 255, 0.14);
+}
+
+.redKeyword {
+  --keyword-color: #ff4d5f;
+  --keyword-color-strong: #ee394c;
+  --keyword-color-soft: rgba(255, 77, 95, 0.14);
+}
+
+.keywordInfo {
+  display: grid;
+  gap: 2px;
+}
+
+.keywordInfo strong {
+  font-size: 0.9rem;
+}
+
+.keywordInfo span {
+  color: #a0a0a0;
+  font-size: 0.82rem;
+}
+
+.keywordRank {
+  display: grid;
+  gap: 2px;
+  text-align: right;
+}
+
+.keywordRank span {
+  color: var(--keyword-color-strong);
+}
+
+.track {
+  position: relative;
+  height: 14px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--keyword-color) 18%, #edf4df 82%);
+  overflow: visible;
+  box-shadow: inset 0 1px 2px rgba(80, 100, 40, 0.08);
+}
+
+.track::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  z-index: 8;
+  max-width: 260px;
+  padding: 5px 8px;
+  border-radius: 7px;
+  background: #222831;
+  color: #ffffff;
+  font-size: 0.68rem;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.track::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  z-index: 9;
+  border: 5px solid transparent;
+  border-top-color: #222831;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.track:hover::after,
+.track:hover::before {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.trackFill {
+  position: relative;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+  background-color: var(--keyword-color);
+  background-image: repeating-linear-gradient(
+    -60deg,
+    rgba(255, 255, 255, 0.34) 0,
+    rgba(255, 255, 255, 0.34) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  background-size: 18px 18px;
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.18),
+    0 0 12px var(--keyword-color-soft);
+  animation:
+    seoTrack 900ms ease both,
+    seoTrackFlow 950ms linear infinite;
+}
+
+.trackFill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.36) 48%, transparent 100%);
+  opacity: 0.3;
+  transform: translateX(-130%);
+  animation: seoTrackSweep 1.9s ease-in-out infinite;
+}
+
+.insight {
+  display: grid;
+  gap: 6px;
+}
+
+.insightHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6d8dff;
+  font-size: 0.92rem;
+}
+
+.insightLogo {
+  width: 29px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.insight p {
+  margin: 0;
+  color: #7d9cff;
+  font-size: 0.82rem;
+  line-height: 1.28;
+}
+
+.cta {
+  height: 40px;
+  border-radius: 999px;
+  border: 1.6px solid #2f79ff;
+  background: transparent;
+  color: #84a8ff;
+  font-size: 0.88rem;
+  transition: box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease;
+}
+
+.cta:hover {
+  transform: translateY(-1px);
+  border-color: #4b8dff;
+  box-shadow: 0 10px 16px rgba(47, 121, 255, 0.12);
+}
+
+@keyframes seoEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes statusPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.88;
+  }
+}
+
+@keyframes sparkDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes seoGauge {
+  from {
+    stroke-dashoffset: 520;
+  }
+}
+
+@keyframes capPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes keywordRowIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes seoTrack {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes seoTrackFlow {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 36px 0;
+  }
+}
+
+@keyframes seoTrackSweep {
+  0% {
+    transform: translateX(-130%);
+  }
+
+  58%,
+  100% {
+    transform: translateX(130%);
+  }
+}

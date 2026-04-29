@@ -1,0 +1,74 @@
+@keyframes intelligenceMapPulse {
+  0%, 100% { 
+    opacity: 0.74; 
+  }
+  50% { 
+    opacity: 1; 
+  }
+}
+
+@keyframes beamTravel {
+  from { 
+    stroke-dashoffset: 0; 
+  }
+  to { 
+    stroke-dashoffset: -460; 
+  }
+}
+
+@keyframes beamTravelFast {
+  from { 
+    stroke-dashoffset: 0; 
+  }
+  to { 
+    stroke-dashoffset: -460; 
+  }
+}
+
+@keyframes beamTravelReverse {
+  from { 
+    stroke-dashoffset: 0; 
+  }
+  to { 
+    stroke-dashoffset: 460; 
+  }
+}
+
+@keyframes beamTravelFastReverse {
+  from { 
+    stroke-dashoffset: 0; 
+  }
+  to { 
+    stroke-dashoffset: 460; 
+  }
+}
+
+@keyframes cableBreathe {
+  0%, 100% { 
+    opacity: 0.92; 
+  }
+  50% { 
+    opacity: 0.8; 
+  }
+}
+
+@keyframes cableGlowPulse {
+  0%, 100% { 
+    opacity: 0.82; 
+  }
+  50% { 
+    opacity: 1; 
+  }
+}
+
+.intelligence-map-grid {
+  background-color: #f8f8f7;
+  background-image:
+    radial-gradient(circle, rgba(148, 163, 184, 0.46) 1.1px, transparent 1.2px),
+    linear-gradient(180deg, rgba(255,255,255,0.78) 0%, rgba(245,247,250,0.96) 100%);
+  background-size: 24px 24px, 100% 100%;
+}
+
+.intelligence-map-ambient {
+  animation: intelligenceMapPulse 5.4s ease-in-out infinite;
+}

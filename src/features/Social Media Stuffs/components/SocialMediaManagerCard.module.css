@@ -1,0 +1,48 @@
+.card {
+  width: 419px;
+  min-height: 496px;
+  padding: 20px 22px 18px;
+  border-radius: 18px;
+  border: 2px solid #b8b8b8;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.16);
+  color: #171717;
+  display: grid;
+  gap: 16px;
+}
+
+.cardHeader { display: flex; justify-content: space-between; align-items: flex-start; }
+.title { margin: 0; font-size: 1rem; font-weight: 700; letter-spacing: -0.04em; }
+.subtitle { margin: 4px 0 0; color: #b7b7b7; font-size: 0.72rem; }
+.status { padding: 8px 14px; border-radius: 999px; background: linear-gradient(180deg, #d9eb54 0%, #91ba10 100%); color: #fff; font-size: 0.8rem; font-weight: 600; }
+.sectionLabel { font-size: 0.9rem; font-weight: 500; }
+.batchProgress { position: relative; height: 46px; border-radius: 999px; border: 4px solid #7ba10a; background: linear-gradient(90deg, rgba(217, 234, 94, 0.32) 0%, rgba(255, 255, 255, 0.96) 56%); display: flex; align-items: center; justify-content: center; gap: 12px; color: #7a9e13; font-size: 0.88rem; }
+.batchProgress strong { color: #648c07; font-weight: 700; }
+.batchProgressDot { position: absolute; left: -2px; width: 10px; height: 10px; border-radius: 999px; background: #d4e84e; }
+.breakdownRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.breakdownCard { border-radius: 12px; padding: 10px 10px 8px; overflow: hidden; }
+.blue { background: linear-gradient(180deg, #e7f2ff 0%, #dcedff 100%); }
+.pink { background: linear-gradient(180deg, #f9edf7 0%, #f7e2ef 100%); }
+.breakdownHead { display: flex; justify-content: space-between; align-items: center; }
+.breakdownIcon { width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid currentColor; display: grid; place-items: center; color: #2f79ff; font-size: 0.88rem; }
+.pink .breakdownIcon { color: #ff5cb0; }
+.breakdownValue { color: #2f79ff; font-size: 0.92rem; }
+.pink .breakdownValue { color: #ff5cb0; }
+.breakdownChart { width: 100%; height: 46px; margin-top: 8px; }
+.breakdownLine { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; color: #2f79ff; }
+.pink .breakdownLine { color: #c456c2; }
+.metricRow { display: grid; grid-template-columns: 96px 1fr; gap: 14px; align-items: end; }
+.metricBlock { display: grid; gap: 4px; }
+.metricLabel { font-size: 0.86rem; font-weight: 500; }
+.metricValue { font-size: 1rem; font-weight: 600; color: #5e5e5e; }
+.metricChart { width: 100%; height: 42px; }
+.metricBar { fill: #60656c; opacity: 0.76; }
+.shareGrowth { display: grid; gap: 6px; }
+.growthChart { width: 100%; height: 52px; }
+.growthFill { fill: url(#manager-growth-fill); }
+.growthLine { fill: none; stroke: #8eae15; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.insight { display: grid; gap: 6px; }
+.insightHeader { display: flex; align-items: center; gap: 8px; color: #6e8fff; font-size: 0.9rem; }
+.insightLogo { width: 28px; height: 18px; object-fit: contain; }
+.insight p { margin: 0; color: #487eff; font-size: 0.82rem; line-height: 1.3; }
+.cta { height: 42px; border-radius: 999px; border: 1.6px solid #2f79ff; background: transparent; color: #84a8ff; font-size: 0.9rem; }

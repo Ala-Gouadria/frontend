@@ -1,0 +1,331 @@
+.card {
+  width: 418px;
+  min-height: 490px;
+  padding: 18px 18px 20px;
+  border-radius: 20px;
+  border: 2px solid #b4b4b4;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.16);
+  color: #191919;
+  display: grid;
+  gap: 14px;
+  animation: salesEntrance 700ms ease both;
+}
+
+.cardHeader,
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 0.7rem;
+  color: #bebebe;
+}
+
+.status {
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d9eb54 0%, #8bb40c 100%);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  box-shadow: 0 6px 14px rgba(147, 188, 18, 0.22);
+}
+
+.growthMeta {
+  display: grid;
+  gap: 2px;
+}
+
+.growthLabel {
+  font-size: 0.82rem;
+}
+
+.growthValue {
+  font-size: 0.9rem;
+  color: #0ba54a;
+}
+
+.sparkline {
+  width: 192px;
+  height: 50px;
+}
+
+.sparkFill {
+  filter: drop-shadow(0 6px 8px rgba(202, 230, 88, 0.12));
+}
+
+.sparkLine {
+  fill: none;
+  stroke: #90ad17;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  animation: chartDraw 920ms ease forwards;
+}
+
+.resultsPanel {
+  padding: 2px;
+  border-radius: 15px;
+  background: linear-gradient(180deg, #ffb15a 0%, #ff7a15 100%);
+  box-shadow: 0 10px 18px rgba(227, 127, 29, 0.2);
+  animation: panelRise 620ms 80ms ease both;
+}
+
+.resultsPanelInner {
+  overflow: hidden;
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+.panelHeader {
+  padding: 8px 10px;
+  background: linear-gradient(180deg, #ffaa52 0%, #ff7710 100%);
+  font-size: 0.84rem;
+  font-weight: 500;
+}
+
+.resultsInner {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 10px 12px 8px;
+  background: #fff;
+}
+
+.resultCol {
+  display: grid;
+  gap: 3px;
+  --result-line: #90ad17;
+  --result-fill-top: rgba(204, 230, 79, 0.38);
+  --result-fill-bottom: rgba(204, 230, 79, 0);
+  --result-value: #6f9a00;
+}
+
+.resultLabel {
+  font-size: 0.8rem;
+}
+
+.resultValue {
+  font-size: 0.88rem;
+  color: var(--result-value);
+}
+
+.resultChartShell {
+  position: relative;
+  min-height: 48px;
+}
+
+.resultTooltip {
+  position: absolute;
+  top: -13px;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 160, 71, 0.14);
+  color: #7a4a0b;
+  font-size: 0.68rem;
+  pointer-events: none;
+  box-shadow: 0 4px 10px rgba(255, 160, 71, 0.14);
+  white-space: nowrap;
+}
+
+.resultChart {
+  width: 100%;
+  height: 48px;
+}
+
+.resultFill {
+  filter: drop-shadow(0 8px 10px rgba(188, 223, 31, 0.14));
+}
+
+.resultLine {
+  fill: none;
+  stroke: var(--result-line);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: chartDraw 880ms ease forwards;
+}
+
+.resultHitArea {
+  fill: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.sourceSection {
+  display: grid;
+  gap: 10px;
+}
+
+.sourceTitle {
+  font-size: 0.84rem;
+}
+
+.legendRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  color: #8b8b8b;
+  font-size: 0.78rem;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 140ms ease;
+}
+
+.legendDimmed {
+  opacity: 0.34;
+}
+
+.legendSwatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.blue {
+  background: linear-gradient(180deg, #9bc0ff 0%, #4e8fff 100%);
+}
+
+.green {
+  background: linear-gradient(180deg, #d6e5b9 0%, #86aa12 100%);
+}
+
+.orange {
+  background: linear-gradient(180deg, #ffe1cb 0%, #ff8d34 100%);
+}
+
+.blockRow {
+  display: grid;
+  grid-template-columns: repeat(17, 1fr);
+  gap: 4px;
+}
+
+.sourceBlock {
+  height: 34px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.24);
+  animation: salesBlocksSlide 520ms ease both;
+  animation-delay: calc(var(--block-index) * 48ms);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.sourceBlockDimmed {
+  opacity: 0.28;
+}
+
+.insight {
+  display: grid;
+  gap: 6px;
+}
+
+.insightHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+}
+
+.insightLogo {
+  width: 29px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.insightTitle {
+  background: linear-gradient(90deg, #64b5f6 0%, #8ca4ff 46%, #ba68c8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 600;
+}
+
+.insight p {
+  margin: 0;
+  color: #7d9cff;
+  font-size: 0.78rem;
+  line-height: 1.22;
+}
+
+.cta {
+  height: 40px;
+  border-radius: 999px;
+  border: 1.6px solid #2f79ff;
+  background: transparent;
+  color: #84a8ff;
+  font-size: 0.84rem;
+  transition: box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease;
+}
+
+.cta:hover {
+  transform: translateY(-1px);
+  border-color: #4b8dff;
+  box-shadow: 0 10px 16px rgba(47, 121, 255, 0.12);
+}
+
+@keyframes salesEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes chartDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes panelRise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes salesBlocksSlide {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
