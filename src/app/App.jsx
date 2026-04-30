@@ -8,6 +8,11 @@ import OnboardingFlow from '../pages/onboarding/OnboardingFlow'
 import Setup from '../pages/onboarding/Setup'
 import ReportsPage from '../pages/reports/ReportsPage'
 import Settings from '../pages/settings/Settings'
+import Integrations from '../pages/settings/Integrations'
+import Team from '../pages/settings/Team'
+import Notifications from '../pages/notifications/Notifications'
+import Assets from '../pages/assets/Assets'
+import ActivityLog from '../pages/activityLog/activityLog'
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -32,6 +37,31 @@ export default function App() {
 
     if (id === 'settings') {
       setView('settings')
+      return
+    }
+
+    if (id === 'settings-integrations') {
+      setView('settings-integrations')
+      return
+    }
+
+    if (id === 'settings-team') {
+      setView('settings-team')
+      return
+    }
+
+    if (id === 'notifications') {
+      setView('notifications')
+      return
+    }
+
+    if (id === 'album') {
+      setView('assets')
+      return
+    }
+
+    if (id === 'chat') {
+      setView('activity-log')
       return
     }
 
@@ -65,6 +95,26 @@ export default function App() {
 
   if (view === 'settings') {
     return <Settings onNavigate={handleNavigation} />
+  }
+
+  if (view === 'settings-integrations') {
+    return <Integrations onNavigate={handleNavigation} />
+  }
+
+  if (view === 'settings-team') {
+    return <Team onNavigate={handleNavigation} />
+  }
+
+  if (view === 'notifications') {
+    return <Notifications onNavigate={handleNavigation} />
+  }
+
+  if (view === 'assets') {
+    return <Assets onNavigate={handleNavigation} />
+  }
+
+  if (view === 'activity-log') {
+    return <ActivityLog onNavigate={handleNavigation} />
   }
 
   if (view === 'integrate') {

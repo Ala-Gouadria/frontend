@@ -1,6 +1,6 @@
 export const WEEK_TASK_THRESHOLDS = {
   low: 35,
-  high: 65,
+  high: 50,
 }
 
 export const WEEK_TASK_STATS = {

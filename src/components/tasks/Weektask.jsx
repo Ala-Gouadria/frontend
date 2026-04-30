@@ -225,7 +225,7 @@ export default function WeekTask({ onClose }) {
   const [stats, setStats] = useState({ completed: 0, total: 0, completionRate: 0, tone: 'blue' })
   const [chartState, setChartState] = useState({ points: [], latest: 0, average: 0, tone: 'blue' })
   const [overviewMode, setOverviewMode] = useState('completed')
-  const [chartRange, setChartRange] = useState('today')
+  const [chartRange, setChartRange] = useState('month')
   const [historyFilter, setHistoryFilter] = useState('completed')
   const [createdFilter, setCreatedFilter] = useState('accepted')
   const [allHistory, setAllHistory] = useState([])

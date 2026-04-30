@@ -12,16 +12,32 @@ const PROFILE_ROWS = [
   { label: 'Language', value: 'English', action: 'Update' },
 ]
 
-const WORKSPACE_ROWS = ['Integration', 'Team Management']
+const WORKSPACE_ROWS = [
+  { label: 'Integration', view: 'settings-integrations' },
+  { label: 'Team Management', view: 'settings-team' },
+]
 const BILLING_ROWS = ['Payment Method', 'Billing History', 'Report a Bug', 'Terms of Use', 'Privacy Policy']
 
 function SettingsCard({ children, className = '' }) {
   return <section className={`settings-card ${className}`}>{children}</section>
 }
 
-function SettingsRow({ label, value, action }) {
+function SettingsRow({ label, value, action, onClick }) {
+  const interactive = typeof onClick === 'function'
+
   return (
-    <div className="settings-row">
+    <div
+      className={`settings-row ${interactive ? 'settings-row--interactive' : ''}`}
+      onClick={onClick}
+      role={interactive ? 'button' : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      onKeyDown={(event) => {
+        if (interactive && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault()
+          onClick()
+        }
+      }}
+    >
       <div>
         <strong>{label}</strong>
         {value ? <span>{value}</span> : null}
@@ -65,8 +81,8 @@ export default function Settings({ onNavigate }) {
         </SettingsCard>
 
         <SettingsCard>
-          {WORKSPACE_ROWS.map((label) => (
-            <SettingsRow key={label} label={label} />
+          {WORKSPACE_ROWS.map((row) => (
+            <SettingsRow key={row.label} label={row.label} onClick={() => onNavigate?.(row.view)} />
           ))}
         </SettingsCard>
 

@@ -54,14 +54,14 @@ function ProjectChevron({ open }) {
   )
 }
 
-function ProjectBell() {
+function ProjectBell({ onClick }) {
   return (
-    <span className="project-trigger__bell" aria-hidden="true">
+    <button type="button" className="project-notification-button" onClick={onClick} aria-label="Open notifications">
       <svg viewBox="0 0 24 24" fill="none">
         <path d="M18 9.7C18 6.2 15.6 3.8 12 3.8S6 6.2 6 9.7v3.1l-1.5 2.5c-.3.6.1 1.2.8 1.2h13.4c.7 0 1.1-.7.8-1.2L18 12.8V9.7Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
         <path d="M9.6 18.2c.5 1 1.3 1.5 2.4 1.5s1.9-.5 2.4-1.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
       </svg>
-    </span>
+    </button>
   )
 }
 
@@ -114,8 +114,15 @@ export default function ProjectList({ onNavigate }) {
     onNavigate?.('settings')
   }
 
+  const openNotifications = () => {
+    handleClose()
+    onNavigate?.('notifications')
+  }
+
   return (
     <div className="project-list" ref={wrapperRef}>
+      <ProjectBell onClick={openNotifications} />
+
       <button
         type="button"
         className={`project-trigger ${open ? 'project-trigger--open' : ''}`}
@@ -123,7 +130,6 @@ export default function ProjectList({ onNavigate }) {
         aria-haspopup="listbox"
         aria-expanded={open}
       >
-        <ProjectBell />
         <ProjectAvatar variant={active.variant} className="project-trigger__avatar" />
         <span className="project-trigger__name">{active.name}</span>
         <ProjectChevron open={open} />

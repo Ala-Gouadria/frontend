@@ -70,6 +70,18 @@
   border-bottom: none;
 }
 
+.settings-row--interactive {
+  cursor: pointer;
+  transition: background 160ms ease, padding-left 160ms ease;
+}
+
+.settings-row--interactive:hover,
+.settings-row--interactive:focus-visible {
+  background: #fbfbfb;
+  padding-left: 24px;
+  outline: none;
+}
+
 .settings-row div {
   display: flex;
   flex-direction: column;

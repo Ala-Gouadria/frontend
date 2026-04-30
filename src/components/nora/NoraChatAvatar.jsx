@@ -46,24 +46,26 @@ export default function NoraAvatar({
         }
       `}</style>
 
-      <div style={{ position: 'relative', width: size, height: size }}>
+      <div className="nora-chat-avatar" style={{ position: 'relative', width: size, height: size }}>
 
         {/* Outer ambient ring */}
-        <div style={{
+        <div className="nora-chat-avatar__ambient" style={{
           position: 'absolute',
-          inset: -28,
+          inset: -70,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 68%)',
+          border: '1px solid rgba(73, 139, 235, 0.22)',
+          background: 'rgba(126, 177, 255, 0.07)',
           animation: 'outerRingPulse 3.8s ease-in-out infinite',
           pointerEvents: 'none',
         }} />
 
         {/* Inner glow */}
-        <div style={{
+        <div className="nora-chat-avatar__ring" style={{
           position: 'absolute',
-          inset: -14,
+          inset: -38,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(99,130,255,0.28) 0%, transparent 65%)',
+          border: '1px solid rgba(73, 139, 235, 0.30)',
+          background: 'rgba(126, 177, 255, 0.10)',
           animation: 'glowPulse 3.8s ease-in-out infinite',
           pointerEvents: 'none',
         }} />
@@ -75,11 +77,11 @@ export default function NoraAvatar({
           height: size,
           borderRadius: '50%',
           overflow: 'hidden',
-          background: 'linear-gradient(135deg, #2563EB 0%, #3B82F6 35%, #C4B5FD 75%, #FFFFFF 100%)',
+          background: 'linear-gradient(135deg, #1f7dff 0%, #5b98ff 44%, #c9c0f6 78%, #fff7fb 100%)',
           boxShadow: `
-            inset 6px 6px 15px rgba(255,255,255,0.4),
-            inset -8px -8px 20px rgba(255,255,255,0.8),
-            0 12px 32px rgba(37,99,235,0.2)
+            inset 10px 10px 20px rgba(255,255,255,0.35),
+            inset -10px -10px 24px rgba(255,255,255,0.70),
+            0 18px 42px rgba(47,128,255,0.22)
           `,
           animation: 'breatheScale 3.8s ease-in-out infinite',
           zIndex: 1,

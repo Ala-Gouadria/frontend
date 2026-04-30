@@ -200,6 +200,15 @@ function ServicePicker({ services, activeServiceId, onSelect }) {
   )
 }
 
+function EditIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path d="M4.2 14.8 5 11.3 12.5 3.8c.8-.8 2-.8 2.8 0l.9.9c.8.8.8 2 0 2.8l-7.5 7.5-3.5.8Z" fill="none" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="m11.4 4.9 3.7 3.7" fill="none" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 function Composer({
   draft,
   onDraftChange,
@@ -652,10 +661,6 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false })
   return (
     <div
       className={`nora-panel ${pairedWithTask ? 'nora-panel--paired' : 'nora-panel--single'} ${showConversation ? 'nora-panel--conversation' : 'nora-panel--welcome'}`}
-      style={{
-        width: pairedWithTask ? 924 : 948,
-        right: pairedWithTask ? '544px' : '24px',
-      }}
     >
       <HistorySidebar
         conversations={conversationList}
@@ -682,6 +687,11 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false })
         <header className="nora-header">
           <div className="nora-header-title">
             <span>{activeConversation?.title ?? 'New Chat'}</span>
+            {showConversation ? (
+              <button type="button" className="nora-title-edit-btn" aria-label="Edit conversation title">
+                <EditIcon />
+              </button>
+            ) : null}
           </div>
         </header>
 
