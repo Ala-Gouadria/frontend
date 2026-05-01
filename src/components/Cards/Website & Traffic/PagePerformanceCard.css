@@ -1,0 +1,22 @@
+.page-performance-card {
+  min-height: 465px;
+}
+
+.page-performance-card__gauges {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.page-performance-card__pages {
+  display: grid;
+  gap: 9px;
+}
+
+.page-performance-card__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8rem;
+}

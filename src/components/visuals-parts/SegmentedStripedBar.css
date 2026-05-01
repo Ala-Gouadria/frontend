@@ -1,0 +1,107 @@
+.segmented-striped-bar {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--bar-segments, 5), minmax(0, 1fr));
+  gap: 4px;
+  cursor: crosshair;
+}
+
+.segmented-striped-bar__segment {
+  min-width: 0;
+  height: 15px;
+  border-radius: 2px;
+  background:
+    linear-gradient(90deg, rgba(221, 235, 250, 0.72), rgba(201, 221, 245, 0.6));
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.56);
+  transition:
+    transform 150ms ease,
+    filter 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.segmented-striped-bar__segment--active {
+  background:
+    repeating-linear-gradient(
+      72deg,
+      rgba(255, 255, 255, 0.06) 0,
+      rgba(255, 255, 255, 0.06) 2px,
+      rgba(255, 255, 255, 0.18) 2px,
+      rgba(255, 255, 255, 0.18) 4px
+    ),
+    linear-gradient(180deg, var(--segmented-top), var(--segmented-bottom));
+  box-shadow:
+    0 4px 9px var(--segmented-glow),
+    inset 0 1px 2px rgba(255, 255, 255, 0.28);
+  animation: segmentedStripedIn 480ms ease both;
+  animation-delay: calc(var(--segment-index) * 28ms);
+}
+
+.segmented-striped-bar:hover .segmented-striped-bar__segment--active {
+  filter: saturate(1.16) brightness(1.05);
+  transform: translateY(-1px) scaleY(1.12);
+  box-shadow:
+    0 7px 13px var(--segmented-glow),
+    inset 0 1px 2px rgba(255, 255, 255, 0.34);
+}
+
+.segmented-striped-bar::after {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 7px);
+  z-index: 25;
+  max-width: 230px;
+  padding: 6px 9px;
+  border: 1px solid rgba(19, 121, 255, 0.24);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12px 24px rgba(24, 24, 27, 0.14);
+  color: #1379ff;
+  content: attr(data-tooltip);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.2;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px) scale(0.98);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+  white-space: nowrap;
+}
+
+.segmented-striped-bar:hover::after,
+.segmented-striped-bar:focus-within::after {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.segmented-striped-bar--blue {
+  --segmented-top: #46a1ff;
+  --segmented-bottom: #0875f6;
+  --segmented-glow: rgba(8, 117, 246, 0.18);
+}
+
+.segmented-striped-bar--green {
+  --segmented-top: #79b51c;
+  --segmented-bottom: #3c860a;
+  --segmented-glow: rgba(60, 134, 10, 0.16);
+}
+
+.segmented-striped-bar--orange {
+  --segmented-top: #ff9b55;
+  --segmented-bottom: #ff7629;
+  --segmented-glow: rgba(255, 118, 41, 0.16);
+}
+
+.segmented-striped-bar--red {
+  --segmented-top: #ff8c90;
+  --segmented-bottom: #ff4d56;
+  --segmented-glow: rgba(255, 77, 86, 0.18);
+}
+
+@keyframes segmentedStripedIn {
+  from {
+    opacity: 0;
+    transform: scaleX(0.6);
+  }
+}

@@ -1,0 +1,70 @@
+.workflow-automation-card {
+  min-height: 484px;
+}
+
+.workflow-automation-card__pulse,
+.workflow-automation-card__panel-title,
+.workflow-automation-card__workflow-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.workflow-automation-card__pulse {
+  font-size: 0.8rem;
+}
+
+.workflow-automation-card__pulse strong {
+  color: #00a34a;
+  font-size: 0.76rem;
+  font-weight: 400;
+  text-align: right;
+}
+
+.workflow-automation-card__panel {
+  display: grid;
+  gap: 11px;
+}
+
+.workflow-automation-card__panel-title {
+  font-size: 0.8rem;
+  color: #171719;
+}
+
+.workflow-automation-card__workflows {
+  display: grid;
+  gap: 11px;
+}
+
+.workflow-automation-card__workflow {
+  display: grid;
+  gap: 6px;
+}
+
+.workflow-automation-card__workflow-head strong {
+  display: block;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.workflow-automation-card__workflow-head span {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.76rem;
+  color: rgba(24, 24, 27, 0.42);
+}
+
+.workflow-automation-card__workflow-head > div:last-child {
+  text-align: right;
+}
+
+.workflow-automation-card__workflow-head > div:last-child strong {
+  color: #0578ff;
+  font-weight: 600;
+}
+
+.workflow-automation-card__workflow .segmented-striped-bar__segment {
+  height: 15px;
+}

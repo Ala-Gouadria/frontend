@@ -1,0 +1,51 @@
+.quality-blocks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
+  gap: 5px;
+}
+
+.quality-blocks__block {
+  height: 26px;
+  border-radius: 3px;
+  box-shadow: 0 8px 14px rgba(147, 179, 17, 0.14);
+  cursor: crosshair;
+  animation: qualityBlockIn 520ms ease both;
+  animation-delay: calc(var(--block-index) * 22ms);
+  transition:
+    filter 150ms ease,
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.quality-blocks__block:hover {
+  filter: saturate(1.18) brightness(1.04);
+  transform: translateY(-2px) scaleY(1.08);
+  box-shadow: 0 12px 20px rgba(147, 179, 17, 0.2);
+}
+
+.quality-blocks__block--green {
+  background: linear-gradient(180deg, #d9ef39 0%, #9dc20f 100%);
+}
+
+.quality-blocks__block--orange {
+  background: linear-gradient(180deg, #ffbd82 0%, #ff872d 100%);
+}
+
+.quality-blocks__block--red {
+  background: linear-gradient(180deg, #ff8a8a 0%, #f04444 100%);
+}
+
+.quality-blocks__block--blue {
+  background: linear-gradient(180deg, #59a0ff 0%, #277de9 100%);
+}
+
+@keyframes qualityBlockIn {
+  from {
+    opacity: 0;
+    transform: scaleY(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}

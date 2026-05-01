@@ -1,0 +1,16 @@
+.conversion-signals-card {
+  min-height: 540px;
+}
+
+.conversion-signals-card__ladder {
+  display: grid;
+  gap: 9px;
+}
+
+.conversion-signals-card__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8rem;
+}

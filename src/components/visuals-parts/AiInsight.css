@@ -1,0 +1,49 @@
+.ai-insight {
+  display: grid;
+  gap: 4px;
+  color: #4f91ff;
+}
+
+.ai-insight__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.ai-insight__logo {
+  width: 34px;
+  height: 20px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 10px rgba(47, 128, 237, 0.18));
+}
+
+.ai-insight p {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.18;
+  color: #4389ff;
+}
+
+.ai-action-button {
+  min-height: 35px;
+  width: 100%;
+  border: 1.5px solid #1677ff;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #6aa5ff;
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.ai-action-button:hover {
+  transform: translateY(-1px);
+  background: #fff;
+  box-shadow: 0 12px 24px rgba(22, 119, 255, 0.14);
+}

@@ -1,0 +1,5 @@
+@import './AnalyticsCardShared.css';
+
+.traffic-source-breakdown-card .striped-bars__track {
+  height: 14px;
+}

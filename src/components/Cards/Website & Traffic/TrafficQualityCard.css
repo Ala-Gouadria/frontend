@@ -1,0 +1,57 @@
+.traffic-quality-card {
+  min-height: 937px;
+}
+
+.traffic-quality-card__health {
+  overflow: hidden;
+  border: 2px solid #80aa12;
+  border-radius: 7px;
+  box-shadow: 0 8px 18px rgba(128, 170, 18, 0.12);
+}
+
+.traffic-quality-card__health h3 {
+  margin: 0;
+  padding: 10px 9px;
+  background: linear-gradient(180deg, #cde83e 0%, #74a503 100%);
+  font-size: 0.82rem;
+  font-weight: 400;
+}
+
+.traffic-quality-card__health-body {
+  display: grid;
+  grid-template-columns: 0.78fr 1.22fr;
+  gap: 16px;
+  padding: 9px 10px 12px;
+}
+
+.traffic-quality-card__health-body > div {
+  display: grid;
+  gap: 5px;
+}
+
+.traffic-quality-card__health-body span {
+  font-size: 0.74rem;
+}
+
+.traffic-quality-card__health-body strong {
+  color: #438c00;
+  font-size: 0.72rem;
+}
+
+.traffic-quality-card__health-body .mini-line-chart {
+  height: 45px;
+}
+
+.traffic-quality-card__mix,
+.traffic-quality-card__sources {
+  display: grid;
+  gap: 9px;
+}
+
+.traffic-quality-card__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8rem;
+}

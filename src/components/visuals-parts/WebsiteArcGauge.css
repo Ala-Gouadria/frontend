@@ -1,0 +1,156 @@
+.website-arc-gauge {
+  position: relative;
+  height: 174px;
+  cursor: crosshair;
+}
+
+.website-arc-gauge__svg {
+  width: 100%;
+  height: 192px;
+  display: block;
+  overflow: visible;
+}
+
+.website-arc-gauge__track,
+.website-arc-gauge__progress {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.website-arc-gauge__track {
+  stroke: rgba(224, 240, 190, 0.72);
+  stroke-width: 28;
+}
+
+.website-arc-gauge__progress {
+  stroke: #9dc914;
+  stroke-width: 20;
+  filter: drop-shadow(0 8px 13px rgba(138, 176, 18, 0.24));
+  animation: websiteArcGrow 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition:
+    filter 160ms ease,
+    stroke-width 160ms ease;
+}
+
+.website-arc-gauge__cap {
+  fill: #a9c718;
+  stroke: #fff;
+  stroke-width: 4;
+  filter: drop-shadow(0 5px 9px rgba(138, 176, 18, 0.28));
+  transition:
+    transform 160ms ease,
+    filter 160ms ease;
+  transform-origin: center;
+}
+
+.website-arc-gauge__text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 92px;
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+}
+
+.website-arc-gauge__text strong {
+  color: #6fab00;
+  font-size: 1.02rem;
+  font-weight: 800;
+}
+
+.website-arc-gauge__text span {
+  font-size: 0.96rem;
+  color: #121215;
+}
+
+.website-arc-gauge--compact {
+  height: 70px;
+}
+
+.website-arc-gauge--compact .website-arc-gauge__svg {
+  height: 92px;
+}
+
+.website-arc-gauge--compact .website-arc-gauge__track {
+  stroke-width: 7;
+}
+
+.website-arc-gauge--compact .website-arc-gauge__progress {
+  stroke-width: 5;
+}
+
+.website-arc-gauge--compact .website-arc-gauge__tick {
+  stroke: #a9c718;
+  stroke-width: 1;
+  stroke-linecap: round;
+  animation: websiteGaugeTick 520ms ease both;
+  animation-delay: calc(var(--tick-index) * 15ms);
+}
+
+.website-arc-gauge--compact .website-arc-gauge__text {
+  top: 32px;
+}
+
+.website-arc-gauge--compact .website-arc-gauge__text strong {
+  font-size: 0.82rem;
+}
+
+.website-arc-gauge--compact .website-arc-gauge__text span {
+  font-size: 0.72rem;
+}
+
+.website-arc-gauge:hover .website-arc-gauge__progress {
+  stroke-width: 22;
+  filter: drop-shadow(0 11px 16px rgba(138, 176, 18, 0.34));
+}
+
+.website-arc-gauge--compact:hover .website-arc-gauge__progress {
+  stroke-width: 6;
+}
+
+.website-arc-gauge:hover .website-arc-gauge__cap {
+  transform: scale(1.08);
+  filter: drop-shadow(0 8px 13px rgba(138, 176, 18, 0.36));
+}
+
+.website-arc-gauge::after {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  z-index: 20;
+  padding: 6px 9px;
+  border: 1px solid rgba(111, 171, 0, 0.2);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12px 24px rgba(24, 24, 27, 0.14);
+  color: #5d9700;
+  content: attr(data-tooltip);
+  font-size: 0.68rem;
+  font-weight: 700;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px) scale(0.98);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+  white-space: nowrap;
+}
+
+.website-arc-gauge:hover::after {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@keyframes websiteArcGrow {
+  from {
+    stroke-dasharray: 0 100;
+  }
+}
+
+@keyframes websiteGaugeTick {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}

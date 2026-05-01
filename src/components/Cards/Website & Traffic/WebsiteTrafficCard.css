@@ -1,0 +1,32 @@
+.website-traffic-card {
+  min-height: 791px;
+}
+
+.website-traffic-card__source,
+.website-traffic-card__device,
+.website-traffic-card__countries {
+  display: grid;
+  gap: 8px;
+}
+
+.website-traffic-card__source h3,
+.website-traffic-card__device h3,
+.website-traffic-card__countries h3 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.website-traffic-card__countries div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: rgba(24, 24, 27, 0.44);
+  font-size: 0.76rem;
+}
+
+.website-traffic-card__countries strong {
+  color: #438c00;
+  font-weight: 700;
+}

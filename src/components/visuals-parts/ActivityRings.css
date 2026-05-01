@@ -1,0 +1,56 @@
+.activity-rings {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.activity-rings__ring {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background:
+    conic-gradient(var(--ring-color, #a7cf18) var(--ring-progress, 270deg), rgba(176, 193, 113, 0.18) 0),
+    #eef4df;
+  box-shadow: 0 8px 14px rgba(155, 189, 25, 0.14);
+  mask: radial-gradient(circle at center, transparent 51%, #000 54%);
+  cursor: crosshair;
+  animation: activityRingIn 620ms ease both;
+  animation-delay: calc(var(--ring-index) * 70ms);
+  transition:
+    transform 180ms ease,
+    filter 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.activity-rings__ring:hover {
+  transform: translateY(-2px) scale(1.08);
+  filter: saturate(1.18);
+  box-shadow: 0 12px 20px rgba(155, 189, 25, 0.2);
+}
+
+.activity-rings__ring--blue {
+  --ring-color: #2f80ed;
+}
+
+.activity-rings__ring--pink {
+  --ring-color: #c96be8;
+}
+
+.activity-rings__ring--orange {
+  --ring-color: #ff872d;
+}
+
+.activity-rings__ring--soft {
+  --ring-color: rgba(167, 207, 24, 0.3);
+}
+
+@keyframes activityRingIn {
+  from {
+    opacity: 0;
+    transform: scale(0.76);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

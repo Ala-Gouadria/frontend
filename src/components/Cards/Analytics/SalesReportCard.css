@@ -1,0 +1,5 @@
+@import './AnalyticsCardShared.css';
+
+.sales-report-card .quality-blocks {
+  margin-top: 10px;
+}

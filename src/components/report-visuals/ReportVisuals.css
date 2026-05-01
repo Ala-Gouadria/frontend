@@ -1,0 +1,436 @@
+.report-visual {
+  display: block;
+  overflow: visible;
+}
+
+.report-mini-bars,
+.report-dotted-bars,
+.report-mini-line {
+  width: 100%;
+  height: 32px;
+}
+
+.report-mini-bars__bar {
+  fill: var(--report-bars-color, #7b8087);
+  opacity: 0.82;
+  transform-origin: bottom;
+  animation: reportBarsRise 0.9s ease both;
+  animation-delay: calc(var(--bar-index) * 38ms);
+}
+
+.report-mini-bars--green {
+  --report-bars-color: #90b30f;
+}
+
+.report-mini-bars--red {
+  --report-bars-color: #ff8888;
+}
+
+.report-dotted-bars__dot {
+  fill: rgba(105, 111, 121, 0.22);
+}
+
+.report-dotted-bars__dot--visible {
+  fill: var(--report-dot-color, rgba(105, 111, 121, 0.72));
+  animation: reportDotIn 460ms ease both;
+  animation-delay: calc(var(--dot-index) * 24ms);
+}
+
+.report-dotted-bars--green {
+  --report-dot-color: rgba(132, 171, 12, 0.86);
+}
+
+.report-mini-line {
+  height: 34px;
+}
+
+.report-mini-line__fill {
+  fill: var(--report-line-fill, rgba(202, 230, 88, 0.34));
+}
+
+.report-mini-line__stroke {
+  fill: none;
+  stroke: var(--report-line-color, #89aa0c);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: reportStrokeDraw 1s ease forwards;
+}
+
+.report-mini-line--red {
+  --report-line-color: #ff8888;
+  --report-line-fill: rgba(255, 136, 136, 0.18);
+}
+
+.report-mini-line--blue {
+  --report-line-color: #2f80ed;
+  --report-line-fill: rgba(47, 128, 237, 0.16);
+}
+
+.report-area-band {
+  width: 100%;
+  height: 96px;
+  --report-area-top: #d9ef38;
+  --report-area-bottom: #6f9f00;
+  --report-area-line: #87a90c;
+  --report-area-soft-line: rgba(139, 169, 26, 0.48);
+  --report-area-dot: #aebd42;
+  --report-area-badge: #d9e449;
+  --report-area-badge-text: #708105;
+}
+
+.report-area-band--red {
+  --report-area-top: #ffb8b8;
+  --report-area-bottom: #ff8585;
+  --report-area-line: #ff8888;
+  --report-area-soft-line: rgba(255, 136, 136, 0.4);
+  --report-area-dot: #ff9898;
+  --report-area-badge: #ffd5d5;
+  --report-area-badge-text: #b84242;
+}
+
+.report-area-band__glow {
+  opacity: 0.58;
+}
+
+.report-area-band__line {
+  fill: none;
+  stroke: var(--report-area-line);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 520;
+  stroke-dashoffset: 520;
+  animation: reportStrokeDraw 1s ease forwards;
+}
+
+.report-area-band__line--soft {
+  stroke: var(--report-area-soft-line);
+  stroke-width: 1.2;
+}
+
+.report-area-band__focus {
+  stroke: rgba(213, 223, 104, 0.9);
+  stroke-width: 1;
+}
+
+.report-area-band__dot {
+  fill: var(--report-area-dot);
+}
+
+.report-area-band__badge {
+  fill: var(--report-area-badge);
+  filter: drop-shadow(0 5px 10px rgba(176, 195, 45, 0.24));
+}
+
+.report-area-band__badge-text {
+  fill: var(--report-area-badge-text);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.report-semi-gauge {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  --gauge-progress: #9fc218;
+  --gauge-track: rgba(210, 225, 157, 0.34);
+  --gauge-glow: rgba(202, 230, 88, 0.24);
+}
+
+.report-semi-gauge__svg {
+  width: 100%;
+  height: 94px;
+  overflow: visible;
+}
+
+.report-semi-gauge__glow,
+.report-semi-gauge__track,
+.report-semi-gauge__progress {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.report-semi-gauge__glow {
+  stroke: var(--gauge-glow);
+  stroke-width: 24;
+  filter: blur(4px);
+}
+
+.report-semi-gauge__track {
+  stroke: var(--gauge-track);
+  stroke-width: 17;
+}
+
+.report-semi-gauge__progress {
+  stroke: var(--gauge-progress);
+  stroke-width: 17;
+  animation: reportGaugeIn 1.05s ease both;
+}
+
+.report-semi-gauge__cap {
+  fill: #d9e649;
+  stroke: #fff;
+  stroke-width: 3;
+  filter: drop-shadow(0 6px 12px rgba(194, 220, 74, 0.24));
+}
+
+.report-semi-gauge__value {
+  margin-top: -34px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: rgba(24, 24, 27, 0.78);
+}
+
+.report-semi-gauge--blue {
+  --gauge-progress: #2f80ed;
+  --gauge-track: rgba(47, 128, 237, 0.18);
+  --gauge-glow: rgba(47, 128, 237, 0.16);
+}
+
+.report-semi-gauge--orange {
+  --gauge-progress: #ff872d;
+  --gauge-track: rgba(255, 185, 137, 0.28);
+  --gauge-glow: rgba(255, 135, 45, 0.16);
+}
+
+.report-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--metric-columns, 5), minmax(0, 1fr));
+  gap: 9px;
+}
+
+.report-metric {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.report-metric__label {
+  font-size: 0.58rem;
+  line-height: 1.14;
+  color: rgba(24, 24, 27, 0.72);
+}
+
+.report-metric__value {
+  min-height: 15px;
+  font-size: 0.52rem;
+  line-height: 1.1;
+  font-weight: 700;
+  color: rgba(24, 24, 27, 0.62);
+}
+
+.report-progress-bar,
+.report-strip-bar {
+  position: relative;
+  height: 26px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(213, 229, 135, 0.52) 0%, rgba(202, 215, 169, 0.38) 100%);
+}
+
+.report-progress-bar__fill,
+.report-strip-bar__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  animation: reportFillGrow 0.95s ease both;
+}
+
+.report-progress-bar__fill {
+  background: linear-gradient(90deg, #d7eb41 0%, #89ac10 100%);
+}
+
+.report-progress-bar__cap {
+  position: absolute;
+  top: 2px;
+  width: 8px;
+  height: 22px;
+  border-radius: 999px;
+  background: #7da20a;
+  transform: translateX(-50%);
+}
+
+.report-strip-bar--green .report-strip-bar__fill {
+  background: repeating-linear-gradient(-60deg, #dce85a 0, #dce85a 5px, #88a80b 5px, #88a80b 9px);
+}
+
+.report-strip-bar--orange .report-strip-bar__fill {
+  background: repeating-linear-gradient(-60deg, #ffb989 0, #ffb989 5px, #ff7f23 5px, #ff7f23 9px);
+}
+
+.report-stacked-bar {
+  display: flex;
+  min-height: 42px;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px rgba(24, 24, 27, 0.05);
+}
+
+.report-stacked-bar__segment {
+  min-width: 2px;
+}
+
+.report-stacked-bar__segment--blue {
+  background: linear-gradient(180deg, #57a0ff 0%, #397ef3 100%);
+}
+
+.report-stacked-bar__segment--green {
+  background: linear-gradient(180deg, #d7eb41 0%, #8aad10 100%);
+}
+
+.report-stacked-bar__segment--orange {
+  background: linear-gradient(180deg, #ffb27f 0%, #ff842a 100%);
+}
+
+.report-quality-blocks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
+  gap: 5px;
+}
+
+.report-quality-block {
+  height: 26px;
+  border-radius: 3px;
+  box-shadow: 0 8px 14px rgba(147, 179, 17, 0.14);
+  animation: reportBlockIn 520ms ease both;
+}
+
+.report-quality-block--green {
+  background: linear-gradient(180deg, #d9ef39 0%, #9dc20f 100%);
+}
+
+.report-quality-block--orange {
+  background: linear-gradient(180deg, #ffbd82 0%, #ff872d 100%);
+}
+
+.report-quality-block--red {
+  background: linear-gradient(180deg, #ff8a8a 0%, #f04444 100%);
+}
+
+.report-quality-block--blue {
+  background: linear-gradient(180deg, #59a0ff 0%, #277de9 100%);
+}
+
+.report-activity-rings {
+  display: flex;
+  gap: 14px;
+}
+
+.report-activity-ring {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background:
+    conic-gradient(var(--ring-color, #a7cf18) var(--ring-progress, 270deg), rgba(176, 193, 113, 0.18) 0),
+    #eef4df;
+  box-shadow: 0 8px 14px rgba(155, 189, 25, 0.14);
+  mask: radial-gradient(circle at center, transparent 51%, #000 54%);
+}
+
+.report-activity-ring--blue {
+  --ring-color: #2f80ed;
+}
+
+.report-activity-ring--pink {
+  --ring-color: #c96be8;
+}
+
+.report-stage-flow {
+  min-height: 31px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow:
+    inset 0 0 0 1px rgba(24, 24, 27, 0.06),
+    0 8px 18px rgba(15, 23, 42, 0.04);
+}
+
+.report-stage-flow__step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.report-stage-flow__pill {
+  width: 100%;
+  min-height: 21px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d8eb43 0%, #78a90d 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36), 0 6px 14px rgba(139, 177, 18, 0.2);
+  color: #fff;
+  font-size: 0.66rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.report-stage-flow__pill--active {
+  background: linear-gradient(180deg, #ffbd82 0%, #ff7b2c 100%);
+}
+
+.report-stage-flow__arrow {
+  color: rgba(24, 24, 27, 0.5);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+@keyframes reportStrokeDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes reportBarsRise {
+  from {
+    transform: scaleY(0.6);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes reportDotIn {
+  from {
+    opacity: 0.2;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes reportGaugeIn {
+  from {
+    stroke-dasharray: 0 100;
+  }
+}
+
+@keyframes reportFillGrow {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes reportBlockIn {
+  from {
+    opacity: 0;
+    transform: scaleY(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}

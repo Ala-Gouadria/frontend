@@ -1,0 +1,63 @@
+.automation-execution-card {
+  min-height: 606px;
+}
+
+.automation-execution-card__state {
+  margin-top: 1px;
+}
+
+.automation-execution-card__gauge {
+  margin-top: -5px;
+}
+
+.automation-execution-card__lanes {
+  display: grid;
+  gap: 11px;
+  margin-top: -3px;
+}
+
+.automation-execution-card__lanes h3 {
+  margin: 0 0 3px;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #171719;
+}
+
+.automation-execution-card__lane {
+  display: grid;
+  gap: 7px;
+}
+
+.automation-execution-card__lane-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.76rem;
+}
+
+.automation-execution-card__lane-head strong {
+  font-size: 0.76rem;
+  font-weight: 400;
+}
+
+.automation-execution-card__lane--green .automation-execution-card__lane-head {
+  color: #408c00;
+}
+
+.automation-execution-card__lane--blue .automation-execution-card__lane-head {
+  color: #0578ff;
+}
+
+.automation-execution-card__lane--orange .automation-execution-card__lane-head {
+  color: #ff7629;
+}
+
+.automation-execution-card__lane .segmented-striped-bar__segment {
+  height: 32px;
+  border-radius: 3px;
+}
+
+.automation-execution-card__lane .segmented-striped-bar {
+  gap: 3px;
+}

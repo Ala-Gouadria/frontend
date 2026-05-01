@@ -3,13 +3,22 @@ import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
 import { BottomAIStatusTools } from '../../components/bottom-ai/BottomAITools'
-import { AnalyticsReportingCard } from '../../features/Analytics/components/AnalyticsReportingCard'
-import { CampaignPerformanceCard } from '../../features/Analytics/components/CampaignPerformanceCard'
-import { ConversionFunnelCard } from '../../features/Analytics/components/ConversionFunnelCard'
-import { PerformanceSummaryCard } from '../../features/Analytics/components/PerformanceSummaryCard'
-import { PortfolioAnalyticsCard } from '../../features/Analytics/components/PortfolioAnalyticsCard'
-import { SalesReportCard } from '../../features/Analytics/components/SalesReportCard'
-import { TrafficSourceBreakdownCard } from '../../features/Analytics/components/TrafficSourceBreakdownCard'
+import {
+  ReportAreaBandChart,
+  ReportDottedBars,
+  ReportMetric,
+  ReportMetricGrid,
+  ReportMiniBars,
+  ReportMiniLine,
+  ReportSemiGauge,
+} from '../../components/report-visuals'
+import {
+  analyticsReportingCardData,
+  conversionFunnelCardData,
+  performanceSummaryCardData,
+  portfolioAnalyticsCardData,
+  salesReportCardData,
+} from '../../features/Analytics/data/analyticsMockData'
 import { AutomationExecutionCard } from '../../features/Automation & Execution/components/AutomationExecutionCard'
 import { SystemMonitoringCard } from '../../features/Automation & Execution/components/SystemMonitoringCard'
 import { TaskExecutionCard } from '../../features/Automation & Execution/components/TaskExecutionCard'
@@ -49,15 +58,8 @@ const REPORT_GROUPS = [
     key: 'Analytics',
     title: 'Analytics & Reporting',
     subtitle: 'Performance tracking and insights',
-    cards: [
-      AnalyticsReportingCard,
-      CampaignPerformanceCard,
-      ConversionFunnelCard,
-      PerformanceSummaryCard,
-      PortfolioAnalyticsCard,
-      SalesReportCard,
-      TrafficSourceBreakdownCard,
-    ],
+    reportOnly: true,
+    cards: [],
   },
   {
     key: 'Strategy',
@@ -225,6 +227,84 @@ function CompareHeaderCard({ title, selectedCount, duration }) {
   )
 }
 
+function AnalyticsReportBlock() {
+  const firstMetrics = analyticsReportingCardData.metrics
+  const resultMetrics = performanceSummaryCardData.results
+  const leadGauge = portfolioAnalyticsCardData.gauge
+  const revenueChart = analyticsReportingCardData.revenueChart
+  const lineMetrics = [
+    ...salesReportCardData.results,
+    {
+      label: 'Growth',
+      value: '+28%',
+      points: analyticsReportingCardData.metrics[2].points,
+      fillPoints: analyticsReportingCardData.metrics[2].fillPoints,
+    },
+    {
+      label: 'Growth',
+      value: '+28%',
+      points: portfolioAnalyticsCardData.growthChart.points,
+      fillPoints: portfolioAnalyticsCardData.growthChart.fillPoints,
+    },
+    {
+      label: 'Total Visit',
+      value: conversionFunnelCardData.visitsValue,
+      points: conversionFunnelCardData.visitsChart.points,
+      fillPoints: conversionFunnelCardData.visitsChart.fillPoints,
+    },
+  ]
+  const topMetrics = [
+    { label: firstMetrics[0].label, value: firstMetrics[0].value, bars: firstMetrics[0].bars },
+    { label: firstMetrics[1].label, value: firstMetrics[1].value, bars: firstMetrics[1].bars },
+    ...resultMetrics.map((item) => ({
+      label: item.label,
+      value: item.value,
+      columns: item.columns,
+    })),
+  ]
+
+  return (
+    <div className="reports-page__analytics-report">
+      <div className="reports-page__analytics-report-top">
+        <div>
+          <h3>Revenue</h3>
+          <ReportAreaBandChart
+            className="reports-page__analytics-report-chart"
+            upperSeries={revenueChart.upperSeries}
+            lowerSeries={revenueChart.lowerSeries}
+            activeIndex={revenueChart.activeIndex}
+          />
+        </div>
+        <div>
+          <h3>{portfolioAnalyticsCardData.gaugeTitle}</h3>
+          <ReportSemiGauge
+            className="reports-page__analytics-report-gauge"
+            current={leadGauge.current}
+            target={leadGauge.target}
+            progress={leadGauge.progress}
+          />
+        </div>
+      </div>
+
+      <ReportMetricGrid className="reports-page__analytics-metrics-grid">
+        {topMetrics.map((metric) => (
+          <ReportMetric key={metric.label} label={metric.label} value={metric.value} className="reports-page__analytics-metric">
+            {metric.bars ? <ReportMiniBars bars={metric.bars} /> : <ReportDottedBars columns={metric.columns} />}
+          </ReportMetric>
+        ))}
+      </ReportMetricGrid>
+
+      <ReportMetricGrid className="reports-page__analytics-metrics-grid reports-page__analytics-metrics-grid--lines">
+        {lineMetrics.map((metric, index) => (
+          <ReportMetric key={`${metric.label}-${index}`} label={metric.label} value={metric.value} className="reports-page__analytics-metric">
+            <ReportMiniLine chart={metric} />
+          </ReportMetric>
+        ))}
+      </ReportMetricGrid>
+    </div>
+  )
+}
+
 function getVisibleGroups(category, compareEnabled) {
   if (compareEnabled && category === 'All') {
     return REPORT_GROUPS.filter((group) => DEFAULT_COMPARE_CATEGORIES.includes(group.key))
@@ -258,7 +338,7 @@ function ReportSection({ group, compact = false }) {
           <p className="reports-page__section-subtitle">{group.subtitle}</p>
         </div>
       </div>
-      <ReportCardGrid group={group} compact={compact} />
+      {group.reportOnly ? <AnalyticsReportBlock /> : <ReportCardGrid group={group} compact={compact} />}
     </section>
   )
 }

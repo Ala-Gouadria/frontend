@@ -1,0 +1,143 @@
+.area-revenue-chart {
+  --area-revenue-top: #d9ef38;
+  --area-revenue-bottom: #6f9f00;
+  --area-revenue-line: #87a90c;
+  --area-revenue-soft-line: rgba(139, 169, 26, 0.48);
+  --area-revenue-dot: #aebd42;
+  --area-revenue-badge: #d9e449;
+  --area-revenue-badge-text: #708105;
+  --area-revenue-glow-color: rgba(137, 170, 12, 0.22);
+  width: 100%;
+  min-width: 0;
+}
+
+.area-revenue-chart--red {
+  --area-revenue-top: #ffb8b8;
+  --area-revenue-bottom: #ff8585;
+  --area-revenue-line: #ff8888;
+  --area-revenue-soft-line: rgba(255, 136, 136, 0.4);
+  --area-revenue-dot: #ff9898;
+  --area-revenue-badge: #ffd5d5;
+  --area-revenue-badge-text: #b84242;
+  --area-revenue-glow-color: rgba(255, 96, 96, 0.24);
+}
+
+.area-revenue-chart--blue {
+  --area-revenue-top: #8ac3ff;
+  --area-revenue-bottom: #2f80ed;
+  --area-revenue-line: #2f80ed;
+  --area-revenue-soft-line: rgba(47, 128, 237, 0.34);
+  --area-revenue-dot: #5aa5ff;
+  --area-revenue-badge: #cfe7ff;
+  --area-revenue-badge-text: #1a63b4;
+  --area-revenue-glow-color: rgba(47, 128, 237, 0.22);
+}
+
+.area-revenue-chart__title {
+  margin-bottom: 7px;
+  font-size: 0.62rem;
+  line-height: 1.2;
+  font-weight: 500;
+  color: rgba(24, 24, 27, 0.82);
+}
+
+.area-revenue-chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.area-revenue-chart__glow {
+  opacity: 0.58;
+}
+
+.area-revenue-chart__area {
+  opacity: 0.98;
+}
+
+.area-revenue-chart__line {
+  fill: none;
+  stroke: var(--area-revenue-line);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 520;
+  stroke-dashoffset: 520;
+  animation: areaRevenueDraw 1s ease forwards;
+  filter: drop-shadow(0 8px 12px var(--area-revenue-glow-color));
+}
+
+.area-revenue-chart__line--soft {
+  stroke: var(--area-revenue-soft-line);
+  stroke-width: 1.2;
+}
+
+.area-revenue-chart__focus {
+  stroke: rgba(213, 223, 104, 0.9);
+  stroke-width: 1;
+  animation: areaRevenueFocus 700ms ease both;
+}
+
+.area-revenue-chart__dot {
+  fill: var(--area-revenue-dot);
+  transform-origin: center;
+  animation: areaRevenueDot 540ms ease both;
+}
+
+.area-revenue-chart__hit {
+  fill: transparent;
+  stroke: transparent;
+  cursor: crosshair;
+  transition:
+    fill 160ms ease,
+    stroke 160ms ease,
+    transform 160ms ease;
+}
+
+.area-revenue-chart__hit:hover {
+  fill: var(--area-revenue-dot);
+  fill-opacity: 0.28;
+  stroke: #fff;
+  stroke-width: 2;
+  transform: scale(1.12);
+}
+
+.area-revenue-chart__badge {
+  fill: var(--area-revenue-badge);
+  filter: drop-shadow(0 5px 10px rgba(176, 195, 45, 0.24));
+}
+
+.area-revenue-chart__badge-text {
+  fill: var(--area-revenue-badge-text);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+@keyframes areaRevenueDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes areaRevenueFocus {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes areaRevenueDot {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

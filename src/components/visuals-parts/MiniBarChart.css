@@ -1,0 +1,51 @@
+.mini-bar-chart {
+  --mini-bar-color: #7b8087;
+  --mini-bar-glow: rgba(36, 42, 52, 0.22);
+  display: block;
+  width: 100%;
+  height: 32px;
+  overflow: visible;
+}
+
+.mini-bar-chart--green {
+  --mini-bar-color: #90b30f;
+  --mini-bar-glow: rgba(144, 179, 15, 0.24);
+}
+
+.mini-bar-chart--red {
+  --mini-bar-color: #ff8888;
+  --mini-bar-glow: rgba(255, 100, 100, 0.28);
+}
+
+.mini-bar-chart--blue {
+  --mini-bar-color: #2f80ed;
+  --mini-bar-glow: rgba(47, 128, 237, 0.24);
+}
+
+.mini-bar-chart__bar {
+  fill: var(--mini-bar-color);
+  opacity: 0.82;
+  transform-origin: bottom;
+  cursor: crosshair;
+  animation: miniBarRise 0.9s ease both;
+  animation-delay: calc(var(--bar-index) * 38ms);
+  transition:
+    opacity 160ms ease,
+    filter 160ms ease,
+    transform 160ms ease;
+}
+
+.mini-bar-chart__bar:hover {
+  opacity: 1;
+  filter: drop-shadow(0 5px 8px var(--mini-bar-glow));
+  transform: scaleY(1.12);
+}
+
+@keyframes miniBarRise {
+  from {
+    transform: scaleY(0.6);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}

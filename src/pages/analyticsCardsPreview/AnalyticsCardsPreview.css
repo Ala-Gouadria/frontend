@@ -1,0 +1,104 @@
+.analytics-cards-preview {
+  min-height: 100vh;
+  padding: 44px clamp(18px, 4vw, 64px) 72px;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(196, 228, 104, 0.2), transparent 30%),
+    radial-gradient(circle at 88% 7%, rgba(95, 145, 255, 0.14), transparent 32%),
+    linear-gradient(180deg, #f4f4f3 0%, #e8e8e6 100%);
+  color: #171719;
+  font-family: "Poppins", Manrope, "Segoe UI", sans-serif;
+}
+
+.analytics-cards-preview__header {
+  max-width: 1280px;
+  margin: 0 auto 28px;
+  padding: 18px 4px 16px;
+  border-bottom: 1px solid rgba(24, 24, 27, 0.16);
+  animation: analyticsPreviewHeaderIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.analytics-cards-preview__header h1 {
+  margin: 0;
+  font-size: clamp(1.45rem, 2vw, 2rem);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.analytics-cards-preview__header p {
+  margin: 8px 0 0;
+  color: rgba(24, 24, 27, 0.48);
+  font-size: 0.84rem;
+}
+
+.analytics-cards-preview__section {
+  max-width: 1540px;
+  margin: 0 auto 54px;
+}
+
+.analytics-cards-preview__section-title {
+  margin: 0 0 18px;
+  padding: 0 2px 12px;
+  border-bottom: 1px solid rgba(24, 24, 27, 0.12);
+  font-size: clamp(1.05rem, 1.35vw, 1.34rem);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.analytics-cards-preview__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 410px), 410px));
+  justify-content: center;
+  align-items: start;
+  gap: 42px 52px;
+}
+
+.analytics-cards-preview__item {
+  display: grid;
+  justify-items: center;
+  min-width: 0;
+  perspective: 1100px;
+  animation: analyticsPreviewItemIn 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--preview-index) * 70ms);
+}
+
+@keyframes analyticsPreviewHeaderIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes analyticsPreviewItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 520px) {
+  .analytics-cards-preview {
+    padding-inline: 10px;
+  }
+
+  .analytics-cards-preview__section {
+    margin-bottom: 38px;
+  }
+
+  .analytics-cards-preview__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .analytics-cards-preview__item .analytics-card {
+    width: min(410px, 100%);
+  }
+}

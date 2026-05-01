@@ -13,11 +13,22 @@ import Team from '../pages/settings/Team'
 import Notifications from '../pages/notifications/Notifications'
 import Assets from '../pages/assets/Assets'
 import ActivityLog from '../pages/activityLog/activityLog'
+import AnalyticsCardsPreview from '../pages/analyticsCardsPreview/AnalyticsCardsPreview'
+
+function isAnalyticsCardsPreviewRequest() {
+  if (typeof window === 'undefined') {
+    return false
+  }
+
+  const params = new URLSearchParams(window.location.search)
+  return params.get('preview') === 'analytics-cards' || window.location.hash === '#analytics-cards'
+}
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const previewAnalyticsCards = isAnalyticsCardsPreviewRequest()
+  const [isAuthenticated, setIsAuthenticated] = useState(previewAnalyticsCards)
   const [authView, setAuthView] = useState('login')
-  const [view, setView] = useState('setup')
+  const [view, setView] = useState(previewAnalyticsCards ? 'analytics-cards-preview' : 'setup')
 
   const handleNavigation = (id) => {
     if (id === 'layers') {
@@ -127,6 +138,10 @@ export default function App() {
 
   if (view === 'reports') {
     return <ReportsPage onNavigate={handleNavigation} />
+  }
+
+  if (view === 'analytics-cards-preview') {
+    return <AnalyticsCardsPreview />
   }
 
   if (view === 'setup') {

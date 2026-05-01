@@ -1,0 +1,14 @@
+.user-behavior-card {
+  min-height: 638px;
+}
+
+.user-behavior-card__flow {
+  display: grid;
+  gap: 8px;
+}
+
+.user-behavior-card__flow h3 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 400;
+}

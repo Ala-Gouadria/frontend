@@ -1,0 +1,5 @@
+@import './AnalyticsCardShared.css';
+
+.performance-summary-card {
+  min-height: 404px;
+}

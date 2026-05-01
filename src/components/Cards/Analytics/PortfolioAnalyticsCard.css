@@ -1,0 +1,5 @@
+@import './AnalyticsCardShared.css';
+
+.portfolio-analytics-card {
+  min-height: 612px;
+}

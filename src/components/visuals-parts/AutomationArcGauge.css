@@ -1,0 +1,116 @@
+.automation-arc-gauge {
+  position: relative;
+  height: 168px;
+  cursor: crosshair;
+}
+
+.automation-arc-gauge__svg {
+  width: 100%;
+  height: 196px;
+  display: block;
+}
+
+.automation-arc-gauge__track,
+.automation-arc-gauge__progress {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.automation-arc-gauge__track {
+  stroke: rgba(223, 240, 192, 0.76);
+  stroke-width: 16;
+}
+
+.automation-arc-gauge__progress {
+  stroke: #95c907;
+  stroke-width: 16;
+  filter: drop-shadow(0 4px 8px rgba(149, 201, 7, 0.28));
+  animation: automationArcGrow 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition:
+    stroke-width 160ms ease,
+    filter 160ms ease;
+}
+
+.automation-arc-gauge__cap {
+  fill: #d8eb36;
+  stroke: #fff;
+  stroke-width: 4;
+  filter: drop-shadow(0 4px 8px rgba(149, 201, 7, 0.28));
+  transition:
+    transform 160ms ease,
+    filter 160ms ease;
+  transform-origin: center;
+}
+
+.automation-arc-gauge__tick {
+  stroke: #9fc514;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  opacity: 0.86;
+  animation: automationTickIn 520ms ease both;
+  animation-delay: calc(var(--tick-index) * 18ms);
+}
+
+.automation-arc-gauge:hover .automation-arc-gauge__progress {
+  stroke-width: 18;
+  filter: drop-shadow(0 8px 14px rgba(149, 201, 7, 0.36));
+}
+
+.automation-arc-gauge:hover .automation-arc-gauge__cap {
+  transform: scale(1.08);
+  filter: drop-shadow(0 8px 14px rgba(149, 201, 7, 0.38));
+}
+
+.automation-arc-gauge::after {
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  z-index: 25;
+  max-width: 230px;
+  padding: 6px 9px;
+  border: 1px solid rgba(86, 156, 0, 0.22);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12px 24px rgba(24, 24, 27, 0.14);
+  color: #4b9500;
+  content: attr(data-tooltip);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.2;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px) scale(0.98);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+  white-space: nowrap;
+}
+
+.automation-arc-gauge:hover::after {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.automation-arc-gauge__label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 104px;
+  text-align: center;
+  color: #121215;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+@keyframes automationArcGrow {
+  from {
+    stroke-dasharray: 0 100;
+  }
+}
+
+@keyframes automationTickIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+}

@@ -1,0 +1,5 @@
+@import './AnalyticsCardShared.css';
+
+.analytics-reporting-card .area-revenue-chart__svg {
+  max-height: 180px;
+}

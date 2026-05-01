@@ -1,0 +1,67 @@
+.mini-line-chart {
+  --mini-line-color: #89aa0c;
+  --mini-line-fill: rgba(202, 230, 88, 0.32);
+  --mini-line-glow: rgba(137, 170, 12, 0.24);
+  display: block;
+  width: 100%;
+  height: 34px;
+  overflow: visible;
+}
+
+.mini-line-chart--red {
+  --mini-line-color: #ff8888;
+  --mini-line-fill: rgba(255, 136, 136, 0.18);
+  --mini-line-glow: rgba(255, 96, 96, 0.26);
+}
+
+.mini-line-chart--blue {
+  --mini-line-color: #2f80ed;
+  --mini-line-fill: rgba(47, 128, 237, 0.16);
+  --mini-line-glow: rgba(47, 128, 237, 0.22);
+}
+
+.mini-line-chart--purple {
+  --mini-line-color: #b05ae4;
+  --mini-line-fill: rgba(176, 90, 228, 0.14);
+  --mini-line-glow: rgba(176, 90, 228, 0.22);
+}
+
+.mini-line-chart__fill {
+  fill: var(--mini-line-fill);
+}
+
+.mini-line-chart__line {
+  fill: none;
+  stroke: var(--mini-line-color);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: miniLineDraw 1s ease forwards;
+  filter: drop-shadow(0 7px 10px var(--mini-line-glow));
+}
+
+.mini-line-chart__hit {
+  fill: transparent;
+  stroke: transparent;
+  cursor: crosshair;
+  transition:
+    fill 160ms ease,
+    stroke 160ms ease,
+    transform 160ms ease;
+}
+
+.mini-line-chart__hit:hover {
+  fill: var(--mini-line-color);
+  stroke: #fff;
+  stroke-width: 2;
+  transform: scale(1.18);
+  filter: drop-shadow(0 4px 7px var(--mini-line-glow));
+}
+
+@keyframes miniLineDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

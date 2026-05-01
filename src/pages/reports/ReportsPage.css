@@ -362,6 +362,27 @@
   color: rgba(24, 24, 27, 0.84);
 }
 
+.reports-page__analytics-report {
+  width: 418px;
+  display: grid;
+  gap: 13px;
+}
+
+.reports-page__analytics-report-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.reports-page__analytics-report h3 {
+  margin: 0 0 7px;
+  font-size: 0.62rem;
+  line-height: 1.2;
+  font-weight: 500;
+  color: rgba(24, 24, 27, 0.82);
+}
+
 .reports-page__analytics-top {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(200px, 0.85fr);
@@ -945,6 +966,10 @@
   padding: 18px 0 80px;
 }
 
+.reports-page__single-layout > .reports-page__report-section:only-child {
+  grid-column: 1 / -1;
+}
+
 .reports-page__report-column {
   display: grid;
   gap: 52px;
@@ -954,23 +979,23 @@
 
 .reports-page__cards-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: repeat(auto-fit, 418px);
   justify-content: start;
-  gap: 16px;
+  gap: 26px 32px;
 }
 
 .reports-page__cards-grid--compact {
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: 418px;
   gap: 14px;
 }
 
 .reports-page__card-shell {
-  width: 100%;
+  width: 418px;
   min-width: 0;
 }
 
 .reports-page__card-shell > article {
-  width: 100% !important;
+  width: 418px !important;
   min-height: 0 !important;
   padding: 0 !important;
   border: 0 !important;
@@ -985,6 +1010,29 @@
 .reports-page__card-shell > article [class*="status"],
 .reports-page__card-shell > article [class*="insight"],
 .reports-page__card-shell > article [class*="cta"] {
+  display: none !important;
+}
+
+.reports-page__card-shell > article [class*="reasonPanel"],
+.reports-page__card-shell > article [class*="reasonsPanel"],
+.reports-page__card-shell > article [class*="problemPanel"],
+.reports-page__card-shell > article [class*="planPanel"],
+.reports-page__card-shell > article [class*="batchPanel"],
+.reports-page__card-shell > article [class*="batchProgress"],
+.reports-page__card-shell > article [class*="captionHeader"],
+.reports-page__card-shell > article [class*="captionBody"],
+.reports-page__card-shell > article [class*="postCaption"],
+.reports-page__card-shell > article [class*="pager"] {
+  display: none !important;
+}
+
+.reports-page__card-shell:has(> article [class*="captionBody"]),
+.reports-page__card-shell:has(> article [class*="postCard"]),
+.reports-page__card-shell:has(> article [class*="thumbRow"]) {
+  display: none !important;
+}
+
+.reports-page__card-shell > article [class*="sectionLabel"]:has(+ [class*="batchProgress"]) {
   display: none !important;
 }
 
@@ -1006,7 +1054,6 @@
 .reports-page__compare-column .reports-page__card-shell > article {
   transform: scale(0.92);
   transform-origin: top left;
-  width: calc(100% / 0.92) !important;
   margin-bottom: -28px;
 }
 

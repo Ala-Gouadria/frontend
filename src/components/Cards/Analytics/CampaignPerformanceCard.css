@@ -1,0 +1,5 @@
+@import './AnalyticsCardShared.css';
+
+.campaign-performance-card .activity-rings {
+  justify-content: flex-end;
+}

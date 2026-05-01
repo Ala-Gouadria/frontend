@@ -1,0 +1,201 @@
+.automation-card {
+  position: relative;
+  width: 410px;
+  padding: 26px 26px 24px;
+  display: grid;
+  gap: 17px;
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow:
+    0 18px 34px rgba(24, 24, 27, 0.18),
+    0 0 0 7px rgba(0, 0, 0, 0.26);
+  color: #121215;
+  font-family: "Poppins", Manrope, "Segoe UI", sans-serif;
+  animation: automationCardIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    filter 220ms ease;
+}
+
+.automation-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 24px 44px rgba(24, 24, 27, 0.22),
+    0 0 0 7px rgba(0, 0, 0, 0.22);
+}
+
+.automation-card .analytics-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.automation-card .analytics-card__title {
+  margin: 0;
+  font-size: 1.16rem;
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  color: #111114;
+}
+
+.automation-card .analytics-card__subtitle {
+  margin: 6px 0 0;
+  font-size: 0.77rem;
+  line-height: 1.25;
+  color: rgba(24, 24, 27, 0.34);
+}
+
+.automation-card .analytics-card__status {
+  min-width: 51px;
+  min-height: 25px;
+  padding: 0 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.78), transparent 35%),
+    linear-gradient(180deg, #d8ed4c 0%, #81b604 100%);
+  box-shadow:
+    0 7px 13px rgba(84, 133, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 500;
+  animation: automationStatusGlow 1.8s ease-in-out infinite alternate;
+}
+
+.automation-card__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  font-size: 0.8rem;
+}
+
+.automation-card__topline .analytics-card__label {
+  color: #222226;
+}
+
+.automation-card__topline .analytics-card__value {
+  color: #4b9500;
+  font-size: 0.79rem;
+  font-weight: 500;
+}
+
+.automation-card .analytics-card__footer {
+  display: grid;
+  gap: 18px;
+}
+
+.automation-card .ai-insight {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.automation-card .ai-insight__head {
+  gap: 8px;
+  color: #2b84ff;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.automation-card .ai-insight__logo {
+  width: 34px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.automation-card .ai-insight p {
+  margin: 6px 0 0;
+  font-size: 0.76rem;
+  line-height: 1.08;
+  color: #2c80ff;
+}
+
+.automation-card .ai-action-button {
+  min-height: 34px;
+  border: 1.5px solid #1379ff;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: none;
+  color: rgba(19, 121, 255, 0.52);
+  font-size: 0.72rem;
+  font-weight: 400;
+}
+
+.automation-card .ai-action-button:hover {
+  transform: translateY(-1px);
+  background: #f8fbff;
+  color: #1379ff;
+  box-shadow: 0 8px 18px rgba(19, 121, 255, 0.13);
+}
+
+.automation-card [data-tooltip] {
+  position: relative;
+}
+
+.automation-card [data-tooltip]::after {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 7px);
+  z-index: 20;
+  max-width: 230px;
+  padding: 6px 9px;
+  border: 1px solid rgba(19, 121, 255, 0.24);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 12px 24px rgba(24, 24, 27, 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.72) inset;
+  color: #1379ff;
+  content: attr(data-tooltip);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.2;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px) scale(0.98);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+  white-space: nowrap;
+}
+
+.automation-card [data-tooltip]:hover::after,
+.automation-card [data-tooltip]:focus-within::after {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@keyframes automationCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes automationStatusGlow {
+  from {
+    box-shadow:
+      0 7px 13px rgba(84, 133, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+  to {
+    box-shadow:
+      0 10px 20px rgba(132, 184, 7, 0.38),
+      0 0 0 6px rgba(208, 235, 52, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.58);
+  }
+}

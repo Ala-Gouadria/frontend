@@ -1,0 +1,65 @@
+.website-traffic-status-card {
+  min-height: 472px;
+}
+
+.website-traffic-status-card__revenue {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.website-traffic-status-card__revenue p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ff5a64;
+  font-size: 0.76rem;
+}
+
+.website-traffic-status-card__down {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.website-traffic-status-card__chart {
+  width: 150px;
+  height: 46px;
+}
+
+.website-traffic-status-card__drop {
+  padding: 10px 9px 9px;
+  display: grid;
+  gap: 8px;
+  border: 2px solid #ff7b1d;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #ffb067 0%, #ff7b1d 38%, #fff 38%, #fff 100%);
+  box-shadow: 0 8px 18px rgba(255, 123, 29, 0.16);
+}
+
+.website-traffic-status-card__drop h3,
+.website-traffic-status-card__drop p,
+.website-traffic-status-card__quality h3 {
+  margin: 0;
+}
+
+.website-traffic-status-card__drop h3 {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.website-traffic-status-card__drop p {
+  color: rgba(24, 24, 27, 0.58);
+  font-size: 0.72rem;
+}
+
+.website-traffic-status-card__quality {
+  display: grid;
+  gap: 8px;
+}
+
+.website-traffic-status-card__quality h3 {
+  font-size: 0.8rem;
+  font-weight: 400;
+}

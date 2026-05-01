@@ -1,0 +1,6 @@
+@import './AnalyticsCardShared.css';
+
+.conversion-funnel-card__bottom-chart {
+  height: 76px;
+  margin-top: 4px;
+}
