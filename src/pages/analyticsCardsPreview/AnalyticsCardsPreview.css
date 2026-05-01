@@ -1,3 +1,21 @@
+/* Add this at the very top of your CSS file */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+  overflow-y: auto !important; /* Force vertical scrolling */
+  height: auto !important;
+  min-height: 100%;
+}
+
+body {
+  overflow-y: auto !important;
+}
+
 .analytics-cards-preview {
   min-height: 100vh;
   padding: 44px clamp(18px, 4vw, 64px) 72px;
@@ -7,51 +25,57 @@
     linear-gradient(180deg, #f4f4f3 0%, #e8e8e6 100%);
   color: #171719;
   font-family: "Poppins", Manrope, "Segoe UI", sans-serif;
+  overflow-y: visible; /* Allow scrolling */
+  height: auto;
+  position: relative;
 }
 
+/* ... rest of your CSS remains the same ... */
+
 .analytics-cards-preview__header {
-  max-width: 1280px;
-  margin: 0 auto 28px;
-  padding: 18px 4px 16px;
-  border-bottom: 1px solid rgba(24, 24, 27, 0.16);
+  max-width: 1800px;
+  margin: 0 auto 48px;
+  padding: 28px 8px 24px;
+  border-bottom: 2px solid rgba(24, 24, 27, 0.16);
   animation: analyticsPreviewHeaderIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .analytics-cards-preview__header h1 {
   margin: 0;
-  font-size: clamp(1.45rem, 2vw, 2rem);
-  line-height: 1;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.2;
   font-weight: 800;
   letter-spacing: -0.045em;
 }
 
 .analytics-cards-preview__header p {
-  margin: 8px 0 0;
+  margin: 12px 0 0;
   color: rgba(24, 24, 27, 0.48);
-  font-size: 0.84rem;
+  font-size: 1.1rem;
+  max-width: 600px;
 }
 
 .analytics-cards-preview__section {
-  max-width: 1540px;
-  margin: 0 auto 54px;
+  max-width: 2000px;
+  margin: 0 auto 80px;
 }
 
 .analytics-cards-preview__section-title {
-  margin: 0 0 18px;
-  padding: 0 2px 12px;
-  border-bottom: 1px solid rgba(24, 24, 27, 0.12);
-  font-size: clamp(1.05rem, 1.35vw, 1.34rem);
-  line-height: 1;
+  margin: 0 0 32px;
+  padding: 0 4px 18px;
+  border-bottom: 2px solid rgba(24, 24, 27, 0.12);
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  line-height: 1.2;
   font-weight: 800;
   letter-spacing: -0.04em;
 }
 
 .analytics-cards-preview__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 410px), 410px));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 580px), 580px));
   justify-content: center;
   align-items: start;
-  gap: 42px 52px;
+  gap: 56px 64px;
 }
 
 .analytics-cards-preview__item {
@@ -61,6 +85,13 @@
   perspective: 1100px;
   animation: analyticsPreviewItemIn 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: calc(var(--preview-index) * 70ms);
+}
+
+/* Make actual cards fill the container */
+.analytics-cards-preview__item > * {
+  width: 100%;
+  max-width: 580px;
+  min-height: 320px;
 }
 
 @keyframes analyticsPreviewHeaderIn {
@@ -77,7 +108,7 @@
 @keyframes analyticsPreviewItemIn {
   from {
     opacity: 0;
-    transform: translateY(22px) scale(0.98);
+    transform: translateY(28px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -85,20 +116,46 @@
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 768px) {
   .analytics-cards-preview {
-    padding-inline: 10px;
+    padding-inline: 20px;
   }
-
-  .analytics-cards-preview__section {
-    margin-bottom: 38px;
-  }
-
+  
   .analytics-cards-preview__grid {
     grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
   }
+  
+  .analytics-cards-preview__item > * {
+    max-width: 100%;
+    min-height: 280px;
+  }
+}
 
-  .analytics-cards-preview__item .analytics-card {
-    width: min(410px, 100%);
+@media (min-width: 1400px) {
+  .analytics-cards-preview__grid {
+    grid-template-columns: repeat(auto-fit, minmax(620px, 620px));
+    gap: 68px 80px;
+  }
+  
+  .analytics-cards-preview__item > * {
+    max-width: 620px;
+    min-height: 380px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .analytics-cards-preview__grid {
+    grid-template-columns: repeat(auto-fit, minmax(680px, 680px));
+    gap: 80px 96px;
+  }
+  
+  .analytics-cards-preview__item > * {
+    max-width: 680px;
+    min-height: 420px;
+  }
+  
+  .analytics-cards-preview__section {
+    margin-bottom: 100px;
   }
 }

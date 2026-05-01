@@ -1,0 +1,75 @@
+/* ─────────────────────────────────────────────────────────
+   LeadGenerationCard.css
+   Extends analytics-card (SalesandLeadsCardShared.css)
+   ───────────────────────────────────────────────────────── */
+
+/* ── Lead Flow row ── */
+.lead-generation-card__flow-row {
+  align-items: flex-end;
+}
+
+.lead-generation-card__flow-chart {
+  width: 186px;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+/* ── Reasons grid (3-col inside the orange panel) ── */
+.lead-generation-card__reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.lead-generation-card__reason-col {
+  display: grid;
+  gap: 3px;
+}
+
+.lead-generation-card__reason-label {
+  font-size: 0.72rem;
+  color: rgba(24, 24, 27, 0.62);
+}
+
+.lead-generation-card__reason-value {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #171719;
+}
+
+.lead-generation-card__reason-bars {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ── Top Source ── */
+.lead-generation-card__source {
+  display: grid;
+  gap: 6px;
+}
+
+.lead-generation-card__source-name {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #5d9700;
+}
+
+.lead-generation-card__source-conversion {
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.lead-generation-card__progress {
+  margin-top: 2px;
+}
+
+/* Keep progress label small & muted */
+.lead-generation-card__progress .progress-bars__head {
+  font-size: 0.7rem;
+  color: rgba(24, 24, 27, 0.55);
+}
+
+.lead-generation-card__progress .progress-bars__head strong {
+  color: rgba(24, 24, 27, 0.55);
+  font-weight: 600;
+}

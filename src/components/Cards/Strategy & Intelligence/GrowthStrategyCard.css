@@ -1,0 +1,61 @@
+.gs-card__focus-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #5d9700;
+}
+
+.gs-card__stacked-section {
+  display: grid;
+  gap: 7px;
+}
+
+.gs-card__content-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.gs-card__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.gs-card__dot--blue   { background: rgba(47, 128, 237, 0.28); }
+.gs-card__dot--green  { background: rgba(132, 171, 12, 0.38); }
+.gs-card__dot--orange { background: rgba(255, 135, 45, 0.32); }
+
+.gs-card__content-label {
+  font-size: 0.74rem;
+  color: rgba(24, 24, 27, 0.72);
+}
+
+.gs-card__content-value {
+  font-size: 0.74rem;
+  color: rgba(24, 24, 27, 0.44);
+}
+
+.gs-card__blocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding-top: 2px;
+}
+
+.gs-card__block {
+  width: 17px;
+  height: 17px;
+  border-radius: 3px;
+  animation: gsBlockIn 400ms ease both;
+  animation-delay: calc(var(--block-i, 0) * 15ms);
+}
+
+.gs-card__block--blue   { background: linear-gradient(180deg, #7bbfff 0%, #2f80ed 100%); }
+.gs-card__block--green  { background: linear-gradient(180deg, #c8e85a 0%, #7fad0c 100%); }
+.gs-card__block--orange { background: linear-gradient(180deg, #ffc88a 0%, #ff7b2c 100%); }
+
+@keyframes gsBlockIn {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}

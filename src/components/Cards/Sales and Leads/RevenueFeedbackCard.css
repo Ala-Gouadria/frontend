@@ -1,0 +1,66 @@
+/* ─────────────────────────────────────────────────────────
+   RevenueFeedbackCard.css
+   Extends analytics-card (SalesandLeadsCardShared.css)
+   ───────────────────────────────────────────────────────── */
+
+/* ── Revenue Response row ── */
+.revenue-feedback-card__response-row {
+  align-items: center;
+}
+
+.revenue-feedback-card__sparkline {
+  width: 160px;
+  min-width: 120px;
+  flex-shrink: 0;
+  height: 64px;
+}
+
+.revenue-feedback-card__sparkline svg {
+  height: 64px !important;
+  width: 100%;
+}
+
+/* ── Revenue by Source ── */
+.revenue-feedback-card__sources {
+  display: grid;
+  gap: 8px;
+}
+
+.revenue-feedback-card__source-list {
+  display: grid;
+  gap: 10px;
+}
+
+.revenue-feedback-card__source-item {
+  display: grid;
+  gap: 4px;
+  border-radius: 6px;
+  transition: transform 160ms ease;
+}
+
+.revenue-feedback-card__source-item:hover {
+  transform: translateX(2px);
+}
+
+.revenue-feedback-card__source-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.revenue-feedback-card__source-label {
+  font-size: 0.74rem;
+  color: rgba(24, 24, 27, 0.78);
+}
+
+.revenue-feedback-card__source-pct {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(24, 24, 27, 0.55);
+}
+
+/* Remove the label row inside StripedBars since we render it ourselves */
+.revenue-feedback-card__bar .striped-bars__head {
+  display: none;
+}

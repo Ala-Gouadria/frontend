@@ -1,0 +1,40 @@
+.mi-card__signals-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #5d9700;
+}
+
+.mi-card__confidence-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #5d9700;
+}
+
+.mi-card__trends {
+  display: grid;
+  gap: 10px;
+}
+
+.mi-card__trend-row {
+  display: grid;
+  gap: 4px;
+}
+
+.mi-card__trend-label {
+  font-size: 0.74rem;
+  color: rgba(24, 24, 27, 0.82);
+}
+
+.mi-card__trend-delta {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #5d9700;
+  white-space: nowrap;
+}
+
+.mi-card__reason-text {
+  margin: 0;
+  font-size: 0.74rem;
+  color: rgba(24, 24, 27, 0.72);
+  line-height: 1.45;
+}

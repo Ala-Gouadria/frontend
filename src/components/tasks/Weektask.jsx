@@ -1,30 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { weekTaskApi } from '../../api/weekTaskApi'
+import { TaskAcceptanceBars, TaskHistoryLineChart } from '../visuals-parts'
 import './Weektask.css'
-
-const TONE_COLORS = {
-  green: {
-    fillTop: 'rgba(176,211,28,0.34)',
-    fillMid: 'rgba(176,211,28,0.11)',
-    lineGlow: 'rgba(160,200,20,0.18)',
-    line: '#9fbe18',
-    badge: '#b5d42d',
-  },
-  red: {
-    fillTop: 'rgba(238,100,98,0.30)',
-    fillMid: 'rgba(238,100,98,0.10)',
-    lineGlow: 'rgba(238,100,98,0.20)',
-    line: '#ef6a66',
-    badge: '#ef6a66',
-  },
-  blue: {
-    fillTop: 'rgba(91,152,255,0.30)',
-    fillMid: 'rgba(91,152,255,0.10)',
-    lineGlow: 'rgba(91,152,255,0.18)',
-    line: '#5b98ff',
-    badge: '#5b98ff',
-  },
-}
 
 function filterHistory(tasks, filterValue) {
   if (filterValue === 'created') {
@@ -48,125 +25,6 @@ function filterCreated(tasks, filterValue) {
   }
 
   return tasks
-}
-
-function SparklineChart({ data, tone = 'green' }) {
-  if (!data || data.length < 2) {
-    return null
-  }
-
-  const palette = TONE_COLORS[tone] ?? TONE_COLORS.green
-  const width = 420
-  const height = 96
-  const paddingX = 0
-  const paddingTop = 6
-  const paddingBottom = 18
-  const min = Math.min(...data)
-  const max = Math.max(...data)
-  const usableWidth = width - paddingX * 2
-  const usableHeight = height - paddingTop - paddingBottom
-  const step = usableWidth / (data.length - 1)
-  const normalizeY = (value) => (
-    max === min
-      ? paddingTop + usableHeight / 2
-      : paddingTop + usableHeight - ((value - min) / (max - min)) * usableHeight
-  )
-
-  const points = data.map((value, index) => ({
-    x: paddingX + index * step,
-    y: normalizeY(value),
-    value,
-  }))
-
-  const linePath = points.reduce((path, point, index) => {
-    if (index === 0) {
-      return `M ${point.x} ${point.y}`
-    }
-
-    const previous = points[index - 1]
-    const controlX = (previous.x + point.x) / 2
-    return `${path} C ${controlX} ${previous.y} ${controlX} ${point.y} ${point.x} ${point.y}`
-  }, '')
-
-  const areaPath = `${linePath} L ${points.at(-1).x} ${height - 2} L ${points[0].x} ${height - 2} Z`
-  const badgeIndex = Math.max(data.length - 7, 1)
-  const badgePoint = points[badgeIndex]
-  const endPoint = points.at(-1)
-
-  return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="wt-sparkline" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="wtFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={palette.fillTop} />
-          <stop offset="62%" stopColor={palette.fillMid} />
-          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-        </linearGradient>
-        <filter id="wtLineGlow" x="-20%" y="-80%" width="140%" height="260%">
-          <feGaussianBlur stdDeviation="2.6" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-        <filter id="wtBadgeGlow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="2.8" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-
-      <path d={areaPath} fill="url(#wtFill)" className="wt-chart-area" />
-
-      <path
-        d={linePath}
-        pathLength="100"
-        fill="none"
-        stroke={palette.lineGlow}
-        strokeWidth="5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        filter="url(#wtLineGlow)"
-        className="wt-chart-line"
-        style={{ animationDelay: '2ms' }}
-      />
-      <path
-        d={linePath}
-        pathLength="100"
-        fill="none"
-        stroke={palette.line}
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="wt-chart-line"
-      />
-
-      <g transform={`translate(${badgePoint.x},${badgePoint.y})`} filter="url(#wtBadgeGlow)">
-        <g className="wt-chart-badge">
-          <circle r="12" fill={palette.badge} />
-          <text y="4.5" textAnchor="middle" className="wt-chart-badge-text">{badgePoint.value}</text>
-        </g>
-      </g>
-
-      <circle cx={endPoint.x} cy={endPoint.y} r="6" fill="rgba(255,255,255,0.95)" className="wt-chart-end-ring" />
-      <circle cx={endPoint.x} cy={endPoint.y} r="3.2" fill={palette.line} className="wt-chart-end-dot" />
-    </svg>
-  )
-}
-
-function AcceptanceBar({ cells }) {
-  return (
-    <div className="wt-accept-bar" aria-hidden="true">
-      {cells.map((cell, index) => (
-        <span
-          key={cell.id}
-          className={`wt-accept-cell ${cell.tone}`}
-          style={{ animationDelay: `${160 + index * 30}ms` }}
-        />
-      ))}
-    </div>
-  )
 }
 
 function PendingCircle() {
@@ -374,7 +232,7 @@ export default function WeekTask({ onClose }) {
         </div>
 
         <div className="wt-chart-card">
-          <SparklineChart data={chartState.points} tone={chartState.tone} />
+          <TaskHistoryLineChart data={chartState.points} tone={chartState.tone} />
         </div>
 
         <section className="wt-section">
@@ -453,7 +311,7 @@ export default function WeekTask({ onClose }) {
               <span className="wt-legend-value">{createdSummary.declinedPct}%</span>
             </span>
           </div>
-          <AcceptanceBar cells={createdSummary.cells} />
+          <TaskAcceptanceBars cells={createdSummary.cells} />
           <div className="wt-task-list wt-task-list--compact">
             {visibleCreated.map((task, index) => (
               <div

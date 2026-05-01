@@ -1,0 +1,25 @@
+.si-card__section {
+  display: grid;
+  gap: 4px;
+}
+
+.si-card__green-bold {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #5d9700;
+}
+
+.si-card__orange-bold {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #ff7b2c;
+}
+
+.si-card__muted-small {
+  font-size: 0.72rem;
+  color: rgba(24, 24, 27, 0.44);
+}
+
+.si-card__confidence-row {
+  margin-top: 2px;
+}

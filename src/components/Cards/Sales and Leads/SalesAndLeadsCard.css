@@ -1,0 +1,114 @@
+/* ─────────────────────────────────────────────────────────
+   SalesAndLeadsCard.css
+   Extends analytics-card (SalesandLeadsCardShared.css)
+   ───────────────────────────────────────────────────────── */
+
+/* ── Revenue Status row ── */
+.sales-and-leads-card__revenue-row {
+  align-items: center;
+}
+
+.sales-and-leads-card__revenue-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.sales-and-leads-card__revenue-arrow {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #5d9700;
+  line-height: 1;
+}
+
+.sales-and-leads-card__revenue-value {
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.sales-and-leads-card__revenue-value--good {
+  color: #5d9700;
+}
+
+.sales-and-leads-card__sparkline {
+  width: 160px;
+  min-width: 120px;
+  flex-shrink: 0;
+  height: 64px;
+}
+
+.sales-and-leads-card__sparkline svg {
+  height: 64px !important;
+  width: 100%;
+}
+
+/* ── Main Problem panel overrides ── */
+.sales-and-leads-card__problem-panel {
+  /* inherits analytics-card__panel orange styling */
+}
+
+.sales-and-leads-card__problem-body {
+  gap: 10px !important;
+}
+
+.sales-and-leads-card__problem-desc {
+  margin: 0;
+  font-size: 0.72rem;
+  color: rgba(24, 24, 27, 0.62);
+  line-height: 1.4;
+}
+
+.sales-and-leads-card__stage-flow {
+  /* StageFlow sits inside the panel body */
+}
+
+/* ── Lead Quality ── */
+.sales-and-leads-card__quality {
+  display: grid;
+  gap: 8px;
+}
+
+.sales-and-leads-card__quality-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.sales-and-leads-card__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: rgba(24, 24, 27, 0.7);
+}
+
+.sales-and-leads-card__legend-item strong {
+  font-weight: 700;
+  color: rgba(24, 24, 27, 0.82);
+}
+
+.sales-and-leads-card__legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.sales-and-leads-card__legend-swatch--green {
+  background: linear-gradient(180deg, #d9ef39 0%, #9dc20f 100%);
+}
+
+.sales-and-leads-card__legend-swatch--orange {
+  background: linear-gradient(180deg, #ffbd82 0%, #ff872d 100%);
+}
+
+.sales-and-leads-card__legend-swatch--red {
+  background: linear-gradient(180deg, #ff8a8a 0%, #f04444 100%);
+}
+
+.sales-and-leads-card__blocks {
+  width: 100%;
+}

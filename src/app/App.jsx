@@ -15,6 +15,12 @@ import Assets from '../pages/assets/Assets'
 import ActivityLog from '../pages/activityLog/activityLog'
 import AnalyticsCardsPreview from '../pages/analyticsCardsPreview/AnalyticsCardsPreview'
 
+const STORAGE_KEYS = {
+  authenticated: 'nora:isAuthenticated',
+  setupComplete: 'nora:setupComplete',
+  view: 'nora:view',
+}
+
 function isAnalyticsCardsPreviewRequest() {
   if (typeof window === 'undefined') {
     return false
@@ -24,66 +30,113 @@ function isAnalyticsCardsPreviewRequest() {
   return params.get('preview') === 'analytics-cards' || window.location.hash === '#analytics-cards'
 }
 
+function readStoredFlag(key) {
+  if (typeof window === 'undefined') {
+    return false
+  }
+
+  return window.localStorage.getItem(key) === 'true'
+}
+
+function readStoredView() {
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  return window.localStorage.getItem(STORAGE_KEYS.view)
+}
+
+function writeStorage(key, value) {
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem(key, value)
+  }
+}
+
 export default function App() {
   const previewAnalyticsCards = isAnalyticsCardsPreviewRequest()
-  const [isAuthenticated, setIsAuthenticated] = useState(previewAnalyticsCards)
+  const setupComplete = readStoredFlag(STORAGE_KEYS.setupComplete)
+  const storedView = readStoredView()
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    previewAnalyticsCards || readStoredFlag(STORAGE_KEYS.authenticated) || setupComplete,
+  )
   const [authView, setAuthView] = useState('login')
-  const [view, setView] = useState(previewAnalyticsCards ? 'analytics-cards-preview' : 'setup')
+  const [view, setView] = useState(
+    previewAnalyticsCards
+      ? 'analytics-cards-preview'
+      : setupComplete
+        ? storedView || 'map'
+        : 'setup',
+  )
+
+  const navigateTo = (nextView) => {
+    setView(nextView)
+
+    if (nextView !== 'setup' && nextView !== 'analytics-cards-preview') {
+      writeStorage(STORAGE_KEYS.view, nextView)
+    }
+  }
 
   const handleNavigation = (id) => {
     if (id === 'layers') {
-      setView('reports')
+      navigateTo('reports')
       return
     }
 
     if (id === 'connect') {
-      setView('integrate')
+      navigateTo('integrate')
       return
     }
 
     if (id === 'database') {
-      setView('onboarding')
+      navigateTo('onboarding')
       return
     }
 
     if (id === 'settings') {
-      setView('settings')
+      navigateTo('settings')
       return
     }
 
     if (id === 'settings-integrations') {
-      setView('settings-integrations')
+      navigateTo('settings-integrations')
       return
     }
 
     if (id === 'settings-team') {
-      setView('settings-team')
+      navigateTo('settings-team')
       return
     }
 
     if (id === 'notifications') {
-      setView('notifications')
+      navigateTo('notifications')
       return
     }
 
     if (id === 'album') {
-      setView('assets')
+      navigateTo('assets')
       return
     }
 
     if (id === 'chat') {
-      setView('activity-log')
+      navigateTo('activity-log')
       return
     }
 
     if (id === 'stars') {
-      setView('map')
+      navigateTo('map')
     }
   }
 
   const enterApp = () => {
+    writeStorage(STORAGE_KEYS.authenticated, 'true')
     setIsAuthenticated(true)
-    setView('setup')
+    navigateTo(readStoredFlag(STORAGE_KEYS.setupComplete) ? readStoredView() || 'map' : 'setup')
+  }
+
+  const completeSetup = () => {
+    writeStorage(STORAGE_KEYS.authenticated, 'true')
+    writeStorage(STORAGE_KEYS.setupComplete, 'true')
+    navigateTo('map')
   }
 
   if (!isAuthenticated) {
@@ -145,7 +198,7 @@ export default function App() {
   }
 
   if (view === 'setup') {
-    return <Setup onComplete={() => setView('map')} />
+    return <Setup onComplete={completeSetup} />
   }
 
   return <IntelligenceMap activeNavId="stars" onNavigate={handleNavigation} />

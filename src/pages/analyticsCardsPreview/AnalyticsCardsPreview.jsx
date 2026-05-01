@@ -1,3 +1,5 @@
+/* AnalyticsCardsPreview.css content - put this in a separate CSS file */
+
 import {
   AnalyticsReportingCard,
   CampaignPerformanceCard,
@@ -22,6 +24,21 @@ import {
   WebsiteTrafficCard,
   WebsiteTrafficStatusCard,
 } from '../../components/Cards/Website & Traffic'
+import {
+  LeadGenerationCard,
+  LeadScoringCard,
+  SalesAndLeadsCard,
+  RevenueFeedbackCard,
+  PipelineTrackingCard,
+} from '../../components/Cards/Sales and Leads'
+import {
+  CompetitorTrackingCard,
+  GrowthStrategyCard,
+  MarketInsightsCard,
+  OpportunityDetectionCard,
+  RiskDetectionCard,
+  StrategyIntelligenceCard,
+} from '../../components/Cards/Strategy & Intelligence'
 import './AnalyticsCardsPreview.css'
 
 const automationCards = [
@@ -51,6 +68,23 @@ const websiteCards = [
   { name: 'Conversion Signals', Component: ConversionSignalsCard },
 ]
 
+const salesLeadsCards = [
+  { name: 'Lead Generation', Component: LeadGenerationCard },
+  { name: 'Lead Scoring', Component: LeadScoringCard },
+  { name: 'Sales and Leads', Component: SalesAndLeadsCard },
+  { name: 'Revenue Feedback', Component: RevenueFeedbackCard },
+  { name: 'Pipeline Tracking', Component: PipelineTrackingCard },
+]
+
+const strategyCards = [
+  { name: 'Strategy & Intelligence', Component: StrategyIntelligenceCard },
+  { name: 'Competitor Tracking', Component: CompetitorTrackingCard },
+  { name: 'Growth Strategy', Component: GrowthStrategyCard },
+  { name: 'Market Insights', Component: MarketInsightsCard },
+  { name: 'Opportunity Detection', Component: OpportunityDetectionCard },
+  { name: 'Risk Detection', Component: RiskDetectionCard },
+]
+
 function PreviewGrid({ title, cards, startIndex = 0 }) {
   return (
     <section className="analytics-cards-preview__section" aria-label={`${title} previews`}>
@@ -60,7 +94,11 @@ function PreviewGrid({ title, cards, startIndex = 0 }) {
           const PreviewCard = card.Component
 
           return (
-            <div className="analytics-cards-preview__item" key={card.name} style={{ '--preview-index': startIndex + index }}>
+            <div 
+              className="analytics-cards-preview__item" 
+              key={card.name} 
+              style={{ '--preview-index': startIndex + index }}
+            >
               <PreviewCard />
             </div>
           )
@@ -71,18 +109,33 @@ function PreviewGrid({ title, cards, startIndex = 0 }) {
 }
 
 export default function AnalyticsCardsPreview() {
+  const automationCount = automationCards.length;
+  const websiteCount = websiteCards.length;
+  const analyticsCount = analyticsCards.length;
+  const strategyCount = strategyCards.length;
+
   return (
     <main className="analytics-cards-preview">
       <header className="analytics-cards-preview__header">
         <div>
           <h1>Analytics Cards Preview</h1>
-          <p>Standalone live view for reusable Analytics and Automation card components.</p>
+          <p>Standalone live view for reusable Analytics, Automation, Strategy, and Sales card components.</p>
         </div>
       </header>
 
       <PreviewGrid title="Automation & Execution" cards={automationCards} />
-      <PreviewGrid title="Website & Traffic" cards={websiteCards} startIndex={automationCards.length} />
-      <PreviewGrid title="Analytics" cards={analyticsCards} startIndex={automationCards.length + websiteCards.length} />
+      <PreviewGrid title="Website & Traffic" cards={websiteCards} startIndex={automationCount} />
+      <PreviewGrid title="Analytics" cards={analyticsCards} startIndex={automationCount + websiteCount} />
+      <PreviewGrid 
+        title="Strategy & Intelligence" 
+        cards={strategyCards} 
+        startIndex={automationCount + websiteCount + analyticsCount} 
+      />
+      <PreviewGrid
+        title="Sales & Leads"
+        cards={salesLeadsCards}
+        startIndex={automationCount + websiteCount + analyticsCount + strategyCount}
+      />
     </main>
   )
 }
