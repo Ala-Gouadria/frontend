@@ -1,6 +1,6 @@
 import './BottomAITools.css'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useControls, useTransformEffect } from 'react-zoom-pan-pinch'
 
 import cursorIcon from '../../assets/icons/Nora-AI-Icon/cursor-icon.png'
@@ -48,20 +48,19 @@ export function BottomAIStatusTools({ onAskNora, onTaskOpen }) {
   )
 }
 
+function formatZoomPercent(currentScale, initialScale) {
+  return `${Math.max(1, Math.round((currentScale / initialScale) * 100))}%`
+}
+
 export default function BottomAITools({ scale, initialScale, mode = 'hand', onModeChange, onTaskOpen }) {
   const { zoomIn, zoomOut, resetTransform } = useControls()
-  const [zoomPercent, setZoomPercent] = useState('100%')
+  const [zoomPercent, setZoomPercent] = useState(() => formatZoomPercent(scale ?? initialScale, initialScale))
   const [isZooming, setIsZooming] = useState(false)
 
   useTransformEffect((ref) => {
     const currentScale = ref?.state?.scale ?? initialScale
-    setZoomPercent(`${Math.max(1, Math.round((currentScale / initialScale) * 100))}%`)
+    setZoomPercent(formatZoomPercent(currentScale, initialScale))
   })
-
-  useEffect(() => {
-    const currentScale = scale ?? initialScale
-    setZoomPercent(`${Math.max(1, Math.round((currentScale / initialScale) * 100))}%`)
-  }, [initialScale, scale])
 
   const handleZoom = (direction) => {
     setIsZooming(true)

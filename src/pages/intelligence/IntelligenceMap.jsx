@@ -6,41 +6,53 @@ import NoraAvatar from '../../components/nora/NoraAvatar'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
 import NoraWorkspace from '../../components/nora/NoraWorkspace'
-import { AnalyticsReportingCard } from '../../features/Analytics/components/AnalyticsReportingCard'
-import { CampaignPerformanceCard } from '../../features/Analytics/components/CampaignPerformanceCard'
-import { ConversionFunnelCard } from '../../features/Analytics/components/ConversionFunnelCard'
-import { PerformanceSummaryCard } from '../../features/Analytics/components/PerformanceSummaryCard'
-import { PortfolioAnalyticsCard } from '../../features/Analytics/components/PortfolioAnalyticsCard'
-import { SalesReportCard } from '../../features/Analytics/components/SalesReportCard'
-import { TrafficSourceBreakdownCard } from '../../features/Analytics/components/TrafficSourceBreakdownCard'
-import { AutomationExecutionCard } from '../../features/Automation & Execution/components/AutomationExecutionCard'
-import { SystemMonitoringCard } from '../../features/Automation & Execution/components/SystemMonitoringCard'
-import { TaskExecutionCard } from '../../features/Automation & Execution/components/TaskExecutionCard'
-import { WorkflowAutomationCard } from '../../features/Automation & Execution/components/WorkflowAutomationCard'
-import { LeadGenerationCard } from '../../features/Sales and Leads/components/LeadGenerationCard'
-import { LeadScoringCard } from '../../features/Sales and Leads/components/LeadScoringCard'
-import { PipelineTrackingCard } from '../../features/Sales and Leads/components/PipelineTrackingCard'
-import { RevenueFeedbackCard } from '../../features/Sales and Leads/components/RevenueFeedbackCard'
-import { SalesAndLeadsCard } from '../../features/Sales and Leads/components/SalesAndLeadsCard'
-import { CaptionGenerationCard } from '../../features/Social Media Stuffs/components/CaptionGenerationCard'
-import { ImageGenerationCard } from '../../features/Social Media Stuffs/components/ImageGenerationCard'
-import { PerformanceTrackingCard } from '../../features/Social Media Stuffs/components/PerformanceTrackingCard'
-import { SocialMediaManagerCard } from '../../features/Social Media Stuffs/components/SocialMediaManagerCard'
-import { SocialMediaPublishingCard } from '../../features/Social Media Stuffs/components/SocialMediaPublishingCard'
-import { SocialMediaStrategyCard } from '../../features/Social Media Stuffs/components/SocialMediaStrategyCard'
-import { CompetitorTrackingCard } from '../../features/Strategy & Intelligence/components/CompetitorTrackingCard'
-import { GrowthStrategyCard } from '../../features/Strategy & Intelligence/components/GrowthStrategyCard'
-import { MarketInsightsCard } from '../../features/Strategy & Intelligence/components/MarketInsightsCard'
-import { OpportunityDetectionCard } from '../../features/Strategy & Intelligence/components/OpportunityDetectionCard'
-import { RiskDetectionCard } from '../../features/Strategy & Intelligence/components/RiskDetectionCard'
-import { StrategyIntelligenceCard } from '../../features/Strategy & Intelligence/components/StrategyIntelligenceCard'
-import { ConversionSignalsCard } from '../../features/Website & Traffic/components/ConversionSignalsCard'
-import { PagePerformanceCard } from '../../features/Website & Traffic/components/PagePerformanceCard'
-import { SEOInsightsCard } from '../../features/Website & Traffic/components/SEOInsightsCard'
-import { TrafficQualityCard } from '../../features/Website & Traffic/components/TrafficQualityCard'
-import { UserBehaviorCard } from '../../features/Website & Traffic/components/UserBehaviorCard'
-import { WebsiteTrafficCard } from '../../features/Website & Traffic/components/WebsiteTrafficCard'
-import { WebsiteTrafficStatusCard } from '../../features/Website & Traffic/components/WebsiteTrafficStatusCard'
+import {
+  AnalyticsReportingCard,
+  CampaignPerformanceCard,
+  ConversionFunnelCard,
+  PerformanceSummaryCard,
+  PortfolioAnalyticsCard,
+  SalesReportCard,
+  TrafficSourceBreakdownCard,
+} from '../../components/Cards/Analytics'
+import {
+  AutomationExecutionCard,
+  SystemMonitoringCard,
+  TaskExecutionCard,
+  WorkflowAutomationCard,
+} from '../../components/Cards/Automation & Execution'
+import {
+  LeadGenerationCard,
+  LeadScoringCard,
+  PipelineTrackingCard,
+  RevenueFeedbackCard,
+  SalesAndLeadsCard,
+} from '../../components/Cards/Sales and Leads'
+import {
+  CaptionGenerationCard,
+  ImageGenerationCard,
+  PerformanceTrackingCard,
+  SocialMediaManagerCard,
+  SocialMediaPublishingCard,
+  SocialMediaStrategyCard,
+} from '../../components/Cards/Social Media Stuffs'
+import {
+  CompetitorTrackingCard,
+  GrowthStrategyCard,
+  MarketInsightsCard,
+  OpportunityDetectionCard,
+  RiskDetectionCard,
+  StrategyIntelligenceCard,
+} from '../../components/Cards/Strategy & Intelligence'
+import {
+  ConversionSignalsCard,
+  PagePerformanceCard,
+  SEOInsightsCard,
+  TrafficQualityCard,
+  UserBehaviorCard,
+  WebsiteTrafficCard,
+  WebsiteTrafficStatusCard,
+} from '../../components/Cards/Website & Traffic'
 import './IntelligenceMap.css'
 import WeekTask from '../../components/tasks/Weektask'
 const CANVAS = {
@@ -169,9 +181,15 @@ const EDGE_DEFS = [
   { id: 'lead-generation-revenue', from: 'leadGeneration', fromPort: 'bottom', to: 'revenueFeedback', toPort: 'top', axis: 'vertical', bendRatio: 0.52, drawDelay: 1200, width: 5.2, beamDuration: 2500, beamDirection: 'forward' },
 ]
 
+const MAIN_CARD_NODE_IDS = ['analytics', 'website', 'automation', 'strategy', 'social', 'sales']
+const MAIN_CARD_NODE_SET = new Set(MAIN_CARD_NODE_IDS)
 const OPEN_START_DELAY_MS = 260
 const CLOSE_DURATION_MS = 1400
 const INITIAL_SCALE = 1.10625
+
+function createInitialCollapsedNodes() {
+  return new Set(MAIN_CARD_NODE_IDS)
+}
 
 function createInitialPositions() {
   return Object.fromEntries(
@@ -247,10 +265,6 @@ function buildVisibleNodeSet(collapsedNodes) {
   return visible
 }
 
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max)
-}
-
 function buildOrthogonalPoints(start, end, axis, bendRatio) {
   if (axis === 'vertical') {
     const middleY = start.y + (end.y - start.y) * bendRatio
@@ -320,20 +334,21 @@ function createCardStyle(node, position, isVisible, isDragging) {
     top: position.top,
     zIndex: isDragging ? 20 : position.left > CANVAS.centerX ? 5 : 4,
     opacity: isVisible ? 1 : 0,
-    transform: `translate(${isVisible ? 0 : node.enterX}px, ${isVisible ? 0 : node.enterY}px) scale(${isVisible ? 1 : 0.968})`,
+    transform: `translate(${isVisible ? 0 : node.enterX}px, ${isVisible ? 0 : node.enterY}px) scale(${isVisible ? 1 : 0.94})`,
     transformOrigin: position.left > CANVAS.centerX ? 'left center' : 'right center',
     transition: [
-      `opacity ${isVisible ? 860 : 420}ms cubic-bezier(.22,1,.36,1) ${delay}ms`,
-      `transform ${isVisible ? 1440 : 700}ms cubic-bezier(.22,1,.36,1) ${delay}ms`,
-      `filter ${isVisible ? 1440 : 700}ms cubic-bezier(.22,1,.36,1) ${delay}ms`,
+      `opacity ${isVisible ? 720 : 260}ms cubic-bezier(.16,1,.3,1) ${delay}ms`,
+      `transform ${isVisible ? 1180 : 420}ms cubic-bezier(.16,1,.3,1) ${delay}ms`,
+      `filter ${isVisible ? 1180 : 420}ms cubic-bezier(.16,1,.3,1) ${delay}ms`,
       isDragging ? 'box-shadow 180ms ease' : 'box-shadow 260ms ease',
     ].join(', '),
-    filter: isVisible ? 'blur(0px)' : 'blur(6px)',
+    filter: isVisible ? 'blur(0px) brightness(1)' : 'blur(8px) brightness(1.08)',
     pointerEvents: isVisible ? 'auto' : 'none',
     cursor: isDragging ? 'grabbing' : 'grab',
     userSelect: 'none',
     touchAction: 'none',
-    boxShadow: isDragging ? '0 18px 40px rgba(15, 23, 42, 0.16)' : 'none',
+    boxShadow: isDragging ? '0 22px 48px rgba(15, 23, 42, 0.2)' : 'none',
+    willChange: 'transform, opacity, filter',
   }
 }
 
@@ -561,15 +576,21 @@ function ConnectorsLayer({
   )
 
   const connectorButtons = Object.entries(CHILDREN_BY_NODE)
-    .filter(([nodeId]) => nodeId !== 'avatar' && visibleNodeIds.has(nodeId))
+    .filter(([nodeId]) => MAIN_CARD_NODE_SET.has(nodeId) && visibleNodeIds.has(nodeId))
     .flatMap(([nodeId]) => {
-      const ports = [...(usedPorts[nodeId] ?? new Set())]
+      const ports = [
+        ...new Set(
+          EDGE_DEFS
+            .filter((edge) => edge.from === nodeId)
+            .map((edge) => edge.fromPort),
+        ),
+      ]
       return ports.map((portName) => ({ nodeId, portName }))
     })
 
   const passiveSockets = Object.entries(usedPorts).flatMap(([nodeId, ports]) => {
     return [...ports]
-      .filter((portName) => !(nodeId !== 'avatar' && (CHILDREN_BY_NODE[nodeId] ?? []).length > 0))
+      .filter(() => !(nodeId !== 'avatar' && (CHILDREN_BY_NODE[nodeId] ?? []).length > 0))
       .map((portName) => ({ nodeId, portName }))
   })
 
@@ -581,6 +602,7 @@ function ConnectorsLayer({
         return (
           <div
             key={`${nodeId}-${portName}-socket`}
+            className="intelligence-map-socket"
             style={{
               position: 'absolute',
               left: point.x,
@@ -588,24 +610,12 @@ function ConnectorsLayer({
               width: nodeId === 'avatar' ? 18 : 14,
               height: nodeId === 'avatar' ? 18 : 14,
               transform: 'translate(-50%, -50%)',
-              borderRadius: 999,
-              border: '1px solid rgba(47,121,255,0.22)',
-              background: 'rgba(255,255,255,0.92)',
-              boxShadow: '0 0 0 5px rgba(47,121,255,0.08)',
               opacity: sceneVisible ? 1 : 0,
-              transition: 'opacity 520ms ease',
               pointerEvents: 'none',
               zIndex: 8,
             }}
           >
-            <div
-              style={{
-                position: 'absolute',
-                inset: nodeId === 'avatar' ? 4 : 3,
-                borderRadius: 999,
-                background: 'rgba(47,121,255,0.78)',
-              }}
-            />
+            <div className="intelligence-map-socket__core" />
           </div>
         )
       })}
@@ -618,6 +628,9 @@ function ConnectorsLayer({
           <button
             key={`${nodeId}-${portName}-toggle`}
             type="button"
+            className={isCollapsed
+              ? 'intelligence-map-connector intelligence-map-connector--collapsed'
+              : 'intelligence-map-connector intelligence-map-connector--expanded'}
             onPointerDown={(event) => {
               event.stopPropagation()
             }}
@@ -629,26 +642,13 @@ function ConnectorsLayer({
               position: 'absolute',
               left: point.x,
               top: point.y,
-              width: 22,
-              height: 22,
               transform: 'translate(-50%, -50%)',
-              borderRadius: 999,
-              border: '1px solid rgba(47,121,255,0.34)',
-              background: 'rgba(255,255,255,0.96)',
-              boxShadow: '0 0 0 6px rgba(47,121,255,0.08)',
-              color: '#2f79ff',
-              fontSize: 14,
-              fontWeight: 700,
-              cursor: 'pointer',
               opacity: sceneVisible ? 1 : 0,
-              transition: 'opacity 520ms ease, transform 220ms ease',
               zIndex: 9,
-              padding: 0,
-              lineHeight: 1,
             }}
             aria-label={isCollapsed ? 'Expand connected cards' : 'Collapse connected cards'}
           >
-            {isCollapsed ? '+' : '-'}
+            <span className="intelligence-map-connector__icon">{isCollapsed ? '+' : '-'}</span>
           </button>
         )
       })}
@@ -669,6 +669,9 @@ function CardsLayer({ mounted, sceneVisible, visibleNodeIds, positions, dragging
     return (
       <div
         key={id}
+        className={isVisible
+          ? 'intelligence-map-card-shell intelligence-map-card-shell--visible'
+          : 'intelligence-map-card-shell'}
         style={createCardStyle(node, position, isVisible, draggingId === id)}
         onPointerDown={(event) => onCardPointerDown(event, id)}
       >
@@ -764,7 +767,7 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   }))
   const [toolMode, setToolMode] = useState('hand')
   const [dragState, setDragState] = useState(null)
-  const [collapsedNodes, setCollapsedNodes] = useState(new Set())
+  const [collapsedNodes, setCollapsedNodes] = useState(() => createInitialCollapsedNodes())
   const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false)
   const [workspaceMode, setWorkspaceMode] = useState('split')
   const panelsPaired = isWorkspaceOpen && isTaskOpen
@@ -772,19 +775,23 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   const shouldShowTaskPanel = isTaskOpen
 
   useEffect(() => {
+    let mountTimer
     let showTimer
+    let sceneTimer
     let hideTimer
 
     if (isActive) {
-      setMounted(true)
+      mountTimer = window.setTimeout(() => setMounted(true), 0)
       showTimer = window.setTimeout(() => setSceneVisible(true), OPEN_START_DELAY_MS)
     } else {
-      setSceneVisible(false)
+      sceneTimer = window.setTimeout(() => setSceneVisible(false), 0)
       hideTimer = window.setTimeout(() => setMounted(false), CLOSE_DURATION_MS)
     }
 
     return () => {
+      window.clearTimeout(mountTimer)
       window.clearTimeout(showTimer)
+      window.clearTimeout(sceneTimer)
       window.clearTimeout(hideTimer)
     }
   }, [isActive])

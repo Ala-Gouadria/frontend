@@ -1,0 +1,73 @@
+@import './SocialMediaPublishingCard.css';
+
+.pt-card__trend-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.pt-card__trend-arrow {
+  color: #5d9700;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.pt-card__trend-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #5d9700;
+}
+
+.pt-card__good    { color: #5d9700 !important; }
+.pt-card__bad     { color: #e33f48 !important; }
+.pt-card__neutral { color: #f07b1a !important; }
+
+.pt-card__performers { display: grid; gap: 8px; }
+.pt-card__performer-row { display: grid; gap: 2px; }
+
+.pt-card__performer-label {
+  font-size: 0.74rem;
+  color: rgba(24,24,27,0.72);
+}
+
+.pt-card__performer-val {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: rgba(24,24,27,0.44);
+}
+
+.pt-card__platforms {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pt-card__platform-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--p-bg);
+  font-size: 0.74rem;
+}
+
+.pt-card__platform-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--p-color);
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pt-card__platform-delta {
+  font-size: 0.74rem;
+  font-weight: 700;
+}

@@ -1,14 +1,23 @@
 .user-behavior-card {
   min-height: 638px;
+  gap: 17px;
 }
 
 .user-behavior-card__flow {
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .user-behavior-card__flow h3 {
   margin: 0;
   font-size: 0.8rem;
   font-weight: 400;
+}
+
+.user-behavior-card .website-card__metric-grid {
+  gap: 23px 28px;
+}
+
+.user-behavior-card .website-card__metric .dotted-data-bars {
+  height: 50px;
 }

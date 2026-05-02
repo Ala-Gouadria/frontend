@@ -1,0 +1,211 @@
+/* ── Shared upcoming-batch panel ──────────────────────────── */
+.smc-card__upcoming-panel {
+  overflow: hidden;
+  border: 2px solid #8ab80d;
+  border-radius: 8px;
+  box-shadow: 0 12px 22px rgba(138, 184, 13, 0.14);
+}
+
+.smc-card__upcoming-title {
+  padding: 6px 10px;
+  background: linear-gradient(180deg, #c2e030 0%, #74a608 100%);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.smc-card__upcoming-body {
+  padding: 8px 10px;
+  display: grid;
+  gap: 8px;
+  background: #fff;
+}
+
+.smc-card__upcoming-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.74rem;
+  color: rgba(24, 24, 27, 0.72);
+}
+
+.smc-card__upcoming-dot {
+  width: 14px;
+  height: 14px;
+  border: 1.5px dashed rgba(24, 24, 27, 0.3);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.smc-card__upcoming-label { flex: 1; }
+
+.smc-card__upcoming-count {
+  font-size: 0.7rem;
+  color: rgba(24, 24, 27, 0.4);
+  white-space: nowrap;
+}
+
+/* ── SocialMediaPublishingCard specific ───────────────────── */
+.smp-card__batch-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1.5px solid #9dc918;
+  border-radius: 999px;
+  background: rgba(210, 235, 78, 0.06);
+  font-size: 0.74rem;
+}
+
+.smp-card__batch-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #8ab80d;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(138, 184, 13, 0.18);
+  animation: batchDotPulse 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes batchDotPulse {
+  to { box-shadow: 0 0 0 5px rgba(138, 184, 13, 0.08); }
+}
+
+.smp-card__batch-label {
+  flex: 1;
+  color: #5d9700;
+  font-weight: 600;
+  font-size: 0.74rem;
+}
+
+.smp-card__batch-count {
+  font-weight: 800;
+  color: #5d9700;
+}
+
+.smp-card__platforms {
+  display: flex;
+  gap: 8px;
+}
+
+.smp-card__platform {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: 1.5px solid rgba(24, 24, 27, 0.1);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.9);
+  font-size: 0.72rem;
+}
+
+.smp-card__platform-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--platform-color);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.smp-card__platform-check {
+  color: #5d9700;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.smp-card__platform-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(24,24,27,0.1);
+  border-top-color: var(--platform-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Post card */
+.smp-card__post-card {
+  border: 1.5px solid rgba(24,24,27,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.smp-card__post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.smp-card__account-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3a3f6b, #1e2244);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.smp-card__account-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.smp-card__account-name { font-size: 0.78rem; font-weight: 700; color: #111; line-height: 1.2; }
+.smp-card__account-sub  { font-size: 0.66rem; color: rgba(24,24,27,0.4); line-height: 1.2; }
+
+.smp-card__preview-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #1a1a2e;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.smp-card__preview-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 300ms ease;
+}
+
+.smp-card__img-spinner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(255,255,255,0.15);
+  border-top-color: rgba(255,255,255,0.7);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+.smp-card__caption {
+  padding: 8px 10px;
+  font-size: 0.72rem;
+  color: rgba(24,24,27,0.7);
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.smp-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 10px 10px;
+  font-size: 1rem;
+  color: rgba(24,24,27,0.38);
+}
+
+.smp-card__bookmark { margin-left: auto; }

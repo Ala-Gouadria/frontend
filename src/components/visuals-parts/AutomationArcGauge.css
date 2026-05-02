@@ -1,6 +1,6 @@
 .automation-arc-gauge {
   position: relative;
-  height: 168px;
+  height: 170px;
   cursor: crosshair;
 }
 
@@ -18,13 +18,13 @@
 
 .automation-arc-gauge__track {
   stroke: rgba(223, 240, 192, 0.76);
-  stroke-width: 16;
+  stroke-width: 18;
 }
 
 .automation-arc-gauge__progress {
   stroke: #95c907;
-  stroke-width: 16;
-  filter: drop-shadow(0 4px 8px rgba(149, 201, 7, 0.28));
+  stroke-width: 18;
+  filter: drop-shadow(0 8px 16px rgba(149, 201, 7, 0.28));
   animation: automationArcGrow 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transition:
     stroke-width 160ms ease,
@@ -95,7 +95,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: 104px;
+  top: 105px;
   text-align: center;
   color: #121215;
   font-size: 0.78rem;

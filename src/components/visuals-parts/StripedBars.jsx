@@ -25,7 +25,10 @@ export function StripedBars({
           <strong>{endLabel}</strong>
         </div>
       ) : null}
-      <div className="striped-bars__track" title={`${label ?? 'Value'}: ${endLabel ?? `${safeValue}%`}`}>
+      <div
+        className="striped-bars__track"
+        title={`${label ?? 'Value'}: ${endLabel ?? `${safeValue}%`}`}
+      >
         <span className="striped-bars__fill" style={{ width: `${safeValue}%` }} />
       </div>
     </div>

@@ -1,0 +1,78 @@
+@import './SocialMediaPublishingCard.css';
+
+.smm-card__activity-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1.5px solid #9dc918;
+  border-radius: 999px;
+  background: rgba(210, 235, 78, 0.06);
+  font-size: 0.74rem;
+}
+
+.smm-card__activity-label {
+  flex: 1;
+  color: rgba(24,24,27,0.72);
+  font-size: 0.74rem;
+}
+
+.smm-card__activity-pct {
+  font-weight: 800;
+  color: #5d9700;
+  font-size: 0.8rem;
+}
+
+.smm-card__engagement-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.smm-card__platform-box {
+  padding: 7px 8px;
+  border-radius: 8px;
+  background: var(--platform-bg);
+  display: grid;
+  gap: 6px;
+}
+
+.smm-card__platform-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.smm-card__platform-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--platform-color);
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.smm-card__platform-delta {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--platform-color);
+}
+
+.smm-card__mini-chart { max-height: 36px; }
+
+.smm-card__metric-val {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: rgba(24,24,27,0.72);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.smm-card__metric-val--good { color: #5d9700; }

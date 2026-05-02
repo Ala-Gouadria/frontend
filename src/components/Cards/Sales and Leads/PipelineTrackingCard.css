@@ -4,6 +4,11 @@
    ───────────────────────────────────────────────────────── */
 
 /* ── Open Pipeline row ── */
+.pipeline-tracking-card {
+  min-height: 518px;
+  gap: 16px;
+}
+
 .pipeline-tracking-card__pipeline-row {
   align-items: center;
 }
@@ -23,7 +28,7 @@
 }
 
 .pipeline-tracking-card__sparkline {
-  width: 160px;
+  width: 152px;
   min-width: 120px;
   flex-shrink: 0;
   height: 56px;
@@ -45,7 +50,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 9px 4px;
+  padding: 9px 0;
   border-bottom: 1px solid rgba(24, 24, 27, 0.07);
   border-radius: 6px;
   transition: background 160ms ease, transform 160ms ease;
@@ -82,7 +87,7 @@
 .pipeline-tracking-card__winrate-section {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
 }
 
@@ -111,14 +116,14 @@
 .pipeline-tracking-card__winrate-chart-wrap {
   display: block;
   width: 100%;
-  height: 60px;
+  height: 62px;
   overflow: hidden;
 }
 
 .pipeline-tracking-card__winrate-chart-wrap .mini-line-chart {
   display: block !important;
   width: 100% !important;
-  height: 60px !important;
+  height: 62px !important;
   min-width: 0 !important;
 }
 
@@ -126,5 +131,5 @@
 .pipeline-tracking-card__winrate-chart-wrap svg {
   display: block !important;
   width: 100% !important;
-  height: 60px !important;
+  height: 62px !important;
 }

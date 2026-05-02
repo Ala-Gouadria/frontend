@@ -1,12 +1,13 @@
 .website-traffic-card {
   min-height: 791px;
+  gap: 17px;
 }
 
 .website-traffic-card__source,
 .website-traffic-card__device,
 .website-traffic-card__countries {
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .website-traffic-card__source h3,

@@ -1,0 +1,22 @@
+@import './SocialMediaPublishingCard.css';
+
+.sms-card__counters {
+  display: flex;
+  gap: 14px;
+}
+
+.sms-card__counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  color: rgba(24,24,27,0.55);
+}
+
+.sms-card__counter strong {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: rgba(24,24,27,0.72);
+}
+
+.sms-card__bad { color: #e33f48 !important; }

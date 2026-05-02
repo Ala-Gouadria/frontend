@@ -61,6 +61,48 @@
   }
 }
 
+@keyframes connectorHalo {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(47, 121, 255, 0.22),
+      0 0 0 8px rgba(47, 121, 255, 0.08),
+      0 16px 34px rgba(26, 90, 210, 0.2);
+  }
+  70% {
+    box-shadow:
+      0 0 0 13px rgba(47, 121, 255, 0),
+      0 0 0 8px rgba(47, 121, 255, 0.08),
+      0 16px 34px rgba(26, 90, 210, 0.2);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(47, 121, 255, 0),
+      0 0 0 8px rgba(47, 121, 255, 0.08),
+      0 16px 34px rgba(26, 90, 210, 0.2);
+  }
+}
+
+@keyframes connectorIconPop {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+@keyframes cardRevealGlow {
+  0% {
+    box-shadow: 0 0 0 rgba(47, 121, 255, 0);
+  }
+  42% {
+    box-shadow: 0 28px 76px rgba(47, 121, 255, 0.18);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(47, 121, 255, 0);
+  }
+}
+
 .intelligence-map-grid {
   background-color: #f8f8f7;
   background-image:
@@ -71,4 +113,76 @@
 
 .intelligence-map-ambient {
   animation: intelligenceMapPulse 5.4s ease-in-out infinite;
+}
+
+.intelligence-map-card-shell--visible {
+  animation: cardRevealGlow 920ms cubic-bezier(.16,1,.3,1) both;
+}
+
+.intelligence-map-socket {
+  border-radius: 999px;
+  border: 1px solid rgba(47, 121, 255, 0.22);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0 0 5px rgba(47, 121, 255, 0.08);
+  transition: opacity 520ms ease;
+}
+
+.intelligence-map-socket__core {
+  position: absolute;
+  inset: 3px;
+  border-radius: 999px;
+  background: rgba(47, 121, 255, 0.78);
+}
+
+.intelligence-map-connector {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(47, 121, 255, 0.42);
+  border-radius: 999px;
+  color: #1f6dff;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 1), rgba(234, 244, 255, 0.96) 62%, rgba(214, 234, 255, 0.94));
+  box-shadow:
+    0 0 0 8px rgba(47, 121, 255, 0.08),
+    0 16px 34px rgba(26, 90, 210, 0.2);
+  cursor: pointer;
+  line-height: 1;
+  transition:
+    opacity 520ms ease,
+    transform 220ms cubic-bezier(.16,1,.3,1),
+    border-color 220ms ease,
+    background 220ms ease;
+}
+
+.intelligence-map-connector:hover {
+  transform: translate(-50%, -50%) scale(1.16) !important;
+  border-color: rgba(47, 121, 255, 0.74);
+}
+
+.intelligence-map-connector:active {
+  transform: translate(-50%, -50%) scale(0.94) !important;
+}
+
+.intelligence-map-connector--collapsed {
+  animation: connectorHalo 2100ms ease-out infinite;
+}
+
+.intelligence-map-connector--expanded {
+  color: #0f4fb8;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 1), rgba(226, 242, 255, 0.96) 62%, rgba(197, 224, 255, 0.94));
+}
+
+.intelligence-map-connector__icon {
+  display: block;
+  font-size: 18px;
+  font-weight: 800;
+  transform-origin: center;
+}
+
+.intelligence-map-connector--collapsed .intelligence-map-connector__icon {
+  animation: connectorIconPop 1300ms ease-in-out infinite;
 }

@@ -1,5 +1,6 @@
 .automation-execution-card {
-  min-height: 606px;
+  min-height: 600px;
+  gap: 16px;
 }
 
 .automation-execution-card__state {
@@ -7,12 +8,13 @@
 }
 
 .automation-execution-card__gauge {
-  margin-top: -5px;
+  margin-top: -10px;
+  margin-bottom: -4px;
 }
 
 .automation-execution-card__lanes {
   display: grid;
-  gap: 11px;
+  gap: 12px;
   margin-top: -3px;
 }
 
@@ -25,7 +27,7 @@
 
 .automation-execution-card__lane {
   display: grid;
-  gap: 7px;
+  gap: 8px;
 }
 
 .automation-execution-card__lane-head {
@@ -55,9 +57,13 @@
 
 .automation-execution-card__lane .segmented-striped-bar__segment {
   height: 32px;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .automation-execution-card__lane .segmented-striped-bar {
-  gap: 3px;
+  gap: 4px;
+}
+
+.automation-execution-card .analytics-card__footer {
+  margin-top: 3px;
 }

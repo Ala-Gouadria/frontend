@@ -4,12 +4,13 @@
   padding: 26px 26px 24px;
   display: grid;
   gap: 17px;
-  border: 1px solid rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   border-radius: 12px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.96);
   box-shadow:
-    0 18px 34px rgba(24, 24, 27, 0.18),
-    0 0 0 7px rgba(0, 0, 0, 0.26);
+    0 18px 34px rgba(24, 24, 27, 0.16),
+    0 0 0 8px rgba(72, 80, 72, 0.38),
+    0 0 0 1px rgba(255, 255, 255, 0.72) inset;
   color: #121215;
   font-family: "Poppins", Manrope, "Segoe UI", sans-serif;
   animation: automationCardIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -20,10 +21,11 @@
 }
 
 .automation-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   box-shadow:
-    0 24px 44px rgba(24, 24, 27, 0.22),
-    0 0 0 7px rgba(0, 0, 0, 0.22);
+    0 24px 44px rgba(24, 24, 27, 0.2),
+    0 0 0 8px rgba(72, 80, 72, 0.32),
+    0 0 0 1px rgba(255, 255, 255, 0.82) inset;
 }
 
 .automation-card .analytics-card__header {
@@ -38,7 +40,7 @@
   font-size: 1.16rem;
   line-height: 1.05;
   font-weight: 700;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
   color: #111114;
 }
 
@@ -51,7 +53,7 @@
 
 .automation-card .analytics-card__status {
   min-width: 51px;
-  min-height: 25px;
+  min-height: 26px;
   padding: 0 11px;
   display: inline-flex;
   align-items: center;
@@ -65,7 +67,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
   color: #fff;
   font-size: 0.72rem;
-  font-weight: 500;
+  font-weight: 700;
   animation: automationStatusGlow 1.8s ease-in-out infinite alternate;
 }
 

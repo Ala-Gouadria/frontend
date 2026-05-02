@@ -34,7 +34,7 @@ export default function MainNav({ activeId, onSelect }) {
     }
 
     if (idx !== active) {
-      setRipple({ idx, key: Date.now() })
+      setRipple((current) => ({ idx, key: (current?.key ?? 0) + 1 }))
     }
 
     onSelect?.(NAV_ITEMS[idx].id, idx)

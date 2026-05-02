@@ -18,7 +18,7 @@ const defaultData = {
     { label: 'Qualified',  value: 28, tone: 'good' },
     { label: 'Proposal',   value: 21, tone: 'good' },
     { label: 'Stuck',      value: 11, tone: 'bad'  },
-    { label: 'Closed',     value: 10, tone: 'bad'  },
+    { label: 'Closed',     value: 10, tone: 'good' },
   ],
   winRate: {
     label: 'Win Rate',

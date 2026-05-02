@@ -64,7 +64,7 @@ export function MetricDots({ metrics, columns = 3, panel = 'orange', title }) {
               columns={(metric.columns ?? metric.bars ?? []).map((count, index) =>
                 typeof count === 'number' ? { label: `Point ${index + 1}`, count: Math.max(1, Math.round(count / 12)) } : count,
               )}
-              tone={metric.tone === 'red' ? 'red' : 'ink'}
+              tone={metric.chartTone ?? 'ink'}
             />
           </div>
         ))}
