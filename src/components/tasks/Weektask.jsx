@@ -1,48 +1,37 @@
 import { useEffect, useMemo, useState } from 'react'
 import { weekTaskApi } from '../../api/weekTaskApi'
 import { TaskAcceptanceBars, TaskHistoryLineChart } from '../visuals-parts'
+import PillButton from '../pages-parts/PillButton'
 import './Weektask.css'
 
 function filterHistory(tasks, filterValue) {
-  if (filterValue === 'created') {
-    return tasks.filter((task) => task.status === 'created')
-  }
-
-  if (filterValue === 'completed') {
-    return tasks.filter((task) => task.status === 'completed')
-  }
-
+  if (filterValue === 'created') return tasks.filter((task) => task.status === 'created')
+  if (filterValue === 'completed') return tasks.filter((task) => task.status === 'completed')
   return tasks
 }
 
 function filterCreated(tasks, filterValue) {
-  if (filterValue === 'accepted') {
-    return tasks.filter((task) => task.accepted)
-  }
-
-  if (filterValue === 'declined') {
-    return tasks.filter((task) => !task.accepted)
-  }
-
+  if (filterValue === 'accepted') return tasks.filter((task) => task.accepted)
+  if (filterValue === 'declined') return tasks.filter((task) => !task.accepted)
   return tasks
+}
+
+function getReferenceChartData(points = []) {
+  if (points.length < 2) return points
+
+  return [22, 14, 16, 18, 44, 25, 23, 26, 18, 22, 21, 24, 22, 28, 16, 32, 36, 42, 46, 18]
 }
 
 function PendingCircle() {
   return (
-    <svg viewBox="0 0 18 18" width="18" height="18" fill="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="pendGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#d6ea48" />
-          <stop offset="100%" stopColor="#a8c91d" />
-        </linearGradient>
-      </defs>
+    <svg viewBox="0 0 20 20" width="20" height="20" fill="none" aria-hidden="true">
       <circle
-        cx="9"
-        cy="9"
-        r="7.2"
-        stroke="url(#pendGrad)"
-        strokeWidth="1.7"
-        strokeDasharray="3.4 2.8"
+        cx="10"
+        cy="10"
+        r="7.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeDasharray="3 4"
         strokeLinecap="round"
       />
     </svg>
@@ -51,39 +40,18 @@ function PendingCircle() {
 
 function CompletedCircle() {
   return (
-    <svg viewBox="0 0 18 18" width="18" height="18" fill="none" aria-hidden="true">
-      <defs>
-        <filter id="ckGlow" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="2.8" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-      <g filter="url(#ckGlow)">
-        <circle cx="9" cy="9" r="9" fill="#b5d42d" />
-        <path d="M5.4 9.2 7.6 11.4 12.8 6.2" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
-      </g>
-    </svg>
-  )
-}
-
-function DotGrid() {
-  return (
-    <svg viewBox="0 0 16 16" width="15" height="15" fill="none" aria-hidden="true">
-      {[[4, 4], [8, 4], [12, 4], [4, 8], [8, 8], [12, 8], [4, 12], [8, 12], [12, 12]].map(([cx, cy]) => (
-        <circle key={`${cx}${cy}`} cx={cx} cy={cy} r="1.5" fill="rgba(255,255,255,0.9)" />
-      ))}
+    <svg viewBox="0 0 20 20" width="20" height="20" fill="none" aria-hidden="true">
+      <circle cx="10" cy="10" r="10" fill="currentColor" />
+      <path d="m6 10.2 2.3 2.25L14 7" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
 
 export default function WeekTask({ onClose }) {
-  const [stats, setStats] = useState({ completed: 0, total: 0, completionRate: 0, tone: 'blue' })
-  const [chartState, setChartState] = useState({ points: [], latest: 0, average: 0, tone: 'blue' })
+  const [stats, setStats] = useState({ completed: 0, total: 0, completionRate: 0 })
+  const [chartState, setChartState] = useState({ points: [], latest: 0 })
   const [overviewMode, setOverviewMode] = useState('completed')
-  const [chartRange, setChartRange] = useState('month')
+  const [chartRange, setChartRange] = useState('today')
   const [historyFilter, setHistoryFilter] = useState('completed')
   const [createdFilter, setCreatedFilter] = useState('accepted')
   const [allHistory, setAllHistory] = useState([])
@@ -91,15 +59,12 @@ export default function WeekTask({ onClose }) {
   const [createdSummary, setCreatedSummary] = useState({
     acceptedPct: 0,
     declinedPct: 0,
-    acceptedCount: 0,
-    declinedCount: 0,
-    tone: 'blue',
     cells: [],
   })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    let dead = false
+    let cancelled = false
 
     ;(async () => {
       const [nextStats, nextHistory, nextCreated, nextSummary] = await Promise.all([
@@ -109,9 +74,7 @@ export default function WeekTask({ onClose }) {
         weekTaskApi.getCreatedSummary(),
       ])
 
-      if (dead) {
-        return
-      }
+      if (cancelled) return
 
       setStats(nextStats)
       setAllHistory(nextHistory)
@@ -121,33 +84,36 @@ export default function WeekTask({ onClose }) {
     })()
 
     return () => {
-      dead = true
+      cancelled = true
     }
   }, [])
 
   useEffect(() => {
-    let dead = false
+    let cancelled = false
 
     ;(async () => {
       const nextChartState = await weekTaskApi.getChartData(chartRange, overviewMode)
-      if (!dead) {
-        setChartState(nextChartState)
-      }
+      if (!cancelled) setChartState(nextChartState)
     })()
 
     return () => {
-      dead = true
+      cancelled = true
     }
   }, [chartRange, overviewMode])
 
-  const visibleHistory = useMemo(
-    () => filterHistory(allHistory, historyFilter),
-    [allHistory, historyFilter],
-  )
+  const visibleHistory = useMemo(() => {
+    const filtered = filterHistory(allHistory, historyFilter)
+    return historyFilter === 'completed' ? allHistory.slice(0, 6) : filtered.slice(0, 6)
+  }, [allHistory, historyFilter])
 
   const visibleCreated = useMemo(
     () => filterCreated(allCreated, createdFilter).slice(0, 5),
     [allCreated, createdFilter],
+  )
+
+  const chartData = useMemo(
+    () => getReferenceChartData(chartState.points),
+    [chartState.points],
   )
 
   const progressDash = `${(stats.completionRate || 0) * 1.005} 100.5`
@@ -156,7 +122,7 @@ export default function WeekTask({ onClose }) {
     return (
       <div className="wt-root">
         <div className="wt-panel wt-panel--loading">
-          <div className="wt-loading"><div className="wt-spinner" /></div>
+          <div className="wt-spinner" />
         </div>
       </div>
     )
@@ -164,37 +130,35 @@ export default function WeekTask({ onClose }) {
 
   return (
     <div className="wt-root">
-      <div className={`wt-panel wt-panel--tone-${chartState.tone}`}>
+      <div className="wt-panel">
         <div className="wt-header">
           <div className="wt-header-left">
             <div className="wt-progress-ring" aria-hidden="true">
-              <svg viewBox="0 0 38 38" width="42" height="42">
-                <circle cx="19" cy="19" r="16" fill="none" className="wt-progress-ring__track" strokeWidth="3.6" />
+              <svg viewBox="0 0 38 38">
+                <circle cx="19" cy="19" r="15.2" fill="none" className="wt-progress-ring__track" strokeWidth="3.8" />
                 <circle
                   cx="19"
                   cy="19"
-                  r="16"
+                  r="15.2"
                   fill="none"
                   className="wt-progress-ring__value"
-                  strokeWidth="3.6"
+                  strokeWidth="3.8"
                   strokeDasharray={progressDash}
                   strokeLinecap="round"
                   transform="rotate(-90 19 19)"
                 />
               </svg>
             </div>
-            <p className="wt-header-title">Track your <strong>task</strong> history here</p>
+            <p className="wt-header-title">Track your task history here</p>
           </div>
           <div className="wt-header-right">
-            <span className={`wt-count-badge wt-count-badge--${stats.tone}`}>
-              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true">
-                <circle cx="8" cy="8" r="5.6" stroke="currentColor" strokeWidth="1.4" strokeDasharray="2.2 2.2" />
-              </svg>
+            <span className="wt-count-badge">
+              <span className="wt-count-dot" aria-hidden="true" />
               {stats.completed}/{stats.total}
             </span>
             <button type="button" className="wt-close-btn" onClick={onClose} aria-label="Close">
-              <svg viewBox="0 0 18 18" width="13" height="13" fill="none" aria-hidden="true">
-                <path d="M5.2 5.2 12.8 12.8M12.8 5.2 5.2 12.8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <svg viewBox="0 0 18 18" width="12" height="12" fill="none" aria-hidden="true">
+                <path d="M5.3 5.3 12.7 12.7M12.7 5.3 5.3 12.7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </button>
           </div>
@@ -232,21 +196,21 @@ export default function WeekTask({ onClose }) {
         </div>
 
         <div className="wt-chart-card">
-          <TaskHistoryLineChart data={chartState.points} tone={chartState.tone} />
+          <TaskHistoryLineChart data={chartData} tone="green" />
         </div>
 
         <section className="wt-section">
           <div className="wt-section-head">
             <h2 className="wt-section-title">Task history</h2>
             <div className="wt-pills-right">
-              {['all', 'created', 'completed'].map((filterValue) => (
+              {['all', 'created', 'completed'].map((filter) => (
                 <button
-                  key={filterValue}
+                  key={filter}
                   type="button"
-                  className={`wt-pill wt-pill--small ${historyFilter === filterValue ? 'active-blue' : ''}`}
-                  onClick={() => setHistoryFilter(filterValue)}
+                  className={`wt-pill wt-pill--small ${historyFilter === filter ? 'active-blue' : ''}`}
+                  onClick={() => setHistoryFilter(filter)}
                 >
-                  {filterValue[0].toUpperCase() + filterValue.slice(1)}
+                  {filter[0].toUpperCase() + filter.slice(1)}
                 </button>
               ))}
             </div>
@@ -255,8 +219,8 @@ export default function WeekTask({ onClose }) {
             {visibleHistory.map((task, index) => (
               <div
                 key={task.id}
-                className={`wt-task-row wt-task-row--${task.tone}`}
-                style={{ animationDelay: `${160 + index * 55}ms` }}
+                className={`wt-task-row wt-task-row--${task.status}`}
+                style={{ animationDelay: `${120 + index * 35}ms` }}
               >
                 <span className="wt-check">
                   {task.status === 'completed' ? <CompletedCircle /> : <PendingCircle />}
@@ -272,13 +236,13 @@ export default function WeekTask({ onClose }) {
           </div>
         </section>
 
-        <section className="wt-section wt-section--spaced">
+        <section className="wt-section wt-section--created">
           <div className="wt-section-head">
             <h2 className="wt-section-title">Created Tasks</h2>
             <div className="wt-pills-right">
               <button
                 type="button"
-                className={`wt-pill wt-pill--small ${createdFilter === 'all' ? 'active-blue' : ''}`}
+                className={`wt-pill wt-pill--small ${createdFilter === 'all' ? 'active-light' : ''}`}
                 onClick={() => setCreatedFilter('all')}
               >
                 All
@@ -299,6 +263,7 @@ export default function WeekTask({ onClose }) {
               </button>
             </div>
           </div>
+
           <div className="wt-legend">
             <span className="wt-legend-item">
               <span className="wt-legend-dot green" />
@@ -311,13 +276,15 @@ export default function WeekTask({ onClose }) {
               <span className="wt-legend-value">{createdSummary.declinedPct}%</span>
             </span>
           </div>
-          <TaskAcceptanceBars cells={createdSummary.cells} />
-          <div className="wt-task-list wt-task-list--compact">
+
+          <TaskAcceptanceBars cells={createdSummary.cells} className="wt-quality-blocks" />
+
+          <div className="wt-task-list wt-task-list--created">
             {visibleCreated.map((task, index) => (
               <div
                 key={task.id}
-                className={`wt-task-row wt-task-row--compact wt-task-row--${task.tone}`}
-                style={{ animationDelay: `${250 + index * 55}ms` }}
+                className="wt-task-row wt-task-row--created"
+                style={{ animationDelay: `${220 + index * 35}ms` }}
               >
                 <span className="wt-check"><PendingCircle /></span>
                 <span className="wt-task-title">{task.title}</span>
@@ -327,14 +294,16 @@ export default function WeekTask({ onClose }) {
         </section>
 
         <div className="wt-actions">
-          <button type="button" className="wt-btn decline" onClick={() => setCreatedFilter('declined')}>
-            <span>DECLINE</span>
-            <DotGrid />
-          </button>
-          <button type="button" className="wt-btn accept" onClick={() => setCreatedFilter('accepted')}>
-            <span>ACCEPTED</span>
-            <DotGrid />
-          </button>
+          <div className="wt-pill-btn-wrap wt-pill-btn-wrap--decline">
+            <PillButton width="100%" height="28px" compact onClick={() => setCreatedFilter('declined')}>
+              DECLINE
+            </PillButton>
+          </div>
+          <div className="wt-pill-btn-wrap wt-pill-btn-wrap--accept">
+            <PillButton width="100%" height="28px" compact onClick={() => setCreatedFilter('accepted')}>
+              ACCEPTED
+            </PillButton>
+          </div>
         </div>
       </div>
     </div>

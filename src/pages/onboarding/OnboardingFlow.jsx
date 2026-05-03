@@ -15,6 +15,7 @@ import ContentIcon from '../../assets/icons/Set-up-Nav/Contentdirection.png'
 import GoalIcon from '../../assets/icons/Set-up-Nav/BusinessGoal.png'
 import OptimIcon from '../../assets/icons/Set-up-Nav/OptimizationInputs.png'
 import { onboardingFlowApi } from '../../api/onboardingFlowApi'
+import PillButton from '../../components/pages-parts/PillButton'
 
 const STEP_ICONS = {
   profile: ProfileIcon,
@@ -517,12 +518,14 @@ export default function OnboardingFlow({ activeNavId = 'database', onNavigate })
                 <button type="button" className="ob-btn-skip" onClick={() => { void handleSkip() }} disabled={isLastStep || saving}>
                   Skip for now
                 </button>
-                <button type="button" className="ob-btn-next" onClick={() => { void handleNext() }} disabled={saving}>
-                  <span className="ob-btn-label">{saving ? 'SAVING' : isLastStep ? 'FINISH' : 'SAVE'}</span>
-                  <span className="ob-grid-dots">
-                    {[...Array(6)].map((_, index) => <span key={index} />)}
-                  </span>
-                </button>
+                <PillButton
+                  onClick={() => { void handleNext() }}
+                  disabled={saving}
+                  width="180px"
+                  height="52px"
+                >
+                  {saving ? 'SAVING…' : isLastStep ? 'FINISH' : 'SAVE'}
+                </PillButton>
               </div>
             </div>
           </div>
