@@ -1,0 +1,272 @@
+NORA FRONTEND PROJECT DOCUMENTATION
+===================================
+
+Project Summary
+---------------
+This is a React + Vite frontend for the Nora AI business dashboard.
+The application includes authentication screens, setup/onboarding, an
+interactive intelligence map, AI chat/workspace tools, reports, integrations,
+assets, notifications, activity log, settings, and analytics card previews.
+
+The project currently uses mock frontend API modules for most data flows.
+These mock APIs simulate asynchronous requests with delays and return static
+or in-memory data.
+
+
+Technology Stack
+----------------
+- React 19
+- React DOM 19
+- Vite 8
+- Tailwind CSS 4
+- ESLint 9
+- react-zoom-pan-pinch for the interactive map/zoom canvas
+
+
+Main Commands
+-------------
+Run development server:
+  npm run dev
+
+Build production files:
+  npm run build
+
+Run lint checks:
+  npm run lint
+
+Preview production build:
+  npm run preview
+
+
+Main Entry Points
+-----------------
+src/main.jsx
+  React root entry point. It imports global styles and renders App.
+
+src/app/App.jsx
+  Main application controller. It does not use React Router. Instead, it uses
+  local React state and localStorage flags to decide which page/view to show.
+
+src/styles/index.css
+  Global styles, Tailwind import, body/root sizing, base font settings.
+
+
+Application State and Navigation
+--------------------------------
+The app stores these localStorage keys:
+
+nora:isAuthenticated
+  Stores whether the user has entered the app.
+
+nora:setupComplete
+  Stores whether setup/onboarding is complete.
+
+nora:view
+  Stores the last selected app view after setup.
+
+Important app views:
+- login
+- signup
+- reset-password
+- setup
+- map
+- reports
+- integrate
+- onboarding
+- settings
+- settings-integrations
+- settings-team
+- notifications
+- assets
+- activity-log
+- analytics-cards-preview
+
+Special preview option:
+  http://localhost:5173?preview=analytics-cards
+  or
+  http://localhost:5173#analytics-cards
+
+These URLs open the analytics cards preview directly.
+
+
+Folder Structure
+----------------
+src/api
+  Mock API modules and mock data used by pages/components.
+
+src/app
+  Main App component and app-level styles.
+
+src/assets
+  Images, backgrounds, icons, and Nora logos.
+
+src/components
+  Shared UI components used across pages.
+
+src/components/bottom-ai
+  Bottom AI toolbar/status tools.
+
+src/components/Cards
+  Older/shared card component groups for analytics, automation, sales,
+  social media, strategy, and website traffic.
+
+src/components/layout
+  Main navigation, profile photo, project list, and layout-related pieces.
+
+src/components/nora
+  Nora avatar/chat/workspace components.
+
+src/components/pages-parts
+  Small reusable page UI parts, including PillButton.
+
+src/components/report-visuals
+  Report visual components.
+
+src/components/tasks
+  Task overview panel, including WeekTask.
+
+src/components/visuals-parts
+  Reusable chart/visual primitives such as line charts, bars, gauges,
+  activity rings, quality blocks, and task acceptance bars.
+
+src/features
+  Feature-focused versions of analytics, automation, sales, social media,
+  strategy, and website traffic cards with CSS modules and mock data.
+
+src/pages
+  Main screen/page components.
+
+src/pages/auth
+  Login, signup, and reset password screens.
+
+src/pages/intelligence
+  Intelligence map and Nora AI page.
+
+src/pages/onboarding
+  Setup and onboarding flow screens.
+
+src/pages/reports
+  Reports page.
+
+src/pages/settings
+  Settings, integrations, and team pages.
+
+
+Important Components
+--------------------
+App
+  Controls top-level view switching and localStorage state.
+
+IntelligenceMap
+  Main interactive workspace/map view. Uses zoom/pan behavior and opens panels
+  such as Nora workspace and task overview.
+
+WeekTask
+  Task overview panel. Uses weekTaskApi, TaskHistoryLineChart,
+  TaskAcceptanceBars, and PillButton.
+
+PillButton
+  Reusable gradient pill button with dotted arrow pattern. It supports
+  accepted/decline/primary variants and compact mode.
+
+NoraWorkspace
+  AI chat/workspace experience using noraWorkspaceApi mock conversation data.
+
+MainNav
+  Primary app navigation icons and navigation callbacks.
+
+
+API / Mock Data Modules
+-----------------------
+activityLogApi.js
+  Activity log mock API.
+
+assetsApi.js
+  Asset library mock API.
+
+integrationsApi.js
+  Integrations mock API.
+
+noraWorkspaceApi.js
+  In-memory Nora conversation, file upload, voice note, and assistant reply API.
+
+notificationsApi.js
+  Notifications mock API.
+
+onboardingFlowApi.js
+  Onboarding form data mock API.
+
+teamApi.js
+  Team/settings mock API.
+
+weekTaskApi.js
+  Week task stats, chart data, task history, created tasks, and acceptance
+  summary mock API.
+
+
+Styling Notes
+-------------
+- The project uses many component-level CSS files.
+- Some feature components use CSS modules.
+- Tailwind is imported globally, but much of the UI is still custom CSS.
+- The visual design relies heavily on gradients, soft shadows, blur effects,
+  rounded panels, dotted chart elements, and image assets.
+- The intelligence map uses fixed/floating panels and must be tested at the
+  target browser viewport because Windows/browser scaling affects perceived
+  sizes.
+
+
+Current Development Options
+---------------------------
+Option 1: Keep the current manual view system
+  Simple and already working. Good for fast iteration. The downside is that
+  deep links and browser back/forward behavior are limited.
+
+Option 2: Move to React Router
+  Better for real product navigation, URL sharing, browser history, and route
+  guards. This is recommended before production if the app grows.
+
+Option 3: Keep mock APIs during UI development
+  Good while finishing design. Replace the mock API modules later with real
+  HTTP calls while keeping the same function names where possible.
+
+Option 4: Add a real backend integration layer
+  Create a shared API client for authentication, workspace data, tasks,
+  integrations, reports, assets, and notifications.
+
+Option 5: Split large bundles
+  The production build warns that the main JavaScript chunk is large.
+  Dynamic imports/code splitting for pages and heavy card previews would
+  improve load time.
+
+Option 6: Consolidate duplicate card systems
+  There are card components under both src/components/Cards and src/features.
+  Choose one structure long-term to reduce duplicate styling and maintenance.
+
+Option 7: Create a design system
+  Promote repeated elements such as PillButton, chart cards, tabs, badges,
+  panels, and icon controls into a consistent component library.
+
+
+Recommended Next Improvements
+-----------------------------
+1. Add React Router or another routing layer.
+2. Replace localStorage-only auth with a real auth/session flow.
+3. Connect API modules to backend endpoints.
+4. Add responsive viewport testing for the intelligence map and panels.
+5. Add code splitting for pages and analytics card previews.
+6. Normalize naming and casing, for example restPassword vs ResetPassword.
+7. Reduce duplicate card implementations between components and features.
+8. Add unit/component tests for critical shared UI components.
+9. Add visual regression screenshots for WeekTask, PillButton, and map panels.
+10. Document design tokens for colors, shadows, spacing, and typography.
+
+
+Known Notes
+-----------
+- Build currently passes.
+- Lint currently passes.
+- The app currently depends heavily on localStorage for app state.
+- Many APIs are mocked and not connected to a backend.
+- The README is still the default Vite/React template and should eventually be
+  replaced or linked to this project documentation.
