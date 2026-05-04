@@ -7,6 +7,8 @@ import Integrate from '../pages/integrate/Integrate'
 import OnboardingFlow from '../pages/onboarding/OnboardingFlow'
 import Setup from '../pages/onboarding/Setup'
 import ReportsPage from '../pages/reports/ReportsPage'
+import EventsPage from '../pages/events/EventsPage'
+import MemoryPage from '../pages/memory/MemoryPage'
 import Settings from '../pages/settings/Settings'
 import Integrations from '../pages/settings/Integrations'
 import Team from '../pages/settings/Team'
@@ -79,6 +81,16 @@ export default function App() {
   const handleNavigation = (id) => {
     if (id === 'layers') {
       navigateTo('reports')
+      return
+    }
+
+    if (id === 'events') {
+      navigateTo('events')
+      return
+    }
+
+    if (id === 'memory') {
+      navigateTo('memory')
       return
     }
 
@@ -191,6 +203,14 @@ export default function App() {
 
   if (view === 'reports') {
     return <ReportsPage onNavigate={handleNavigation} />
+  }
+
+  if (view === 'events') {
+    return <EventsPage onNavigate={handleNavigation} />
+  }
+
+  if (view === 'memory') {
+    return <MemoryPage onNavigate={handleNavigation} />
   }
 
   if (view === 'analytics-cards-preview') {

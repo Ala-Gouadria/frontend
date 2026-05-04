@@ -524,6 +524,22 @@ export default function ReportsPage({ onNavigate }) {
             <div className="reports-page__actions">
               <button
                 type="button"
+                className="reports-page__action-button reports-page__action-button--dark"
+                onClick={() => onNavigate?.('events')}
+              >
+                <span>Events</span>
+                <GridIcon />
+              </button>
+              <button
+                type="button"
+                className="reports-page__action-button reports-page__action-button--dark"
+                onClick={() => onNavigate?.('memory')}
+              >
+                <span>Memory</span>
+                <GridIcon />
+              </button>
+              <button
+                type="button"
                 className={`reports-page__action-button ${compareEnabled ? 'reports-page__action-button--dark' : 'reports-page__action-button--blue'}`}
                 onClick={() => setCompareEnabled((current) => !current)}
               >
