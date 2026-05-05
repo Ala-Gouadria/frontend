@@ -110,7 +110,11 @@ function FilterRail({ label, items, active, onChange, align = 'left', trailingLa
           <button
             key={item}
             type="button"
-            className={`reports-page__pill ${item === active ? 'reports-page__pill--active' : ''}`}
+            className={[
+              'reports-page__pill',
+              item === active ? 'reports-page__pill--active' : '',
+              label === 'Category' && active === 'All' && (item === 'Strategy' || item === 'Website') ? 'reports-page__pill--active' : '',
+            ].filter(Boolean).join(' ')}
             onClick={() => onChange(item)}
             aria-pressed={item === active}
           >
@@ -522,22 +526,6 @@ export default function ReportsPage({ onNavigate }) {
               <span>{selectedLabel} Selected</span>
             </div>
             <div className="reports-page__actions">
-              <button
-                type="button"
-                className="reports-page__action-button reports-page__action-button--dark"
-                onClick={() => onNavigate?.('events')}
-              >
-                <span>Events</span>
-                <GridIcon />
-              </button>
-              <button
-                type="button"
-                className="reports-page__action-button reports-page__action-button--dark"
-                onClick={() => onNavigate?.('memory')}
-              >
-                <span>Memory</span>
-                <GridIcon />
-              </button>
               <button
                 type="button"
                 className={`reports-page__action-button ${compareEnabled ? 'reports-page__action-button--dark' : 'reports-page__action-button--blue'}`}

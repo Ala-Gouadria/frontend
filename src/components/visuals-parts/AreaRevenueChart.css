@@ -1,18 +1,20 @@
 .area-revenue-chart {
-  --area-revenue-top: #d9ef38;
-  --area-revenue-bottom: #6f9f00;
-  --area-revenue-line: #87a90c;
-  --area-revenue-soft-line: rgba(139, 169, 26, 0.48);
-  --area-revenue-dot: #aebd42;
-  --area-revenue-badge: #d9e449;
-  --area-revenue-badge-text: #708105;
-  --area-revenue-glow-color: rgba(137, 170, 12, 0.22);
+  --area-revenue-top: #e3f735;
+  --area-revenue-mid: #b9df08;
+  --area-revenue-bottom: #72a900;
+  --area-revenue-line: #8cb309;
+  --area-revenue-soft-line: rgba(174, 190, 71, 0.62);
+  --area-revenue-dot: #afc847;
+  --area-revenue-badge: #daf049;
+  --area-revenue-badge-text: #708108;
+  --area-revenue-glow-color: rgba(165, 205, 15, 0.34);
   width: 100%;
   min-width: 0;
 }
 
 .area-revenue-chart--red {
   --area-revenue-top: #ffb8b8;
+  --area-revenue-mid: #ff9a9a;
   --area-revenue-bottom: #ff8585;
   --area-revenue-line: #ff8888;
   --area-revenue-soft-line: rgba(255, 136, 136, 0.4);
@@ -24,6 +26,7 @@
 
 .area-revenue-chart--blue {
   --area-revenue-top: #8ac3ff;
+  --area-revenue-mid: #5aa5ff;
   --area-revenue-bottom: #2f80ed;
   --area-revenue-line: #2f80ed;
   --area-revenue-soft-line: rgba(47, 128, 237, 0.34);
@@ -34,11 +37,11 @@
 }
 
 .area-revenue-chart__title {
-  margin-bottom: 7px;
-  font-size: 0.62rem;
+  margin-bottom: 12px;
+  font-size: 24px;
   line-height: 1.2;
-  font-weight: 500;
-  color: rgba(24, 24, 27, 0.82);
+  font-weight: 600;
+  color: #273542;
 }
 
 .area-revenue-chart__svg {
@@ -49,38 +52,40 @@
 }
 
 .area-revenue-chart__glow {
-  opacity: 0.58;
+  opacity: 0.76;
 }
 
 .area-revenue-chart__area {
-  opacity: 0.98;
+  opacity: 0.97;
+  filter: drop-shadow(0 12px 20px var(--area-revenue-glow-color));
 }
 
-.area-revenue-chart__line {
+.area-revenue-chart__rail {
   fill: none;
   stroke: var(--area-revenue-line);
-  stroke-width: 2.2;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 520;
   stroke-dashoffset: 520;
   animation: areaRevenueDraw 1s ease forwards;
-  filter: drop-shadow(0 8px 12px var(--area-revenue-glow-color));
 }
 
-.area-revenue-chart__line--soft {
+.area-revenue-chart__rail {
   stroke: var(--area-revenue-soft-line);
-  stroke-width: 1.2;
+  stroke-width: 1.5;
+  filter: none;
 }
 
 .area-revenue-chart__focus {
-  stroke: rgba(213, 223, 104, 0.9);
-  stroke-width: 1;
+  stroke: rgba(213, 231, 79, 0.92);
+  stroke-width: 1.4;
   animation: areaRevenueFocus 700ms ease both;
 }
 
 .area-revenue-chart__dot {
-  fill: var(--area-revenue-dot);
+  fill: #b4c94a;
+  opacity: 0.88;
+  filter: none;
   transform-origin: center;
   animation: areaRevenueDot 540ms ease both;
 }
@@ -105,12 +110,12 @@
 
 .area-revenue-chart__badge {
   fill: var(--area-revenue-badge);
-  filter: drop-shadow(0 5px 10px rgba(176, 195, 45, 0.24));
+  filter: drop-shadow(0 7px 14px rgba(176, 195, 45, 0.28));
 }
 
 .area-revenue-chart__badge-text {
   fill: var(--area-revenue-badge-text);
-  font-size: 0.68rem;
+  font-size: 16px;
   font-weight: 800;
 }
 
