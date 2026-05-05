@@ -1,27 +1,26 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
 import { BottomAIStatusTools } from '../../components/bottom-ai/BottomAITools'
+import { eventsApi } from '../../api/eventsApi'
 import './EventsPage.css'
 
-const SUMMARY = [
-  ['Total Events', '12'],
-  ['Processed', '12'],
-  ['Processing', '12'],
-  ['Critical', '12'],
-  ['Blocked', '12'],
-]
+const ALL_FILTER = 'All'
+const EMPTY_FILTERS = {
+  types: [],
+  severities: [],
+  statuses: [],
+  agents: [],
+}
 
-const EVENTS = [
-  { id: 1, title: 'Traffic spike detected from LinkedIn campaign', type: 'Automation and Execution', severity: 'Low', status: 'Received', agent: 'Automation Agent', time: '15 min ago', tone: 'low' },
-  { id: 2, title: 'Traffic spike detected from LinkedIn campaign', type: 'Automation and Execution', severity: 'Critical', status: 'Processing', agent: 'Automation Agent', time: '15 min ago', tone: 'critical' },
-  { id: 3, title: 'Traffic spike detected from LinkedIn campaign', type: 'Automation and Execution', severity: 'High', status: 'Blocked', agent: 'Automation Agent', time: '15 min ago', tone: 'high' },
-  { id: 4, title: 'Traffic spike detected from LinkedIn campaign', type: 'Automation and Execution', severity: 'Medium', status: 'Processed', agent: 'Automation Agent', time: '15 min ago', tone: 'medium' },
-  { id: 5, title: 'Traffic spike detected from LinkedIn campaign', type: 'Automation and Execution', severity: 'High', status: 'Processed', agent: 'Automation Agent', time: '15 min ago', tone: 'high' },
-  { id: 6, title: 'Traffic spike detected from LinkedIn campaign', type: 'Automation and Execution', severity: 'High', status: 'Processed', agent: 'Automation Agent', time: '15 min ago', tone: 'high' },
-  { id: 7, title: 'Traffic spike detected from LinkedIn campaign', type: 'Automation and Execution', severity: 'High', status: 'Processed', agent: 'Automation Agent', time: '15 min ago', tone: 'high' },
-]
+const DEFAULT_FILTER_STATE = {
+  query: '',
+  type: ALL_FILTER,
+  severity: ALL_FILTER,
+  status: ALL_FILTER,
+  agent: ALL_FILTER,
+}
 
 function SearchIcon() {
   return (
@@ -42,24 +41,128 @@ function DownloadIcon() {
   )
 }
 
-function SelectBox({ label }) {
+function normalizeTone(value) {
+  return String(value ?? '').toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')
+}
+
+function getSummary(events) {
+  return [
+    ['Total Events', events.length],
+    ['Processed', events.filter((event) => event.status === 'Processed').length],
+    ['Processing', events.filter((event) => event.status === 'Processing').length],
+    ['Critical', events.filter((event) => event.severity === 'Critical').length],
+    ['Blocked', events.filter((event) => event.status === 'Blocked').length],
+  ]
+}
+
+function SelectBox({ label, value, options, onChange }) {
   return (
-    <button type="button" className="events-page__select">
-      <span>{label}</span>
+    <label className="events-page__select">
+      <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={label}>
+        <option value={ALL_FILTER}>{label}</option>
+        {options.map((option) => (
+          <option key={option} value={option}>{option}</option>
+        ))}
+      </select>
       <svg viewBox="0 0 18 18" aria-hidden="true">
         <path d="m5 7 4 4 4-4" />
       </svg>
-    </button>
+    </label>
   )
 }
 
 function Badge({ children, tone }) {
-  return <span className={`events-page__badge events-page__badge--${tone}`}>{children}</span>
+  return <span className={`events-page__badge events-page__badge--${normalizeTone(tone ?? children)}`}>{children}</span>
+}
+
+function eventMatchesFilters(event, filters) {
+  const query = filters.query.trim().toLowerCase()
+  const searchable = [
+    event.title,
+    event.description,
+    event.type,
+    event.severity,
+    event.status,
+    event.agent,
+  ].join(' ').toLowerCase()
+
+  return (!query || searchable.includes(query))
+    && (filters.type === ALL_FILTER || event.type === filters.type)
+    && (filters.severity === ALL_FILTER || event.severity === filters.severity)
+    && (filters.status === ALL_FILTER || event.status === filters.status)
+    && (filters.agent === ALL_FILTER || event.agent === filters.agent)
+}
+
+function exportEventsAsCsv(events) {
+  const columns = ['Title', 'Type', 'Severity', 'Status', 'Agent', 'Time', 'Description']
+  const rows = events.map((event) => [
+    event.title,
+    event.type,
+    event.severity,
+    event.status,
+    event.agent,
+    event.time,
+    event.description,
+  ])
+  const csv = [columns, ...rows]
+    .map((row) => row.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(','))
+    .join('\n')
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+
+  anchor.href = url
+  anchor.download = 'nora-events.csv'
+  anchor.click()
+  URL.revokeObjectURL(url)
 }
 
 export default function EventsPage({ onNavigate }) {
-  const [selectedId, setSelectedId] = useState(1)
-  const selected = useMemo(() => EVENTS.find((event) => event.id === selectedId) ?? EVENTS[0], [selectedId])
+  const [events, setEvents] = useState([])
+  const [filterOptions, setFilterOptions] = useState(EMPTY_FILTERS)
+  const [filters, setFilters] = useState(DEFAULT_FILTER_STATE)
+  const [selectedId, setSelectedId] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let isMounted = true
+
+    Promise.all([eventsApi.listEvents(), eventsApi.getEventFilters()]).then(([eventItems, options]) => {
+      if (!isMounted) {
+        return
+      }
+
+      setEvents(eventItems)
+      setFilterOptions(options)
+      setSelectedId(eventItems[0]?.id ?? null)
+      setLoading(false)
+    })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const visibleEvents = useMemo(() => (
+    events.filter((event) => eventMatchesFilters(event, filters))
+  ), [events, filters])
+
+  const summary = useMemo(() => getSummary(events), [events])
+  const selected = useMemo(() => (
+    visibleEvents.find((event) => event.id === selectedId)
+      ?? events.find((event) => event.id === selectedId)
+      ?? visibleEvents[0]
+      ?? events[0]
+      ?? null
+  ), [events, selectedId, visibleEvents])
+
+  const updateFilter = (key, value) => {
+    setFilters((current) => ({ ...current, [key]: value }))
+  }
+
+  const resetFilters = () => {
+    setFilters(DEFAULT_FILTER_STATE)
+  }
 
   return (
     <div className="events-page">
@@ -76,14 +179,14 @@ export default function EventsPage({ onNavigate }) {
 
           <section className="events-page__summary">
             <div className="events-page__summary-pills">
-              {SUMMARY.map(([label, value]) => (
+              {summary.map(([label, value]) => (
                 <div key={label} className="events-page__summary-pill">
                   <span>{label}</span>
                   <strong>{value}</strong>
                 </div>
               ))}
             </div>
-            <button type="button" className="events-page__export">
+            <button type="button" className="events-page__export" onClick={() => exportEventsAsCsv(visibleEvents)} disabled={!visibleEvents.length}>
               <span>Export As CSV</span>
               <DownloadIcon />
             </button>
@@ -94,16 +197,21 @@ export default function EventsPage({ onNavigate }) {
               <div className="events-page__search-row">
                 <label className="events-page__search">
                   <SearchIcon />
-                  <input type="search" placeholder="Search events, agents, or systems..." />
+                  <input
+                    type="search"
+                    placeholder="Search events, agents, or systems..."
+                    value={filters.query}
+                    onChange={(event) => updateFilter('query', event.target.value)}
+                  />
                 </label>
-                <button type="button" className="events-page__reset">Reset Filter</button>
+                <button type="button" className="events-page__reset" onClick={resetFilters}>Reset Filter</button>
               </div>
 
               <div className="events-page__filters">
-                <SelectBox label="Select event type" />
-                <SelectBox label="Select Severity Type" />
-                <SelectBox label="Select Status" />
-                <SelectBox label="Select related agent" />
+                <SelectBox label="Select event type" value={filters.type} options={filterOptions.types} onChange={(value) => updateFilter('type', value)} />
+                <SelectBox label="Select Severity Type" value={filters.severity} options={filterOptions.severities} onChange={(value) => updateFilter('severity', value)} />
+                <SelectBox label="Select Status" value={filters.status} options={filterOptions.statuses} onChange={(value) => updateFilter('status', value)} />
+                <SelectBox label="Select related agent" value={filters.agent} options={filterOptions.agents} onChange={(value) => updateFilter('agent', value)} />
               </div>
 
               <div className="events-page__table">
@@ -115,7 +223,13 @@ export default function EventsPage({ onNavigate }) {
                   <span>Agent</span>
                   <span>Time</span>
                 </div>
-                {EVENTS.map((event) => (
+                {loading ? (
+                  <div className="events-page__empty">Loading events...</div>
+                ) : null}
+                {!loading && !visibleEvents.length ? (
+                  <div className="events-page__empty">No events match the selected filters.</div>
+                ) : null}
+                {visibleEvents.map((event) => (
                   <button
                     key={event.id}
                     type="button"
@@ -125,11 +239,11 @@ export default function EventsPage({ onNavigate }) {
                     <span className="events-page__title-cell">
                       <i />
                       <strong>{event.title}</strong>
-                      <small>Nora detected website sessions increased by 42% in 30 minutes.</small>
+                      <small>{event.description}</small>
                     </span>
                     <span>{event.type}</span>
-                    <span><Badge tone={event.tone}>{event.severity}</Badge></span>
-                    <span><Badge tone={event.status.toLowerCase()}>{event.status}</Badge></span>
+                    <span><Badge>{event.severity}</Badge></span>
+                    <span><Badge>{event.status}</Badge></span>
                     <span>{event.agent}</span>
                     <span>{event.time}</span>
                   </button>
@@ -138,39 +252,46 @@ export default function EventsPage({ onNavigate }) {
             </div>
 
             <aside className="events-page__detail">
-              <div className="events-page__detail-head">
-                <span>Selected Event</span>
-                <Badge tone="medium">Medium</Badge>
-              </div>
-              <h2>{selected.title}</h2>
-              <div className="events-page__tags">
-                <Badge tone="neutral">Website and Traffic</Badge>
-                <Badge tone="processed">Processed</Badge>
-                <Badge tone="neutral">Automation Agent</Badge>
-              </div>
+              {selected ? (
+                <>
+                  <div className="events-page__detail-head">
+                    <span>Selected Event</span>
+                    <Badge>{selected.severity}</Badge>
+                  </div>
+                  <h2>{selected.title}</h2>
+                  <div className="events-page__tags">
+                    <Badge tone="neutral">{selected.type}</Badge>
+                    <Badge>{selected.status}</Badge>
+                    <Badge tone="neutral">{selected.agent}</Badge>
+                  </div>
 
-              <div className="events-page__info-block">
-                <span>What Nora Detected</span>
-                <p>Nora detected website sessions increased by 42% in 30 minutes.</p>
-              </div>
-              <div className="events-page__info-block">
-                <span>Reasoning Summary</span>
-                <p>Continuing without valid access could create incomplete or duplicated actions.</p>
-              </div>
+                  <div className="events-page__info-block">
+                    <span>What Nora Detected</span>
+                    <p>{selected.detected}</p>
+                  </div>
+                  <div className="events-page__info-block">
+                    <span>Reasoning Summary</span>
+                    <p>{selected.reasoning}</p>
+                  </div>
+                  <div className="events-page__info-block">
+                    <span>Business Impact</span>
+                    <p>{selected.impact}</p>
+                  </div>
 
-              <div className="events-page__trail">
-                <span>Event Trail</span>
-                <div className="events-page__trail-item">
-                  <i />
-                  <strong>Received</strong>
-                  <small>Event Received by Nora</small>
-                </div>
-                <div className="events-page__trail-item events-page__trail-item--active">
-                  <i />
-                  <strong>Processed</strong>
-                  <small>Current event state</small>
-                </div>
-              </div>
+                  <div className="events-page__trail">
+                    <span>Event Trail</span>
+                    {selected.trail.map((item) => (
+                      <div key={`${selected.id}-${item.label}`} className={`events-page__trail-item ${item.state === 'current' ? 'events-page__trail-item--active' : ''}`}>
+                        <i />
+                        <strong>{item.label}</strong>
+                        <small>{item.detail}</small>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="events-page__empty events-page__empty--detail">Select an event to view Nora's reasoning.</div>
+              )}
             </aside>
           </section>
         </div>

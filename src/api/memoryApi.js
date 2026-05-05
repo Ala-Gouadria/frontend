@@ -1,0 +1,180 @@
+const CATEGORIES = ['Social Media', 'Analytics', 'Strategy', 'Sales', 'Website', 'Automation']
+const DURATIONS = ['Today', 'Weekly', 'Monthly', 'Custom']
+const STATUSES = ['Positive', 'Neutral', 'Negative']
+
+const MEMORIES = [
+  {
+    id: 'mem-1001',
+    title: 'Adjusted Instagram posting schedule',
+    summary: 'Engagement increased by 24% over 3 days',
+    time: '5 min ago',
+    category: 'Website',
+    categoryLabel: 'Website and Traffic',
+    duration: 'Custom',
+    status: 'Positive',
+    decision: 'Nora moved high-intent Instagram posts into the evening publishing window.',
+    outcome: 'Engagement increased by 24% over 3 days',
+    reasoning: 'Audience activity peaks shifted to evening hours',
+    details: 'Analyzed engagement heatmaps and moved posting time',
+    decisionDuration: '3 days',
+  },
+  {
+    id: 'mem-1002',
+    title: 'Paused low quality retargeting segment',
+    summary: 'Ad spend waste decreased by 16% this week',
+    time: '18 min ago',
+    category: 'Automation',
+    categoryLabel: 'Automation',
+    duration: 'Weekly',
+    status: 'Positive',
+    decision: 'Nora paused a retargeting segment with repeated visits but weak checkout intent.',
+    outcome: 'Ad spend waste decreased by 16% this week',
+    reasoning: 'Click volume was high, but product-page depth and cart starts stayed low.',
+    details: 'Excluded low quality visitors and preserved budget for pricing-page audiences.',
+    decisionDuration: '7 days',
+  },
+  {
+    id: 'mem-1003',
+    title: 'Flagged competitor discount campaign',
+    summary: 'Positioning risk marked for strategy review',
+    time: '31 min ago',
+    category: 'Strategy',
+    categoryLabel: 'Strategy',
+    duration: 'Today',
+    status: 'Negative',
+    decision: 'Nora flagged competitor discount messaging as a short-term positioning risk.',
+    outcome: 'Positioning risk marked for strategy review',
+    reasoning: 'The competitor offer overlaps with the active acquisition audience.',
+    details: 'Captured campaign screenshots, offer language, and affected audience segments.',
+    decisionDuration: '42 min',
+  },
+  {
+    id: 'mem-1008',
+    title: 'Refined competitor response strategy',
+    summary: 'Risk score decreased after value messaging update',
+    time: '7 min ago',
+    category: 'Strategy',
+    categoryLabel: 'Strategy',
+    duration: 'Custom',
+    status: 'Negative',
+    decision: 'Nora marked the competitor discount campaign as a negative strategic signal.',
+    outcome: 'Risk score decreased after value messaging update',
+    reasoning: 'Discount-led competitor messaging could pull attention away from proof and outcomes.',
+    details: 'Updated the positioning notes, prioritized customer proof, and recommended avoiding price matching.',
+    decisionDuration: 'Jan 1 - Jan 31',
+  },
+  {
+    id: 'mem-1009',
+    title: 'Blocked weak differentiation angle',
+    summary: 'Brand clarity issue sent to strategy queue',
+    time: '12 min ago',
+    category: 'Strategy',
+    categoryLabel: 'Strategy',
+    duration: 'Custom',
+    status: 'Negative',
+    decision: 'Nora blocked a campaign angle because it sounded too similar to competitor messaging.',
+    outcome: 'Brand clarity issue sent to strategy queue',
+    reasoning: 'The draft emphasized generic speed claims instead of the strongest proof points.',
+    details: 'Compared campaign language against competitor pages and saved a stronger positioning direction.',
+    decisionDuration: 'Jan 1 - Jan 31',
+  },
+  {
+    id: 'mem-1010',
+    title: 'Reduced expansion priority for cold audience',
+    summary: 'Growth plan adjusted after weak intent signals',
+    time: '24 min ago',
+    category: 'Strategy',
+    categoryLabel: 'Strategy',
+    duration: 'Custom',
+    status: 'Negative',
+    decision: 'Nora lowered priority for a cold audience expansion segment.',
+    outcome: 'Growth plan adjusted after weak intent signals',
+    reasoning: 'The segment had strong reach but low demo intent and low return visits.',
+    details: 'Moved budget recommendation toward warm proof-led audiences and saved the reason in memory.',
+    decisionDuration: 'Jan 1 - Jan 31',
+  },
+  {
+    id: 'mem-1004',
+    title: 'Kept sales follow-up cadence unchanged',
+    summary: 'Reply rate remained stable across warm leads',
+    time: '44 min ago',
+    category: 'Sales',
+    categoryLabel: 'Sales',
+    duration: 'Today',
+    status: 'Neutral',
+    decision: 'Nora kept the current sales follow-up cadence unchanged.',
+    outcome: 'Reply rate remained stable across warm leads',
+    reasoning: 'Lead response time improved, but conversion lift was not significant yet.',
+    details: 'Compared two follow-up windows and retained the better performing baseline.',
+    decisionDuration: '1 day',
+  },
+  {
+    id: 'mem-1005',
+    title: 'Shifted report focus to traffic quality',
+    summary: 'Dashboard reviews became easier to prioritize',
+    time: '1 hr ago',
+    category: 'Analytics',
+    categoryLabel: 'Analytics',
+    duration: 'Monthly',
+    status: 'Positive',
+    decision: 'Nora prioritized traffic quality over raw session volume in the weekly report.',
+    outcome: 'Dashboard reviews became easier to prioritize',
+    reasoning: 'High session count was hiding a conversion quality issue.',
+    details: 'Weighted source quality, demo intent, checkout starts, and follow-up velocity.',
+    decisionDuration: '14 days',
+  },
+  {
+    id: 'mem-1006',
+    title: 'Delayed campaign publish until asset review',
+    summary: 'Publishing issue prevented duplicate content',
+    time: '2 hrs ago',
+    category: 'Social Media',
+    categoryLabel: 'Social Media',
+    duration: 'Weekly',
+    status: 'Negative',
+    decision: 'Nora delayed a campaign publish until duplicated visuals were reviewed.',
+    outcome: 'Publishing issue prevented duplicate content',
+    reasoning: 'Two scheduled posts used the same visual with conflicting captions.',
+    details: 'Held the post queue, marked duplicated assets, and requested replacement media.',
+    decisionDuration: '2 hrs',
+  },
+  {
+    id: 'mem-1007',
+    title: 'Reordered onboarding setup tasks',
+    summary: 'Setup completion increased by 11%',
+    time: '3 hrs ago',
+    category: 'Automation',
+    categoryLabel: 'Automation',
+    duration: 'Monthly',
+    status: 'Positive',
+    decision: 'Nora reordered onboarding tasks so integrations appear before profile polish.',
+    outcome: 'Setup completion increased by 11%',
+    reasoning: 'Users who connected accounts early reached useful dashboards faster.',
+    details: 'Moved integration prompts earlier and kept brand details after first data sync.',
+    decisionDuration: '30 days',
+  },
+]
+
+function delay(ms) {
+  return new Promise((resolve) => globalThis.setTimeout(resolve, ms))
+}
+
+function cloneMemory(memory) {
+  return { ...memory }
+}
+
+export const memoryApi = {
+  async listMemories() {
+    await delay(150)
+    return MEMORIES.map(cloneMemory)
+  },
+
+  async getMemoryFilters() {
+    await delay(80)
+    return {
+      categories: [...CATEGORIES],
+      durations: [...DURATIONS],
+      statuses: [...STATUSES],
+    }
+  },
+}

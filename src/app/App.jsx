@@ -9,6 +9,7 @@ import Setup from '../pages/onboarding/Setup'
 import ReportsPage from '../pages/reports/ReportsPage'
 import EventsPage from '../pages/events/EventsPage'
 import MemoryPage from '../pages/memory/MemoryPage'
+import PricingPage from '../pages/pricing/PricingPage'
 import Settings from '../pages/settings/Settings'
 import Integrations from '../pages/settings/Integrations'
 import Team from '../pages/settings/Team'
@@ -91,6 +92,11 @@ export default function App() {
 
     if (id === 'memory') {
       navigateTo('memory')
+      return
+    }
+
+    if (id === 'pricing') {
+      navigateTo('pricing')
       return
     }
 
@@ -211,6 +217,10 @@ export default function App() {
 
   if (view === 'memory') {
     return <MemoryPage onNavigate={handleNavigation} />
+  }
+
+  if (view === 'pricing') {
+    return <PricingPage onNavigate={handleNavigation} />
   }
 
   if (view === 'analytics-cards-preview') {

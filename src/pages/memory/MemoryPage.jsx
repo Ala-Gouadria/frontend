@@ -1,23 +1,18 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
 import { BottomAIStatusTools } from '../../components/bottom-ai/BottomAITools'
+import { memoryApi } from '../../api/memoryApi'
 import './MemoryPage.css'
 
-const CATEGORIES = ['All', 'Social Media', 'Analytics', 'Strategy', 'Sales', 'Website', 'Automation']
-const DURATIONS = ['All', 'Today', 'Weekly', 'Monthly', 'Custom']
-const STATUSES = ['All', 'Positive', 'Neutral', 'Negative']
-
-const MEMORIES = [
-  { id: 1, title: 'Adjusted Instagram posting schedule', summary: 'Engagement increased by 24% over 3 days', time: '5 min ago', category: 'Website and Traffic', status: 'Positive' },
-  { id: 2, title: 'Adjusted Instagram posting schedule', summary: 'Engagement increased by 24% over 3 days', time: '5 min ago', category: 'Website and Traffic', status: 'Positive' },
-  { id: 3, title: 'Adjusted Instagram posting schedule', summary: 'Engagement increased by 24% over 3 days', time: '5 min ago', category: 'Website and Traffic', status: 'Positive' },
-  { id: 4, title: 'Adjusted Instagram posting schedule', summary: 'Engagement increased by 24% over 3 days', time: '5 min ago', category: 'Website and Traffic', status: 'Positive' },
-  { id: 5, title: 'Adjusted Instagram posting schedule', summary: 'Engagement increased by 24% over 3 days', time: '5 min ago', category: 'Website and Traffic', status: 'Positive' },
-  { id: 6, title: 'Adjusted Instagram posting schedule', summary: 'Engagement increased by 24% over 3 days', time: '5 min ago', category: 'Website and Traffic', status: 'Positive' },
-  { id: 7, title: 'Adjusted Instagram posting schedule', summary: 'Engagement increased by 24% over 3 days', time: '5 min ago', category: 'Website and Traffic', status: 'Positive' },
-]
+const ALL_FILTER = 'All'
+const DEFAULT_FILTERS = {
+  category: 'Strategy',
+  duration: 'Custom',
+  status: 'Negative',
+  query: '',
+}
 
 function SearchIcon() {
   return (
@@ -29,11 +24,13 @@ function SearchIcon() {
 }
 
 function Segmented({ label, items, active, onChange, extra, align = 'left' }) {
+  const allItems = label === 'Category' || label === 'Duration' || label === 'Status' ? [ALL_FILTER, ...items] : items
+
   return (
     <div className={`memory-page__segmented memory-page__segmented--${align}`}>
       <span className="memory-page__segmented-label">{label}</span>
       <div className="memory-page__segmented-pills">
-        {items.map((item) => (
+        {allItems.map((item) => (
           <button
             key={item}
             type="button"
@@ -50,15 +47,92 @@ function Segmented({ label, items, active, onChange, extra, align = 'left' }) {
 }
 
 function Tag({ children, tone = 'neutral' }) {
-  return <span className={`memory-page__tag memory-page__tag--${tone}`}>{children}</span>
+  return <span className={`memory-page__tag memory-page__tag--${String(tone).toLowerCase()}`}>{children}</span>
+}
+
+function memoryMatchesFilters(memory, filters) {
+  const query = filters.query.trim().toLowerCase()
+  const searchable = [
+    memory.title,
+    memory.summary,
+    memory.category,
+    memory.categoryLabel,
+    memory.status,
+    memory.decision,
+    memory.reasoning,
+  ].join(' ').toLowerCase()
+
+  return (!query || searchable.includes(query))
+    && (filters.category === ALL_FILTER || memory.category === filters.category)
+    && (filters.duration === ALL_FILTER || memory.duration === filters.duration)
+    && (filters.status === ALL_FILTER || memory.status === filters.status)
 }
 
 export default function MemoryPage({ onNavigate }) {
-  const [category, setCategory] = useState('Strategy')
-  const [duration, setDuration] = useState('Custom')
-  const [status, setStatus] = useState('Negative')
-  const [selectedId, setSelectedId] = useState(1)
-  const selected = useMemo(() => MEMORIES.find((item) => item.id === selectedId) ?? MEMORIES[0], [selectedId])
+  const [memories, setMemories] = useState([])
+  const [filterOptions, setFilterOptions] = useState({ categories: [], durations: [], statuses: [] })
+  const [filters, setFilters] = useState(DEFAULT_FILTERS)
+  const [selectedId, setSelectedId] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [detailKey, setDetailKey] = useState(0)
+  const [removingIds, setRemovingIds] = useState([])
+  const removeTimersRef = useRef([])
+
+  useEffect(() => {
+    let isMounted = true
+
+    Promise.all([memoryApi.listMemories(), memoryApi.getMemoryFilters()]).then(([items, options]) => {
+      if (!isMounted) {
+        return
+      }
+
+      setMemories(items)
+      setFilterOptions(options)
+      setSelectedId(items[0]?.id ?? null)
+      setLoading(false)
+    })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  useEffect(() => () => {
+    removeTimersRef.current.forEach((timerId) => window.clearTimeout(timerId))
+  }, [])
+
+  const visibleMemories = useMemo(() => (
+    memories.filter((memory) => memoryMatchesFilters(memory, filters))
+  ), [filters, memories])
+
+  const selected = useMemo(() => (
+    visibleMemories.find((item) => item.id === selectedId)
+      ?? visibleMemories[0]
+      ?? null
+  ), [selectedId, visibleMemories])
+
+  const updateFilter = (key, value) => {
+    setFilters((current) => ({ ...current, [key]: value }))
+  }
+
+  const selectMemory = (id) => {
+    if (removingIds.includes(id)) {
+      return
+    }
+
+    setSelectedId(id)
+    setDetailKey((current) => current + 1)
+    setRemovingIds((current) => [...current, id])
+
+    const timerId = window.setTimeout(() => {
+      setMemories((current) => current.filter((memory) => memory.id !== id))
+      setRemovingIds((current) => current.filter((itemId) => itemId !== id))
+      setSelectedId((current) => (current === id ? null : current))
+      setDetailKey((current) => current + 1)
+    }, 680)
+
+    removeTimersRef.current.push(timerId)
+  }
 
   return (
     <div className="memory-page">
@@ -74,13 +148,13 @@ export default function MemoryPage({ onNavigate }) {
           </header>
 
           <section className="memory-page__toolbar">
-            <Segmented label="Category" items={CATEGORIES} active={category} onChange={setCategory} />
+            <Segmented label="Category" items={filterOptions.categories} active={filters.category} onChange={(value) => updateFilter('category', value)} />
             <Segmented
               label="Duration"
-              items={DURATIONS}
-              active={duration}
-              onChange={setDuration}
-              extra={duration === 'Custom' ? 'Jan 1 - Jan 31' : null}
+              items={filterOptions.durations}
+              active={filters.duration}
+              onChange={(value) => updateFilter('duration', value)}
+              extra={filters.duration === 'Custom' ? 'Jan 1 - Jan 31' : null}
               align="right"
             />
           </section>
@@ -90,18 +164,30 @@ export default function MemoryPage({ onNavigate }) {
               <div className="memory-page__search-row">
                 <label className="memory-page__search">
                   <SearchIcon />
-                  <input type="search" placeholder="Search events, agents, or systems..." />
+                  <input
+                    type="search"
+                    placeholder="Search events, agents, or systems..."
+                    value={filters.query}
+                    onChange={(event) => updateFilter('query', event.target.value)}
+                  />
                 </label>
-                <Segmented label="Status" items={STATUSES} active={status} onChange={setStatus} align="right" />
+                <Segmented label="Status" items={filterOptions.statuses} active={filters.status} onChange={(value) => updateFilter('status', value)} align="right" />
               </div>
 
               <div className="memory-page__list">
-                {MEMORIES.map((item) => (
+                {loading ? <div className="memory-page__empty">Loading memory...</div> : null}
+                {!loading && !visibleMemories.length ? <div className="memory-page__empty">No memory records match these filters.</div> : null}
+                {visibleMemories.map((item) => (
                   <button
                     key={item.id}
                     type="button"
-                    className={`memory-page__memory-card ${item.id === selectedId ? 'memory-page__memory-card--active' : ''}`}
-                    onClick={() => setSelectedId(item.id)}
+                    className={[
+                      'memory-page__memory-card',
+                      item.id === selected?.id ? 'memory-page__memory-card--active' : '',
+                      removingIds.includes(item.id) ? 'memory-page__memory-card--removing' : '',
+                    ].filter(Boolean).join(' ')}
+                    onClick={() => selectMemory(item.id)}
+                    disabled={removingIds.includes(item.id)}
                   >
                     <span className="memory-page__memory-title">
                       <i />
@@ -110,8 +196,8 @@ export default function MemoryPage({ onNavigate }) {
                     <small>{item.summary}</small>
                     <time>{item.time}</time>
                     <div className="memory-page__memory-tags">
-                      <Tag>{item.category}</Tag>
-                      <Tag tone="positive">{item.status}</Tag>
+                      <Tag>{item.categoryLabel}</Tag>
+                      <Tag tone={item.status}>{item.status}</Tag>
                     </div>
                   </button>
                 ))}
@@ -120,30 +206,39 @@ export default function MemoryPage({ onNavigate }) {
 
             <aside className="memory-page__detail">
               <h2>Decision Details</h2>
+              {selected ? (
+                <div key={`${selected.id}-${detailKey}`} className="memory-page__detail-body">
+                  <dl>
+                    <div>
+                      <dt>Decision</dt>
+                      <dd>{selected.decision}</dd>
+                    </div>
+                    <div>
+                      <dt>Decision duration</dt>
+                      <dd>{selected.decisionDuration}</dd>
+                    </div>
+                    <div>
+                      <dt>Outcome</dt>
+                      <dd>{selected.outcome}</dd>
+                    </div>
+                    <div>
+                      <dt>Reasoning</dt>
+                      <dd>{selected.reasoning}</dd>
+                    </div>
+                    <div>
+                      <dt>Details</dt>
+                      <dd>{selected.details}</dd>
+                    </div>
+                  </dl>
 
-              <dl>
-                <div>
-                  <dt>Decision</dt>
-                  <dd>Nora detected website sessions increased by 42% in 30 minutes.</dd>
+                  <div className="memory-page__detail-tags">
+                    <Tag>{selected.categoryLabel}</Tag>
+                    <Tag tone={selected.status}>{selected.status}</Tag>
+                  </div>
                 </div>
-                <div>
-                  <dt>Outcome</dt>
-                  <dd>{selected.summary}</dd>
-                </div>
-                <div>
-                  <dt>Reasoning</dt>
-                  <dd>Audience activity peaks shifted to evening hours</dd>
-                </div>
-                <div>
-                  <dt>Details</dt>
-                  <dd>Analyzed engagement heatmaps and moved posting time</dd>
-                </div>
-              </dl>
-
-              <div className="memory-page__detail-tags">
-                <Tag>{selected.category}</Tag>
-                <Tag tone="positive">{selected.status}</Tag>
-              </div>
+              ) : (
+                <div className="memory-page__empty memory-page__empty--detail">Select a memory to view Nora's reasoning.</div>
+              )}
             </aside>
           </section>
         </div>

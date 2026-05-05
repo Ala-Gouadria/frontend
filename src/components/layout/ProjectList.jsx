@@ -114,6 +114,21 @@ export default function ProjectList({ onNavigate }) {
     onNavigate?.('settings')
   }
 
+  const openEvents = () => {
+    handleClose()
+    onNavigate?.('events')
+  }
+
+  const openMemory = () => {
+    handleClose()
+    onNavigate?.('memory')
+  }
+
+  const openPricing = () => {
+    handleClose()
+    onNavigate?.('pricing')
+  }
+
   const openNotifications = () => {
     handleClose()
     onNavigate?.('notifications')
@@ -160,7 +175,7 @@ export default function ProjectList({ onNavigate }) {
                   <span className="project-balance__ring" aria-hidden="true" />
                   <span>Balance</span>
                 </div>
-                <button type="button" className="project-balance__upgrade">
+                <button type="button" className="project-balance__upgrade" onClick={openPricing}>
                   Upgrade
                 </button>
               </div>
@@ -178,8 +193,10 @@ export default function ProjectList({ onNavigate }) {
             </div>
 
             <div className="project-dropdown__links">
+              <button type="button" className="project-dropdown__link" onClick={openEvents}>Events</button>
+              <button type="button" className="project-dropdown__link" onClick={openMemory}>Memory</button>
               <button type="button" className="project-dropdown__link" onClick={openSettings}>Settings</button>
-              <button type="button" className="project-dropdown__link" onClick={handleClose}>Upgrade Your Plan</button>
+              <button type="button" className="project-dropdown__link" onClick={openPricing}>Upgrade Your Plan</button>
               <button type="button" className="project-dropdown__link project-dropdown__link--danger" onClick={handleClose}>Log Out</button>
             </div>
           </div>
