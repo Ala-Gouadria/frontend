@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect, useCallback } from 'react'
+import { reportsApi } from '../../api/reports.js'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
@@ -488,6 +489,79 @@ function RenderReports({ keys }) {
   })
 }
 
+function AIReportsPanel() {
+  const [reports, setReports] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [generating, setGenerating] = useState(null) // 'daily' | 'weekly' | null
+  const [error, setError] = useState('')
+
+  const loadReports = useCallback(() => {
+    setLoading(true)
+    reportsApi.list({ pageSize: 10 }).then(({ items }) => {
+      setReports(items)
+    }).catch(() => {}).finally(() => setLoading(false))
+  }, [])
+
+  useEffect(() => { loadReports() }, [loadReports])
+
+  const handleGenerate = async (type) => {
+    setError('')
+    setGenerating(type)
+    try {
+      await (type === 'daily' ? reportsApi.generateDaily() : reportsApi.generateWeekly())
+      await loadReports()
+    } catch (err) {
+      setError(err.message ?? 'Generation failed.')
+    } finally {
+      setGenerating(null)
+    }
+  }
+
+  return (
+    <section className="reports-page__ai-panel">
+      <div className="reports-page__ai-header">
+        <h2>AI Reports</h2>
+        <div className="reports-page__ai-actions">
+          <button
+            type="button"
+            className="reports-page__action-button reports-page__action-button--blue"
+            onClick={() => handleGenerate('daily')}
+            disabled={generating !== null}
+          >
+            {generating === 'daily' ? 'Generating…' : 'Generate Daily'}
+          </button>
+          <button
+            type="button"
+            className="reports-page__action-button reports-page__action-button--dark"
+            onClick={() => handleGenerate('weekly')}
+            disabled={generating !== null}
+          >
+            {generating === 'weekly' ? 'Generating…' : 'Generate Weekly'}
+          </button>
+        </div>
+      </div>
+      {error ? <p className="reports-page__ai-error">{error}</p> : null}
+      {loading ? (
+        <p className="reports-page__ai-empty">Loading reports…</p>
+      ) : reports.length === 0 ? (
+        <p className="reports-page__ai-empty">No AI reports yet. Generate your first daily or weekly report.</p>
+      ) : (
+        <ul className="reports-page__ai-list">
+          {reports.map((report) => (
+            <li key={report.id} className="reports-page__ai-item">
+              <span className={`reports-page__ai-badge reports-page__ai-badge--${report.type ?? 'daily'}`}>
+                {report.type ?? 'daily'}
+              </span>
+              <span className="reports-page__ai-date">{report.periodDate ?? report.createdAt?.slice(0, 10)}</span>
+              <span className="reports-page__ai-title">{report.title ?? 'Report'}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}
+
 export default function ReportsPage({ onNavigate }) {
   const [category, setCategory] = useState('All')
   const [duration, setDuration] = useState('Custom')
@@ -508,6 +582,8 @@ export default function ReportsPage({ onNavigate }) {
             <h1>Reports</h1>
             <p>Review business performance by department, compare time periods side by side, and export structured report data.</p>
           </header>
+
+          <AIReportsPanel />
 
           <section className="reports-page__toolbar">
             <div className="reports-page__toolbar-row">
