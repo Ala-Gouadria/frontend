@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './Signup.css'
 import noraLoginLogo from '../../assets/logo/Nora-Login-Logo.png'
 import loginBackground from '../../assets/background/Login-background.jpg'
+import * as authApi from '../../api/auth.js'
 
 function PasswordInput({ value, onChange, placeholder = 'Enter your password', autoComplete }) {
   const [visible, setVisible] = useState(false)
@@ -46,17 +47,19 @@ export default function Signup({ onSuccess, onLogin }) {
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
+    companyName: '',
     email: '',
     password: '',
     confirmPassword: '',
   })
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const updateField = (field) => (event) => {
     setForm((current) => ({ ...current, [field]: event.target.value }))
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     if (form.password.length < 8) {
@@ -70,7 +73,25 @@ export default function Signup({ onSuccess, onLogin }) {
     }
 
     setError('')
-    onSuccess?.()
+    setLoading(true)
+    try {
+      await authApi.register({
+        email: form.email.trim(),
+        password: form.password,
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        companyName: form.companyName.trim(),
+      })
+      onSuccess?.()
+    } catch (err) {
+      if (err.code === 'CONFLICT') {
+        setError('An account with this email already exists.')
+      } else {
+        setError(err.message ?? 'Registration failed. Please try again.')
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -104,6 +125,11 @@ export default function Signup({ onSuccess, onLogin }) {
         </div>
 
         <label className="auth-field">
+          <span>Company Name</span>
+          <input value={form.companyName} onChange={updateField('companyName')} placeholder="eg. Acme Inc." autoComplete="organization" />
+        </label>
+
+        <label className="auth-field">
           <span>Email</span>
           <input value={form.email} onChange={updateField('email')} type="email" placeholder="eg. johnfrans@gmail.com" autoComplete="email" />
         </label>
@@ -121,8 +147,8 @@ export default function Signup({ onSuccess, onLogin }) {
         <p className="auth-helper">Must be at least 8 characters.</p>
         {error ? <p className="auth-error">{error}</p> : null}
 
-        <button type="submit" className="auth-submit-btn">
-          <span>Sign Up</span>
+        <button type="submit" className="auth-submit-btn" disabled={loading}>
+          <span>{loading ? 'Creating account…' : 'Sign Up'}</span>
           <i aria-hidden="true" />
         </button>
 

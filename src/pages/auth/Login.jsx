@@ -2,10 +2,11 @@ import { useState } from 'react'
 import './Login.css'
 import noraLoginLogo from '../../assets/logo/Nora-Login-Logo.png'
 import loginBackground from '../../assets/background/Login-background.jpg'
+import * as authApi from '../../api/auth.js'
 
-const DEMO_ACCOUNT = {
-  email: 'demo@nora.ai',
-  password: 'demo1234',
+const QA_ACCOUNT = {
+  email: 'mazen@testing.com',
+  password: 'TestPass@123',
 }
 
 function PasswordInput({ value, onChange, placeholder = 'Enter your password' }) {
@@ -81,20 +82,27 @@ function SocialButton({ provider }) {
 }
 
 export default function Login({ onSuccess, onSignup, onResetPassword }) {
-  const [email, setEmail] = useState(DEMO_ACCOUNT.email)
-  const [password, setPassword] = useState(DEMO_ACCOUNT.password)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-
-    if (email.trim().toLowerCase() === DEMO_ACCOUNT.email && password === DEMO_ACCOUNT.password) {
-      setError('')
+    setError('')
+    setLoading(true)
+    try {
+      await authApi.login({ email: email.trim(), password })
       onSuccess?.()
-      return
+    } catch (err) {
+      if (err.isAuth?.()) {
+        setError('Email or password is wrong.')
+      } else {
+        setError(err.message ?? 'Login failed. Please try again.')
+      }
+    } finally {
+      setLoading(false)
     }
-
-    setError('Use demo@nora.ai with password demo1234 to enter.')
   }
 
   return (
@@ -137,22 +145,22 @@ export default function Login({ onSuccess, onSignup, onResetPassword }) {
 
         {error ? <p className="auth-error">{error}</p> : null}
 
-        <button type="submit" className="auth-submit-btn">
-          <span>Sign in</span>
+        <button type="submit" className="auth-submit-btn" disabled={loading}>
+          <span>{loading ? 'Signing in…' : 'Sign in'}</span>
           <i aria-hidden="true" />
         </button>
 
         <p className="auth-footer-copy">
-          Demo account:{' '}
+          QA account:{' '}
           <button
             type="button"
             onClick={() => {
-              setEmail(DEMO_ACCOUNT.email)
-              setPassword(DEMO_ACCOUNT.password)
+              setEmail(QA_ACCOUNT.email)
+              setPassword(QA_ACCOUNT.password)
               setError('')
             }}
           >
-            demo@nora.ai / demo1234
+            mazen@testing.com / TestPass@123
           </button>
         </p>
 

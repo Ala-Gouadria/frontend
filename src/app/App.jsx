@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import * as tokenStore from '../api/tokenStore.js'
+import * as authApi from '../api/auth.js'
 import Login from '../pages/auth/Login'
 import RestPassword from '../pages/auth/restPassword'
 import Signup from '../pages/auth/Signup'
@@ -60,7 +62,7 @@ export default function App() {
   const setupComplete = readStoredFlag(STORAGE_KEYS.setupComplete)
   const storedView = readStoredView()
   const [isAuthenticated, setIsAuthenticated] = useState(
-    previewAnalyticsCards || readStoredFlag(STORAGE_KEYS.authenticated) || setupComplete,
+    previewAnalyticsCards || tokenStore.getAccessToken() !== null || setupComplete,
   )
   const [authView, setAuthView] = useState('login')
   const [view, setView] = useState(
@@ -70,6 +72,27 @@ export default function App() {
         ? storedView || 'map'
         : 'setup',
   )
+
+  // On mount: if only the refresh token survived a hard reload, attempt silent refresh
+  useEffect(() => {
+    if (!isAuthenticated && tokenStore.hasRefresh() && tokenStore.getAccessToken() === null) {
+      authApi.refresh().then(() => {
+        setIsAuthenticated(true)
+      }).catch(() => {
+        tokenStore.clear()
+      })
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Listen for auth:logout emitted by client.js on double-401
+  useEffect(() => {
+    const handleForceLogout = () => {
+      setIsAuthenticated(false)
+      setAuthView('login')
+    }
+    window.addEventListener('auth:logout', handleForceLogout)
+    return () => window.removeEventListener('auth:logout', handleForceLogout)
+  }, [])
 
   const navigateTo = (nextView) => {
     setView(nextView)
@@ -146,9 +169,15 @@ export default function App() {
   }
 
   const enterApp = () => {
-    writeStorage(STORAGE_KEYS.authenticated, 'true')
     setIsAuthenticated(true)
     navigateTo(readStoredFlag(STORAGE_KEYS.setupComplete) ? readStoredView() || 'map' : 'setup')
+  }
+
+  const handleLogout = async () => {
+    await authApi.logout().catch(() => {})
+    setIsAuthenticated(false)
+    setAuthView('login')
+    navigateTo('map')
   }
 
   const completeSetup = () => {
