@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import logoMark from '../../../assets/Logo/Nora_Componennts_Logo.png'
+import logoMark from '../../../assets/logo/Nora_Componennts_Logo.png'
 import { campaignPerformanceCardData } from '../data/analyticsMockData.js'
 import styles from './CampaignPerformanceCard.module.css'
 

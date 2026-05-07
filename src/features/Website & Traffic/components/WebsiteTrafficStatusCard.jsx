@@ -1,4 +1,4 @@
-import logoMark from '../../../assets/Logo/Nora_Componennts_Logo.png'
+import logoMark from '../../../assets/logo/Nora_Componennts_Logo.png'
 import { websiteTrafficStatusCardData } from '../data/websiteTrafficMockData.js'
 import styles from './WebsiteTrafficStatusCard.module.css'
 

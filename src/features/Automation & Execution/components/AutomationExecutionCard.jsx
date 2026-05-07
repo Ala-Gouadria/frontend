@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import logoMark from '../../../assets/Logo/Nora_Componennts_Logo.png'
+import logoMark from '../../../assets/logo/Nora_Componennts_Logo.png'
 import { automationExecutionCardData } from '../data/automationExecutionMockData.js'
 import styles from './AutomationExecutionCard.module.css'
 

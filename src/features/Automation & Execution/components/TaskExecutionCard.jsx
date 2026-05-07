@@ -1,4 +1,4 @@
-import logoMark from '../../../assets/Logo/Nora_Componennts_Logo.png'
+import logoMark from '../../../assets/logo/Nora_Componennts_Logo.png'
 import { taskExecutionCardData } from '../data/automationExecutionMockData.js'
 import styles from './TaskExecutionCard.module.css'
 

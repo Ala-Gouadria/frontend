@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import logoMark from '../../../assets/Logo/Nora_Componennts_Logo.png'
+import logoMark from '../../../assets/logo/Nora_Componennts_Logo.png'
 import { performanceSummaryCardData } from '../data/analyticsMockData.js'
 import styles from './PerformanceSummaryCard.module.css'
 

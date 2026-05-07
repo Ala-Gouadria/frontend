@@ -1,4 +1,4 @@
-import logoMark from '../../../assets/Logo/Nora_Componennts_Logo.png'
+import logoMark from '../../../assets/logo/Nora_Componennts_Logo.png'
 import { riskDetectionCardData } from '../data/strategyIntelligenceMockData.js'
 import styles from './RiskDetectionCard.module.css'
 
