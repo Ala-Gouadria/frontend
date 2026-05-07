@@ -26,9 +26,8 @@ echo "Build complete. Reloading PM2..."
 if pm2 list | grep -q "nora-frontend"; then
   pm2 reload nora-frontend
 else
-  echo "Starting PM2 process for the first time..."
-  echo "Run: pm2 start serve -- -s dist -l 8080 --name nora-frontend --no-clipboard"
-  echo "Then: pm2 save"
+  pm2 start /home/dev/node_modules/.bin/serve --name nora-frontend -- -s "$FRONTEND_DIR/dist" -l 8080 --no-clipboard
+  pm2 save
 fi
 
 echo "Done. Frontend available at http://85.137.249.238:8080"
