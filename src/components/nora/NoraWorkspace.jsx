@@ -209,6 +209,36 @@ function EditIcon() {
   )
 }
 
+function CloseIcon({ expanded = false }) {
+  if (expanded) {
+    return (
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M7.2 3.4H3.4v3.8M3.4 3.4l5.1 5.1M12.8 16.6h3.8v-3.8M16.6 16.6l-5.1-5.1" stroke="currentColor" strokeWidth="1.45" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    )
+  }
+
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function CompanyPill() {
+  return (
+    <button type="button" className="nora-company-pill" aria-label="Current company">
+      <span className="nora-company-pill__mark">
+        <span />
+      </span>
+      <span className="nora-company-pill__name">xWorldLTD</span>
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="m5.8 8.2 4.2 4.2 4.2-4.2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </button>
+  )
+}
+
 function Composer({
   draft,
   onDraftChange,
@@ -678,10 +708,15 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false })
         <div className="nora-glow-top-right" />
         <div className="nora-glow-bottom-left" />
 
-        <button onClick={onClose} className="nora-close-btn" type="button" aria-label="Close Nora workspace">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-            <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          </svg>
+        {showConversation && !pairedWithTask ? <CompanyPill /> : null}
+
+        <button
+          onClick={onClose}
+          className={`nora-close-btn ${showConversation ? 'nora-close-btn--expand' : ''}`}
+          type="button"
+          aria-label="Close Nora workspace"
+        >
+          <CloseIcon expanded={showConversation} />
         </button>
 
         <header className="nora-header">

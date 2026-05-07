@@ -258,12 +258,11 @@
 }
 
 .reports-page .semi-circle-gauge__svg {
-  height: 138px;
+  max-width: 620px;
 }
 
 .reports-page .semi-circle-gauge__value {
-  margin-top: -36px;
-  font-size: 15px;
+  color: #0f1116;
 }
 
 .reports-page .metric-grid {

@@ -1,27 +1,42 @@
 .semi-circle-gauge {
-  --gauge-progress: #9fc218;
-  --gauge-track: rgba(210, 225, 157, 0.34);
-  --gauge-glow: rgba(202, 230, 88, 0.24);
+  --gauge-progress: #a6cf2a;
+  --gauge-track: rgba(226, 242, 154, 0.55);
+  --gauge-glow: rgba(179, 214, 61, 0.2);
+  --gauge-tick: rgba(120, 166, 15, 0.2);
+  --gauge-cap: #c6d653;
+  --gauge-text: #2f2f31;
+  --gauge-text-muted: #85888d;
+
+  position: relative;
   display: grid;
   justify-items: center;
+  width: 100%;
   min-width: 0;
+  padding: 2px 0 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .semi-circle-gauge--blue {
-  --gauge-progress: #2f80ed;
-  --gauge-track: rgba(47, 128, 237, 0.18);
-  --gauge-glow: rgba(47, 128, 237, 0.16);
+  --gauge-progress: #60a5fa;
+  --gauge-track: rgba(147, 197, 253, 0.34);
+  --gauge-track-end: rgba(191, 219, 254, 0.32);
+  --gauge-glow: rgba(96, 165, 250, 0.18);
+  --gauge-tick: rgba(219, 234, 254, 0.82);
+  --gauge-cap: #93c5fd;
 }
 
 .semi-circle-gauge--orange {
-  --gauge-progress: #ff872d;
-  --gauge-track: rgba(255, 185, 137, 0.28);
-  --gauge-glow: rgba(255, 135, 45, 0.16);
+  --gauge-progress: #f59e0b;
+  --gauge-track: rgba(253, 186, 116, 0.34);
+  --gauge-track-end: rgba(254, 215, 170, 0.32);
+  --gauge-glow: rgba(245, 158, 11, 0.17);
+  --gauge-tick: rgba(255, 237, 213, 0.8);
+  --gauge-cap: #facc15;
 }
 
 .semi-circle-gauge__title {
   justify-self: start;
-  margin-bottom: 7px;
+  margin: 0 0 7px;
   font-size: 0.62rem;
   line-height: 1.2;
   font-weight: 500;
@@ -29,49 +44,83 @@
 }
 
 .semi-circle-gauge__svg {
-  width: 100%;
+  width: min(100%, 620px);
   height: auto;
+  display: block;
   overflow: visible;
 }
 
 .semi-circle-gauge__glow,
 .semi-circle-gauge__track,
-.semi-circle-gauge__progress {
+.semi-circle-gauge__progress,
+.semi-circle-gauge__clip-path {
   fill: none;
   stroke-linecap: round;
 }
 
 .semi-circle-gauge__glow {
   stroke: var(--gauge-glow);
-  stroke-width: 24;
-  filter: blur(4px);
+  stroke-width: 154;
+  filter: blur(32px);
+  opacity: 0.82;
 }
 
 .semi-circle-gauge__track {
   stroke: var(--gauge-track);
-  stroke-width: 17;
+  stroke-width: 112;
 }
 
 .semi-circle-gauge__progress {
   stroke: var(--gauge-progress);
-  stroke-width: 17;
-  animation: semiGaugeIn 1.05s ease both;
+  stroke-width: 74;
+  animation: semiGaugeIn 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
+  filter: drop-shadow(0 6px 12px rgba(139, 176, 20, 0.08));
+}
+
+.semi-circle-gauge__clip-path {
+  stroke: #fff;
+  stroke-width: 76;
+}
+
+.semi-circle-gauge__tick {
+  stroke: var(--gauge-tick);
+  stroke-width: 8;
+  stroke-linecap: round;
+  opacity: 1;
+}
+
+.semi-circle-gauge__cap-ring {
+  fill: #fff;
+  filter: drop-shadow(0 8px 14px rgba(45, 55, 72, 0.13));
+  animation: semiGaugeCap 640ms ease both;
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 .semi-circle-gauge__cap {
-  fill: #d9e649;
-  stroke: #fff;
-  stroke-width: 3;
-  filter: drop-shadow(0 6px 12px rgba(194, 220, 74, 0.24));
+  fill: var(--gauge-cap);
   animation: semiGaugeCap 640ms ease both;
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 .semi-circle-gauge__value {
-  margin-top: -38px;
-  font-size: 0.68rem;
-  line-height: 1;
-  font-weight: 800;
-  color: rgba(24, 24, 27, 0.78);
+  font-size: 48px;
+  font-weight: 780;
+  color: var(--gauge-text);
+  fill: var(--gauge-text);
+  letter-spacing: 0;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.semi-circle-gauge__current {
+  fill: var(--gauge-text);
+}
+
+.semi-circle-gauge__target {
+  fill: var(--gauge-text-muted);
+  font-weight: 760;
 }
 
 @keyframes semiGaugeIn {
@@ -85,6 +134,7 @@
     opacity: 0;
     transform: scale(0.7);
   }
+
   to {
     opacity: 1;
     transform: scale(1);

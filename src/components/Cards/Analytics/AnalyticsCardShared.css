@@ -336,17 +336,17 @@
 
 .analytics-card__gauge-wrap {
   margin-top: 12px;
-  min-height: 176px;
+  min-height: 192px;
+  overflow: visible;
 }
 
 .analytics-card__gauge-wrap .semi-circle-gauge__value {
-  margin-top: -78px;
-  font-size: 1.1rem;
-  color: #5d9700;
+  color: #0f1116;
 }
 
 .analytics-card__gauge-wrap .semi-circle-gauge__svg {
-  height: 188px;
+  width: 100%;
+  max-width: 620px;
 }
 
 .analytics-card__compact-chart {

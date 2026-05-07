@@ -61,7 +61,7 @@
 .memory-page__segmented-label {
   color: rgba(27, 28, 32, 0.84);
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .memory-page__segmented-pills {
@@ -85,7 +85,7 @@
   color: rgba(27, 28, 32, 0.72);
   font: inherit;
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 500;
   white-space: nowrap;
   cursor: pointer;
 }
@@ -222,7 +222,7 @@
 
 .memory-page__memory-title strong {
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .memory-page__memory-card small {
@@ -288,6 +288,7 @@
   margin: 0 0 27px;
   font-size: 16px;
   line-height: 1;
+  font-weight: 600;
 }
 
 .memory-page__detail dl {

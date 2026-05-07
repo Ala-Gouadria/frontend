@@ -1,12 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+.nora-panel * {
+  box-sizing: border-box;
+  font-family: Manrope, "DM Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
 
-/* ─── KEYFRAMES ─── */
-@keyframes noraIn {
+@keyframes noraPanelIn {
   from {
     opacity: 0;
-    transform: translateX(72px) scale(0.94);
-    filter: blur(12px);
+    transform: translateX(34px) scale(0.988);
+    filter: blur(8px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0) scale(1);
@@ -14,2323 +17,165 @@
   }
 }
 
-@keyframes noraCaret {
-  0%, 48% { opacity: 1; }
-  52%, 100% { opacity: 0; }
-}
-
-@keyframes noraMsgIn {
+@keyframes noraMessageIn {
   from {
     opacity: 0;
-    transform: translateY(16px) scale(0.97);
+    transform: translateY(12px);
   }
+
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
-@keyframes noraRingPulse {
-  0%, 100% { opacity: 0.20; transform: scale(0.96); }
-  50% { opacity: 0.65; transform: scale(1.04); }
-}
-
-@keyframes noraOrbFloat {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-8px) rotate(1deg); }
-  66% { transform: translateY(-4px) rotate(-1deg); }
-}
-
-@keyframes noraOrbShimmer {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
-}
-
-@keyframes sidebarGlowDrift {
-  0%, 100% { transform: translate(-8%, 0%) scale(1); opacity: 0.7; }
-  50% { transform: translate(8%, -12%) scale(1.1); opacity: 1; }
-}
-
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-@keyframes composerGlow {
-  0%, 100% { box-shadow: 0 24px 80px rgba(80, 100, 255, 0.32), 0 8px 32px rgba(80, 100, 255, 0.20), 0 2px 8px rgba(80, 100, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.25); }
-  50% { box-shadow: 0 32px 100px rgba(120, 80, 255, 0.38), 0 12px 40px rgba(120, 80, 255, 0.24), 0 4px 12px rgba(120, 80, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.30); }
-}
-
-/* ─── ROOT FONT ─── */
-.nora-panel * {
-  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
-  box-sizing: border-box;
-}
-
-/* ─── PANEL SHELL ─── */
 .nora-panel {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 48;
-  display: flex;
-  animation: noraIn 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  box-shadow:
-    -60px 0 140px rgba(8, 16, 80, 0.28),
-    -24px 0 64px rgba(8, 16, 80, 0.16),
-    -6px 0 20px rgba(8, 16, 80, 0.10),
-    0 0 0 1px rgba(255, 255, 255, 0.25);
-  border-radius: 28px 0 0 28px;
-  overflow: hidden;
-  border-left: 1px solid rgba(255, 255, 255, 0.35);
-}
-
-/* ─── HISTORY SIDEBAR ─── */
-.nora-history-sidebar {
-  background:
-    linear-gradient(
-      170deg,
-      rgba(255, 255, 255, 0.38) 0%,
-      rgba(230, 244, 255, 0.28) 45%,
-      rgba(210, 232, 255, 0.22) 100%
-    );
-  backdrop-filter: blur(48px) saturate(200%) brightness(1.12);
-  -webkit-backdrop-filter: blur(48px) saturate(200%) brightness(1.12);
-  border-right: 1px solid rgba(255, 255, 255, 0.50);
-  box-shadow:
-    inset 1px 0 0 rgba(255, 255, 255, 0.75),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    4px 0 40px rgba(15, 40, 140, 0.08);
-  overflow: hidden;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  padding: 28px 14px 20px;
-  position: relative;
-  transform: translateZ(0);
-  will-change: backdrop-filter;
-  border-radius: 0;
-}
-
-.nora-sidebar-glow {
-  position: absolute;
-  left: -40%;
-  right: -40%;
-  bottom: -20%;
-  height: 60%;
-  background: radial-gradient(
-    ellipse at 45% 60%,
-    rgba(80, 150, 255, 0.28) 0%,
-    rgba(130, 190, 255, 0.12) 50%,
-    transparent 72%
-  );
-  filter: blur(32px);
-  pointer-events: none;
-  animation: sidebarGlowDrift 10s ease-in-out infinite;
-}
-
-.nora-history-sidebar::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.98) 0%, rgba(210,228,255,0.55) 100%);
-  pointer-events: none;
-  z-index: 2;
-}
-
-.nora-history-sidebar::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 18% 14%, rgba(255,255,255,0.38) 0%, transparent 52%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.nora-sidebar-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.055em;
-  color: #0d1525;
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 2;
-  padding-left: 4px;
-}
-
-.nora-new-chat-btn {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  background: transparent;
-  border: none;
-  border-radius: 14px;
-  padding: 8px 10px;
-  cursor: pointer;
-  margin-bottom: 12px;
-  color: #111827;
-  font-size: 13.5px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  text-align: left;
-  transition: background 160ms ease, color 160ms ease;
-}
-
-.nora-new-chat-btn.active,
-.nora-new-chat-btn:hover {
-  background: rgba(45, 110, 240, 0.10);
-  color: #1a4ed0;
-}
-
-.nora-new-chat-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 9px;
-  background: linear-gradient(140deg, #4a7fff 0%, #7c5cfc 55%, #a855f7 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(74, 127, 255, 0.40), 0 2px 4px rgba(74, 127, 255, 0.20);
-}
-
-.nora-recents-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: #8fa4c0;
-  margin-bottom: 6px;
-  padding-left: 10px;
-  position: relative;
-  z-index: 2;
-}
-
-.nora-history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  overflow-y: auto;
-  flex: 1;
-  position: relative;
-  z-index: 2;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(100, 150, 220, 0.25) transparent;
-}
-
-.nora-history-list::-webkit-scrollbar { width: 3px; }
-.nora-history-list::-webkit-scrollbar-track { background: transparent; }
-.nora-history-list::-webkit-scrollbar-thumb { background: rgba(100, 150, 220, 0.25); border-radius: 99px; }
-
-.nora-history-item {
-  border: none;
-  background: transparent;
-  border-radius: 11px;
-  padding: 7px 10px;
-  text-align: left;
-  font-size: 12.5px;
-  letter-spacing: -0.015em;
-  color: #3d5070;
-  font-weight: 400;
-  cursor: pointer;
-  transition: background 140ms ease, color 140ms ease, transform 100ms ease;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.nora-history-item.active {
-  background: rgba(40, 100, 240, 0.10);
-  color: #1a3d90;
-  font-weight: 500;
-}
-
-.nora-history-item:hover:not(.active) {
-  background: rgba(220, 235, 255, 0.60);
-  transform: translateX(2px);
-}
-
-.nora-history-item-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.nora-history-item-active-indicator {
-  color: #a0b4cc;
-  font-size: 14px;
-  flex-shrink: 0;
-  letter-spacing: 1px;
-}
-
-.nora-view-all-btn {
-  border: none;
-  background: transparent;
-  padding: 8px 10px 0;
-  font-size: 12px;
-  font-weight: 600;
-  color: #2f79ff;
-  cursor: pointer;
-  text-align: left;
-  position: relative;
-  z-index: 2;
-  letter-spacing: -0.01em;
-  opacity: 0.80;
-  transition: opacity 130ms ease, transform 120ms ease;
-}
-
-.nora-view-all-btn:hover {
-  opacity: 1;
-  transform: translateX(2px);
-}
-
-/* ─── RESIZE HANDLES ─── */
-.nora-resize-handle {
-  position: absolute;
-  left: -5px;
-  top: 0; bottom: 0;
-  width: 10px;
-  cursor: ew-resize;
-  z-index: 60;
-  opacity: 0.35;
-  transition: opacity 180ms ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.nora-resize-handle:hover { opacity: 1; }
-
-.nora-resize-handle-bar {
-  width: 3px;
-  height: 56px;
-  border-radius: 99px;
-  background: linear-gradient(180deg, rgba(90, 140, 255, 0.35) 0%, rgba(130, 105, 255, 0.60) 100%);
-}
-
-.nora-sidebar-resize {
-  width: 4px;
-  cursor: ew-resize;
-  flex-shrink: 0;
-  background: transparent;
-  transition: background 150ms ease;
-  z-index: 10;
-}
-
-.nora-sidebar-resize:hover {
-  background: rgba(80, 145, 255, 0.22);
-}
-
-/* ─── MAIN CONTENT — Deep Transparent Glass ─── */
-.nora-main-content {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
-  background:
-    linear-gradient(
-      155deg,
-      rgba(160, 200, 255, 0.48) 0%,
-      rgba(140, 185, 255, 0.42) 28%,
-      rgba(120, 168, 255, 0.40) 55%,
-      rgba(150, 188, 255, 0.44) 80%,
-      rgba(170, 200, 255, 0.46) 100%
-    );
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
-}
-
-/* Dot grid — softer */
-.nora-bg-dot-grid {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.25) 1px, transparent 1.2px);
-  background-size: 24px 24px;
-  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 15%, rgba(0,0,0,0.6) 85%, transparent 100%);
-}
-
-.nora-glow-top-right {
-  position: absolute;
-  top: -100px; right: -100px;
-  width: 550px; height: 550px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.28) 0%,
-    rgba(190, 220, 255, 0.16) 38%,
-    transparent 65%
-  );
-  filter: blur(40px);
-  pointer-events: none;
-  z-index: 0;
-  animation: noraOrbShimmer 8s ease-in-out infinite;
-}
-
-.nora-glow-bottom-left {
-  position: absolute;
-  bottom: -80px; left: -80px;
-  width: 360px; height: 360px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(110, 80, 255, 0.18) 0%,
-    rgba(150, 105, 255, 0.09) 42%,
-    transparent 68%
-  );
-  filter: blur(32px);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ─── CLOSE BUTTON ─── */
-.nora-close-btn {
-  position: absolute;
-  top: 16px; right: 16px;
-  z-index: 10;
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  box-shadow:
-    0 6px 20px rgba(15, 23, 42, 0.14),
-    0 2px 6px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.98),
-    inset 0 -1px 0 rgba(0,0,0,0.03);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #5a6780;
-  transition: transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1), background 150ms ease, box-shadow 150ms ease;
-}
-
-.nora-close-btn:hover {
-  transform: scale(1.10) rotate(5deg);
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow:
-    0 8px 28px rgba(15, 23, 42, 0.18),
-    0 3px 8px rgba(15, 23, 42, 0.10),
-    inset 0 1px 0 rgba(255,255,255,1);
-}
-
-/* ─── HEADER ─── */
-.nora-header {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px 56px 10px;
-  flex-shrink: 0;
-}
-
-.nora-header-title {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 13.5px;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  color: #1a2540;
-}
-
-.nora-edit-btn {
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: #b0bcd4;
-  padding: 0;
-  display: flex;
-  transition: color 140ms ease, transform 140ms ease;
-}
-
-.nora-edit-btn:hover {
-  color: #6a88bc;
-  transform: scale(1.12);
-}
-
-/* ─── WELCOME SCENE ─── */
-.nora-welcome-scene {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 24px 32px 18px;
-  position: relative;
-  z-index: 1;
-  gap: 0;
-}
-
-.nora-welcome-headline {
-  font-family: 'Outfit', sans-serif;
-  max-width: 400px;
-  margin: 0 0 14px;
-  font-size: 24px;
-  line-height: 1.20;
-  font-weight: 800;
-  letter-spacing: -0.055em;
-  color: #0b1628;
-}
-
-.nora-welcome-text {
-  max-width: 340px;
-  margin: 0 auto;
-  font-size: 14.5px;
-  line-height: 1.68;
-  color: #3d5070;
-  min-height: 50px;
-}
-
-.nora-caret {
-  display: inline-block;
-  width: 9px;
-  height: 1em;
-  margin-left: 2px;
-  background: rgba(50, 120, 255, 0.88);
-  vertical-align: -0.1em;
-  border-radius: 2px;
-  animation: noraCaret 1.1s steps(1) infinite;
-}
-
-/* ─── CONVERSATION SCENE ─── */
-.nora-conversation-scene {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px 30px 20px;
-  position: relative;
-  z-index: 1;
-}
-
-.nora-conversation-scene::-webkit-scrollbar { width: 4px; }
-.nora-conversation-scene::-webkit-scrollbar-track { background: transparent; }
-.nora-conversation-scene::-webkit-scrollbar-thumb {
-  background: rgba(100, 145, 225, 0.30);
-  border-radius: 99px;
-}
-
-.nora-user-prompt {
-  margin-left: auto;
-  width: fit-content;
-  max-width: 65%;
-  padding: 11px 17px;
-  border-radius: 20px 20px 6px 20px;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(210, 228, 255, 0.75);
-  box-shadow:
-    0 6px 20px rgba(15, 23, 42, 0.08),
-    0 2px 6px rgba(15, 23, 42, 0.04),
-    inset 0 1px 0 rgba(255,255,255,1);
-  font-size: 13.5px;
-  color: #1a2438;
-  margin-bottom: 30px;
-  margin-top: 10px;
-  letter-spacing: -0.012em;
-  line-height: 1.54;
-  font-weight: 400;
-}
-
-.nora-message-section { margin-bottom: 30px; }
-
-.nora-message-section.user {
-  margin-left: auto;
-  width: fit-content;
-  max-width: 58%;
-}
-
-.nora-message-section.ai { max-width: 80%; }
-
-.nora-user-message {
-  padding: 10px 16px;
-  border-radius: 20px 20px 6px 20px;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(210, 228, 255, 0.70);
-  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.07), inset 0 1px 0 rgba(255,255,255,1);
-  font-size: 13.5px;
-  color: #1a2438;
-  letter-spacing: -0.012em;
-  line-height: 1.52;
-}
-
-.nora-ai-message {
-  font-size: 13.5px;
-  line-height: 1.66;
-  color: #1d304e;
-  letter-spacing: -0.010em;
-}
-
-.nora-ai-message-title {
-  margin: 0 0 8px;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 600;
-  color: #0e1d38;
-  font-size: 14px;
-  letter-spacing: -0.03em;
-}
-
-.nora-ai-message-line {
-  margin: 0 0 5px;
-  color: #304868;
-}
-
-.nora-new-message {
-  margin-bottom: 12px;
-  animation: noraMsgIn 300ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nora-new-message.user {
-  margin-left: auto;
-  width: fit-content;
-  max-width: 65%;
-}
-
-.nora-new-message.assistant { max-width: 80%; }
-
-.nora-message-bubble {
-  padding: 11px 16px;
-  border-radius: 20px 20px 6px 20px;
-  background: rgba(255, 255, 255, 0.97);
-  border: 1px solid rgba(210, 228, 255, 0.70);
-  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.07), inset 0 1px 0 rgba(255,255,255,1);
-  font-size: 13.5px;
-  line-height: 1.58;
-  color: #0f1a2e;
-  letter-spacing: -0.012em;
-}
-
-.nora-message-bubble.assistant {
-  border-radius: 20px 20px 20px 6px;
-  background: rgba(230, 243, 255, 0.97);
-  border: 1px solid rgba(120, 175, 255, 0.18);
-  color: #1a3055;
-  box-shadow: 0 5px 16px rgba(40, 80, 200, 0.07), inset 0 1px 0 rgba(255,255,255,0.85);
-}
-
-/* ─── COMPOSER — Premium Gradient ─── */
-.nora-composer {
-  padding: 0 18px 18px;
-  position: relative;
-  z-index: 2;
-  flex-shrink: 0;
-}
-
-.nora-composer-container {
-  border-radius: 26px;
-  padding: 12px 12px 10px;
-  background: linear-gradient(
-    135deg,
-    rgba(65, 118, 255, 0.92) 0%,
-    rgba(100, 75, 255, 0.88) 30%,
-    rgba(160, 90, 235, 0.85) 60%,
-    rgba(210, 110, 190, 0.83) 100%
-  );
-  background-size: 200% 200%;
-  animation: gradientShift 8s ease infinite, composerGlow 6s ease-in-out infinite;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Inner glass highlight */
-.nora-composer-container::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 50%;
-  border-radius: 26px 26px 0 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.nora-files-list {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 9px;
-  flex-wrap: wrap;
-  position: relative;
-  z-index: 1;
-}
-
-.nora-file-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 11px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(200, 218, 248, 0.70);
-  font-size: 11.5px;
-  color: #2d4060;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
-  letter-spacing: -0.012em;
-  font-weight: 500;
-  transition: transform 130ms ease;
-}
-
-.nora-file-chip:hover { transform: scale(1.02); }
-
-.nora-file-remove {
-  border: none;
-  background: none;
-  color: #9aafc0;
-  cursor: pointer;
-  padding: 0;
-  font-size: 14px;
-  line-height: 1;
-  transition: color 120ms ease;
-}
-
-.nora-file-remove:hover { color: #475569; }
-
-.nora-textarea {
-  width: 100%;
-  resize: none;
-  border: 1.5px solid rgba(200, 225, 255, 0.22);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.98);
-  padding: 13px 16px;
-  box-sizing: border-box;
-  font-size: 14px;
-  color: #0f1a2e;
-  outline: none;
-  font-family: 'DM Sans', system-ui, sans-serif;
-  box-shadow:
-    inset 0 2px 8px rgba(15, 23, 42, 0.05),
-    0 2px 0 rgba(255, 255, 255, 0.55);
-  min-height: 76px;
-  letter-spacing: -0.012em;
-  line-height: 1.58;
-  position: relative;
-  z-index: 1;
-  transition: border-color 180ms ease, box-shadow 180ms ease;
-}
-
-.nora-textarea:focus {
-  border-color: rgba(100, 160, 255, 0.35);
-  box-shadow:
-    inset 0 2px 8px rgba(15, 23, 42, 0.04),
-    0 0 0 3px rgba(80, 140, 255, 0.12),
-    0 2px 0 rgba(255, 255, 255, 0.55);
-}
-
-.nora-textarea::placeholder {
-  color: #a0afc0;
-  font-style: italic;
-}
-
-.nora-composer-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 9px;
-  position: relative;
-  z-index: 1;
-}
-
-.nora-composer-left-actions { display: flex; gap: 5px; }
-
-.nora-icon-btn {
-  width: 37px;
-  height: 37px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.18);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 150ms ease, transform 130ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  border: 1px solid rgba(255,255,255,0.10);
-}
-
-.nora-icon-btn:hover {
-  background: rgba(255, 255, 255, 0.30);
-  transform: scale(1.08);
-}
-
-.nora-icon-btn:active { transform: scale(0.94); }
-
-.nora-icon-btn.light {
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow:
-    0 3px 10px rgba(15, 23, 42, 0.12),
-    0 1px 3px rgba(15, 23, 42, 0.06),
-    inset 0 1px 0 rgba(255,255,255,1);
-  border: 1px solid rgba(200,220,255,0.30);
-}
-
-.nora-icon-btn.light:hover {
-  background: rgba(255, 255, 255, 1);
-  transform: scale(1.08);
-  box-shadow:
-    0 5px 16px rgba(15, 23, 42, 0.15),
-    0 2px 5px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255,255,255,1);
-}
-
-.nora-composer-right-actions { display: flex; gap: 7px; }
-
-/* Reference-style Nora panel docking */
-@keyframes noraPanelOpenRef {
-  from {
-    opacity: 0;
-    transform: translateX(42px) scale(0.985);
-    filter: blur(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-.nora-panel {
   top: 24px;
+  right: 24px;
   bottom: 24px;
-  border-radius: 24px;
+  z-index: 54;
+  display: flex;
   overflow: hidden;
-  border: 3px solid rgba(255, 255, 255, 0.98);
-  background: rgba(255, 255, 255, 0.94);
-  animation: noraPanelOpenRef 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  border: 3px solid #ffffff;
+  border-radius: 25px;
+  background: #ffffff;
   box-shadow:
-    0 24px 80px rgba(22, 37, 70, 0.16),
-    0 8px 22px rgba(22, 37, 70, 0.08);
+    0 28px 72px rgba(18, 28, 52, 0.16),
+    0 8px 24px rgba(18, 28, 52, 0.08);
+  animation: noraPanelIn 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.nora-panel--single.nora-panel--welcome,
+.nora-panel--paired {
+  width: 948px;
 }
 
 .nora-panel--paired {
-  border-radius: 22px;
+  right: 464px;
 }
 
-.nora-panel--single {
-  max-width: calc(100vw - 72px);
+.nora-panel--single.nora-panel--conversation {
+  width: calc(100vw - 132px);
+  right: 24px;
 }
 
 .nora-history-sidebar {
-  padding: 18px 26px 22px 30px;
+  position: relative;
+  z-index: 2;
+  flex: 0 0 278px;
+  width: 278px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 35px 31px 34px 39px;
+  border-right: 1px solid rgba(221, 229, 241, 0.96);
   background:
-    radial-gradient(circle at 8% 76%, rgba(159, 204, 255, 0.72), transparent 22%),
-    radial-gradient(circle at 100% 45%, rgba(231, 255, 198, 0.35), transparent 20%),
-    linear-gradient(95deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.86) 52%, rgba(239, 247, 255, 0.74) 100%);
-  border-right: 0;
-  box-shadow: inset -1px 0 rgba(224, 232, 246, 0.72);
-  backdrop-filter: blur(22px) saturate(1.2);
-  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+    radial-gradient(circle at 58% 86%, rgba(178, 212, 255, 0.68), transparent 35%),
+    linear-gradient(180deg, #ffffff 0%, #ffffff 58%, #d9ecff 100%);
+}
+
+.nora-sidebar-glow,
+.nora-history-sidebar::before,
+.nora-history-sidebar::after {
+  display: none;
 }
 
 .nora-sidebar-title {
-  margin-bottom: 58px;
-  padding-left: 0;
-  font-family: 'Outfit', system-ui, sans-serif;
-  font-size: 14px;
-  letter-spacing: -0.03em;
+  margin: 0 0 82px;
+  color: #111111;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 .nora-new-chat-btn {
-  margin-bottom: 13px;
-  padding: 7px 0;
-  gap: 11px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 27px;
+  width: 100%;
+  margin: 0 0 27px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
   background: transparent;
-  color: #111317;
-  font-size: 14px;
-  border-radius: 9px;
+  color: #111111;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
 }
 
-.nora-new-chat-btn.active,
-.nora-new-chat-btn:hover {
+.nora-new-chat-btn:hover,
+.nora-new-chat-btn.active {
   background: transparent;
-  color: #111317;
 }
 
 .nora-new-chat-icon {
-  width: 27px;
-  height: 16px;
+  flex: 0 0 31px;
+  width: 31px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
 }
 
 .nora-new-chat-icon img {
-  width: 27px !important;
-  height: 16px !important;
-  filter: drop-shadow(0 4px 7px rgba(74, 127, 255, 0.18));
-}
-
-.nora-recents-title {
-  padding-left: 0;
-  margin-bottom: 8px;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
-  color: #b0b1b8;
-}
-
-.nora-history-list {
-  gap: 8px;
-  overflow: visible;
-}
-
-.nora-history-item {
-  height: 28px;
-  padding: 0 8px;
-  border-radius: 7px;
-  color: #111317;
-  font-size: 13px;
-  letter-spacing: -0.03em;
-}
-
-.nora-history-item.active {
-  background: rgba(238, 238, 238, 0.92);
-  color: #111317;
-}
-
-.nora-history-item:hover:not(.active) {
-  background: rgba(244, 244, 244, 0.7);
-}
-
-.nora-history-item-active-indicator {
-  color: #696a70;
-}
-
-.nora-view-all-btn {
-  margin-top: 10px;
-  padding: 0 0 0;
-  font-size: 12px;
-  color: #2f80ed;
-  text-decoration: underline;
-}
-
-.nora-sidebar-resize,
-.nora-resize-handle {
-  display: none;
-}
-
-.nora-main-content {
-  background:
-    radial-gradient(circle at 96% 4%, rgba(58, 138, 255, 0.72), transparent 24%),
-    radial-gradient(circle at 0% 68%, rgba(107, 177, 255, 0.48), transparent 29%),
-    linear-gradient(112deg, rgba(255, 255, 255, 0.96) 0%, rgba(252, 252, 255, 0.94) 42%, rgba(215, 235, 255, 0.86) 100%);
-  color: #101114;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-.nora-bg-dot-grid {
-  background-image: radial-gradient(circle, rgba(85, 137, 188, 0.22) 1px, transparent 1.2px);
-  background-size: 16px 16px;
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.2) 18%, rgba(0,0,0,0.58) 100%);
-}
-
-.nora-glow-top-right {
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle, rgba(73, 143, 255, 0.18), transparent 66%);
-}
-
-.nora-close-btn {
-  top: 18px;
-  right: 18px;
-  width: 34px;
-  height: 34px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #596579;
-}
-
-.nora-panel--paired .nora-close-btn,
-.nora-panel--conversation .nora-close-btn {
-  display: none;
-}
-
-.nora-welcome-scene {
-  padding: 76px 44px 40px;
-  justify-content: center;
-}
-
-.nora-welcome-scene::before,
-.nora-welcome-scene::after {
-  content: "";
-  position: absolute;
-  top: 18.5%;
-  left: 50%;
-  border-radius: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
-.nora-welcome-scene::before {
-  width: 310px;
-  height: 310px;
-  border: 1px solid rgba(54, 127, 238, 0.24);
-}
-
-.nora-welcome-scene::after {
-  width: 240px;
-  height: 240px;
-  border: 1px solid rgba(54, 127, 238, 0.28);
-}
-
-.nora-welcome-headline {
-  max-width: 560px;
-  margin-top: 126px;
-  margin-bottom: 0;
-  font-family: 'Outfit', system-ui, sans-serif;
-  font-size: 30px;
-  line-height: 1.18;
-  letter-spacing: -0.055em;
-  color: transparent;
-  background: linear-gradient(100deg, #0a2d61 0%, #142057 48%, #6b1038 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-.nora-welcome-text {
-  margin-top: 18px;
-  max-width: 440px;
-  font-size: 17px;
-  line-height: 1.42;
-  color: #516178;
-}
-
-.nora-header {
-  min-height: 58px;
-  padding: 0 46px;
-  justify-content: flex-start;
-}
-
-.nora-header-title {
-  width: 100%;
-  justify-content: center;
-  font-size: 14px;
-  color: #1d1d24;
-  font-weight: 400;
-}
-
-.nora-panel--paired .nora-header-title {
-  justify-content: flex-start;
-}
-
-.nora-conversation-scene {
-  padding: 42px 20px 18px;
-  font-family: 'DM Sans', system-ui, sans-serif;
-}
-
-.nora-ai-message,
-.nora-user-message,
-.nora-user-prompt,
-.nora-message-bubble {
-  font-size: 13px;
-  color: #0f1014;
-  letter-spacing: -0.035em;
-}
-
-.nora-ai-message {
-  line-height: 1.36;
-}
-
-.nora-user-prompt,
-.nora-user-message {
-  border-radius: 7px;
-  background: rgba(255, 255, 255, 0.88);
-  border: 0;
-  box-shadow: none;
-}
-
-.nora-message-section {
-  margin-bottom: 68px;
-}
-
-.nora-message-section.user {
-  max-width: 44%;
-}
-
-.nora-message-section.ai {
-  max-width: 84%;
-}
-
-.nora-composer {
-  padding: 0 20px 13px;
-}
-
-.nora-composer-container {
-  border-radius: 17px;
-  padding: 5px 10px 12px;
-  background:
-    linear-gradient(105deg, #2f80ff 0%, #89afff 52%, #f4cae4 100%);
-  animation: none;
-  border: 1.5px solid rgba(47, 128, 255, 0.9);
-  box-shadow: 0 14px 34px rgba(47, 128, 237, 0.16);
-}
-
-.nora-panel--welcome .nora-composer-container {
-  background: linear-gradient(105deg, #2f80ff 0%, #a574ec 54%, #d36fd6 100%);
-  border-color: rgba(255, 255, 255, 0.32);
-}
-
-.nora-textarea {
-  min-height: 82px;
-  border-radius: 15px;
-  border: 0;
-  padding: 17px 18px;
-  font-size: 13px;
-  color: #191a1f;
-  box-shadow: none;
-}
-
-.nora-textarea::placeholder {
-  font-style: normal;
-  color: #8f98a6;
-}
-
-.nora-composer-left-actions .nora-icon-btn {
-  width: 30px;
-  height: 30px;
-  background: transparent;
-  border: 0;
-}
-
-.nora-icon-btn.light {
-  width: 32px;
-  height: 32px;
-  background: #fff;
-  color: #111317;
-}
-
-.nora-panel--paired .nora-composer-actions svg,
-.nora-panel--conversation .nora-composer-actions svg {
-  stroke: #111317;
-}
-
-@media (max-width: 1320px) {
-  .nora-panel {
-    max-width: calc(100vw - 48px);
-  }
-}
-
-.nora-top-tools {
-  position: relative;
-  z-index: 2;
-  padding: 0 20px 8px;
-}
-
-.nora-service-picker {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.nora-service-chip {
-  border: 1px solid rgba(47, 128, 237, 0.14);
-  background: rgba(255, 255, 255, 0.78);
-  color: #23314d;
-  border-radius: 999px;
-  padding: 8px 12px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  cursor: pointer;
-  transition: background 160ms ease, color 160ms ease, transform 120ms ease, box-shadow 160ms ease;
-}
-
-.nora-service-chip:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(47, 128, 237, 0.12);
-}
-
-.nora-service-chip--active {
-  background: linear-gradient(135deg, rgba(47, 128, 255, 0.95) 0%, rgba(137, 174, 255, 0.92) 100%);
-  color: #ffffff;
-  border-color: transparent;
-}
-
-.nora-notice {
-  position: relative;
-  z-index: 2;
-  margin: 0 20px 10px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.74);
-  color: #1b2a47;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  border: 1px solid rgba(47, 128, 237, 0.12);
-}
-
-.nora-workspace-loading {
-  margin: auto;
-  padding: 18px 22px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.78);
-  color: #24344f;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  box-shadow: 0 16px 34px rgba(21, 38, 70, 0.08);
-}
-
-.nora-empty-state {
-  margin-top: 22px;
-  max-width: 560px;
-}
-
-.nora-empty-state__eyebrow {
-  margin: 0 0 8px;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #6b7b95;
-  font-weight: 700;
-}
-
-.nora-empty-state__body {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.55;
-  color: #405069;
-}
-
-.nora-quick-prompts {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 18px;
-}
-
-.nora-quick-prompt {
-  border: 1px solid rgba(47, 128, 237, 0.14);
-  background: rgba(255, 255, 255, 0.84);
-  color: #182742;
-  border-radius: 14px;
-  padding: 12px 14px;
-  font-size: 12.5px;
-  line-height: 1.4;
-  letter-spacing: -0.02em;
-  cursor: pointer;
-  max-width: 170px;
-  transition: transform 120ms ease, box-shadow 160ms ease, background 160ms ease;
-}
-
-.nora-quick-prompt:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(47, 128, 237, 0.12);
-  background: rgba(255, 255, 255, 0.95);
-}
-
-.nora-history-item {
-  height: auto;
-  min-height: 44px;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 8px 10px;
-}
-
-.nora-history-item__content {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  align-items: flex-start;
-}
-
-.nora-history-item-preview {
-  display: block;
-  width: 100%;
-  margin-top: 2px;
-  color: #7a879d;
-  font-size: 11px;
-  line-height: 1.35;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.nora-history-item-time {
-  color: #8c98ad;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  flex-shrink: 0;
-  padding-top: 3px;
-}
-
-.nora-chat-row {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 18px;
-}
-
-.nora-chat-row--user {
-  align-items: flex-end;
-}
-
-.nora-chat-row--assistant {
-  align-items: flex-start;
-}
-
-.nora-message-line {
-  margin: 0 0 6px;
-}
-
-.nora-message-line:last-child {
-  margin-bottom: 0;
-}
-
-.nora-message-time {
-  margin-top: 6px;
-  font-size: 10px;
-  color: #7d8ba3;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
-.nora-inline-service-tag {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 8px;
-  border-radius: 999px;
-  background: rgba(47, 128, 237, 0.08);
-  color: #2555b8;
-  padding: 5px 9px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.nora-typing-indicator {
-  display: inline-flex;
-  gap: 5px;
-  align-items: center;
-  min-height: 18px;
-}
-
-.nora-typing-indicator span {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(58, 95, 165, 0.6);
-  animation: noraTypingBounce 1s infinite ease-in-out;
-}
-
-.nora-typing-indicator span:nth-child(2) {
-  animation-delay: 0.12s;
-}
-
-.nora-typing-indicator span:nth-child(3) {
-  animation-delay: 0.24s;
-}
-
-@keyframes noraTypingBounce {
-  0%, 80%, 100% {
-    transform: translateY(0);
-    opacity: 0.45;
-  }
-  40% {
-    transform: translateY(-3px);
-    opacity: 1;
-  }
-}
-
-.nora-attachments-grid {
-  display: grid;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.nora-attachment-card {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(47, 128, 237, 0.12);
-  text-decoration: none;
-}
-
-.nora-attachment-card--compact {
-  padding: 9px;
-}
-
-.nora-attachment-card--file {
-  color: #182742;
-}
-
-.nora-attachment-card__image {
-  width: 100%;
-  max-width: 220px;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  border-radius: 10px;
-  border: 1px solid rgba(47, 128, 237, 0.08);
-}
-
-.nora-attachment-card__audio {
-  width: min(240px, 100%);
-}
-
-.nora-attachment-card__meta {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.nora-attachment-card__meta strong {
-  font-size: 12px;
-  font-weight: 700;
-  color: #192844;
-  letter-spacing: -0.02em;
-}
-
-.nora-attachment-card__meta span {
-  font-size: 11px;
-  color: #61728d;
-}
-
-.nora-file-chip {
-  gap: 7px;
-}
-
-.nora-file-chip__type {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-  flex-shrink: 0;
-}
-
-.nora-file-chip__type--image {
-  background: #53a3ff;
-}
-
-.nora-file-chip__type--audio {
-  background: #8b5cf6;
-}
-
-.nora-file-chip__type--file {
-  background: #0f766e;
-}
-
-.nora-recording-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  padding: 7px 11px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #8b1f3a;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.nora-recording-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ef4444;
-  box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.12);
-  animation: noraRecordPulse 1.1s infinite ease-in-out;
-}
-
-@keyframes noraRecordPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.16);
-    opacity: 1;
-  }
-}
-
-.nora-composer-icon {
-  width: 16px;
-  height: 16px;
+  width: 31px !important;
+  height: 18px !important;
   object-fit: contain;
 }
 
-.nora-composer-icon--dark {
-  filter: brightness(0) saturate(100%) invert(9%) sepia(11%) saturate(647%) hue-rotate(187deg) brightness(95%) contrast(95%);
-}
-
-.nora-icon-btn--recording {
-  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.14);
-}
-
-.nora-history-list {
-  overflow-y: auto;
-}
-
-.nora-panel--paired .nora-close-btn,
-.nora-panel--conversation .nora-close-btn {
-  display: flex;
-}
-
-/* Figma reference alignment */
-.nora-panel {
-  top: 28px;
-  bottom: 28px;
-  display: flex;
-  border: 3px solid #ffffff;
-  border-radius: 28px;
-  background: #ffffff;
-  overflow: hidden;
-  box-shadow:
-    0 32px 80px rgba(20, 31, 54, 0.22),
-    0 4px 18px rgba(20, 31, 54, 0.10);
-}
-
-.nora-panel *,
-.nora-panel button,
-.nora-panel textarea {
-  letter-spacing: 0;
-}
-
-.nora-panel--single .nora-history-sidebar {
-  width: 430px;
-}
-
-.nora-panel--paired .nora-history-sidebar {
-  width: 278px;
-}
-
-.nora-history-sidebar {
-  flex: 0 0 auto;
-  padding: 31px 40px 28px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.94) 49%, rgba(219,236,255,0.78) 100%);
-  border-right: 1px solid rgba(213, 224, 239, 0.78);
-  box-shadow: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-.nora-sidebar-glow,
-.nora-history-sidebar::before,
-.nora-history-sidebar::after,
-.nora-glow-top-right,
-.nora-glow-bottom-left {
-  display: none;
-}
-
-.nora-sidebar-title {
-  margin: 0 0 84px;
-  padding: 0;
-  font-family: 'Outfit', system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.1;
-  font-weight: 700;
-  color: #111827;
-}
-
-.nora-new-chat-btn {
-  height: 28px;
-  margin: 0 0 26px;
-  padding: 0;
-  gap: 14px;
-  color: #111827;
-  font-size: 17px;
-  font-weight: 500;
-  background: transparent;
-}
-
-.nora-new-chat-icon,
-.nora-new-chat-icon img {
-  width: 32px !important;
-  height: 18px !important;
-}
-
 .nora-recents-title {
-  margin: 0 0 18px;
+  margin: 0 0 15px;
   padding: 0;
-  color: #a7adba;
-  font-size: 13px;
-  font-weight: 400;
-}
-
-.nora-history-list {
-  gap: 21px;
-  overflow-y: auto;
-}
-
-.nora-history-item {
-  min-height: 52px;
-  padding: 0 0 0 12px;
-  align-items: flex-start;
-  border-radius: 7px;
-  color: #111827;
-  background: transparent;
-}
-
-.nora-panel--paired .nora-history-item {
-  min-height: 28px;
-  padding: 0 8px;
-}
-
-.nora-history-item.active {
-  background: rgba(237, 238, 240, 0.92);
-}
-
-.nora-history-item:hover:not(.active) {
-  background: rgba(244, 246, 249, 0.88);
-  transform: none;
-}
-
-.nora-history-item-text {
-  font-size: 16px;
-  line-height: 1.15;
-  color: #111827;
-  font-weight: 400;
-}
-
-.nora-panel--paired .nora-history-item-text {
+  color: #a6adb8;
   font-size: 14px;
-}
-
-.nora-history-item-preview {
-  max-width: 270px;
-  margin-top: 7px;
-  color: #6f809a;
-  font-size: 14px;
-  line-height: 1.2;
-}
-
-.nora-panel--paired .nora-history-item-preview {
-  display: none;
-}
-
-.nora-history-item-time {
-  color: #8190a9;
-  font-size: 12px;
-  font-weight: 700;
-  padding-top: 2px;
-}
-
-.nora-panel--paired .nora-history-item-time {
-  display: none;
-}
-
-.nora-view-all-btn {
-  margin: 22px 0 0;
-  padding: 0;
-  color: #2f80ed;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: underline;
-}
-
-.nora-main-content {
-  min-width: 0;
-  background:
-    radial-gradient(circle at 100% 0%, rgba(69, 142, 255, 0.64), transparent 28%),
-    radial-gradient(circle at 0% 72%, rgba(118, 181, 255, 0.42), transparent 34%),
-    linear-gradient(115deg, #ffffff 0%, #fbfcff 43%, #dceeff 100%);
-}
-
-.nora-bg-dot-grid {
-  opacity: 0.75;
-  background-image: radial-gradient(circle, rgba(98, 148, 211, 0.22) 0.8px, transparent 1px);
-  background-size: 16px 16px;
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.16) 18%, rgba(0,0,0,0.64) 100%);
-}
-
-.nora-header {
-  min-height: 75px;
-  padding: 0 74px 0 46px;
-  justify-content: center;
-}
-
-.nora-header-title {
-  justify-content: center;
-  color: #111827;
-  font-family: 'DM Sans', system-ui, sans-serif;
-  font-size: 17px;
   font-weight: 400;
-}
-
-.nora-panel--paired .nora-header {
-  min-height: 64px;
-  justify-content: flex-start;
-  padding: 0 52px 0 18px;
-}
-
-.nora-panel--paired .nora-header-title {
-  justify-content: flex-start;
-  font-size: 14px;
-}
-
-.nora-close-btn {
-  top: 26px;
-  right: 22px;
-  width: 42px;
-  height: 42px;
-  background: rgba(255,255,255,0.88);
-  color: #42506a;
-  box-shadow: 0 8px 20px rgba(23, 39, 70, 0.12);
-}
-
-.nora-panel--paired .nora-close-btn,
-.nora-panel--conversation .nora-close-btn {
-  display: flex;
-}
-
-.nora-top-tools {
-  padding: 0 24px;
-}
-
-.nora-service-picker {
-  justify-content: center;
-  gap: 9px;
-}
-
-.nora-service-chip {
-  min-height: 45px;
-  padding: 0 19px;
-  border-radius: 999px;
-  border: 1px solid rgba(209, 223, 244, 0.85);
-  background: rgba(255,255,255,0.72);
-  color: #20304c;
-  font-size: 15px;
-  font-weight: 700;
-  box-shadow: 0 8px 18px rgba(91, 128, 184, 0.08);
-}
-
-.nora-service-chip--active {
-  color: #ffffff;
-  background: #5b98ff;
-  box-shadow: 0 10px 22px rgba(91, 152, 255, 0.26);
-}
-
-.nora-welcome-scene {
-  justify-content: flex-start;
-  padding: 102px 60px 20px;
-}
-
-.nora-welcome-scene > div:first-child {
-  width: 176px !important;
-  height: 176px !important;
-}
-
-.nora-welcome-scene > div:first-child img {
-  width: 86px !important;
-}
-
-.nora-welcome-scene::before {
-  top: 214px;
-  width: 390px;
-  height: 390px;
-  border-color: rgba(89, 145, 235, 0.24);
-}
-
-.nora-welcome-scene::after {
-  top: 246px;
-  width: 310px;
-  height: 310px;
-  border-color: rgba(89, 145, 235, 0.28);
-}
-
-.nora-welcome-headline {
-  max-width: 690px;
-  margin: 168px 0 0;
-  font-size: 36px;
-  line-height: 1.18;
-  font-weight: 800;
+  line-height: 1;
   letter-spacing: 0;
-  background: linear-gradient(100deg, #092e63 0%, #142457 53%, #6f143d 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-.nora-welcome-text {
-  max-width: 580px;
-  margin-top: 25px;
-  color: #526176;
-  font-size: 22px;
-  line-height: 1.42;
-}
-
-.nora-caret {
-  display: none;
-}
-
-.nora-empty-state {
-  margin-top: 36px;
-  max-width: 640px;
-}
-
-.nora-empty-state__eyebrow {
-  margin-bottom: 13px;
-  color: #6b7b95;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-}
-
-.nora-empty-state__body {
-  color: #4f6078;
-  font-size: 18px;
-}
-
-.nora-quick-prompts {
-  display: none;
-}
-
-.nora-composer {
-  padding: 0 14px 25px;
-}
-
-.nora-panel--single.nora-panel--welcome .nora-composer {
-  padding: 0 14px 27px;
-}
-
-.nora-composer-container {
-  border-radius: 17px;
-  padding: 6px 10px 12px;
-  background: linear-gradient(105deg, #2f80ff 0%, #9ab6ff 54%, #f2cce7 100%);
-  border: 1.5px solid #2f80ff;
-  box-shadow: none;
-}
-
-.nora-composer-container::before {
-  display: none;
-}
-
-.nora-textarea {
-  min-height: 84px;
-  border-radius: 14px;
-  padding: 19px 20px;
-  color: #111827;
-  font-size: 14px;
-  line-height: 1.4;
-  background: rgba(255,255,255,0.96);
-}
-
-.nora-textarea::placeholder {
-  color: #9099a8;
-}
-
-.nora-composer-actions {
-  margin-top: 9px;
-}
-
-.nora-icon-btn,
-.nora-composer-left-actions .nora-icon-btn,
-.nora-icon-btn.light {
-  width: 30px;
-  height: 30px;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-}
-
-.nora-icon-btn:hover,
-.nora-icon-btn.light:hover {
-  background: rgba(255,255,255,0.24);
-  box-shadow: none;
-}
-
-.nora-composer-icon {
-  width: 18px;
-  height: 18px;
-}
-
-.nora-composer-icon--dark {
-  filter: brightness(0) saturate(100%);
-}
-
-.nora-files-list {
-  margin: 0 0 7px;
-  gap: 6px;
-}
-
-.nora-file-chip {
-  min-height: 25px;
-  padding: 0 9px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.94);
-  color: #111827;
-  font-size: 12px;
-  box-shadow: none;
-}
-
-.nora-file-chip__type {
-  display: none;
-}
-
-.nora-conversation-scene {
-  flex: 1;
-  padding: 14px 18px 16px;
-}
-
-.nora-chat-row {
-  margin-bottom: 48px;
-}
-
-.nora-panel--paired .nora-chat-row {
-  margin-bottom: 54px;
-}
-
-.nora-chat-row--user {
-  align-items: flex-end;
-}
-
-.nora-chat-row--assistant {
-  align-items: flex-start;
-}
-
-.nora-message-bubble {
-  max-width: min(620px, 72%);
-  padding: 10px 12px;
-  border: 0;
-  border-radius: 7px;
-  background: rgba(255,255,255,0.86);
-  box-shadow: none;
-  color: #111111;
-  font-size: 14px;
-  line-height: 1.36;
-}
-
-.nora-message-bubble.assistant {
-  max-width: min(620px, 78%);
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-  color: #111111;
-}
-
-.nora-message-line {
-  margin-bottom: 7px;
-}
-
-.nora-message-time {
-  display: none;
-}
-
-.nora-inline-service-tag {
-  display: none;
-}
-
-.nora-notice {
-  margin: 0 20px 10px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.84);
-  font-size: 12px;
-}
-
-@media (max-width: 1320px) {
-  .nora-panel--single .nora-history-sidebar {
-    width: 330px;
-  }
-
-  .nora-welcome-headline {
-    font-size: 30px;
-    max-width: 580px;
-  }
-
-  .nora-welcome-text {
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 860px) {
-  .nora-panel {
-    top: 14px;
-    right: 14px !important;
-    bottom: 14px;
-    width: calc(100vw - 28px) !important;
-  }
-
-  .nora-history-sidebar {
-    display: none;
-  }
-
-  .nora-welcome-scene {
-    padding: 88px 24px 20px;
-  }
-
-  .nora-welcome-headline {
-    margin-top: 132px;
-    font-size: 25px;
-  }
-
-  .nora-welcome-text {
-    font-size: 16px;
-  }
-
-  .nora-service-picker {
-    overflow-x: auto;
-    justify-content: flex-start;
-    padding-bottom: 4px;
-  }
-}
-
-/* Size correction for the reference Nora workspace */
-.nora-panel {
-  top: 22px;
-  bottom: 22px;
-  max-width: calc(100vw - 48px);
-}
-
-.nora-panel--single .nora-history-sidebar,
-.nora-panel--paired .nora-history-sidebar {
-  width: 278px;
-}
-
-.nora-history-sidebar {
-  padding: 26px 18px 26px 28px;
-}
-
-.nora-sidebar-title {
-  margin-bottom: 74px;
-  font-size: 14px;
-}
-
-.nora-new-chat-btn {
-  margin-bottom: 19px;
-  font-size: 14px;
-}
-
-.nora-history-list {
-  gap: 11px;
-}
-
-.nora-history-item {
-  min-height: 30px;
-  padding: 0 8px;
-}
-
-.nora-history-item-text {
-  font-size: 13px;
-}
-
-.nora-history-item-preview,
-.nora-history-item-time {
-  display: none;
-}
-
-.nora-header {
-  min-height: 58px;
-  padding: 0 58px;
-}
-
-.nora-header-title {
-  font-size: 14px;
-}
-
-.nora-close-btn {
-  top: 18px;
-  right: 18px;
-  width: 34px;
-  height: 34px;
-}
-
-.nora-top-tools {
-  padding: 0 18px;
-}
-
-.nora-service-picker {
-  gap: 8px;
-  justify-content: center;
-}
-
-.nora-service-chip {
-  min-height: 42px;
-  padding: 0 16px;
-  font-size: 13px;
-}
-
-.nora-welcome-scene {
-  justify-content: flex-start;
-  padding: 76px 36px 16px;
-}
-
-.nora-welcome-scene > div:first-child {
-  width: 140px !important;
-  height: 140px !important;
-}
-
-.nora-welcome-scene > div:first-child img {
-  width: 68px !important;
-}
-
-.nora-welcome-scene::before {
-  top: 178px;
-  width: 310px;
-  height: 310px;
-}
-
-.nora-welcome-scene::after {
-  top: 206px;
-  width: 246px;
-  height: 246px;
-}
-
-.nora-welcome-headline {
-  max-width: 560px;
-  margin-top: 126px;
-  font-size: 30px;
-  line-height: 1.18;
-}
-
-.nora-welcome-text {
-  max-width: 440px;
-  margin-top: 18px;
-  font-size: 17px;
-}
-
-.nora-empty-state {
-  margin-top: 26px;
-}
-
-.nora-empty-state__eyebrow {
-  margin-bottom: 9px;
-  font-size: 11px;
-}
-
-.nora-empty-state__body {
-  font-size: 14px;
-}
-
-.nora-composer {
-  padding: 0 18px 14px;
-}
-
-.nora-composer-container {
-  border-radius: 17px;
-  padding: 5px 10px 12px;
-}
-
-.nora-textarea {
-  min-height: 82px;
-  padding: 17px 18px;
-  font-size: 13px;
-}
-
-.nora-conversation-scene {
-  padding: 36px 18px 14px;
-}
-
-.nora-message-bubble,
-.nora-message-bubble.assistant {
-  max-width: 68%;
-  font-size: 13px;
-  line-height: 1.36;
-}
-
-@media (max-height: 850px) {
-  .nora-welcome-scene {
-    padding-top: 44px;
-  }
-
-  .nora-welcome-scene::before {
-    top: 130px;
-    width: 260px;
-    height: 260px;
-  }
-
-  .nora-welcome-scene::after {
-    top: 154px;
-    width: 204px;
-    height: 204px;
-  }
-
-  .nora-welcome-scene > div:first-child {
-    width: 116px !important;
-    height: 116px !important;
-  }
-
-  .nora-welcome-scene > div:first-child img {
-    width: 58px !important;
-  }
-
-  .nora-welcome-headline {
-    margin-top: 98px;
-    font-size: 27px;
-  }
-
-  .nora-welcome-text {
-    margin-top: 12px;
-    font-size: 15px;
-  }
-
-  .nora-empty-state {
-    margin-top: 16px;
-  }
-}
-
-/* Reference polish pass: crisp glass panels, light blue field, soft motion. */
-@keyframes noraRefPanelIn {
-  from {
-    opacity: 0;
-    transform: translateX(28px) scale(0.985);
-    filter: blur(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-@keyframes noraRefGlow {
-  0%, 100% {
-    opacity: 0.66;
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    opacity: 0.9;
-    transform: translate3d(-10px, 8px, 0) scale(1.04);
-  }
-}
-
-@keyframes noraRefMessageIn {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.nora-panel {
-  top: 24px;
-  bottom: 24px;
-  border: 3px solid rgba(255, 255, 255, 0.96);
-  border-radius: 26px;
-  background: rgba(255, 255, 255, 0.94);
-  overflow: hidden;
-  box-shadow:
-    0 34px 88px rgba(17, 27, 48, 0.18),
-    0 10px 30px rgba(17, 27, 48, 0.10),
-    0 0 0 1px rgba(180, 204, 238, 0.22);
-  animation: noraRefPanelIn 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.nora-panel *,
-.nora-panel button,
-.nora-panel textarea {
-  font-family: "Outfit", "Poppins", "Segoe UI", system-ui, sans-serif;
-  letter-spacing: 0;
-}
-
-.nora-panel--single .nora-history-sidebar,
-.nora-panel--paired .nora-history-sidebar {
-  width: 278px;
-}
-
-.nora-history-sidebar {
-  padding: 24px 20px 26px 28px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.94) 52%, rgba(220,237,255,0.78) 100%);
-  border-right: 1px solid rgba(215, 225, 241, 0.82);
-  box-shadow: inset -16px 0 42px rgba(166, 198, 237, 0.06);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-.nora-sidebar-glow,
-.nora-history-sidebar::before,
-.nora-history-sidebar::after,
-.nora-glow-top-right,
-.nora-glow-bottom-left {
-  display: none;
-}
-
-.nora-sidebar-title {
-  margin: 0 0 70px;
-  padding: 0;
-  color: #121721;
-  font-size: 14px;
-  line-height: 1.1;
-  font-weight: 700;
-}
-
-.nora-new-chat-btn {
-  min-height: 28px;
-  margin: 0 0 20px;
-  padding: 0;
-  gap: 14px;
-  border-radius: 8px;
-  color: #121721;
-  font-size: 14px;
-  font-weight: 500;
-  background: transparent;
-}
-
-.nora-new-chat-btn.active,
-.nora-new-chat-btn:hover {
-  color: #121721;
-  background: transparent;
-}
-
-.nora-new-chat-icon,
-.nora-new-chat-icon img {
-  width: 32px !important;
-  height: 18px !important;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.nora-recents-title {
-  margin: 0 0 16px;
-  padding: 0;
-  color: #aeb5c2;
-  font-size: 13px;
-  font-weight: 400;
   text-transform: none;
 }
 
 .nora-history-list {
-  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
   overflow-y: auto;
   scrollbar-width: none;
 }
 
 .nora-history-list::-webkit-scrollbar {
-  width: 0;
+  display: none;
 }
 
 .nora-history-item {
-  min-height: 30px;
-  padding: 0 8px;
-  border-radius: 7px;
+  min-height: 31px;
+  width: 100%;
+  display: flex;
   align-items: center;
-  color: #111827;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 7px;
   background: transparent;
-  transition: background 160ms ease, color 160ms ease;
+  color: #111111;
+  cursor: pointer;
+  text-align: left;
 }
 
+.nora-history-item:hover,
 .nora-history-item.active {
-  background: rgba(235, 237, 240, 0.94);
-  color: #111827;
-  font-weight: 400;
-}
-
-.nora-history-item:hover:not(.active) {
-  background: rgba(242, 246, 252, 0.92);
-  transform: none;
+  background: #eeeeef;
 }
 
 .nora-history-item__content {
@@ -2338,10 +183,14 @@
 }
 
 .nora-history-item-text {
-  color: #111827;
-  font-size: 13px;
-  line-height: 1.25;
+  display: block;
+  overflow: hidden;
+  color: #111111;
+  font-size: 14px;
+  line-height: 1.2;
   font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .nora-history-item-preview,
@@ -2350,511 +199,86 @@
 }
 
 .nora-view-all-btn {
+  align-self: flex-start;
   margin: 18px 0 0;
   padding: 0;
+  border: 0;
+  background: transparent;
   color: #2f80ff;
   font-size: 13px;
   font-weight: 600;
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .nora-main-content {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background:
-    radial-gradient(circle at 86% 5%, rgba(72, 143, 255, 0.50), transparent 31%),
-    radial-gradient(circle at 3% 78%, rgba(131, 190, 255, 0.40), transparent 36%),
-    linear-gradient(112deg, #ffffff 0%, #fbfdff 44%, #d9ecff 100%);
-}
-
-.nora-main-content::before {
-  display: none;
+    radial-gradient(circle at 90% 0%, rgba(65, 143, 255, 0.58), transparent 35%),
+    radial-gradient(circle at 4% 76%, rgba(118, 185, 255, 0.46), transparent 38%),
+    linear-gradient(112deg, #ffffff 0%, #fbfdff 42%, #dceeff 100%);
 }
 
 .nora-bg-dot-grid {
-  opacity: 0.76;
-  background-image: radial-gradient(circle, rgba(82, 139, 216, 0.22) 0.75px, transparent 1px);
-  background-size: 16px 16px;
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.22) 18%, rgba(0,0,0,0.68) 100%);
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.85;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.82) 0.8px, transparent 1.2px);
+  background-size: 13px 13px;
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.17) 16%, rgba(0, 0, 0, 0.92) 100%);
 }
 
-.nora-main-content::after {
+.nora-glow-top-right,
+.nora-glow-bottom-left {
   display: none;
-}
-
-.nora-bg-dot-grid {
-  z-index: 1;
 }
 
 .nora-header,
-.nora-top-tools,
-.nora-notice,
-.nora-workspace-loading,
 .nora-welcome-scene,
 .nora-conversation-scene,
-.nora-composer {
-  position: relative;
-  z-index: 2;
-}
-
-.nora-close-btn {
-  position: absolute;
-  z-index: 10;
-}
-
-.nora-header {
-  min-height: 58px;
-  padding: 0 60px;
-  justify-content: center;
-}
-
-.nora-header-title {
-  color: #111827;
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.nora-panel--paired .nora-header {
-  min-height: 58px;
-  padding: 0 52px 0 18px;
-  justify-content: flex-start;
-}
-
-.nora-panel--paired .nora-header-title {
-  font-size: 14px;
-}
-
-.nora-close-btn {
-  top: 18px;
-  right: 18px;
-  width: 34px;
-  height: 34px;
-  color: #41506a;
-  background: rgba(255,255,255,0.90);
-  border: 0;
-  box-shadow: 0 9px 22px rgba(36, 55, 92, 0.12);
-}
-
-.nora-close-btn:hover {
-  transform: scale(1.06);
-  background: rgba(255,255,255,0.98);
-}
-
-.nora-top-tools {
-  padding: 0 18px;
-}
-
-.nora-service-picker {
-  justify-content: center;
-  gap: 8px;
-}
-
-.nora-service-chip {
-  min-height: 42px;
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(208, 224, 247, 0.95);
-  background: rgba(255,255,255,0.72);
-  color: #21304c;
-  font-size: 13px;
-  font-weight: 700;
-  box-shadow: 0 8px 20px rgba(88, 128, 190, 0.08);
-}
-
-.nora-service-chip:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(88, 128, 190, 0.13);
-}
-
-.nora-service-chip--active {
-  color: #ffffff;
-  background: linear-gradient(135deg, #4b8fff 0%, #6fa7ff 100%);
-  border-color: transparent;
-  box-shadow: 0 12px 24px rgba(75, 143, 255, 0.28);
-}
-
-.nora-welcome-scene {
-  justify-content: flex-start;
-  padding: 46px 36px 16px;
-}
-
-.nora-welcome-scene > div:first-child {
-  width: 116px !important;
-  height: 116px !important;
-}
-
-.nora-welcome-scene > div:first-child img {
-  width: 58px !important;
-}
-
-.nora-welcome-scene::before,
-.nora-welcome-scene::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  border-radius: 50%;
-  border: 1px solid rgba(83, 142, 232, 0.24);
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
-.nora-welcome-scene::before {
-  top: 130px;
-  width: 260px;
-  height: 260px;
-}
-
-.nora-welcome-scene::after {
-  top: 154px;
-  width: 204px;
-  height: 204px;
-}
-
-.nora-welcome-headline {
-  max-width: 560px;
-  margin: 98px 0 0;
-  color: transparent;
-  font-size: 27px;
-  line-height: 1.18;
-  font-weight: 800;
-  background: linear-gradient(100deg, #092e63 0%, #18265b 54%, #7b173f 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-.nora-welcome-text {
-  max-width: 440px;
-  min-height: 0;
-  margin-top: 12px;
-  color: #56657a;
-  font-size: 15px;
-  line-height: 1.42;
-}
-
-.nora-caret {
-  display: none;
-}
-
-.nora-empty-state {
-  margin-top: 16px;
-  max-width: 620px;
-}
-
-.nora-empty-state__eyebrow {
-  margin-bottom: 9px;
-  color: #6b7b95;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-}
-
-.nora-empty-state__body {
-  color: #53647b;
-  font-size: 14px;
-}
-
-.nora-quick-prompts {
-  display: none;
-}
-
-.nora-conversation-scene {
-  flex: 1;
-  padding: 34px 18px 14px;
-  position: relative;
-  z-index: 1;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(115, 164, 229, 0.38) transparent;
-}
-
-.nora-chat-row {
-  margin-bottom: 50px;
-  animation: noraRefMessageIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.nora-message-bubble {
-  max-width: min(620px, 68%);
-  padding: 10px 12px;
-  border: 0;
-  border-radius: 7px;
-  background: rgba(255,255,255,0.88);
-  box-shadow: none;
-  color: #111111;
-  font-size: 13px;
-  line-height: 1.36;
-}
-
-.nora-message-bubble.assistant {
-  max-width: min(640px, 78%);
-  color: #111111;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-}
-
-.nora-message-line {
-  margin-bottom: 7px;
-}
-
-.nora-message-time,
-.nora-inline-service-tag {
-  display: none;
-}
-
-.nora-composer {
-  padding: 0 18px 14px;
-}
-
-.nora-composer-container {
-  border: 1.5px solid #2f80ff;
-  border-radius: 17px;
-  padding: 5px 10px 12px;
-  background: linear-gradient(105deg, #2f80ff 0%, #92b3ff 52%, #f2cbe7 100%);
-  box-shadow: none;
-  animation: none;
-}
-
-.nora-composer-container::before {
-  display: none;
-}
-
-.nora-files-list {
-  position: relative;
-  z-index: 1;
-  gap: 6px;
-  margin: 0 0 7px;
-}
-
-.nora-file-chip {
-  min-height: 25px;
-  padding: 0 9px;
-  border: 1px solid rgba(209, 219, 234, 0.86);
-  border-radius: 999px;
-  background: rgba(255,255,255,0.94);
-  color: #111827;
-  font-size: 12px;
-  box-shadow: none;
-}
-
-.nora-file-chip__type {
-  display: none;
-}
-
-.nora-textarea {
-  min-height: 82px;
-  padding: 17px 18px;
-  border: 0;
-  border-radius: 15px;
-  background: rgba(255,255,255,0.96);
-  color: #111827;
-  font-size: 13px;
-  line-height: 1.4;
-  box-shadow: none;
-}
-
-.nora-textarea:focus {
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.82);
-}
-
-.nora-textarea::placeholder {
-  color: #8f98a7;
-  font-style: normal;
-}
-
-.nora-composer-actions {
-  margin-top: 9px;
-}
-
-.nora-icon-btn,
-.nora-composer-left-actions .nora-icon-btn,
-.nora-icon-btn.light {
-  width: 30px;
-  height: 30px;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.nora-icon-btn:hover,
-.nora-icon-btn.light:hover {
-  background: rgba(255,255,255,0.24);
-  box-shadow: none;
-}
-
-.nora-composer-icon {
-  width: 18px;
-  height: 18px;
-}
-
-.nora-composer-icon--dark {
-  filter: brightness(0) saturate(100%);
-}
-
+.nora-composer,
 .nora-notice,
 .nora-workspace-loading {
   position: relative;
-  z-index: 2;
-  border: 1px solid rgba(212, 225, 244, 0.78);
-  border-radius: 10px;
-  background: rgba(255,255,255,0.82);
-  color: #25334a;
-  box-shadow: 0 12px 26px rgba(49, 84, 130, 0.08);
-}
-
-@media (max-width: 860px) {
-  .nora-panel {
-    top: 14px;
-    right: 14px !important;
-    bottom: 14px;
-    width: calc(100vw - 28px) !important;
-  }
-
-  .nora-history-sidebar {
-    display: none;
-  }
-
-  .nora-welcome-headline {
-    font-size: 24px;
-  }
-}
-
-/* Nora AI Figma alignment pass */
-.nora-panel {
-  top: 23px !important;
-  bottom: 23px !important;
-  height: auto;
-  border: 3px solid rgba(255, 255, 255, 0.98);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow:
-    0 28px 74px rgba(20, 35, 76, 0.16),
-    0 10px 28px rgba(20, 35, 76, 0.08);
-}
-
-.nora-panel--single {
-  width: min(948px, calc(100vw - 48px)) !important;
-}
-
-.nora-panel--paired {
-  width: min(948px, calc(100vw - 568px)) !important;
-  right: 544px !important;
-}
-
-.nora-panel--single.nora-panel--conversation {
-  width: min(1794px, calc(100vw - 132px)) !important;
-  right: 21px !important;
-}
-
-.nora-panel--single.nora-panel--conversation .nora-history-sidebar {
-  width: 280px;
-}
-
-.nora-panel--single.nora-panel--conversation .nora-main-content {
-  border-radius: 0 21px 21px 0;
-}
-
-.nora-history-sidebar {
-  width: 278px !important;
-  padding: 21px 26px 28px 31px;
-  background:
-    radial-gradient(circle at 55% 78%, rgba(185, 216, 255, 0.64), transparent 36%),
-    linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.94) 54%, rgba(224,239,255,0.78) 100%);
-  border-right: 1px solid rgba(225, 231, 241, 0.88);
-}
-
-.nora-sidebar-title {
-  margin-bottom: 64px;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.nora-new-chat-btn {
-  margin-bottom: 16px;
-  gap: 12px;
-  font-size: 14px;
-}
-
-.nora-new-chat-icon,
-.nora-new-chat-icon img {
-  width: 30px !important;
-  height: 18px !important;
-}
-
-.nora-recents-title {
-  margin-bottom: 13px;
-  color: #a9afb9;
-  font-size: 13px;
-}
-
-.nora-history-list {
-  gap: 9px;
-}
-
-.nora-history-item {
-  min-height: 28px;
-  padding: 0 6px;
-  border-radius: 7px;
-}
-
-.nora-history-item.active {
-  background: rgba(235, 235, 236, 0.96);
-}
-
-.nora-history-item-text {
-  color: #111111;
-  font-size: 13px;
-}
-
-.nora-view-all-btn {
-  margin-top: 18px;
-  color: #2f80ff;
-}
-
-.nora-main-content {
-  background:
-    radial-gradient(circle at 92% 2%, rgba(75, 146, 255, 0.62), transparent 34%),
-    radial-gradient(circle at 3% 73%, rgba(132, 191, 255, 0.44), transparent 36%),
-    linear-gradient(112deg, #ffffff 0%, #fbfdff 43%, #d9ecff 100%);
-}
-
-.nora-bg-dot-grid {
-  opacity: 0.82;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.72) 0.75px, transparent 1px);
-  background-size: 13px 13px;
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.2) 14%, rgba(0,0,0,0.9) 100%);
+  z-index: 1;
 }
 
 .nora-header {
-  min-height: 66px;
-  padding: 0 62px;
-}
-
-.nora-panel--paired .nora-header,
-.nora-panel--conversation .nora-header {
-  min-height: 66px;
-  justify-content: flex-start;
-  padding: 0 56px 0 19px;
+  min-height: 61px;
+  flex: 0 0 61px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 72px;
 }
 
 .nora-header-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
   color: #111111;
   font-size: 14px;
+  line-height: 1;
   font-weight: 400;
 }
 
 .nora-title-edit-btn {
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
   display: inline-grid;
   place-items: center;
   padding: 0;
-  border: none;
+  border: 0;
   background: transparent;
   color: #b7b8bd;
   cursor: pointer;
-  transition: color 160ms ease, transform 160ms ease;
-}
-
-.nora-title-edit-btn:hover {
-  color: #2f80ff;
-  transform: translateY(-1px);
 }
 
 .nora-title-edit-btn svg {
@@ -2862,24 +286,113 @@
   height: 20px;
 }
 
+.nora-title-edit-btn:hover {
+  color: #2f80ff;
+}
+
+.nora-top-tools,
+.nora-service-picker,
+.nora-empty-state,
+.nora-welcome-text {
+  display: none;
+}
+
 .nora-close-btn {
-  top: 17px;
-  right: 18px;
-  width: 36px;
-  height: 36px;
-  color: #111111;
+  position: absolute;
+  top: 27px;
+  right: 28px;
+  z-index: 3;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
   background: transparent;
-  box-shadow: none;
+  color: #111111;
+  cursor: pointer;
 }
 
 .nora-close-btn:hover {
-  background: rgba(255,255,255,0.55);
-  transform: scale(1.04);
+  color: #2f80ff;
+}
+
+.nora-close-btn--expand {
+  top: 18px;
+  right: 18px;
+}
+
+.nora-company-pill {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  z-index: 3;
+  min-width: 176px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 13px 4px 5px;
+  border: 3px solid #ffffff;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.93);
+  color: #111111;
+  box-shadow: 0 10px 28px rgba(21, 42, 83, 0.1);
+  cursor: pointer;
+}
+
+.nora-company-pill__mark {
+  position: relative;
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 32%),
+    linear-gradient(135deg, #075ec7 0%, #0f7ee8 48%, #003884 100%);
+  box-shadow: inset 0 2px 7px rgba(255, 255, 255, 0.45), 0 5px 12px rgba(0, 94, 196, 0.24);
+}
+
+.nora-company-pill__mark::before,
+.nora-company-pill__mark::after,
+.nora-company-pill__mark span {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 21px;
+  height: 2px;
+  border-radius: 999px;
+  background: #ffffff;
+  transform: rotate(24deg);
+}
+
+.nora-company-pill__mark::after {
+  transform: rotate(-24deg);
+}
+
+.nora-company-pill__mark span {
+  left: 13px;
+  right: 13px;
+  top: 17px;
+  opacity: 0.8;
+}
+
+.nora-company-pill__name {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .nora-welcome-scene {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: flex-start;
-  padding: 130px 36px 16px;
+  text-align: center;
+  padding: 170px 44px 18px;
 }
 
 .nora-welcome-scene > .nora-chat-avatar {
@@ -2888,39 +401,56 @@
 }
 
 .nora-welcome-scene .nora-chat-avatar__ambient {
-  inset: -86px !important;
+  inset: -78px !important;
+  border-color: rgba(73, 139, 235, 0.20) !important;
+  background: rgba(126, 177, 255, 0.06) !important;
 }
 
 .nora-welcome-scene .nora-chat-avatar__ring {
-  inset: -48px !important;
+  inset: -40px !important;
+  border-color: rgba(73, 139, 235, 0.28) !important;
+  background: rgba(126, 177, 255, 0.09) !important;
 }
 
 .nora-welcome-headline {
-  max-width: 600px;
-  margin-top: 150px;
-  font-size: 32px;
-  line-height: 1.18;
+  max-width: 610px;
+  margin: 142px 0 0;
   color: transparent;
-  background: linear-gradient(100deg, #0a3772 0%, #16285d 56%, #70133f 100%);
+  background: linear-gradient(100deg, #0a3871 0%, #17285d 55%, #74123f 100%);
   -webkit-background-clip: text;
   background-clip: text;
+  font-size: 31px;
+  line-height: 1.18;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-align: center;
 }
 
-.nora-welcome-text,
-.nora-empty-state {
+.nora-caret {
   display: none;
 }
 
 .nora-conversation-scene {
-  padding: 34px 19px 14px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 90px 19px 20px;
+  scrollbar-width: none;
+}
+
+.nora-conversation-scene::-webkit-scrollbar {
+  display: none;
 }
 
 .nora-panel--single.nora-panel--conversation .nora-conversation-scene {
-  padding: 45px min(18vw, 310px) 20px;
+  padding: 60px min(18vw, 350px) 20px;
 }
 
 .nora-chat-row {
-  margin-bottom: 50px;
+  display: flex;
+  width: 100%;
+  margin-bottom: 52px;
+  animation: noraMessageIn 320ms ease both;
 }
 
 .nora-chat-row--user {
@@ -2929,10 +459,6 @@
 
 .nora-chat-row--assistant {
   justify-content: flex-start;
-}
-
-.nora-panel--single.nora-panel--conversation .nora-chat-row--assistant {
-  max-width: 740px;
 }
 
 .nora-message-bubble {
@@ -2944,20 +470,42 @@
   color: #111111;
   box-shadow: none;
   font-size: 14px;
-  line-height: 1.36;
+  line-height: 1.38;
+  font-weight: 400;
 }
 
 .nora-message-bubble.assistant {
-  background: transparent;
   max-width: min(660px, 82%);
+  background: transparent;
 }
 
 .nora-message-line {
-  margin-bottom: 7px;
+  margin: 0 0 7px;
+  white-space: pre-wrap;
 }
 
-.nora-message-line:empty {
-  min-height: 14px;
+.nora-message-line:last-child {
+  margin-bottom: 0;
+}
+
+.nora-message-time,
+.nora-inline-service-tag {
+  display: none;
+}
+
+.nora-typing-indicator {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  min-width: 34px;
+}
+
+.nora-typing-indicator span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #2f80ff;
+  opacity: 0.48;
 }
 
 .nora-attachments-grid {
@@ -2967,23 +515,45 @@
   margin-top: 24px;
 }
 
+.nora-attachment-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+
 .nora-attachment-card--file,
 .nora-attachment-card--compact {
   min-height: 25px;
   width: auto;
   padding: 0 10px;
-  border-radius: 999px;
   border: 1px solid rgba(208, 216, 230, 0.92);
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: none;
   color: #111111;
 }
 
+.nora-attachment-card__image {
+  width: 64px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.nora-attachment-card__audio {
+  height: 28px;
+}
+
 .nora-attachment-card__meta {
+  display: flex;
+  flex-direction: column;
   gap: 0;
 }
 
 .nora-attachment-card__meta strong {
+  color: #111111;
   font-size: 12px;
   font-weight: 400;
 }
@@ -2993,302 +563,176 @@
 }
 
 .nora-composer {
-  padding: 0 18px 14px;
+  flex: 0 0 auto;
+  padding: 0 18px 18px;
 }
 
 .nora-panel--single.nora-panel--conversation .nora-composer {
-  max-width: 754px;
-  width: min(754px, calc(100% - 120px));
+  width: min(754px, calc(100% - 160px));
   margin: 0 auto;
   padding-bottom: 34px;
 }
 
 .nora-composer-container {
+  position: relative;
+  overflow: hidden;
+  padding: 7px 10px 12px;
   border: 1.5px solid #2f80ff;
   border-radius: 17px;
-  background: linear-gradient(105deg, #2f80ff 0%, #92b5ff 53%, #f4cbe8 100%);
-  padding: 6px 10px 12px;
+  background: linear-gradient(105deg, #2f80ff 0%, #92b4ff 54%, #f0c5e5 100%);
+  box-shadow: none;
+}
+
+.nora-composer-container::before {
+  display: none;
+}
+
+.nora-files-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0 0 7px;
+}
+
+.nora-file-chip {
+  min-height: 25px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 9px;
+  border: 1px solid rgba(209, 219, 234, 0.86);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #111111;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.nora-file-chip__type {
+  display: none;
+}
+
+.nora-file-remove {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #111111;
+  cursor: pointer;
+}
+
+.nora-recording-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 7px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #111111;
+  font-size: 12px;
+}
+
+.nora-recording-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff3b3b;
 }
 
 .nora-textarea {
+  width: 100%;
   min-height: 84px;
+  display: block;
+  resize: none;
+  padding: 19px 20px;
   border: 0;
   border-radius: 15px;
-  background: rgba(255,255,255,0.97);
+  outline: none;
+  background: rgba(255, 255, 255, 0.98);
   color: #111111;
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: none;
+}
+
+.nora-textarea::placeholder {
+  color: #8e98a7;
+  font-style: normal;
+}
+
+.nora-textarea:focus {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.78);
+}
+
+.nora-composer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 9px;
+}
+
+.nora-composer-left-actions,
+.nora-composer-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
 .nora-icon-btn,
 .nora-icon-btn.light {
   width: 30px;
   height: 30px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
 }
 
-.nora-panel--paired .nora-welcome-scene {
-  padding-top: 78px;
+.nora-icon-btn:hover,
+.nora-icon-btn.light:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.nora-icon-btn:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.nora-icon-btn--recording {
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.nora-composer-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.nora-composer-icon--dark {
+  filter: brightness(0) saturate(100%);
+}
+
+.nora-notice,
+.nora-workspace-loading {
+  align-self: center;
+  margin: 12px 18px;
+  padding: 10px 14px;
+  border: 1px solid rgba(212, 225, 244, 0.78);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #25334a;
+  font-size: 13px;
+  box-shadow: 0 12px 26px rgba(49, 84, 130, 0.08);
 }
 
 @media (max-width: 1500px) {
   .nora-panel--paired {
-    width: calc(100vw - 568px) !important;
+    right: 464px;
   }
-}
-
-@media (max-width: 1180px) {
-  .nora-panel--paired,
-  .nora-panel--single,
-  .nora-panel--single.nora-panel--conversation {
-    right: 14px !important;
-    width: calc(100vw - 28px) !important;
-  }
-}
-
-/* Exact reference shell: final authority layer */
-.nora-panel {
-  position: fixed !important;
-  top: 24px !important;
-  right: 24px !important;
-  bottom: 24px !important;
-  left: auto !important;
-  z-index: 54 !important;
-  display: flex !important;
-  border: 3px solid #ffffff !important;
-  border-radius: 25px !important;
-  overflow: hidden !important;
-  background: #ffffff !important;
-  box-shadow:
-    0 30px 80px rgba(18, 28, 52, 0.22),
-    0 8px 24px rgba(18, 28, 52, 0.12) !important;
-}
-
-.nora-panel--single.nora-panel--welcome {
-  width: 948px !important;
-}
-
-.nora-panel--paired {
-  width: 948px !important;
-  right: 544px !important;
-}
-
-.nora-panel--single.nora-panel--conversation {
-  width: calc(100vw - 132px) !important;
-  right: 24px !important;
-}
-
-.nora-panel--single.nora-panel--conversation .nora-history-sidebar,
-.nora-panel--single.nora-panel--welcome .nora-history-sidebar,
-.nora-panel--paired .nora-history-sidebar {
-  width: 278px !important;
-  flex: 0 0 278px !important;
-}
-
-.nora-history-sidebar {
-  padding: 35px 31px 34px 39px !important;
-  background:
-    radial-gradient(circle at 62% 86%, rgba(183, 216, 255, 0.62), transparent 36%),
-    linear-gradient(180deg, #ffffff 0%, #ffffff 58%, #d8ebff 100%) !important;
-  border-right: 1px solid rgba(221, 229, 241, 0.96) !important;
-  box-shadow: none !important;
-}
-
-.nora-sidebar-title {
-  margin: 0 0 82px !important;
-  color: #111111 !important;
-  font-size: 16px !important;
-  font-weight: 700 !important;
-}
-
-.nora-new-chat-btn {
-  min-height: 27px !important;
-  margin: 0 0 27px !important;
-  padding: 0 !important;
-  gap: 13px !important;
-  color: #111111 !important;
-  font-size: 15px !important;
-  font-weight: 500 !important;
-}
-
-.nora-new-chat-icon,
-.nora-new-chat-icon img {
-  width: 31px !important;
-  height: 18px !important;
-}
-
-.nora-recents-title {
-  margin: 0 0 15px !important;
-  color: #a4abb7 !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-}
-
-.nora-history-list {
-  gap: 13px !important;
-}
-
-.nora-history-item {
-  min-height: 31px !important;
-  padding: 0 8px !important;
-  border-radius: 7px !important;
-  color: #111111 !important;
-}
-
-.nora-history-item.active {
-  background: #eeeeef !important;
-}
-
-.nora-history-item-text {
-  font-size: 14px !important;
-  font-weight: 400 !important;
-}
-
-.nora-view-all-btn {
-  margin-top: 18px !important;
-  color: #2f80ff !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-}
-
-.nora-main-content {
-  flex: 1 1 auto !important;
-  background:
-    radial-gradient(circle at 90% 2%, rgba(70, 145, 255, 0.54), transparent 34%),
-    radial-gradient(circle at 4% 76%, rgba(124, 188, 255, 0.42), transparent 38%),
-    linear-gradient(112deg, #ffffff 0%, #fbfdff 42%, #dbeeff 100%) !important;
-}
-
-.nora-bg-dot-grid {
-  opacity: 0.82 !important;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.78) 0.8px, transparent 1.2px) !important;
-  background-size: 13px 13px !important;
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.16) 16%, rgba(0,0,0,0.9) 100%) !important;
-}
-
-.nora-top-tools {
-  display: none !important;
-}
-
-.nora-header {
-  min-height: 61px !important;
-  padding: 0 60px !important;
-  justify-content: center !important;
-}
-
-.nora-panel--conversation .nora-header,
-.nora-panel--paired .nora-header {
-  justify-content: center !important;
-}
-
-.nora-header-title {
-  color: #111111 !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-}
-
-.nora-close-btn {
-  top: 27px !important;
-  right: 28px !important;
-  width: 24px !important;
-  height: 24px !important;
-  color: #111111 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.nora-close-btn svg {
-  width: 13px;
-  height: 13px;
-}
-
-.nora-welcome-scene {
-  justify-content: flex-start !important;
-  padding: 170px 44px 18px !important;
-}
-
-.nora-welcome-scene > .nora-chat-avatar {
-  width: 140px !important;
-  height: 140px !important;
-}
-
-.nora-welcome-scene .nora-chat-avatar__ambient {
-  inset: -76px !important;
-}
-
-.nora-welcome-scene .nora-chat-avatar__ring {
-  inset: -40px !important;
-}
-
-.nora-welcome-headline {
-  max-width: 610px !important;
-  margin-top: 142px !important;
-  font-size: 31px !important;
-  line-height: 1.18 !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.03em !important;
-  text-align: center !important;
-  color: transparent !important;
-  background: linear-gradient(100deg, #0a3871 0%, #17285d 55%, #74123f 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-}
-
-.nora-composer {
-  padding: 0 18px 18px !important;
-}
-
-.nora-composer-container {
-  border: 1.5px solid #2f80ff !important;
-  border-radius: 17px !important;
-  padding: 7px 10px 12px !important;
-  background: linear-gradient(105deg, #2f80ff 0%, #92b4ff 54%, #f0c5e5 100%) !important;
-  box-shadow: none !important;
-}
-
-.nora-textarea {
-  min-height: 84px !important;
-  border: 0 !important;
-  border-radius: 15px !important;
-  background: rgba(255,255,255,0.98) !important;
-  padding: 19px 20px !important;
-  color: #111111 !important;
-  font-size: 14px !important;
-}
-
-.nora-conversation-scene {
-  padding: 92px 19px 14px !important;
-}
-
-.nora-panel--single.nora-panel--conversation .nora-conversation-scene {
-  padding: 90px min(18vw, 350px) 20px !important;
-}
-
-.nora-panel--paired .nora-conversation-scene {
-  padding: 92px 19px 14px !important;
-}
-
-.nora-chat-row {
-  margin-bottom: 52px !important;
-}
-
-.nora-message-bubble {
-  max-width: min(640px, 74%) !important;
-  border: 0 !important;
-  border-radius: 7px !important;
-  background: rgba(255,255,255,0.9) !important;
-  color: #111111 !important;
-  box-shadow: none !important;
-  font-size: 14px !important;
-  line-height: 1.38 !important;
-}
-
-.nora-message-bubble.assistant {
-  background: transparent !important;
-}
-
-.nora-panel--single.nora-panel--conversation .nora-composer {
-  width: min(754px, calc(100% - 160px)) !important;
-  margin: 0 auto !important;
-  padding-bottom: 34px !important;
 }
 
 @media (max-width: 1180px) {
@@ -3296,7 +740,46 @@
   .nora-panel--single.nora-panel--welcome,
   .nora-panel--paired,
   .nora-panel--single.nora-panel--conversation {
-    right: 14px !important;
-    width: calc(100vw - 28px) !important;
+    right: 14px;
+    width: calc(100vw - 28px);
+  }
+
+  .nora-panel--single.nora-panel--conversation .nora-composer {
+    width: min(754px, calc(100% - 56px));
+  }
+
+  .nora-company-pill {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .nora-panel {
+    top: 14px;
+    bottom: 14px;
+    border-radius: 20px;
+  }
+
+  .nora-history-sidebar {
+    display: none;
+  }
+
+  .nora-welcome-scene {
+    padding: 108px 24px 16px;
+  }
+
+  .nora-welcome-headline {
+    margin-top: 120px;
+    font-size: 25px;
+  }
+
+  .nora-conversation-scene,
+  .nora-panel--single.nora-panel--conversation .nora-conversation-scene {
+    padding: 38px 18px 18px;
+  }
+
+  .nora-panel--single.nora-panel--conversation .nora-composer {
+    width: 100%;
+    padding: 0 14px 14px;
   }
 }

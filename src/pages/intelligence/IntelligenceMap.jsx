@@ -921,17 +921,15 @@ return (
           position: 'absolute',
           inset: 0,
           transformOrigin: 'center center',
-          willChange: 'transform, filter',
-          transition: 'transform 580ms cubic-bezier(0.22, 1, 0.36, 1), filter 580ms cubic-bezier(0.22, 1, 0.36, 1)',
+          willChange: 'transform',
+          transition: 'transform 580ms cubic-bezier(0.22, 1, 0.36, 1)',
           ...(shouldShowWorkspace
             ? {
-                transform: 'scale(0.97) translateX(-18px)',
-                filter: 'brightness(0.84) saturate(0.80)',
+                transform: 'scale(1) translateX(0px)',
                 pointerEvents: 'none',
               }
             : {
                 transform: 'scale(1) translateX(0px)',
-                filter: 'brightness(1) saturate(1)',
               }),
         }}
       >
@@ -990,10 +988,10 @@ return (
           position: 'fixed',
           inset: 0,
           zIndex: 44,
-          backdropFilter: shouldShowWorkspace ? 'blur(10px) brightness(0.88)' : 'blur(0px) brightness(1)',
-          WebkitBackdropFilter: shouldShowWorkspace ? 'blur(10px) brightness(0.88)' : 'blur(0px) brightness(1)',
-          background: shouldShowWorkspace ? 'rgba(8, 16, 55, 0.12)' : 'rgba(0, 0, 0, 0)',
-          transition: 'backdrop-filter 580ms cubic-bezier(0.22, 1, 0.36, 1), background 580ms cubic-bezier(0.22, 1, 0.36, 1)',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          background: 'rgba(0, 0, 0, 0)',
+          transition: 'background 220ms ease',
           pointerEvents: shouldShowWorkspace ? 'auto' : 'none',
           cursor: shouldShowWorkspace ? 'pointer' : 'default',
         }}
