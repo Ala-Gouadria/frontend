@@ -1,75 +1,34 @@
-const assetModules = import.meta.glob(
-  [
-    '../assets/**/*.{png,jpg,jpeg,webp}',
-    '../features/**/*.{png,jpg,jpeg,webp}',
-  ],
-  {
-    eager: true,
-    import: 'default',
-    query: '?url',
-  },
-)
+import { get, post } from './client.js'
 
-const imageAssets = Object.entries(assetModules)
-  .filter(([path]) => !path.includes('/icons/'))
-  .map(([path, url], index) => {
-    const fileName = path.split('/').at(-1) ?? `asset-${index + 1}`
-    const title = fileName.replace(/\.(png|jpg|jpeg|webp)$/i, '').replace(/[-_]/g, ' ')
-
-    return {
-      id: `image-${index + 1}`,
-      title,
-      src: url,
-      date: 'Mar 14, 11:00 AM',
-      type: 'image',
-    }
-  })
-
-const postSourceImages = imageAssets.filter((asset) => (
-  /social|image generation|caption|strategy|hero|background/i.test(asset.title)
-))
-
-const captionText = 'Most people don’t fail because they lack talent. They fail because they lack consistency...'
-
-function delay(ms) {
-  return new Promise((resolve) => globalThis.setTimeout(resolve, ms))
-}
-
-function makePost(index) {
-  const source = postSourceImages[index % postSourceImages.length] ?? imageAssets[index % imageAssets.length]
-
+function mapBackendAsset(item) {
   return {
-    id: `post-${index + 1}`,
-    image: source?.src,
-    text: captionText,
-    location: 'Manchester, United Kingdom',
-    type: 'post',
+    id: item.id,
+    title: item.name,
+    src: item.url ?? '',
+    date: item.createdAt ? new Date(item.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '',
+    type: item.type ?? 'image',
   }
-}
-
-function makeCaption(index) {
-  return {
-    id: `caption-${index + 1}`,
-    text: captionText,
-    location: 'Manchester, United Kingdom',
-    type: 'caption',
-  }
-}
-
-const projectAssets = {
-  images: imageAssets,
-  posts: Array.from({ length: 8 }, (_, index) => makePost(index)),
-  captions: Array.from({ length: 8 }, (_, index) => makeCaption(index)),
 }
 
 export const assetsApi = {
   async getProjectAssets() {
-    await delay(140)
-
-    return {
-      images: projectAssets.images.map((asset) => ({ ...asset })),
-      posts: projectAssets.posts.map((asset) => ({ ...asset })),
-      captions: projectAssets.captions.map((asset) => ({ ...asset })),
+    try {
+      const result = await get('/api/v1/brand/assets', { params: { pageSize: 100 } })
+      const items = Array.isArray(result) ? result : (result?.items ?? result?.data ?? [])
+      const images = items.map(mapBackendAsset)
+      return { images, posts: [], captions: [] }
+    } catch {
+      return { images: [], posts: [], captions: [] }
     }
+  },
+
+  async uploadAsset(file) {
+    const form = new FormData()
+    form.append('file', file)
+    form.append('name', file.name)
+    form.append('type', file.type.startsWith('image/') ? 'image' : 'file')
+    return post('/api/v1/brand/assets/upload', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
   },
 }

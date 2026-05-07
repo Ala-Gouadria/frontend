@@ -1,3 +1,4 @@
+// TODO(backend): no upstream endpoint — this module stays mock until a notifications service is built
 const NOTIFICATIONS = Array.from({ length: 12 }, (_, index) => ({
   id: `notification-${index + 1}`,
   source: 'Social Media Manager',
