@@ -24,7 +24,6 @@ function getArcAngle(progress) {
 
 function getArcPoint(progress) {
   const angle = getArcAngle(progress)
-
   return {
     x: ARC.cx + ARC.rx * Math.cos(angle),
     y: ARC.cy - ARC.ry * Math.sin(angle),
@@ -44,7 +43,6 @@ function getTickLine(progress) {
     y: tangent.x / length,
   }
   const tickLength = 28
-
   return {
     x1: point.x - normal.x * tickLength / 2,
     y1: point.y - normal.y * tickLength / 2,
@@ -56,7 +54,6 @@ function getTickLine(progress) {
 function getPathData() {
   const start = getArcPoint(0)
   const end = getArcPoint(1)
-
   return `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${ARC.rx} ${ARC.ry} 0 0 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`
 }
 
@@ -73,6 +70,7 @@ export function SemiCircleGauge({
 }) {
   const reactId = useId().replace(/[^a-zA-Z0-9_-]/g, '')
   const clipId = `semi-gauge-progress-${reactId}`
+  const stripeId = `semi-gauge-stripe-${reactId}`
   const safeProgress = clamp(progress ?? (target ? current / target : 0), 0, 1)
   const capPosition = getArcPoint(safeProgress)
   const pathData = getPathData()
@@ -88,6 +86,16 @@ export function SemiCircleGauge({
           <clipPath id={clipId}>
             <path d={pathData} className="semi-circle-gauge__clip-path" />
           </clipPath>
+          <pattern
+            id={stripeId}
+            patternUnits="userSpaceOnUse"
+            width="8"
+            height="8"
+            patternTransform="rotate(72)"
+          >
+            <rect width="2" height="8" fill="rgba(255,255,255,0.06)" />
+            <rect x="2" width="2" height="8" fill="rgba(255,255,255,0.18)" />
+          </pattern>
         </defs>
 
         <path d={pathData} className="semi-circle-gauge__glow" />
@@ -98,11 +106,19 @@ export function SemiCircleGauge({
           pathLength="100"
           strokeDasharray={`${safeProgress * 100} 100`}
         />
+        <path
+          d={pathData}
+          fill="none"
+          stroke={`url(#${stripeId})`}
+          strokeWidth="39"
+          strokeLinecap="round"
+          pathLength="100"
+          strokeDasharray={`${safeProgress * 100} 100`}
+        />
 
         <g clipPath={`url(#${clipId})`}>
           {progressTicks.map((tickProgress) => {
             const tick = getTickLine(tickProgress)
-
             return (
               <line
                 key={tickProgress}
