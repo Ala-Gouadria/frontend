@@ -336,7 +336,7 @@
 
 .analytics-card__gauge-wrap {
   margin-top: 12px;
-  min-height: 192px;
+  min-height: 150px;
   overflow: visible;
 }
 
@@ -346,7 +346,7 @@
 
 .analytics-card__gauge-wrap .semi-circle-gauge__svg {
   width: 100%;
-  max-width: 620px;
+  max-width: 510px;
 }
 
 .analytics-card__compact-chart {

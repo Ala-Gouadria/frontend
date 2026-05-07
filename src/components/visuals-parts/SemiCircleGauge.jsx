@@ -10,12 +10,12 @@ function clamp(value, min, max) {
 }
 
 const ARC = {
-  cx: 612,
-  cy: 422,
-  rx: 548,
-  ry: 344,
-  startAngle: 158 * (Math.PI / 180),
-  endAngle: 38 * (Math.PI / 180),
+  cx: 255,
+  cy: 260,
+  rx: 275,
+  ry: 216,
+  startAngle: 156 * (Math.PI / 180),
+  endAngle: 31 * (Math.PI / 180),
 }
 
 function getArcAngle(progress) {
@@ -43,7 +43,7 @@ function getTickLine(progress) {
     x: -tangent.y / length,
     y: tangent.x / length,
   }
-  const tickLength = 42
+  const tickLength = 28
 
   return {
     x1: point.x - normal.x * tickLength / 2,
@@ -60,7 +60,7 @@ function getPathData() {
   return `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${ARC.rx} ${ARC.ry} 0 0 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`
 }
 
-const TICK_PROGRESS = Array.from({ length: 54 }, (_, index) => (index + 1) / 56)
+const TICK_PROGRESS = Array.from({ length: 42 }, (_, index) => (index + 1) / 44)
 
 export function SemiCircleGauge({
   current = 578,
@@ -83,7 +83,7 @@ export function SemiCircleGauge({
   return (
     <div className={classNames('semi-circle-gauge', `semi-circle-gauge--${tone}`, className)}>
       {title ? <div className="semi-circle-gauge__title">{title}</div> : null}
-      <svg className="semi-circle-gauge__svg" viewBox="0 0 1225 489" aria-hidden="true">
+      <svg className="semi-circle-gauge__svg" viewBox="0 0 510 256" aria-hidden="true">
         <defs>
           <clipPath id={clipId}>
             <path d={pathData} className="semi-circle-gauge__clip-path" />
@@ -113,10 +113,10 @@ export function SemiCircleGauge({
           })}
         </g>
 
-        <circle cx={capPosition.x} cy={capPosition.y} r="40" className="semi-circle-gauge__cap-ring" />
-        <circle cx={capPosition.x} cy={capPosition.y} r="27" className="semi-circle-gauge__cap" />
+        <circle cx={capPosition.x} cy={capPosition.y} r="30" className="semi-circle-gauge__cap-ring" />
+        <circle cx={capPosition.x} cy={capPosition.y} r="22" className="semi-circle-gauge__cap" />
 
-        <text x="612" y="326" textAnchor="middle" className="semi-circle-gauge__value">
+        <text x="255" y="154" textAnchor="middle" className="semi-circle-gauge__value">
           <tspan className="semi-circle-gauge__current">{currentLabel}</tspan>
           {targetLabel ? <tspan className="semi-circle-gauge__target">/{targetLabel}</tspan> : null}
         </text>
