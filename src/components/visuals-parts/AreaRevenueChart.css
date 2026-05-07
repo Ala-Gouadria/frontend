@@ -1,8 +1,8 @@
 .area-revenue-chart {
-  --area-revenue-top: #e3f735;
+  --area-revenue-top: #e5f83f;
   --area-revenue-mid: #b9df08;
-  --area-revenue-bottom: #72a900;
-  --area-revenue-line: #8cb309;
+  --area-revenue-bottom: #6da500;
+  --area-revenue-line: #8bb40a;
   --area-revenue-soft-line: rgba(174, 190, 71, 0.62);
   --area-revenue-dot: #afc847;
   --area-revenue-badge: #daf049;
@@ -52,11 +52,11 @@
 }
 
 .area-revenue-chart__glow {
-  opacity: 0.76;
+  opacity: 0.72;
 }
 
 .area-revenue-chart__area {
-  opacity: 0.97;
+  opacity: 0.96;
   filter: drop-shadow(0 12px 20px var(--area-revenue-glow-color));
 }
 
@@ -72,7 +72,7 @@
 
 .area-revenue-chart__rail {
   stroke: var(--area-revenue-soft-line);
-  stroke-width: 1.5;
+  stroke-width: 1.6;
   filter: none;
 }
 
