@@ -43,7 +43,7 @@ function getTickLine(progress) {
     x: -tangent.y / length,
     y: tangent.x / length,
   }
-  const tickLength = 62
+  const tickLength = 42
 
   return {
     x1: point.x - normal.x * tickLength / 2,
@@ -60,7 +60,7 @@ function getPathData() {
   return `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${ARC.rx} ${ARC.ry} 0 0 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`
 }
 
-const TICK_PROGRESS = Array.from({ length: 44 }, (_, index) => (index + 1) / 46)
+const TICK_PROGRESS = Array.from({ length: 54 }, (_, index) => (index + 1) / 56)
 
 export function SemiCircleGauge({
   current = 578,
@@ -113,8 +113,8 @@ export function SemiCircleGauge({
           })}
         </g>
 
-        <circle cx={capPosition.x} cy={capPosition.y} r="58" className="semi-circle-gauge__cap-ring" />
-        <circle cx={capPosition.x} cy={capPosition.y} r="43" className="semi-circle-gauge__cap" />
+        <circle cx={capPosition.x} cy={capPosition.y} r="40" className="semi-circle-gauge__cap-ring" />
+        <circle cx={capPosition.x} cy={capPosition.y} r="27" className="semi-circle-gauge__cap" />
 
         <text x="612" y="326" textAnchor="middle" className="semi-circle-gauge__value">
           <tspan className="semi-circle-gauge__current">{currentLabel}</tspan>

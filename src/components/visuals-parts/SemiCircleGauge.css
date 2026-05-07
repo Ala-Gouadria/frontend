@@ -1,11 +1,13 @@
 .semi-circle-gauge {
-  --gauge-progress: #a6cf2a;
-  --gauge-track: rgba(226, 242, 154, 0.55);
-  --gauge-glow: rgba(179, 214, 61, 0.2);
-  --gauge-tick: rgba(120, 166, 15, 0.2);
-  --gauge-cap: #c6d653;
-  --gauge-text: #2f2f31;
-  --gauge-text-muted: #85888d;
+  /* Green tone (default) — matches reference image */
+  --gauge-glow:        rgba(185, 225, 70, 0.38);   /* wide feathered halo color */
+  --gauge-track:       rgba(210, 238, 145, 0.60);  /* thin backing track (full arc) */
+  --gauge-progress:    #8bbf0c;                    /* solid green filled arc */
+  --gauge-tick:        rgba(72, 116, 4, 0.30);     /* stripe lines inside fill */
+  --gauge-cap-ring:    #ffffff;                    /* white outer ring on cap */
+  --gauge-cap:         #9ac418;                    /* green dot */
+  --gauge-text:        #1c1d20;
+  --gauge-text-muted:  #9da0a6;
 
   position: relative;
   display: grid;
@@ -17,21 +19,21 @@
 }
 
 .semi-circle-gauge--blue {
-  --gauge-progress: #60a5fa;
-  --gauge-track: rgba(147, 197, 253, 0.34);
-  --gauge-track-end: rgba(191, 219, 254, 0.32);
-  --gauge-glow: rgba(96, 165, 250, 0.18);
-  --gauge-tick: rgba(219, 234, 254, 0.82);
-  --gauge-cap: #93c5fd;
+  --gauge-glow:        rgba(96, 165, 250, 0.30);
+  --gauge-track:       rgba(147, 197, 253, 0.50);
+  --gauge-progress:    #3b82f6;
+  --gauge-tick:        rgba(29, 78, 216, 0.28);
+  --gauge-cap-ring:    #ffffff;
+  --gauge-cap:         #60a5fa;
 }
 
 .semi-circle-gauge--orange {
-  --gauge-progress: #f59e0b;
-  --gauge-track: rgba(253, 186, 116, 0.34);
-  --gauge-track-end: rgba(254, 215, 170, 0.32);
-  --gauge-glow: rgba(245, 158, 11, 0.17);
-  --gauge-tick: rgba(255, 237, 213, 0.8);
-  --gauge-cap: #facc15;
+  --gauge-glow:        rgba(245, 158, 11, 0.30);
+  --gauge-track:       rgba(253, 186, 116, 0.50);
+  --gauge-progress:    #f97316;
+  --gauge-tick:        rgba(194, 65, 12, 0.28);
+  --gauge-cap-ring:    #ffffff;
+  --gauge-cap:         #fb923c;
 }
 
 .semi-circle-gauge__title {
@@ -58,69 +60,87 @@
   stroke-linecap: round;
 }
 
+/*
+  Wide, very-heavily-blurred ambient halo.
+  This is the feathery light-green area visible behind and around the arc.
+  No hard edge — just a soft fog of color.
+*/
 .semi-circle-gauge__glow {
   stroke: var(--gauge-glow);
-  stroke-width: 154;
-  filter: blur(32px);
-  opacity: 0.82;
+  stroke-width: 155;
+  filter: blur(28px);
+  opacity: 0.88;
 }
 
+/*
+  Thin light-green backing track — shows the full arc path (filled + unfilled).
+  Same thickness as the progress arc so they sit flush.
+*/
 .semi-circle-gauge__track {
   stroke: var(--gauge-track);
-  stroke-width: 112;
+  stroke-width: 44;
 }
 
+/*
+  Thin solid green progress fill.
+  Same width as the backing track for a clean flush look.
+*/
 .semi-circle-gauge__progress {
   stroke: var(--gauge-progress);
-  stroke-width: 74;
+  stroke-width: 44;
   animation: semiGaugeIn 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
-  filter: drop-shadow(0 6px 12px rgba(139, 176, 20, 0.08));
 }
 
+/* Clip path: same width as progress so ticks are clipped inside the fill */
 .semi-circle-gauge__clip-path {
   stroke: #fff;
-  stroke-width: 76;
+  stroke-width: 46;
 }
 
+/* Tick stripes — vertical lines across the filled arc */
 .semi-circle-gauge__tick {
   stroke: var(--gauge-tick);
-  stroke-width: 8;
-  stroke-linecap: round;
+  stroke-width: 5;
+  stroke-linecap: butt;
   opacity: 1;
 }
 
+/* White outer ring around the cap dot */
 .semi-circle-gauge__cap-ring {
-  fill: #fff;
-  filter: drop-shadow(0 8px 14px rgba(45, 55, 72, 0.13));
-  animation: semiGaugeCap 640ms ease both;
+  fill: var(--gauge-cap-ring);
+  filter: drop-shadow(0 3px 8px rgba(45, 55, 72, 0.16));
+  animation: semiGaugeCap 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-box: fill-box;
   transform-origin: center;
 }
 
+/* Solid green inner dot */
 .semi-circle-gauge__cap {
   fill: var(--gauge-cap);
-  animation: semiGaugeCap 640ms ease both;
+  animation: semiGaugeCap 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-box: fill-box;
   transform-origin: center;
 }
 
+/* Value text: "578" bold dark + "/700" muted gray */
 .semi-circle-gauge__value {
-  font-size: 48px;
-  font-weight: 780;
-  color: var(--gauge-text);
+  font-size: 52px;
+  font-weight: 800;
   fill: var(--gauge-text);
-  letter-spacing: 0;
+  letter-spacing: -0.5px;
   dominant-baseline: middle;
   pointer-events: none;
 }
 
 .semi-circle-gauge__current {
   fill: var(--gauge-text);
+  font-weight: 800;
 }
 
 .semi-circle-gauge__target {
   fill: var(--gauge-text-muted);
-  font-weight: 760;
+  font-weight: 500;
+  font-size: 46px;
 }
 
 @keyframes semiGaugeIn {
@@ -132,9 +152,8 @@
 @keyframes semiGaugeCap {
   from {
     opacity: 0;
-    transform: scale(0.7);
+    transform: scale(0.6);
   }
-
   to {
     opacity: 1;
     transform: scale(1);

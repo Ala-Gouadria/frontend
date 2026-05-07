@@ -67,22 +67,25 @@
 /* ── Lead Quality ── */
 .sales-and-leads-card__quality {
   display: grid;
-  gap: 8px;
+  gap: 12px;
 }
 
 .sales-and-leads-card__quality-legend {
   display: flex;
   align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: nowrap;
 }
 
 .sales-and-leads-card__legend-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.72rem;
-  color: rgba(24, 24, 27, 0.7);
+  gap: 9px;
+  font-size: clamp(0.78rem, 2.8vw, 1.1rem);
+  font-weight: 600;
+  color: rgba(24, 24, 27, 0.72);
+  white-space: nowrap;
 }
 
 .sales-and-leads-card__legend-item strong {
@@ -91,22 +94,29 @@
 }
 
 .sales-and-leads-card__legend-swatch {
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
   flex-shrink: 0;
+  box-shadow: 0 8px 14px rgba(147, 179, 17, 0.14);
 }
 
 .sales-and-leads-card__legend-swatch--green {
-  background: linear-gradient(180deg, #d9ef39 0%, #9dc20f 100%);
+  background:
+    repeating-linear-gradient(63deg, rgba(126, 169, 9, 0.2) 0 3px, rgba(255, 255, 255, 0.05) 3px 7px),
+    linear-gradient(180deg, #d7f11b 0%, #a4d10b 48%, #8bc000 100%);
 }
 
 .sales-and-leads-card__legend-swatch--orange {
-  background: linear-gradient(180deg, #ffbd82 0%, #ff872d 100%);
+  background:
+    repeating-linear-gradient(63deg, rgba(255, 122, 28, 0.18) 0 3px, rgba(255, 255, 255, 0.08) 3px 7px),
+    linear-gradient(180deg, #ffb85f 0%, #ff973d 52%, #ff8535 100%);
 }
 
 .sales-and-leads-card__legend-swatch--red {
-  background: linear-gradient(180deg, #ff8a8a 0%, #f04444 100%);
+  background:
+    repeating-linear-gradient(63deg, rgba(226, 35, 45, 0.18) 0 3px, rgba(255, 255, 255, 0.08) 3px 7px),
+    linear-gradient(180deg, #ff686e 0%, #ff5159 52%, #f8414d 100%);
 }
 
 .sales-and-leads-card__blocks {

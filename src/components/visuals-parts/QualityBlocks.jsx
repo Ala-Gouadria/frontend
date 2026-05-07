@@ -12,8 +12,10 @@ export function QualityBlocks({
   ],
   className = '',
 }) {
+  const blockCount = blocks.reduce((total, group) => total + group.count, 0)
+
   return (
-    <div className={classNames('quality-blocks', className)}>
+    <div className={classNames('quality-blocks', className)} style={{ '--quality-block-count': blockCount }}>
       {blocks.flatMap((group) =>
         Array.from({ length: group.count }).map((_, index) => (
           <span
