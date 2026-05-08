@@ -518,12 +518,12 @@ export default function OnboardingFlow({ activeNavId = 'database', onNavigate })
                 <button type="button" className="ob-btn-skip" onClick={() => { void handleSkip() }} disabled={isLastStep || saving}>
                   Skip for now
                 </button>
-                <PillButton
-                  onClick={() => { void handleNext() }}
-                  disabled={saving}
-                  width="180px"
-                  height="52px"
-                >
+<PillButton
+  onClick={() => { void handleNext() }}
+  disabled={saving}
+  width="200px"
+height="52px"
+>
                   {saving ? 'SAVING…' : isLastStep ? 'FINISH' : 'SAVE'}
                 </PillButton>
               </div>
