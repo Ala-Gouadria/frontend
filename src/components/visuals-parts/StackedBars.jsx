@@ -26,7 +26,6 @@ export function StackedBars({
         if (entry.isIntersecting && !animated.current) {
           animated.current = true
 
-          // Reset first
           refs.current.forEach(el => {
             if (el) {
               el.style.transition = 'none'
@@ -35,7 +34,6 @@ export function StackedBars({
             }
           })
 
-          // Animate after reset paints
           setTimeout(() => {
             segments.forEach((segment, index) => {
               setTimeout(() => {
@@ -67,7 +65,7 @@ export function StackedBars({
           ref={el => refs.current[index] = el}
           className={classNames('stacked-bars__segment', `stacked-bars__segment--${segment.tone ?? 'green'}`)}
           style={{ width: '0%', opacity: 0 }}
-          title={segment.label}
+          data-label={segment.label}
         />
       ))}
     </div>

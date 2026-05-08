@@ -2,7 +2,6 @@
   display: flex;
   gap: 3px;
   min-height: 42px;
-  /* NO overflow: hidden here */
   border-radius: 4px;
   background: #ffffff;
   box-shadow: inset 0 0 0 1px rgba(24, 24, 27, 0.05);
@@ -11,7 +10,7 @@
 .stacked-bars__segment {
   position: relative;
   min-width: 0;
-  overflow: hidden; /* keep here for stripe clipping */
+  overflow: visible;
   border-radius: 0;
   width: 0%;
   opacity: 0;
@@ -24,6 +23,7 @@
   content: '';
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   background: repeating-linear-gradient(
     72deg,
     rgba(255, 255, 255, 0.06) 0,
@@ -32,6 +32,35 @@
     rgba(255, 255, 255, 0.18) 4px
   );
   pointer-events: none;
+}
+
+.stacked-bars__segment::before {
+  content: attr(data-label);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(5px) scale(0.97);
+  z-index: 25;
+  padding: 5px 10px;
+  border: 1px solid rgba(19, 121, 255, 0.2);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 10px 22px rgba(24, 24, 27, 0.13);
+  color: #1379ff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.stacked-bars__segment:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
 }
 
 .stacked-bars__segment--blue {
