@@ -59,3 +59,11 @@
     transform: scale(1);
   }
 }
+.task-history-line-chart__hit {
+  cursor: crosshair;
+  transition: fill 160ms ease;
+}
+
+.task-history-line-chart__hit:hover {
+  fill: rgba(159, 190, 24, 0.18);
+}

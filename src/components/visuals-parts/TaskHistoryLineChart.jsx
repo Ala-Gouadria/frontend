@@ -25,9 +25,7 @@ const TONE_COLORS = {
 }
 
 export function TaskHistoryLineChart({ data, tone = 'green', className = '' }) {
-  if (!data || data.length < 2) {
-    return null
-  }
+  if (!data || data.length < 2) return null
 
   const palette = TONE_COLORS[tone] ?? TONE_COLORS.green
   const width = 520
@@ -51,10 +49,7 @@ export function TaskHistoryLineChart({ data, tone = 'green', className = '' }) {
   }))
 
   const linePath = points.reduce((path, point, index) => {
-    if (index === 0) {
-      return `M ${point.x} ${point.y}`
-    }
-
+    if (index === 0) return `M ${point.x} ${point.y}`
     const previous = points[index - 1]
     const controlX = (previous.x + point.x) / 2
     return `${path} C ${controlX} ${previous.y} ${controlX} ${point.y} ${point.x} ${point.y}`
@@ -66,7 +61,12 @@ export function TaskHistoryLineChart({ data, tone = 'green', className = '' }) {
   const endPoint = points.at(-1)
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className={`task-history-line-chart ${className}`} preserveAspectRatio="none" aria-hidden="true">
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      className={`task-history-line-chart ${className}`}
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
       <defs>
         <linearGradient id="taskHistoryFill" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={palette.fillTop} />
@@ -81,15 +81,31 @@ export function TaskHistoryLineChart({ data, tone = 'green', className = '' }) {
           </feMerge>
         </filter>
       </defs>
+
       <path d={areaPath} fill="url(#taskHistoryFill)" className="task-history-line-chart__area" />
       <path d={linePath} fill="none" stroke={palette.lineGlow} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" filter="url(#taskHistoryGlow)" />
       <path d={linePath} pathLength="100" fill="none" stroke={palette.line} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="task-history-line-chart__line" />
+
       <g transform={`translate(${badgePoint.x},${badgePoint.y})`} className="task-history-line-chart__badge">
         <circle r="17" fill={palette.badge} />
         <text y="5" textAnchor="middle">{badgePoint.value}</text>
       </g>
+
       <circle cx={endPoint.x} cy={endPoint.y} r="9" fill="#fff" className="task-history-line-chart__end-ring" />
       <circle cx={endPoint.x} cy={endPoint.y} r="4" fill={palette.line} />
+
+      {points.map((point, index) => (
+        <circle
+          key={index}
+          cx={point.x}
+          cy={point.y}
+          r="14"
+          fill="transparent"
+          className="task-history-line-chart__hit"
+        >
+          <title>Point {index + 1}: {point.value}</title>
+        </circle>
+      ))}
     </svg>
   )
 }
