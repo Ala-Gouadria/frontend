@@ -78,6 +78,7 @@ export function AreaRevenueChart({
           </filter>
         </defs>
 
+        {/* Reference-critical: keep the band, rails, active marker, dots, and badge together. */}
         <polygon
           points={buildAreaPoints(upperSeries, lowerSeries)}
           className="area-revenue-chart__glow"

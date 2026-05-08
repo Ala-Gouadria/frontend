@@ -81,6 +81,45 @@ function barsToColumns(bars = []) {
   }))
 }
 
+function barsToDenseDotColumns(bars = []) {
+  return bars.map((bar, index) => ({
+    label: `P${index + 1}`,
+    value: bar,
+    count: Math.max(1, Math.round(bar / 9)),
+  }))
+}
+
+function expandDotColumns(columns = []) {
+  if (columns.length >= 10) {
+    return columns
+  }
+
+  return columns.flatMap((column, index) => {
+    const nextColumn = columns[index + 1]
+
+    if (!nextColumn || columns.length + index >= 10) {
+      return [column]
+    }
+
+    return [
+      column,
+      {
+        label: `${column.label}-${nextColumn.label}`,
+        value: column.value,
+        count: Math.max(1, Math.round((column.count + nextColumn.count) / 2)),
+      },
+    ]
+  }).slice(0, 10)
+}
+
+function metricToDotColumns(metric) {
+  if (metric.bars) {
+    return barsToDenseDotColumns(metric.bars)
+  }
+
+  return expandDotColumns(metric.columns ?? [])
+}
+
 function DownloadIcon() {
   return (
     <svg viewBox="0 0 18 18" aria-hidden="true" className="reports-page__button-icon">
@@ -215,8 +254,8 @@ function RiskRows({ rows }) {
 
 function AnalyticsReport() {
   const topMetrics = [
-    ...analyticsReportingCardData.metrics.slice(0, 2).map((item) => ({ ...item, visual: 'bars' })),
-    ...performanceSummaryCardData.results.map((item) => ({ ...item, visual: 'dots' })),
+    ...analyticsReportingCardData.metrics.slice(0, 2),
+    ...performanceSummaryCardData.results,
   ]
   const lineMetrics = [
     ...salesReportCardData.results,
@@ -238,12 +277,10 @@ function AnalyticsReport() {
         </div>
       </div>
 
-      <MetricGrid columns={5}>
+      <MetricGrid columns={5} className="reports-page__analytics-metrics">
         {topMetrics.map((metric) => (
           <MetricItem key={metric.label} label={metric.label} value={metric.value}>
-            {metric.visual === 'bars'
-              ? <MiniBarChart bars={metric.bars} />
-              : <DottedDataBars columns={metric.columns} />}
+            <DottedDataBars columns={metricToDotColumns(metric)} className="reports-page__analytics-dots" />
           </MetricItem>
         ))}
       </MetricGrid>

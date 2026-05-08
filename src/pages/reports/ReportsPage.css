@@ -258,7 +258,7 @@
 }
 
 .reports-page .semi-circle-gauge__svg {
-  max-width: 620px;
+  max-width: 510px;
 }
 
 .reports-page .semi-circle-gauge__value {
@@ -287,6 +287,42 @@
 
 .reports-page .metric-item__visual {
   margin-top: 3px;
+}
+
+.reports-page__analytics-metrics {
+  gap: 22px;
+  align-items: start;
+}
+
+.reports-page__analytics-metrics .metric-item {
+  gap: 4px;
+}
+
+.reports-page__analytics-metrics .metric-item__label {
+  color: rgba(27, 28, 32, 0.86);
+  font-size: 14px;
+  line-height: 1.05;
+  font-weight: 500;
+}
+
+.reports-page__analytics-metrics .metric-item__value {
+  min-height: 18px;
+  color: rgba(27, 28, 32, 0.72);
+  font-size: 12px;
+  line-height: 1.05;
+  font-weight: 700;
+}
+
+.reports-page__analytics-metrics .metric-item__visual {
+  margin-top: 12px;
+}
+
+.reports-page .reports-page__analytics-dots {
+  height: 62px;
+}
+
+.reports-page .reports-page__analytics-dots .dotted-data-bars__dot {
+  r: 1.35px;
 }
 
 .reports-page .mini-line-chart,

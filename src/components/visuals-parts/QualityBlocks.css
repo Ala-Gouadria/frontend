@@ -1,7 +1,7 @@
 .quality-blocks {
   container-type: inline-size;
   display: flex;
-  align-items: end;
+  align-items: center;
   gap: clamp(4px, 0.65cqw, 7px);
   min-width: 0;
   overflow: hidden;
@@ -12,59 +12,73 @@
   width: clamp(14px, 3.05cqw, 28px);
   min-width: 10px;
   height: clamp(31px, 6.15cqw, 52px);
-  border-radius: 1px;
+  border-radius: 5px;
   cursor: crosshair;
-  background-size: 12px 12px, 100% 100%;
-  box-shadow:
-    0 7px 13px rgba(147, 179, 17, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.32);
-  animation: qualityBlockIn 520ms ease both;
-  animation-delay: calc(var(--block-index) * 22ms);
+  position: relative;
+  overflow: hidden;
+  background: var(--block-color);
+  animation: qualityBlockIn 0.95s ease both;
+  animation-delay: calc(var(--block-index) * 38ms);
   transition:
     filter 150ms ease,
     transform 150ms ease,
     box-shadow 150ms ease;
+  box-shadow:
+    0 7px 13px rgba(0, 0, 0, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
 }
 
 .quality-blocks__block:hover {
-  filter: saturate(1.12) brightness(1.03);
-  transform: translateY(-1px) scaleY(1.03);
+  filter: saturate(1.12) brightness(1.05);
+  transform: translateY(-2px);
   box-shadow:
-    0 10px 16px rgba(147, 179, 17, 0.18),
+    0 12px 20px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.38);
 }
 
-.quality-blocks__block--green {
-  background-image:
-    repeating-linear-gradient(63deg, rgba(126, 169, 9, 0.2) 0 3px, rgba(255, 255, 255, 0.05) 3px 7px),
-    linear-gradient(180deg, #d7f11b 0%, #a4d10b 48%, #8bc000 100%);
+/* animated diagonal stripes */
+.quality-blocks__block::before {
+  content: '';
+  position: absolute;
+  inset: 0 -20px;
+  background: repeating-linear-gradient(
+    72deg,
+    rgba(255, 255, 255, 0.06) 0,
+    rgba(255, 255, 255, 0.06) 2px,
+    rgba(255, 255, 255, 0.18) 2px,
+    rgba(255, 255, 255, 0.18) 4px
+  );
+  will-change: transform;
+  animation: qualityBlocksMove 1.8s linear infinite;
 }
 
-.quality-blocks__block--orange {
-  background-image:
-    repeating-linear-gradient(63deg, rgba(255, 122, 28, 0.18) 0 3px, rgba(255, 255, 255, 0.08) 3px 7px),
-    linear-gradient(180deg, #ffb85f 0%, #ff973d 52%, #ff8535 100%);
+/* gloss sheen */
+.quality-blocks__block::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.24) 0%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.08) 100%
+  );
+  pointer-events: none;
 }
 
-.quality-blocks__block--red {
-  background-image:
-    repeating-linear-gradient(63deg, rgba(226, 35, 45, 0.18) 0 3px, rgba(255, 255, 255, 0.08) 3px 7px),
-    linear-gradient(180deg, #ff686e 0%, #ff5159 52%, #f8414d 100%);
-}
-
-.quality-blocks__block--blue {
-  background-image:
-    repeating-linear-gradient(63deg, rgba(39, 125, 233, 0.18) 0 3px, rgba(255, 255, 255, 0.08) 3px 7px),
-    linear-gradient(180deg, #69aaff 0%, #378aff 52%, #277de9 100%);
-}
+/* color variants — solid base, ramp via --block-color per block */
+.quality-blocks__block--green  { --block-color: #7ec41a; }
+.quality-blocks__block--orange { --block-color: #f07a20; }
+.quality-blocks__block--red    { --block-color: #f05050; }
+.quality-blocks__block--blue   { --block-color: #2f80ed; }
 
 @keyframes qualityBlockIn {
-  from {
-    opacity: 0;
-    transform: scaleY(0.7);
-  }
-  to {
-    opacity: 1;
-    transform: scaleY(1);
-  }
+  from { opacity: 0; transform: scaleY(0.6); }
+  to   { opacity: 1; transform: scaleY(1);   }
+}
+
+@keyframes qualityBlocksMove {
+  from { transform: translateX(0);    }
+  to   { transform: translateX(20px); }
 }
