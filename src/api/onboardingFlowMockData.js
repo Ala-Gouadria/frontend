@@ -197,7 +197,7 @@ export const ONBOARDING_FLOW_STEPS = [
   {
     id: 'goals',
     label: 'Business Goal',
-    iconKey: 'goal',
+    iconKey: 'goals',
     titleLead: 'Business',
     titleTail: 'goals',
     subtitle: 'Nora will prioritize strategy, campaigns, and automation around your primary business outcome.',

@@ -36,7 +36,7 @@ function buildSmoothPath(points) {
     const current = points[index]
     const next = points[index + 1]
     const afterNext = points[index + 2] ?? next
-    const tension = 0.18
+    const tension = 0.38
 
     const cp1x = current.x + (next.x - previous.x) * tension
     const cp1y = current.y + (next.y - previous.y) * tension

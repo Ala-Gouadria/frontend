@@ -314,10 +314,6 @@ function Composer({
             <button type="button" className="nora-icon-btn" onClick={() => triggerUpload(fileInputRef)} aria-label="Upload file">
               <img src={attachmentIcon} alt="" aria-hidden="true" className="nora-composer-icon" />
             </button>
-
-            <button type="button" className="nora-icon-btn" onClick={() => triggerUpload(audioInputRef)} aria-label="Upload voice file">
-              <img src={uploadFileIcon} alt="" aria-hidden="true" className="nora-composer-icon" />
-            </button>
           </div>
 
           <div className="nora-composer-right-actions">

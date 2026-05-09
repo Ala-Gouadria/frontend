@@ -98,11 +98,17 @@
     radial-gradient(circle at 13% 22%, rgba(255, 255, 255, 0.24), transparent 34%),
     linear-gradient(96deg, var(--pill-green-a) 0%, var(--pill-green-b) 43%, var(--pill-green-c) 100%);
 }
-
 .pill-btn--primary {
   background:
-    radial-gradient(circle at 13% 22%, rgba(255, 255, 255, 0.22), transparent 34%),
-    linear-gradient(104deg, var(--pill-blue-a) 0%, var(--pill-blue-b) 56%, var(--pill-blue-c) 100%);
+    radial-gradient(circle at 13% 22%, rgba(255, 255, 255, 0.18), transparent 34%),
+    linear-gradient(90deg, #4f86f7 0%, #6b9fff 45%, #d4b0e4 78%, #ecc8e0 100%);
+}
+
+.pill-wrap--primary::before {
+  --pill-glow: rgba(79, 134, 247, 0.38);
+  inset: -6px -8px;
+  filter: blur(11px);
+  opacity: 0.58;
 }
 
 .pill-btn__label {

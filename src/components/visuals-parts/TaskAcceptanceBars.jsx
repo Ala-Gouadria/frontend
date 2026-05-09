@@ -8,6 +8,7 @@ export function TaskAcceptanceBars({ cells = [], className = '' }) {
           key={cell.id}
           className={`task-acceptance-bars__cell task-acceptance-bars__cell--${cell.tone}`}
           style={{ '--cell-index': index }}
+          title={cell.label ?? (cell.tone === 'green' ? 'Accepted' : 'Declined')}
         />
       ))}
     </div>
