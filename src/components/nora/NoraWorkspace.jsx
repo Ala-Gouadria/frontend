@@ -8,7 +8,7 @@ import uploadFileIcon from '../../assets/icons/Nora-AI-Icon/upload-file-icon.png
 import micIcon from '../../assets/icons/Nora-AI-Icon/mic-icon.png'
 import sentIcon from '../../assets/icons/Nora-AI-Icon/sent-icon.png'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
-
+import ProjectList from '../layout/ProjectList'
 const WELCOME_HEADLINE = 'An AI system that manages, automates, and grows your business.'
 const WELCOME_TEXT = 'Welcome back. I can help you grow, automate, and organize your business.'
 
@@ -704,8 +704,11 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false })
         <div className="nora-glow-top-right" />
         <div className="nora-glow-bottom-left" />
 
-        {showConversation && !pairedWithTask ? <CompanyPill /> : null}
-
+        {showConversation && !pairedWithTask ? (
+  <div className="nora-project-list-wrapper">
+    <ProjectList onNavigate={onClose} />
+  </div>
+) : null}
         <button
           onClick={onClose}
           className={`nora-close-btn ${showConversation ? 'nora-close-btn--expand' : ''}`}
