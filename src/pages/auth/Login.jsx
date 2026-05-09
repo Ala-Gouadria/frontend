@@ -4,11 +4,6 @@ import noraLoginLogo from '../../assets/logo/Nora-Login-Logo.png'
 import loginBackground from '../../assets/background/Login-background.jpg'
 import * as authApi from '../../api/auth.js'
 
-const QA_ACCOUNT = {
-  email: 'mazen@testing.com',
-  password: 'TestPass@123',
-}
-
 function PasswordInput({ value, onChange, placeholder = 'Enter your password' }) {
   const [visible, setVisible] = useState(false)
 
@@ -149,20 +144,6 @@ export default function Login({ onSuccess, onSignup, onResetPassword }) {
           <span>{loading ? 'Signing in…' : 'Sign in'}</span>
           <i aria-hidden="true" />
         </button>
-
-        <p className="auth-footer-copy">
-          QA account:{' '}
-          <button
-            type="button"
-            onClick={() => {
-              setEmail(QA_ACCOUNT.email)
-              setPassword(QA_ACCOUNT.password)
-              setError('')
-            }}
-          >
-            mazen@testing.com / TestPass@123
-          </button>
-        </p>
 
         <p className="auth-footer-copy">
           Don't have an account? <button type="button" onClick={onSignup}>Sign Up</button>
