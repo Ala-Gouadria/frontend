@@ -55,6 +55,7 @@ import {
 } from '../../components/Cards/Website & Traffic'
 import './IntelligenceMap.css'
 import WeekTask from '../../components/tasks/Weektask'
+import DotGrid from '../../components/background/DotGrid'
 const CANVAS = {
   width: 7800,
   height: 4300,
@@ -700,6 +701,8 @@ function MapCanvas({
         width: CANVAS.width,
         height: CANVAS.height,
         position: 'relative',
+        backgroundColor: 'transparent',
+        backgroundImage: 'none',
       }}
     >
       <div
@@ -753,6 +756,7 @@ function MapCanvas({
     </div>
   )
 }
+
 
 export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   const [isActive, setIsActive] = useState(false)
@@ -915,6 +919,20 @@ return (
         cursor: dragState ? 'grabbing' : toolMode === 'hand' ? 'grab' : 'default',
       }}
     >
+
+      <DotGrid
+        style={{ position: 'absolute', inset: 0, zIndex: 0 }}
+        dotSize={4}
+        gap={28}
+        baseColor="#aaaaaa"
+        activeColor="#555555"
+        proximity={120}
+        shockRadius={250}
+        shockStrength={5}
+        resistance={750}
+        returnDuration={1.5}
+      />
+
       {/* ── Map content wrapper — gentle dim when workspace is open ── */}
       <div
         style={{
