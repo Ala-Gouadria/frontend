@@ -9,9 +9,15 @@ import stopIcon from '../../assets/icons/Nora-AI-Icon/Stop-icon.png'
 import noraLogo from '../../assets/logo/Ask-Nora-Logo.png'
 
 function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
+  const [isTaskRunning, setIsTaskRunning] = useState(false)
+
   return (
     <>
-      <button type="button" className="bottom-ai-tools__pill bottom-ai-tools__pill--ask" onClick={() => onAskNora?.('ask-nora')}>
+      <button
+        type="button"
+        className="bottom-ai-tools__pill bottom-ai-tools__pill--ask"
+        onClick={() => onAskNora?.('ask-nora')}
+      >
         <img src={noraLogo} alt="" aria-hidden="true" className="bottom-ai-tools__logo-icon" />
         <span className="bottom-ai-tools__label">Ask Nora about your business</span>
       </button>
@@ -20,9 +26,12 @@ function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
         <button
           type="button"
           className="bottom-ai-tools__pill bottom-ai-tools__pill--task"
-          onClick={onTaskOpen}
+          onClick={() => {
+            setIsTaskRunning(r => !r)
+            onTaskOpen?.()
+          }}
         >
-          <span className="bottom-ai-tools__task-ring" />
+          <span className={`bottom-ai-tools__task-ring ${isTaskRunning ? 'bottom-ai-tools__task-ring--spinning' : ''}`} />
           <span className="bottom-ai-tools__label">Task Overview</span>
         </button>
 
@@ -64,13 +73,11 @@ export default function BottomAITools({ scale, initialScale, mode = 'hand', onMo
 
   const handleZoom = (direction) => {
     setIsZooming(true)
-
     if (direction === 'in') {
       zoomIn(0.08, 180, 'easeOut')
     } else {
       zoomOut(0.08, 180, 'easeOut')
     }
-
     window.setTimeout(() => setIsZooming(false), 160)
   }
 
