@@ -1,4 +1,4 @@
-import { websiteTrafficCardData } from '../../../features/Website & Traffic/data/websiteTrafficMockData'
+import { websiteTrafficCardData } from '../../../api/websiteTrafficMockData'
 import {
   BlockLegend,
   BlockMix,

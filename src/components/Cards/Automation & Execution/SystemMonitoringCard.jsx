@@ -4,7 +4,7 @@ import {
   DottedDataBars,
   SegmentedStripedBar,
 } from '../../visuals-parts'
-import { systemMonitoringCardData } from '../../../features/Automation & Execution/data/automationExecutionMockData.js'
+import { systemMonitoringCardData } from '../../../api/automationExecutionMockData.js'
 import './Automation & ExecutionCardShared.css'
 import './SystemMonitoringCard.css'
 

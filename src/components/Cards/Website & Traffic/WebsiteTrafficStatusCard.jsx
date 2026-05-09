@@ -1,5 +1,5 @@
 import { MiniLineChart, WebsiteStagePath } from '../../visuals-parts'
-import { websiteTrafficStatusCardData } from '../../../features/Website & Traffic/data/websiteTrafficMockData'
+import { websiteTrafficStatusCardData } from '../../../api/websiteTrafficMockData'
 import {
   BlockLegend,
   BlockMix,

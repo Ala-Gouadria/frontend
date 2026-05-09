@@ -5,7 +5,7 @@ import {
   MiniLineChart,
   SemiCircleGauge,
 } from '../../visuals-parts'
-import { portfolioAnalyticsCardData } from '../../../features/Analytics/data/analyticsMockData'
+import { portfolioAnalyticsCardData } from '../../../api/analyticsMockData'
 import './PortfolioAnalyticsCard.css'
 
 export function PortfolioAnalyticsCard({ data = portfolioAnalyticsCardData }) {

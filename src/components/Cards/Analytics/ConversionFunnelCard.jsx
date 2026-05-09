@@ -4,7 +4,7 @@ import {
   MiniLineChart,
   StripedBars,
 } from '../../visuals-parts'
-import { conversionFunnelCardData } from '../../../features/Analytics/data/analyticsMockData'
+import { conversionFunnelCardData } from '../../../api/analyticsMockData'
 import './ConversionFunnelCard.css'
 
 function percentNumber(value) {

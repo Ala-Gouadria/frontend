@@ -7,7 +7,7 @@ import {
   MiniBarChart,
   MiniLineChart,
 } from '../../visuals-parts'
-import { analyticsReportingCardData } from '../../../features/Analytics/data/analyticsMockData'
+import { analyticsReportingCardData } from '../../../api/analyticsMockData'
 import './AnalyticsReportingCard.css'
 
 function renderRiskMessage(message) {

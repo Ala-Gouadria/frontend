@@ -5,7 +5,7 @@ import {
   AreaRevenueChart,
   MiniLineChart,
 } from '../../visuals-parts'
-import { campaignPerformanceCardData } from '../../../features/Analytics/data/analyticsMockData'
+import { campaignPerformanceCardData } from '../../../api/analyticsMockData'
 import './CampaignPerformanceCard.css'
 
 function toneFromValue(value) {

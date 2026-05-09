@@ -123,10 +123,10 @@ export const revenueFeedbackCardData = {
   },
   sourcesTitle: 'Revenue by source',
   sources: [
-    { label: 'Instagram', value: '55%', width: '82%' },
-    { label: 'Website', value: '35%', width: '70%' },
-    { label: 'Email', value: '25%', width: '50%' },
-  ],
+  { label: 'Instagram', value: '55%', width: '100%' },
+  { label: 'Website',   value: '35%', width: '100%' },
+  { label: 'Email',     value: '25%', width: '100%' },
+],
   insight:
     'High-scoring leads are showing strong buying intent through pricing page visits and booking actions. Prioritize outreach to high-score leads within the next 24 hours',
   ctaLabel: 'Ask or assign Anything',

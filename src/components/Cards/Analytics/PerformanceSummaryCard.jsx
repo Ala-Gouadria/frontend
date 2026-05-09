@@ -4,7 +4,7 @@ import {
   DottedDataBars,
   MiniLineChart,
 } from '../../visuals-parts'
-import { performanceSummaryCardData } from '../../../features/Analytics/data/analyticsMockData'
+import { performanceSummaryCardData } from '../../../api/analyticsMockData'
 import './PerformanceSummaryCard.css'
 
 export function PerformanceSummaryCard({ data = performanceSummaryCardData }) {

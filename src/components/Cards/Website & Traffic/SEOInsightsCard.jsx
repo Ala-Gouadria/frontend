@@ -1,5 +1,5 @@
 import { WebsiteArcGauge } from '../../visuals-parts'
-import { seoInsightsCardData } from '../../../features/Website & Traffic/data/websiteTrafficMockData'
+import { seoInsightsCardData } from '../../../api/websiteTrafficMockData'
 import {
   CardFooter,
   CardHeader,
