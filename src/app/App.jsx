@@ -140,6 +140,11 @@ export default function App() {
       return
     }
 
+    if (id === 'activityLog') {
+      navigateTo('activity-log')
+      return
+    }
+
     if (id === 'stars') {
       navigateTo('map')
     }

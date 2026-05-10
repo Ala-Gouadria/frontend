@@ -116,6 +116,11 @@ export default function ProjectList({ onNavigate }) {
     onNavigate?.('memory')
   }
 
+  const openActivityLog = () => {
+    handleClose()
+    onNavigate?.('activityLog')
+  }
+
   const openPricing = () => {
     handleClose()
     onNavigate?.('pricing')
@@ -187,6 +192,7 @@ export default function ProjectList({ onNavigate }) {
             <div className="project-dropdown__links">
               <button type="button" className="project-dropdown__link" onClick={openEvents}>Events</button>
               <button type="button" className="project-dropdown__link" onClick={openMemory}>Memory</button>
+              <button type="button" className="project-dropdown__link" onClick={openActivityLog}>Activity Log</button>
               <button type="button" className="project-dropdown__link" onClick={openSettings}>Settings</button>
               <button type="button" className="project-dropdown__link" onClick={openPricing}>Upgrade Your Plan</button>
               <button type="button" className="project-dropdown__link project-dropdown__link--danger" onClick={handleClose}>Log Out</button>
