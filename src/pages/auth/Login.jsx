@@ -81,8 +81,8 @@ function SocialButton({ provider }) {
 }
 
 export default function Login({ onSuccess, onSignup, onResetPassword }) {
-  const [email, setEmail] = useState(DEMO_ACCOUNT.email)
-  const [password, setPassword] = useState(DEMO_ACCOUNT.password)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
   const handleSubmit = (event) => {
@@ -94,7 +94,7 @@ export default function Login({ onSuccess, onSignup, onResetPassword }) {
       return
     }
 
-    setError('Use demo@nora.ai with password demo1234 to enter.')
+    setError('Invalid email or password.')
   }
 
   return (
@@ -142,19 +142,6 @@ export default function Login({ onSuccess, onSignup, onResetPassword }) {
           <i aria-hidden="true" />
         </button>
 
-        <p className="auth-footer-copy">
-          Demo account:{' '}
-          <button
-            type="button"
-            onClick={() => {
-              setEmail(DEMO_ACCOUNT.email)
-              setPassword(DEMO_ACCOUNT.password)
-              setError('')
-            }}
-          >
-            demo@nora.ai / demo1234
-          </button>
-        </p>
 
         <p className="auth-footer-copy">
           Don't have an account? <button type="button" onClick={onSignup}>Sign Up</button>

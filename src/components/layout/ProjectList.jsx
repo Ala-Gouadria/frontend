@@ -131,6 +131,17 @@ export default function ProjectList({ onNavigate }) {
     onNavigate?.('notifications')
   }
 
+  const handleLogout = () => {
+    handleClose()
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem('nora:isAuthenticated')
+      window.localStorage.removeItem('nora:setupComplete')
+      window.localStorage.removeItem('nora:view')
+      window.location.reload()
+    }
+  }
+
+
   return (
     <div className="project-list" ref={wrapperRef}>
       <ProjectBell onClick={openNotifications} />
@@ -195,7 +206,7 @@ export default function ProjectList({ onNavigate }) {
               <button type="button" className="project-dropdown__link" onClick={openActivityLog}>Activity Log</button>
               <button type="button" className="project-dropdown__link" onClick={openSettings}>Settings</button>
               <button type="button" className="project-dropdown__link" onClick={openPricing}>Upgrade Your Plan</button>
-              <button type="button" className="project-dropdown__link project-dropdown__link--danger" onClick={handleClose}>Log Out</button>
+              <button type="button" className="project-dropdown__link project-dropdown__link--danger" onClick={handleLogout}>Log Out</button>
             </div>
           </div>
         </div>

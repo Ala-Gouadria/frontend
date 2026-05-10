@@ -7,4 +7,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  define: {
+    __APP_SESSION__: Date.now(),
+  },
 })

@@ -3,9 +3,9 @@ import './BottomAITools.css'
 import { useState } from 'react'
 import { useControls, useTransformEffect } from 'react-zoom-pan-pinch'
 
-import cursorIcon from '../../assets/icons/Nora-AI-Icon/cursor-icon.png'
-import handIcon from '../../assets/icons/Nora-AI-Icon/four-finger-icon.png'
-import stopIcon from '../../assets/icons/Nora-AI-Icon/Stop-icon.png'
+import cursorIcon from '../../assets/icons/Nora-AI-Icon/cursor-icon.svg'
+import handIcon from '../../assets/icons/Nora-AI-Icon/four-finger-icon.svg'
+import stopIcon from '../../assets/icons/Nora-AI-Icon/Stop-icon.svg'
 import noraLogo from '../../assets/logo/Ask-Nora-Logo.png'
 
 function BottomAIActionCluster({ onAskNora, onTaskOpen }) {

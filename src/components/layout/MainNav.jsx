@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react'
 import './MainNav.css'
 
-import StarsIcon from '../../assets/icons/Main-Nav-icons/StarsIcon.png'
-import ConnectIcon from '../../assets/icons/Main-Nav-icons/ConnectIcon.png'
-import DataBaseIcon from '../../assets/icons/Main-Nav-icons/DataBaseIcon.png'
-import LayersIcon from '../../assets/icons/Main-Nav-icons/layersIcon.png'
-import BubbleChatSparkIcon from '../../assets/icons/Main-Nav-icons/BubbleChatSparkIcon.png'
-import AlbumIcon from '../../assets/icons/Main-Nav-icons/albumIcon.png'
+import StarsIcon from '../../assets/icons/Main-Nav-icons/StarsIcon.svg'
+import ConnectIcon from '../../assets/icons/Main-Nav-icons/ConnectIcon.svg'
+import DataBaseIcon from '../../assets/icons/Main-Nav-icons/DataBaseIcon.svg'
+import LayersIcon from '../../assets/icons/Main-Nav-icons/layersIcon.svg'
+import BubbleChatSparkIcon from '../../assets/icons/Main-Nav-icons/BubbleChatSparkIcon.svg'
+import AlbumIcon from '../../assets/icons/Main-Nav-icons/albumIcon.svg'
 
 const NAV_ITEMS = [
   { id: 'stars', icon: StarsIcon, label: 'AI Magic' },
