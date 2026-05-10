@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './Signup.css'
 import noraLoginLogo from '../../assets/logo/Nora-Login-Logo.png'
 import loginBackground from '../../assets/background/Login-background.jpg'
+import PillButton from '../../components/pages-parts/PillButton'
 
 function PasswordInput({ value, onChange, placeholder = 'Enter your password', autoComplete }) {
   const [visible, setVisible] = useState(false)
@@ -121,10 +122,9 @@ export default function Signup({ onSuccess, onLogin }) {
         <p className="auth-helper">Must be at least 8 characters.</p>
         {error ? <p className="auth-error">{error}</p> : null}
 
-        <button type="submit" className="auth-submit-btn">
-          <span>Sign Up</span>
-          <i aria-hidden="true" />
-        </button>
+        <PillButton type="submit" width="100%" height="48px" variant="primary">
+          SIGN UP
+        </PillButton>
 
         <p className="auth-footer-copy">
           Already have an account? <button type="button" onClick={onLogin}>Log in</button>

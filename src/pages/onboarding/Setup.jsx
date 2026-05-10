@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './Setup.css'
-
-import { onboardingFlowApi } from '../../api/onboardingFlowApi'
+import { setupApi } from '../../api/setupApi'
 import NoraLogo from '../../assets/logo/Nora-logo.png'
 import ProfileIcon from '../../assets/icons/Set-up-Nav/Profilesetup.png'
 import BusinessIcon from '../../assets/icons/Set-up-Nav/Businesssetup.png'
@@ -212,7 +211,7 @@ export default function Setup({ onComplete }) {
     let active = true
 
     ;(async () => {
-      const response = await onboardingFlowApi.getFlow()
+      const response = await setupApi.getFlow()
       if (!active) {
         return
       }
@@ -253,7 +252,7 @@ export default function Setup({ onComplete }) {
     setSaving(true)
 
     try {
-      const response = await onboardingFlowApi.saveStep({
+      const response = await setupApi.saveStep({
         steps,
         values: nextValues,
         stepId,
@@ -300,7 +299,7 @@ export default function Setup({ onComplete }) {
     setSaving(true)
 
     try {
-      const uploaded = await onboardingFlowApi.uploadFieldFiles(fieldId, files)
+      const uploaded = await setupApi.uploadFieldFiles(fieldId, files)
       setValues((current) => ({
         ...current,
         [currentStep.id]: {
@@ -366,7 +365,7 @@ export default function Setup({ onComplete }) {
     if (isLastStep) {
       setSaving(true)
       try {
-        const response = await onboardingFlowApi.completeFlow({ steps, values: nextValues })
+        const response = await setupApi.completeFlow({ steps, values: nextValues })
         setStepProgress(response.stepProgress)
         setOverallProgress(response.overallProgress)
         setStatusMessage(response.summary)

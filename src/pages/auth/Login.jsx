@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './Login.css'
 import noraLoginLogo from '../../assets/logo/Nora-Login-Logo.png'
 import loginBackground from '../../assets/background/Login-background.jpg'
+import PillButton from '../../components/pages-parts/PillButton'
 
 const DEMO_ACCOUNT = {
   email: 'demo@nora.ai',
@@ -137,10 +138,9 @@ export default function Login({ onSuccess, onSignup, onResetPassword }) {
 
         {error ? <p className="auth-error">{error}</p> : null}
 
-        <button type="submit" className="auth-submit-btn">
-          <span>Sign in</span>
-          <i aria-hidden="true" />
-        </button>
+        <PillButton type="submit" width="100%" height="48px" variant="primary">
+          SIGN IN
+        </PillButton>
 
 
         <p className="auth-footer-copy">
