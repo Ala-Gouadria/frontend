@@ -11,7 +11,7 @@ import ChannelsIcon from '../../assets/icons/Set-up-Nav/Channels&Integration.png
 import ContentIcon from '../../assets/icons/Set-up-Nav/Contentdirection.png'
 import GoalIcon from '../../assets/icons/Set-up-Nav/BusinessGoal.png'
 import OptimIcon from '../../assets/icons/Set-up-Nav/OptimizationInputs.png'
-
+import PillButton from '../../components/pages-parts/PillButton'
 const STEP_ICONS = {
   profile: ProfileIcon,
   business: BusinessIcon,
@@ -503,12 +503,14 @@ export default function Setup({ onComplete }) {
                 <button type="button" className="ob-btn-skip" onClick={() => { void handleSkip() }} disabled={isLastStep || saving}>
                   Skip for now
                 </button>
-                <button type="button" className="ob-btn-next" onClick={() => { void handleNext() }} disabled={saving}>
-                  <span className="ob-btn-label">{saving ? 'SAVING' : isLastStep ? 'FINISH' : 'NEXT'}</span>
-                  <span className="ob-grid-dots">
-                    {[...Array(6)].map((_, index) => <span key={index} />)}
-                  </span>
-                </button>
+                <PillButton
+  onClick={() => { void handleNext() }}
+  disabled={saving}
+  width="200px"
+  height="52px"
+>
+  {saving ? 'SAVING…' : isLastStep ? 'FINISH' : 'NEXT'}
+</PillButton>
               </div>
             </div>
           </div>
