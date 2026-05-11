@@ -65,11 +65,14 @@ export function SemiCircleGauge({
   const reactId      = useId().replace(/[^a-zA-Z0-9_-]/g, '')
   const clipId       = `semi-gauge-progress-${reactId}`
   const stripeId     = `semi-gauge-stripe-${reactId}`
-  const safeProgress = clamp(progress ?? (target ? current / target : 0), 0, 1)
-  const capPosition  = getArcPoint(safeProgress)
-  const pathData     = getPathData()
+  const fadeId       = `semi-gauge-fade-${reactId}`
+  const fadeMaskId   = `semi-gauge-mask-${reactId}`
+
+  const safeProgress  = clamp(progress ?? (target ? current / target : 0), 0, 1)
+  const capPosition   = getArcPoint(safeProgress)
+  const pathData      = getPathData()
   const progressTicks = TICK_PROGRESS.filter(tp => tp <= safeProgress + 0.014)
-  const valueLabel   = label ?? `${current}/${target}`
+  const valueLabel    = label ?? `${current}/${target}`
   const [currentLabel, targetLabel] = valueLabel.split('/')
 
   return (
@@ -77,10 +80,12 @@ export function SemiCircleGauge({
       {title ? <div className="semi-circle-gauge__title">{title}</div> : null}
       <svg className="semi-circle-gauge__svg" viewBox="0 0 510 256" aria-hidden="true">
         <defs>
+          {/* Clip path for tick marks */}
           <clipPath id={clipId}>
             <path d={pathData} className="semi-circle-gauge__clip-path" />
           </clipPath>
-          {/* Vertical/radial segment pattern matching reference */}
+
+          {/* Stripe texture */}
           <pattern
             id={stripeId}
             patternUnits="userSpaceOnUse"
@@ -90,45 +95,64 @@ export function SemiCircleGauge({
             <rect width="2"  height="9" fill="rgba(255,255,255,0.07)" />
             <rect x="2" width="2" height="9" fill="rgba(255,255,255,0.20)" />
           </pattern>
+
+        <linearGradient id={fadeId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="510" y2="0">
+  <stop offset="0"   stopColor="white" stopOpacity="0" />
+  <stop offset="20"  stopColor="white" stopOpacity="1" />
+  <stop offset="420" stopColor="white" stopOpacity="1" />  {/* was 370 — stay opaque right up to knob */}
+  <stop offset="490" stopColor="white" stopOpacity="0" />  {/* was 480 — fade dies just past arc end */}
+</linearGradient>
+
+          {/* Mask using the fade gradient */}
+          <mask id={fadeMaskId} maskUnits="userSpaceOnUse" x="0" y="0" width="510" height="520">
+            <rect x="0" y="0" width="510" height="520" fill={`url(#${fadeId})`} />
+          </mask>
         </defs>
 
-        {/* Diffuse outer glow on full arc */}
-        <path d={pathData} className="semi-circle-gauge__glow" />
+        {/* ── All arc layers wrapped in fade mask ── */}
+        <g mask={`url(#${fadeMaskId})`}>
 
-        {/* Pale background track — wider than progress = creates inset groove */}
-        <path d={pathData} className="semi-circle-gauge__track" />
+          {/* Diffuse outer glow on full arc */}
+          <path d={pathData} className="semi-circle-gauge__glow" />
 
-        {/* Progress fill — narrower, centered inside track */}
-        <path
-          d={pathData}
-          className="semi-circle-gauge__progress"
-          pathLength="100"
-          strokeDasharray={`${safeProgress * 100} 100`}
-        />
+          {/* Pale background track */}
+          <path d={pathData} className="semi-circle-gauge__track" />
 
-        {/* Stripe texture over progress only */}
-        <path
-          d={pathData}
-          fill="none"
-          stroke={`url(#${stripeId})`}
-          strokeWidth="26"
-          strokeLinecap="round"
-          pathLength="100"
-          strokeDasharray={`${safeProgress * 100} 100`}
-        />
+          {/* Progress fill */}
+          <path
+            d={pathData}
+            className="semi-circle-gauge__progress"
+            pathLength="100"
+            strokeDasharray={`${safeProgress * 100} 100`}
+          />
 
-        {/* Tick lines, clipped to progress region */}
-        <g clipPath={`url(#${clipId})`}>
-          {progressTicks.map(tp => {
-            const tick = getTickLine(tp)
-            return <line key={tp} {...tick} className="semi-circle-gauge__tick" />
-          })}
+          {/* Stripe texture over progress */}
+          <path
+            d={pathData}
+            fill="none"
+            stroke={`url(#${stripeId})`}
+            strokeWidth="26"
+            strokeLinecap="round"
+            pathLength="100"
+            strokeDasharray={`${safeProgress * 100} 100`}
+          />
+
+          {/* Tick lines clipped to progress region */}
+          <g clipPath={`url(#${clipId})`}>
+            {progressTicks.map(tp => {
+              const tick = getTickLine(tp)
+              return <line key={tp} {...tick} className="semi-circle-gauge__tick" />
+            })}
+          </g>
+
         </g>
+        {/* ── End fade mask group ── */}
 
-        {/* Knob — thin white ring + drop shadow */}
+        {/* Knob — outside mask so it stays fully sharp */}
         <circle cx={capPosition.x} cy={capPosition.y} r="20" className="semi-circle-gauge__cap-ring" />
         <circle cx={capPosition.x} cy={capPosition.y} r="13" className="semi-circle-gauge__cap" />
 
+        {/* Value label */}
         <text x="255" y="148" textAnchor="middle" className="semi-circle-gauge__value">
           <tspan className="semi-circle-gauge__current">{currentLabel}</tspan>
           {targetLabel ? <tspan className="semi-circle-gauge__target">/{targetLabel}</tspan> : null}

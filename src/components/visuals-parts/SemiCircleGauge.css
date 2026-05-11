@@ -1,7 +1,7 @@
 .semi-circle-gauge {
   /* ── Green (default) ─────────────────────────────────────────────── */
   --gauge-glow:       rgba(168, 210, 40, 0.16);  /* very subtle full-arc bloom   */
-  --gauge-track:      rgba(218, 238, 144, 0.62); /* pale yellow-green background  */
+--gauge-track: rgba(218, 238, 144, 0.32);   /* was 0.62 */
   --gauge-progress:   #82ba08;                   /* muted olive green             */
   --gauge-tick:       rgba(130, 175, 15, 0.38);  /* faint tick marks              */
   --gauge-cap-ring:   #ffffff;
@@ -80,6 +80,7 @@
 .semi-circle-gauge__track {
   stroke: var(--gauge-track);
   stroke-width: 46;   /* track is 46, progress is 28 → 9px pale border each side */
+  stroke-linecap: butt;   /* ← add this, overrides the shared `round` */
 }
 
 /* ── Progress: narrower fill sitting inside the track ────────────────── */
