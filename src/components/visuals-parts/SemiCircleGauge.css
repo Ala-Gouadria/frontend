@@ -2,7 +2,6 @@
   --gauge-glow:       rgba(168, 210, 40, 0.42);
   --gauge-track:      rgba(218, 238, 144, 0.88);
   --gauge-progress:   #78b000;
-  --gauge-tick:       rgba(130, 175, 15, 0.38);
   --gauge-cap-ring:   #ffffff;
   --gauge-cap:        #8abe10;
   --gauge-text:       #6aa800;
@@ -21,7 +20,6 @@
   --gauge-glow:       rgba(96, 165, 250, 0.40);
   --gauge-track:      rgba(147, 197, 253, 0.80);
   --gauge-progress:   #3b82f6;
-  --gauge-tick:       rgba(29, 78, 216, 0.30);
   --gauge-cap-ring:   #ffffff;
   --gauge-cap:        #60a5fa;
   --gauge-text:       #2563eb;
@@ -32,7 +30,6 @@
   --gauge-glow:       rgba(245, 158, 11, 0.40);
   --gauge-track:      rgba(253, 186, 116, 0.80);
   --gauge-progress:   #f97316;
-  --gauge-tick:       rgba(194, 65, 12, 0.30);
   --gauge-cap-ring:   #ffffff;
   --gauge-cap:        #fb923c;
   --gauge-text:       #ea580c;

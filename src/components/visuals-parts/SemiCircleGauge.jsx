@@ -36,7 +36,7 @@ function getTickLine(progress) {
   const tangent = { x: -ARC.rx * Math.sin(angle), y: -ARC.ry * Math.cos(angle) }
   const length = Math.hypot(tangent.x, tangent.y) || 1
   const normal = { x: -tangent.y / length, y: tangent.x / length }
-  const tickLength = 22
+const tickLength = 28
   return {
     x1: point.x - normal.x * tickLength / 2,
     y1: point.y - normal.y * tickLength / 2,
@@ -51,7 +51,7 @@ function getPathData() {
   return `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${ARC.rx} ${ARC.ry} 0 0 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`
 }
 
-const TICK_PROGRESS = Array.from({ length: 44 }, (_, i) => (i + 1) / 46)
+const TICK_PROGRESS = Array.from({ length: 32 }, (_, i) => (i + 1) / 34)
 
 export function SemiCircleGauge({
   current = 578,
@@ -64,7 +64,6 @@ export function SemiCircleGauge({
 }) {
   const id = useId().replace(/[^a-zA-Z0-9]/g, '')
   const clipId = 'c' + id
-  const stripeId = 's' + id
   const maskId = 'm' + id
   const gradId = 'g' + id
 
@@ -84,28 +83,40 @@ export function SemiCircleGauge({
         aria-hidden="true"
       >
         <defs>
-          <clipPath id={clipId}>
-            <path d={pathData} fill="none" stroke="#fff" strokeWidth="30" />
-          </clipPath>
+          {/* Clip path spans full track width so ticks cover entire filled band */}
+         <g clipPath={'url(#' + clipId + ')'}>
+  {TICK_PROGRESS.filter(tp => tp <= safeProgress + 0.014).map(tp => {
+    const tick = getTickLine(tp)
+    return (
+      <line
+        key={tp}
+        x1={tick.x1} y1={tick.y1}
+        x2={tick.x2} y2={tick.y2}
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        strokeLinecap="butt"
+      />
+    )
+  })}
+</g>
 
-          <pattern id={stripeId} patternUnits="userSpaceOnUse" width="9" height="9" patternTransform="rotate(72)">
-            <rect width="2" height="9" fill="rgba(255,255,255,0.07)" />
-            <rect x="2" width="2" height="9" fill="rgba(255,255,255,0.20)" />
-          </pattern>
-
+          {/* Horizontal fade gradient — transparent at both ends */}
           <linearGradient id={gradId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="510" y2="0">
-  <stop offset="0%"  stopColor="white" stopOpacity="0" />
-<stop offset="22%" stopColor="white" stopOpacity="1" />  {/* was 12% */}
-<stop offset="65%" stopColor="white" stopOpacity="1" />  {/* was 75% */}
-<stop offset="96%" stopColor="white" stopOpacity="0" />
-</linearGradient>
+            <stop offset="0%"  stopColor="white" stopOpacity="0" />
+            <stop offset="22%" stopColor="white" stopOpacity="1" />
+            <stop offset="65%" stopColor="white" stopOpacity="1" />
+            <stop offset="96%" stopColor="white" stopOpacity="0" />
+          </linearGradient>
 
+          {/* Mask covers viewBox + overflow to catch glow bleed */}
           <mask id={maskId} maskUnits="userSpaceOnUse" x="-60" y="-60" width="630" height="380">
             <rect x="-60" y="-60" width="630" height="380" fill={'url(#' + gradId + ')'} />
           </mask>
         </defs>
 
         <g mask={'url(#' + maskId + ')'}>
+
+          {/* Soft outer glow */}
           <path
             d={pathData}
             fill="none"
@@ -114,6 +125,8 @@ export function SemiCircleGauge({
             strokeLinecap="butt"
             style={{ filter: 'blur(28px)', opacity: 0.65 }}
           />
+
+          {/* Pale background track */}
           <path
             d={pathData}
             fill="none"
@@ -121,6 +134,8 @@ export function SemiCircleGauge({
             strokeWidth="54"
             strokeLinecap="butt"
           />
+
+          {/* Green progress fill */}
           <path
             d={pathData}
             fill="none"
@@ -131,15 +146,8 @@ export function SemiCircleGauge({
             strokeDasharray={safeProgress * 100 + ' 100'}
             className="semi-circle-gauge__progress"
           />
-          <path
-            d={pathData}
-            fill="none"
-            stroke={'url(#' + stripeId + ')'}
-            strokeWidth="26"
-            strokeLinecap="butt"
-            pathLength="100"
-            strokeDasharray={safeProgress * 100 + ' 100'}
-          />
+
+          {/* Perpendicular tick dividers clipped to progress + full track width */}
           <g clipPath={'url(#' + clipId + ')'}>
             {progressTicks.map(tp => {
               const tick = getTickLine(tp)
@@ -148,18 +156,21 @@ export function SemiCircleGauge({
                   key={tp}
                   x1={tick.x1} y1={tick.y1}
                   x2={tick.x2} y2={tick.y2}
-                  stroke="var(--gauge-tick)"
-                  strokeWidth="3"
+                  stroke="rgba(255,255,255,0.35)"
+                  strokeWidth="1.5"
                   strokeLinecap="butt"
                 />
               )
             })}
           </g>
+
         </g>
 
+        {/* Knob — outside mask, always fully visible */}
         <circle cx={capPosition.x} cy={capPosition.y} r="20" className="semi-circle-gauge__cap-ring" />
         <circle cx={capPosition.x} cy={capPosition.y} r="13" className="semi-circle-gauge__cap" />
 
+        {/* Value label */}
         <text x="255" y="148" textAnchor="middle" className="semi-circle-gauge__value">
           <tspan className="semi-circle-gauge__current">{currentLabel}</tspan>
           {targetLabel ? <tspan className="semi-circle-gauge__target">/{targetLabel}</tspan> : null}
