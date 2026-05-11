@@ -11,11 +11,11 @@ function clamp(value, min, max) {
 
 const ARC = {
   cx: 255,
-  cy: 260,
-  rx: 275,
-  ry: 216,
-  startAngle: 156 * (Math.PI / 180),
-  endAngle: 31 * (Math.PI / 180),
+  cy: 262,
+  rx: 242,
+  ry: 242,
+  startAngle: 155 * (Math.PI / 180),
+  endAngle:    25 * (Math.PI / 180),
 }
 
 function getArcAngle(progress) {
@@ -33,16 +33,10 @@ function getArcPoint(progress) {
 function getTickLine(progress) {
   const angle = getArcAngle(progress)
   const point = getArcPoint(progress)
-  const tangent = {
-    x: -ARC.rx * Math.sin(angle),
-    y: -ARC.ry * Math.cos(angle),
-  }
-  const length = Math.hypot(tangent.x, tangent.y) || 1
-  const normal = {
-    x: -tangent.y / length,
-    y: tangent.x / length,
-  }
-  const tickLength = 28
+  const tangent = { x: -ARC.rx * Math.sin(angle), y: -ARC.ry * Math.cos(angle) }
+  const length  = Math.hypot(tangent.x, tangent.y) || 1
+  const normal  = { x: -tangent.y / length, y: tangent.x / length }
+  const tickLength = 22
   return {
     x1: point.x - normal.x * tickLength / 2,
     y1: point.y - normal.y * tickLength / 2,
@@ -53,29 +47,29 @@ function getTickLine(progress) {
 
 function getPathData() {
   const start = getArcPoint(0)
-  const end = getArcPoint(1)
+  const end   = getArcPoint(1)
   return `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${ARC.rx} ${ARC.ry} 0 0 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`
 }
 
-const TICK_PROGRESS = Array.from({ length: 42 }, (_, index) => (index + 1) / 44)
+const TICK_PROGRESS = Array.from({ length: 44 }, (_, i) => (i + 1) / 46)
 
 export function SemiCircleGauge({
   current = 578,
-  target = 700,
+  target  = 700,
   progress,
   label,
   title,
-  tone = 'green',
+  tone      = 'green',
   className = '',
 }) {
-  const reactId = useId().replace(/[^a-zA-Z0-9_-]/g, '')
-  const clipId = `semi-gauge-progress-${reactId}`
-  const stripeId = `semi-gauge-stripe-${reactId}`
+  const reactId      = useId().replace(/[^a-zA-Z0-9_-]/g, '')
+  const clipId       = `semi-gauge-progress-${reactId}`
+  const stripeId     = `semi-gauge-stripe-${reactId}`
   const safeProgress = clamp(progress ?? (target ? current / target : 0), 0, 1)
-  const capPosition = getArcPoint(safeProgress)
-  const pathData = getPathData()
-  const progressTicks = TICK_PROGRESS.filter((tickProgress) => tickProgress <= safeProgress + 0.018)
-  const valueLabel = label ?? `${current}/${target}`
+  const capPosition  = getArcPoint(safeProgress)
+  const pathData     = getPathData()
+  const progressTicks = TICK_PROGRESS.filter(tp => tp <= safeProgress + 0.014)
+  const valueLabel   = label ?? `${current}/${target}`
   const [currentLabel, targetLabel] = valueLabel.split('/')
 
   return (
@@ -86,53 +80,56 @@ export function SemiCircleGauge({
           <clipPath id={clipId}>
             <path d={pathData} className="semi-circle-gauge__clip-path" />
           </clipPath>
+          {/* Vertical/radial segment pattern matching reference */}
           <pattern
             id={stripeId}
             patternUnits="userSpaceOnUse"
-            width="8"
-            height="8"
+            width="9" height="9"
             patternTransform="rotate(72)"
           >
-            <rect width="2" height="8" fill="rgba(255,255,255,0.06)" />
-            <rect x="2" width="2" height="8" fill="rgba(255,255,255,0.18)" />
+            <rect width="2"  height="9" fill="rgba(255,255,255,0.07)" />
+            <rect x="2" width="2" height="9" fill="rgba(255,255,255,0.20)" />
           </pattern>
         </defs>
 
+        {/* Diffuse outer glow on full arc */}
         <path d={pathData} className="semi-circle-gauge__glow" />
+
+        {/* Pale background track — wider than progress = creates inset groove */}
         <path d={pathData} className="semi-circle-gauge__track" />
+
+        {/* Progress fill — narrower, centered inside track */}
         <path
           d={pathData}
           className="semi-circle-gauge__progress"
           pathLength="100"
           strokeDasharray={`${safeProgress * 100} 100`}
         />
+
+        {/* Stripe texture over progress only */}
         <path
           d={pathData}
           fill="none"
           stroke={`url(#${stripeId})`}
-          strokeWidth="39"
+          strokeWidth="26"
           strokeLinecap="round"
           pathLength="100"
           strokeDasharray={`${safeProgress * 100} 100`}
         />
 
+        {/* Tick lines, clipped to progress region */}
         <g clipPath={`url(#${clipId})`}>
-          {progressTicks.map((tickProgress) => {
-            const tick = getTickLine(tickProgress)
-            return (
-              <line
-                key={tickProgress}
-                {...tick}
-                className="semi-circle-gauge__tick"
-              />
-            )
+          {progressTicks.map(tp => {
+            const tick = getTickLine(tp)
+            return <line key={tp} {...tick} className="semi-circle-gauge__tick" />
           })}
         </g>
 
-        <circle cx={capPosition.x} cy={capPosition.y} r="30" className="semi-circle-gauge__cap-ring" />
-        <circle cx={capPosition.x} cy={capPosition.y} r="22" className="semi-circle-gauge__cap" />
+        {/* Knob — thin white ring + drop shadow */}
+        <circle cx={capPosition.x} cy={capPosition.y} r="20" className="semi-circle-gauge__cap-ring" />
+        <circle cx={capPosition.x} cy={capPosition.y} r="13" className="semi-circle-gauge__cap" />
 
-        <text x="255" y="154" textAnchor="middle" className="semi-circle-gauge__value">
+        <text x="255" y="148" textAnchor="middle" className="semi-circle-gauge__value">
           <tspan className="semi-circle-gauge__current">{currentLabel}</tspan>
           {targetLabel ? <tspan className="semi-circle-gauge__target">/{targetLabel}</tspan> : null}
         </text>
