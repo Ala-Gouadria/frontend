@@ -1,6 +1,14 @@
 @import './AnalyticsCardShared.css';
 
+.conversion-funnel-card__bottom-chart-wrap {
+  width: min(100%, 300px);
+  margin: 6px auto 0;
+  overflow: hidden;
+}
+
 .conversion-funnel-card__bottom-chart {
+  width: 100%;
   height: 76px;
-  margin-top: 4px;
+  min-height: 76px;
+  overflow: hidden;
 }

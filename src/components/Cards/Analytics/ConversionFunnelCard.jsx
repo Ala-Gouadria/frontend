@@ -62,11 +62,13 @@ export function ConversionFunnelCard({ data = conversionFunnelCardData }) {
       <section>
         <span className="analytics-card__label">{data.totalConversionLabel}</span>
         <strong className="analytics-card__value analytics-card__value--good">{data.totalConversionValue}</strong>
-        <MiniLineChart
-          points={data.bottomChart.points}
-          fillPoints={data.bottomChart.fillPoints}
-          className="conversion-funnel-card__bottom-chart"
-        />
+        <div className="conversion-funnel-card__bottom-chart-wrap">
+          <MiniLineChart
+            points={data.bottomChart.points}
+            fillPoints={data.bottomChart.fillPoints}
+            className="conversion-funnel-card__bottom-chart"
+          />
+        </div>
       </section>
 
       <footer className="analytics-card__footer">

@@ -8,8 +8,18 @@
 }
 
 .automation-execution-card__gauge {
+  width: min(100%, 300px);
+  height: 176px;
+  justify-self: center;
   margin-top: -10px;
   margin-bottom: -4px;
+  overflow: visible;
+}
+
+.automation-execution-card__gauge .automation-arc-gauge__svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
 }
 
 .automation-execution-card__lanes {
