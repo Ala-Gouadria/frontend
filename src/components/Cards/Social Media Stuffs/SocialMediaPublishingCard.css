@@ -209,3 +209,114 @@
 }
 
 .smp-card__bookmark { margin-left: auto; }
+
+.smp-card.analytics-card {
+  width: 410px;
+  min-height: 804px;
+  padding: 18px 16px 16px;
+  gap: 14px;
+}
+
+.smp-card__header {
+  padding-bottom: 4px;
+}
+
+.smp-card__title {
+  font-size: 1.02rem;
+  line-height: 1.05;
+  font-weight: 500;
+}
+
+.smp-card__subtitle {
+  margin-top: 6px;
+  font-size: 0.73rem;
+}
+
+.smp-card__status {
+  margin-top: -2px;
+}
+
+.smp-card__section {
+  display: grid;
+  gap: 8px;
+}
+
+.smp-card__section-title {
+  margin-bottom: 0;
+  color: rgba(24, 24, 27, 0.86);
+  font-size: 0.72rem;
+}
+
+.smp-card__current-batch.activity-progress-pill {
+  min-height: 36px;
+  border-width: 3px;
+  font-size: 0.72rem;
+  gap: 10px;
+}
+
+.smp-card__current-batch.activity-progress-pill::before {
+  top: -3px;
+  height: 3px;
+}
+
+.smp-card__current-batch.activity-progress-pill::after {
+  inset: -3px -3px -3px 50%;
+  border-width: 3px;
+}
+
+.smp-card__current-batch .activity-progress-pill__dot {
+  width: 8px;
+  height: 8px;
+}
+
+.smp-card__current-batch .activity-progress-pill__value {
+  font-size: 0.72rem;
+}
+
+.smp-card__platforms {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.smp-card__upcoming-panel {
+  margin-top: 2px;
+}
+
+.smp-card__upcoming-panel .smc-card__upcoming-title {
+  min-height: 29px;
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  color: #111114;
+  font-weight: 500;
+}
+
+.smp-card__upcoming-panel .smc-card__upcoming-body {
+  margin: 0 2px 2px;
+  border-radius: 7px;
+  padding: 9px 11px 10px;
+}
+
+.smp-card__upcoming-panel .smc-card__upcoming-row {
+  font-size: 0.72rem;
+}
+
+.smp-card__upcoming-panel .smc-card__upcoming-count {
+  font-size: 0.68rem;
+}
+
+.smp-card__insight {
+  margin-top: 2px;
+}
+
+.smp-card__action {
+  margin-top: 0;
+}
+
+@media (max-width: 440px) {
+  .smp-card.analytics-card {
+    width: 100%;
+    padding-inline: 14px;
+  }
+}

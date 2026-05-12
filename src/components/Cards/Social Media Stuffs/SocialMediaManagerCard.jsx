@@ -1,103 +1,107 @@
 import './SocialMediaStuffsCardShared.css'
 import './SocialMediaManagerCard.css'
-import { MiniLineChart, DottedDataBars, AiInsight, AiActionButton } from '../../visuals-parts'
+import {
+  ActivityProgressPill,
+  AiActionButton,
+  AiInsight,
+  DottedDataBars,
+  MetricVisualPanel,
+  MiniLineChart,
+  PlatformEngagementCard,
+} from '../../visuals-parts'
+import facebookIcon from '../../../assets/icons/Social-Media-Card-Icon/fb.svg'
+import linkedinIcon from '../../../assets/icons/Social-Media-Card-Icon/in.svg'
+import instagramIcon from '../../../assets/icons/Social-Media-Card-Icon/instagram.svg'
 
 const defaultEngagement = [
   {
-    id: 'fb',  label: 'f',  color: '#4267B2', bgColor: 'rgba(66,103,178,0.08)',
-    delta: '+32%',
-    points: '0,44 20,40 40,42 60,34 80,36 100,30 120,32 140,28 160,26 172,24',
-    fillPoints: '0,58 0,44 20,40 40,42 60,34 80,36 100,30 120,32 140,28 160,26 172,24 172,58',
+    id: 'fb',
+    iconSrc: facebookIcon,
+    iconAlt: 'Facebook',
+    delta: '+ 32%',
+    tone: 'blue',
+    points: '0,36 14,34 28,37 42,35 56,38 70,31 84,32 98,28 112,31 126,26 140,42 154,24 168,47 182,29 194,38',
   },
   {
-    id: 'li',  label: 'in', color: '#0077B5', bgColor: 'rgba(0,119,181,0.08)',
-    delta: '+32%',
-    points: '0,42 20,44 40,38 60,40 80,34 100,38 120,32 140,36 160,30 172,28',
-    fillPoints: '0,58 0,42 20,44 40,38 60,40 80,34 100,38 120,32 140,36 160,30 172,28 172,58',
+    id: 'li',
+    iconSrc: linkedinIcon,
+    iconAlt: 'LinkedIn',
+    delta: '+ 32%',
+    tone: 'blue',
+    points: '0,39 14,36 28,38 42,41 56,35 70,37 84,33 98,35 112,29 126,31 140,43 154,24 168,45 182,25 194,39',
   },
   {
-    id: 'ig',  label: '◎',  color: '#E1306C', bgColor: 'rgba(225,48,108,0.08)',
-    delta: '+24%',
-    points: '0,38 20,42 40,36 60,44 80,38 100,42 120,36 140,40 160,34 172,36',
-    fillPoints: '0,58 0,38 20,42 40,36 60,44 80,38 100,42 120,36 140,40 160,34 172,36 172,58',
+    id: 'ig',
+    iconSrc: instagramIcon,
+    iconAlt: 'Instagram',
+    delta: '+ 24%',
+    tone: 'pink',
+    points: '0,26 14,43 28,38 42,40 56,36 70,42 84,37 98,40 112,34 126,37 140,35 154,23 168,42 182,54 194,35',
   },
 ]
 
+const crtColumns = [2, 7, 4, 9, 5, 8, 3, 6, 9, 4, 5, 8, 7, 4]
+
 export function SocialMediaManagerCard({
-  status           = 'Active',
-  currentActivity  = 'Running Instagram Campaign',
+  status = 'Active',
+  currentActivity = 'Running Instagram Campaign',
   activityProgress = 75,
-  engagement       = defaultEngagement,
-  crt              = '3.2%',
-  share            = '+9%',
-  aiText           = 'Instagram is driving the strongest growth today, while LinkedIn needs attention.',
-  className        = '',
+  engagement = defaultEngagement,
+  crt = '3.2%',
+  share = '+9%',
+  aiText = 'Instagram is driving the strongest growth today, while LinkedIn needs attention.',
+  className = '',
 }) {
   return (
-    <div className={`analytics-card ${className}`}>
-      <div className="analytics-card__header">
+    <div className={`analytics-card smm-card ${className}`}>
+      <div className="analytics-card__header smm-card__header">
         <div>
-          <h2 className="analytics-card__title">Social Media Manager</h2>
-          <p className="analytics-card__subtitle">Content, publishing, and engagement</p>
+          <h2 className="analytics-card__title smm-card__title">Social Media Manager</h2>
+          <p className="analytics-card__subtitle smm-card__subtitle">Content, publishing, and engagement</p>
         </div>
-        <span className="analytics-card__status">{status}</span>
+        <span className="analytics-card__status smm-card__status">{status}</span>
       </div>
 
-      <div>
-        <p className="analytics-card__section-title">Current Activity</p>
-        <div className="smm-card__activity-bar">
-          <span className="smp-card__batch-dot" />
-          <span className="smm-card__activity-label">{currentActivity}</span>
-          <span className="smm-card__activity-pct">{activityProgress}%</span>
-        </div>
-      </div>
+      <section className="smm-card__section" aria-label="Current activity">
+        <p className="analytics-card__section-title smm-card__section-title">Current Activity</p>
+        <ActivityProgressPill
+          label={currentActivity}
+          progress={activityProgress}
+          className="smm-card__activity"
+        />
+      </section>
 
-      <div>
-        <p className="analytics-card__section-title">Engagement Breakdown</p>
+      <section className="smm-card__section" aria-label="Engagement breakdown">
+        <p className="analytics-card__section-title smm-card__section-title">Engagement Breakdown</p>
         <div className="smm-card__engagement-grid">
-          {engagement.map(e => (
-            <div key={e.id} className="smm-card__platform-box" style={{ '--platform-bg': e.bgColor, '--platform-color': e.color }}>
-              <div className="smm-card__platform-top">
-                <span className="smm-card__platform-icon">{e.label}</span>
-                <span className="smm-card__platform-delta">{e.delta}</span>
-              </div>
-              <MiniLineChart
-                points={e.points}
-                fillPoints={e.fillPoints}
-                tone={e.id === 'ig' ? 'purple' : 'blue'}
-                className="smm-card__mini-chart"
-              />
-            </div>
+          {engagement.map((platform) => (
+            <PlatformEngagementCard
+              key={platform.id}
+              iconSrc={platform.iconSrc}
+              iconAlt={platform.iconAlt}
+              delta={platform.delta}
+              points={platform.points}
+              tone={platform.tone}
+            />
           ))}
         </div>
-      </div>
+      </section>
 
-      <div className="analytics-card__panel-grid">
-        <div>
-          <p className="analytics-card__section-title">CRT</p>
-          <strong className="smm-card__metric-val">{crt}</strong>
-          <DottedDataBars
-            columns={[
-              {label:'M',count:2},{label:'T',count:4},{label:'W',count:3},
-              {label:'T',count:5},{label:'F',count:4},{label:'S',count:3},
-            ]}
-            tone="green"
-          />
-        </div>
-        <div>
-          <p className="analytics-card__section-title">Share</p>
-          <strong className="smm-card__metric-val smm-card__metric-val--good">{share}</strong>
+      <div className="smm-card__metrics-grid">
+        <MetricVisualPanel label="CRT" value={crt} className="smm-card__metric smm-card__metric--crt">
+          <DottedDataBars columns={crtColumns} tone="ink" className="smm-card__dotted-bars" />
+        </MetricVisualPanel>
+        <MetricVisualPanel label="Share" value={share} valueTone="good" className="smm-card__metric smm-card__metric--share">
           <MiniLineChart
-            points="0,44 20,40 40,36 60,42 80,34 100,30 120,32 140,26 160,22 172,18"
-            fillPoints="0,58 0,44 20,40 40,36 60,42 80,34 100,30 120,32 140,26 160,22 172,18 172,58"
+            points="0,29 14,40 28,38 42,37 56,35 70,20 84,18 98,15 112,30 126,36 140,33 154,29 168,25 182,23 194,44"
             tone="green"
-            className="smm-card__mini-chart"
+            className="smm-card__share-chart"
           />
-        </div>
+        </MetricVisualPanel>
       </div>
 
-      <AiInsight>{aiText}</AiInsight>
-      <AiActionButton />
+      <AiInsight className="smm-card__insight">{aiText}</AiInsight>
+      <AiActionButton className="smm-card__action" />
     </div>
   )
 }

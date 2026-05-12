@@ -48,6 +48,13 @@
   --mini-line-glow: rgba(176, 90, 228, 0.22);
 }
 
+.mini-line-chart--pink {
+  --mini-line-color: #e44177;
+  --mini-line-fill-top: rgba(228, 65, 119, 0.16);
+  --mini-line-fill-bottom: rgba(255, 218, 232, 0.08);
+  --mini-line-glow: rgba(228, 65, 119, 0.22);
+}
+
 .mini-line-chart__fill {
   opacity: 1;
 }
