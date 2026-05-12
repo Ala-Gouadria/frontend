@@ -1,8 +1,8 @@
 export const SETUP_FLOW_CONTENT = {
-  tagline: 'Nora is learning your business',
+  tagline: 'Nora is Learning your business',
   headlineLead: 'SET UP YOUR AI',
   headlineAccent: 'OPERATING SYSTEM',
-  headlineSubcopy: 'Add the right business information so Nora can personalize strategy, content, automations, and reporting for your brand.',
+  headlineSubcopy: 'Add all the given informations so that NORA can help you automate your business.',
   sidebarTitle: 'Setup steps',
   sidebarSubcopy: 'Each step builds a deeper business profile for Nora.',
 }
@@ -15,15 +15,15 @@ export const SETUP_FLOW_STEPS = [
     titleLead: 'Profile',
     titleTail: 'setup',
     subtitle: 'This helps Nora identify your business and personalize your workspace from the start.',
-    whyMatters: 'A clear owner profile helps Nora tailor messaging, workspace defaults, and strategic recommendations.',
+    whyMatters: 'The more complete this step is, the better Nora can generate strategy, content, automations, and business decisions tailored to your brand.',
     fields: [
-      { id: 'firstName', type: 'text', label: 'First Name', placeholder: 'e.g. Nora', required: true, width: 'half' },
-      { id: 'lastName', type: 'text', label: 'Last Name', placeholder: 'e.g. Smith', required: true, width: 'half' },
+      { id: 'firstName', type: 'text', label: 'First Name', placeholder: 'eg. johnfrans@gmail.com', required: true, width: 'half' },
+      { id: 'lastName', type: 'text', label: 'Last name', placeholder: 'eg. johnfrans@gmail.com', required: true, width: 'half' },
       {
         id: 'industry',
         type: 'select',
         label: 'Industry',
-        placeholder: 'Select industry',
+        placeholder: 'Select Industry',
         required: true,
         options: ['Marketing', 'E-commerce', 'Coaching', 'SaaS', 'Local Business', 'Education'],
       },

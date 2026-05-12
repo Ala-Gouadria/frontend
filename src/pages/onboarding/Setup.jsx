@@ -503,13 +503,13 @@ export default function Setup({ onComplete }) {
                   Skip for now
                 </button>
                 <PillButton
-  onClick={() => { void handleNext() }}
-  disabled={saving}
-  width="200px"
-  height="52px"
->
-  {saving ? 'SAVING…' : isLastStep ? 'FINISH' : 'NEXT'}
-</PillButton>
+                  onClick={() => { void handleNext() }}
+                  disabled={saving}
+                  width="136px"
+                  height="36px"
+                >
+                  {saving ? 'SAVING...' : isLastStep ? 'FINISH' : 'NEXT'}
+                </PillButton>
               </div>
             </div>
           </div>
