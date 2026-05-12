@@ -45,6 +45,7 @@
 }
 
 .nora-panel--single.nora-panel--welcome,
+.nora-panel--single.nora-panel--conversation,
 .nora-panel--paired {
   width: 948px;
 }
@@ -54,8 +55,16 @@
 }
 
 .nora-panel--single.nora-panel--conversation {
-  width: calc(100vw - 132px);
   right: 24px;
+}
+
+.nora-panel--full {
+  top: 20px;
+  right: 20px;
+  bottom: 20px;
+  width: calc(100vw - 126px) !important;
+  border-radius: 23px;
+  animation: none;
 }
 
 /* ── SIDEBAR ── */
@@ -317,66 +326,9 @@
   right: 18px;
 }
 
-.nora-company-pill {
-  position: absolute;
-  top: 20px;
-  right: 22px;
-  z-index: 3;
-  min-width: 176px;
-  height: 52px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 4px 13px 4px 5px;
-  border: 3px solid #ffffff;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.93);
-  color: #111111;
-  box-shadow: 0 10px 28px rgba(21, 42, 83, 0.1);
-  cursor: pointer;
-}
-
-.nora-company-pill__mark {
+.nora-full-project-list {
   position: relative;
-  width: 43px;
-  height: 43px;
-  border-radius: 50%;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 32%),
-    linear-gradient(135deg, #075ec7 0%, #0f7ee8 48%, #003884 100%);
-  box-shadow: inset 0 2px 7px rgba(255, 255, 255, 0.45), 0 5px 12px rgba(0, 94, 196, 0.24);
-}
-
-.nora-company-pill__mark::before,
-.nora-company-pill__mark::after,
-.nora-company-pill__mark span {
-  content: "";
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 21px;
-  height: 2px;
-  border-radius: 999px;
-  background: #ffffff;
-  transform: rotate(24deg);
-}
-
-.nora-company-pill__mark::after {
-  transform: rotate(-24deg);
-}
-
-.nora-company-pill__mark span {
-  left: 13px;
-  right: 13px;
-  top: 17px;
-  opacity: 0.8;
-}
-
-.nora-company-pill__name {
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1;
+  z-index: 3;
 }
 
 /* ── WELCOME ── */
@@ -440,7 +392,11 @@
 }
 
 .nora-panel--single.nora-panel--conversation .nora-conversation-scene {
-  padding: 60px min(18vw, 350px) 20px;
+  padding: 58px 18px 18px;
+}
+
+.nora-panel--full.nora-panel--conversation .nora-conversation-scene {
+  padding: 60px min(18vw, 350px) 18px;
 }
 
 .nora-chat-row {
@@ -567,6 +523,12 @@
 }
 
 .nora-panel--single.nora-panel--conversation .nora-composer {
+  width: 100%;
+  margin: 0;
+  padding: 0 18px 18px;
+}
+
+.nora-panel--full.nora-panel--conversation .nora-composer {
   width: min(754px, calc(100% - 160px));
   margin: 0 auto;
   padding-bottom: 34px;
@@ -739,18 +701,16 @@
   .nora-panel,
   .nora-panel--single.nora-panel--welcome,
   .nora-panel--paired,
+  .nora-panel--full,
   .nora-panel--single.nora-panel--conversation {
     right: 14px;
-    width: calc(100vw - 28px);
+    width: calc(100vw - 28px) !important;
   }
 
   .nora-panel--single.nora-panel--conversation .nora-composer {
     width: min(754px, calc(100% - 56px));
   }
 
-  .nora-company-pill {
-    display: none;
-  }
 }
 
 @media (max-width: 760px) {
@@ -764,6 +724,13 @@
     display: none;
   }
 
+  .nora-panel--full {
+    top: 14px;
+    right: 14px;
+    bottom: 14px;
+    width: calc(100vw - 28px) !important;
+  }
+
   .nora-welcome-scene {
     padding: 108px 24px 16px;
   }
@@ -774,11 +741,17 @@
   }
 
   .nora-conversation-scene,
-  .nora-panel--single.nora-panel--conversation .nora-conversation-scene {
+  .nora-panel--single.nora-panel--conversation .nora-conversation-scene,
+  .nora-panel--full.nora-panel--conversation .nora-conversation-scene {
     padding: 38px 18px 18px;
   }
 
   .nora-panel--single.nora-panel--conversation .nora-composer {
+    width: 100%;
+    padding: 0 14px 14px;
+  }
+
+  .nora-panel--full.nora-panel--conversation .nora-composer {
     width: 100%;
     padding: 0 14px 14px;
   }

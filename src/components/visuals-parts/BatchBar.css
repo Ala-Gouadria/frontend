@@ -1,0 +1,123 @@
+/* ─── BatchBar.css ──────────────────────────────────────────── */
+
+.batch-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* "Current Batch" heading */
+.batch-bar__title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #555;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* ── outer pill track ───────────────────────────────────────── */
+.batch-bar__track {
+  position: relative;
+  height: 42px;
+  border-radius: 999px;
+  border: 2px solid #8ab820;          /* lime-green border */
+  background: #ffffff;
+  overflow: hidden;
+  box-shadow: 0 0 0 0 rgba(138, 184, 32, 0);
+  transition: box-shadow 0.3s ease;
+}
+
+.batch-bar__track:hover {
+  box-shadow: 0 0 0 4px rgba(138, 184, 32, 0.15);
+}
+
+/* ── animated green fill ────────────────────────────────────── */
+.batch-bar__fill {
+  position: absolute;
+  inset: 0 auto 0 0;          /* left-anchored */
+  width: 0%;                  /* starts at 0, JS sets real value */
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    #c5e04a 0%,      /* light lime at the left */
+    #6ea800 100%     /* deep green at the leading edge */
+  );
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* subtle shimmer sweep */
+  overflow: hidden;
+}
+
+.batch-bar__fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── content row (dot + label + count) ─────────────────────── */
+.batch-bar__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 10px;
+  pointer-events: none;   /* let clicks fall through to track */
+}
+
+/* pulsing dot */
+.batch-bar__dot {
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #6ea800;
+  box-shadow: 0 0 0 0 rgba(110, 168, 0, 0.6);
+  animation: pulse-dot 1.8s ease-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%   { box-shadow: 0 0 0 0   rgba(110, 168, 0, 0.6); }
+  70%  { box-shadow: 0 0 0 7px rgba(110, 168, 0, 0);   }
+  100% { box-shadow: 0 0 0 0   rgba(110, 168, 0, 0);   }
+}
+
+/* label */
+.batch-bar__label {
+  flex: 1;
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #4a7500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* count  7/12 */
+.batch-bar__count {
+  flex-shrink: 0;
+  font-size: 0.88rem;
+  color: #4a7500;
+  letter-spacing: 0.01em;
+}
+
+.batch-bar__count strong {
+  font-weight: 700;
+  font-size: 0.95rem;
+}

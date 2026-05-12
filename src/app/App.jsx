@@ -17,6 +17,9 @@ import Notifications from '../pages/notifications/Notifications'
 import Assets from '../pages/assets/Assets'
 import ActivityLog from '../pages/activityLog/activityLog'
 import AnalyticsCardsPreview from '../pages/analyticsCardsPreview/AnalyticsCardsPreview'
+import NoraChatPage from '../pages/chat/NoraChatPage'
+
+/* global __APP_SESSION__ */
 
 const STORAGE_KEYS = {
   authenticated: 'nora:isAuthenticated',
@@ -47,7 +50,7 @@ if (typeof window !== 'undefined') {
         window.localStorage.setItem('nora:appSession', currentSession)
       }
     }
-  } catch (e) {
+  } catch {
     // Ignore errors
   }
 }
@@ -149,7 +152,7 @@ export default function App() {
     }
 
     if (id === 'chat') {
-      navigateTo('activity-log')
+      navigateTo('chat')
       return
     }
 
@@ -215,6 +218,10 @@ export default function App() {
 
   if (view === 'activity-log') {
     return <ActivityLog onNavigate={handleNavigation} />
+  }
+
+  if (view === 'chat') {
+    return <NoraChatPage onNavigate={handleNavigation} />
   }
 
   if (view === 'integrate') {
