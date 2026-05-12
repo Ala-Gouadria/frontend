@@ -701,10 +701,22 @@ function MapCanvas({
         width: CANVAS.width,
         height: CANVAS.height,
         position: 'relative',
-        backgroundColor: 'transparent',
-        backgroundImage: 'none',
+        background: 'linear-gradient(180deg, rgba(255,255,255,0.78) 0%, rgba(245,247,250,0.96) 100%)',
       }}
     >
+      <DotGrid
+        style={{ position: 'absolute', inset: 0, zIndex: 0 }}
+        dotSize={4}
+        gap={28}
+        baseColor="#aaaaaa"
+        activeColor="#555555"
+        proximity={120}
+        shockRadius={250}
+        shockStrength={5}
+        resistance={750}
+        returnDuration={1.5}
+      />
+
       <div
         className="intelligence-map-ambient"
         style={{
@@ -919,19 +931,6 @@ return (
         cursor: dragState ? 'grabbing' : toolMode === 'hand' ? 'grab' : 'default',
       }}
     >
-
-      <DotGrid
-        style={{ position: 'absolute', inset: 0, zIndex: 0 }}
-        dotSize={4}
-        gap={28}
-        baseColor="#aaaaaa"
-        activeColor="#555555"
-        proximity={120}
-        shockRadius={250}
-        shockStrength={5}
-        resistance={750}
-        returnDuration={1.5}
-      />
 
       {/* ── Map content wrapper — gentle dim when workspace is open ── */}
       <div

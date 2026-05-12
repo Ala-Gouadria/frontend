@@ -27,6 +27,17 @@ function hexToRgb(hex) {
   };
 }
 
+function getCanvasLocalPoint(canvas, clientX, clientY) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = rect.width / (canvas.clientWidth || rect.width || 1);
+  const scaleY = rect.height / (canvas.clientHeight || rect.height || 1);
+
+  return {
+    x: (clientX - rect.left) / (scaleX || 1),
+    y: (clientY - rect.top) / (scaleY || 1)
+  };
+}
+
 const DotGrid = ({
   dotSize = 16,
   gap = 32,
@@ -190,9 +201,9 @@ const DotGrid = ({
       pr.vy = vy;
       pr.speed = speed;
 
-      const rect = canvasRef.current.getBoundingClientRect();
-      pr.x = e.clientX - rect.left;
-      pr.y = e.clientY - rect.top;
+      const localPoint = getCanvasLocalPoint(canvasRef.current, e.clientX, e.clientY);
+      pr.x = localPoint.x;
+      pr.y = localPoint.y;
 
       for (const dot of dotsRef.current) {
         const dist = Math.hypot(dot.cx - pr.x, dot.cy - pr.y);
@@ -218,9 +229,12 @@ const DotGrid = ({
     };
 
     const onClick = e => {
-      const rect = canvasRef.current.getBoundingClientRect();
-      const cx = e.clientX - rect.left;
-      const cy = e.clientY - rect.top;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const localPoint = getCanvasLocalPoint(canvas, e.clientX, e.clientY);
+      const cx = localPoint.x;
+      const cy = localPoint.y;
       for (const dot of dotsRef.current) {
         const dist = Math.hypot(dot.cx - cx, dot.cy - cy);
         if (dist < shockRadius && !dot._inertiaApplied) {
