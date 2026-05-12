@@ -244,6 +244,7 @@ export default function WeekTask({ onClose }) {
             tone="green"
             className="wt-mini-line-chart"
           />
+          <span className="wt-chart-badge">{chartState.average}</span>
         </div>
 
         <section className="wt-section">
