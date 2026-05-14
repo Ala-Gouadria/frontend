@@ -80,8 +80,8 @@
   pointer-events: none;
   opacity: 0.52;
   filter: grayscale(1) brightness(0.64) contrast(0.9);
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  transform: translateZ(0); /* ← forces GPU layer, sharpens rendering */
+  will-change: transform;
 }
 
 .mnav-icon--on {

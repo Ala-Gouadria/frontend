@@ -19,6 +19,9 @@ import Notifications from '../pages/notifications/Notifications'
 import Assets from '../pages/assets/Assets'
 import ActivityLog from '../pages/activityLog/activityLog'
 import AnalyticsCardsPreview from '../pages/analyticsCardsPreview/AnalyticsCardsPreview'
+import NoraChatPage from '../pages/chat/NoraChatPage'
+
+/* global __APP_SESSION__ */
 
 const STORAGE_KEYS = {
   authenticated: 'nora:isAuthenticated',
@@ -35,19 +38,32 @@ function isAnalyticsCardsPreviewRequest() {
   return params.get('preview') === 'analytics-cards' || window.location.hash === '#analytics-cards'
 }
 
-function readStoredFlag(key) {
-  if (typeof window === 'undefined') {
-    return false
+// Clear storage if the Vite server was restarted
+if (typeof window !== 'undefined') {
+  try {
+    if (typeof __APP_SESSION__ !== 'undefined') {
+      const currentSession = String(__APP_SESSION__)
+      const storedSession = window.localStorage.getItem('nora:appSession')
+      
+      if (storedSession !== currentSession) {
+        window.localStorage.removeItem(STORAGE_KEYS.authenticated)
+        window.localStorage.removeItem(STORAGE_KEYS.setupComplete)
+        window.localStorage.removeItem(STORAGE_KEYS.view)
+        window.localStorage.setItem('nora:appSession', currentSession)
+      }
+    }
+  } catch {
+    // Ignore errors
   }
+}
 
+function readStoredFlag(key) {
+  if (typeof window === 'undefined') return false
   return window.localStorage.getItem(key) === 'true'
 }
 
 function readStoredView() {
-  if (typeof window === 'undefined') {
-    return null
-  }
-
+  if (typeof window === 'undefined') return null
   return window.localStorage.getItem(STORAGE_KEYS.view)
 }
 
@@ -159,6 +175,11 @@ export default function App() {
     }
 
     if (id === 'chat') {
+      navigateTo('chat')
+      return
+    }
+
+    if (id === 'activityLog') {
       navigateTo('activity-log')
       return
     }
@@ -188,7 +209,7 @@ export default function App() {
 
   if (!isAuthenticated) {
     if (authView === 'signup') {
-      return <Signup onSuccess={enterApp} onLogin={() => setAuthView('login')} />
+      return <Signup onSuccess={() => setAuthView('login')} onLogin={() => setAuthView('login')} />
     }
 
     if (authView === 'reset-password') {
@@ -226,6 +247,10 @@ export default function App() {
 
   if (view === 'activity-log') {
     return <ActivityLog onNavigate={handleNavigation} />
+  }
+
+  if (view === 'chat') {
+    return <NoraChatPage onNavigate={handleNavigation} />
   }
 
   if (view === 'integrate') {

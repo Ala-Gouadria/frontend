@@ -1,4 +1,4 @@
-import { userBehaviorCardData } from '../../../features/Website & Traffic/data/websiteTrafficMockData'
+import { userBehaviorCardData } from '../../../api/websiteTrafficMockData'
 import {
   CardFooter,
   CardHeader,

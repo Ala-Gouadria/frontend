@@ -28,37 +28,37 @@ import {
   performanceSummaryCardData,
   portfolioAnalyticsCardData,
   salesReportCardData,
-} from '../../features/Analytics/data/analyticsMockData'
+} from '../../api/analyticsMockData'
 import {
   leadGenerationCardData,
   leadScoringCardData,
   pipelineTrackingCardData,
   revenueFeedbackCardData,
   salesAndLeadsCardData,
-} from '../../features/Sales and Leads/data/salesAndLeadsMockData'
+} from '../../api/salesAndLeadsMockData'
 import {
   performanceTrackingCardData,
   socialMediaManagerCardData,
   socialMediaStrategyCardData,
-} from '../../features/Social Media Stuffs/data/socialMediaStuffsMockData'
+} from '../../api/socialMediaStuffsMockData'
 import {
   growthStrategyCardData,
   riskDetectionCardData,
   strategyIntelligenceCardData,
-} from '../../features/Strategy & Intelligence/data/strategyIntelligenceMockData'
+} from '../../api/strategyIntelligenceMockData'
 import {
   pagePerformanceCardData,
   trafficQualityCardData,
   userBehaviorCardData,
   websiteTrafficCardData,
   websiteTrafficStatusCardData,
-} from '../../features/Website & Traffic/data/websiteTrafficMockData'
+} from '../../api/websiteTrafficMockData'
 import {
   automationExecutionCardData,
   systemMonitoringCardData,
   taskExecutionCardData,
   workflowAutomationCardData,
-} from '../../features/Automation & Execution/data/automationExecutionMockData'
+} from '../../api/automationExecutionMockData'
 import './ReportsPage.css'
 
 const CATEGORY_FILTERS = ['All', 'Social Media', 'Analytics', 'Strategy', 'Sales', 'Website', 'Automation']

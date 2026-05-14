@@ -4,7 +4,7 @@ import {
   AutomationArcGauge,
   SegmentedStripedBar,
 } from '../../visuals-parts'
-import { automationExecutionCardData } from '../../../features/Automation & Execution/data/automationExecutionMockData.js'
+import { automationExecutionCardData } from '../../../api/automationExecutionMockData.js'
 import './Automation & ExecutionCardShared.css'
 import './AutomationExecutionCard.css'
 

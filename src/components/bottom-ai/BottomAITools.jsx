@@ -3,15 +3,22 @@ import './BottomAITools.css'
 import { useState } from 'react'
 import { useControls, useTransformEffect } from 'react-zoom-pan-pinch'
 
-import cursorIcon from '../../assets/icons/Nora-AI-Icon/cursor-icon.png'
-import handIcon from '../../assets/icons/Nora-AI-Icon/four-finger-icon.png'
-import stopIcon from '../../assets/icons/Nora-AI-Icon/Stop-icon.png'
+import cursorIcon from '../../assets/icons/Nora-AI-Icon/cursor-icon.svg'
+import eyeIcon from '../../assets/icons/Nora-AI-Icon/eye-icon.svg'
+import handIcon from '../../assets/icons/Nora-AI-Icon/four-finger-icon.svg'
+import stopIcon from '../../assets/icons/Nora-AI-Icon/Stop-icon.svg'
 import noraLogo from '../../assets/logo/Ask-Nora-Logo.png'
 
 function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
+  const [isTaskRunning, setIsTaskRunning] = useState(false)
+
   return (
     <>
-      <button type="button" className="bottom-ai-tools__pill bottom-ai-tools__pill--ask" onClick={() => onAskNora?.('ask-nora')}>
+      <button
+        type="button"
+        className="bottom-ai-tools__pill bottom-ai-tools__pill--ask"
+        onClick={() => onAskNora?.('ask-nora')}
+      >
         <img src={noraLogo} alt="" aria-hidden="true" className="bottom-ai-tools__logo-icon" />
         <span className="bottom-ai-tools__label">Ask Nora about your business</span>
       </button>
@@ -20,9 +27,12 @@ function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
         <button
           type="button"
           className="bottom-ai-tools__pill bottom-ai-tools__pill--task"
-          onClick={onTaskOpen}
+          onClick={() => {
+            setIsTaskRunning(r => !r)
+            onTaskOpen?.()
+          }}
         >
-          <span className="bottom-ai-tools__task-ring" />
+          <span className={`bottom-ai-tools__task-ring ${isTaskRunning ? 'bottom-ai-tools__task-ring--spinning' : ''}`} />
           <span className="bottom-ai-tools__label">Task Overview</span>
         </button>
 
@@ -56,6 +66,7 @@ export default function BottomAITools({ scale, initialScale, mode = 'hand', onMo
   const { zoomIn, zoomOut, resetTransform } = useControls()
   const [zoomPercent, setZoomPercent] = useState(() => formatZoomPercent(scale ?? initialScale, initialScale))
   const [isZooming, setIsZooming] = useState(false)
+  const [viewOpen, setViewOpen] = useState(false)
 
   useTransformEffect((ref) => {
     const currentScale = ref?.state?.scale ?? initialScale
@@ -64,60 +75,72 @@ export default function BottomAITools({ scale, initialScale, mode = 'hand', onMo
 
   const handleZoom = (direction) => {
     setIsZooming(true)
-
     if (direction === 'in') {
       zoomIn(0.08, 180, 'easeOut')
     } else {
       zoomOut(0.08, 180, 'easeOut')
     }
-
     window.setTimeout(() => setIsZooming(false), 160)
   }
 
   return (
     <div className="bottom-ai-tools">
       <div className="bottom-ai-tools__row">
-        <div className="bottom-ai-tools__zoom-reset">
-          <button type="button" className="bottom-ai-tools__circle-btn--flat" onClick={() => handleZoom('in')} aria-label="Zoom in">
-            <span className="bottom-ai-tools__math-symbol">+</span>
-          </button>
-
-          <span
-            className={`bottom-ai-tools__zoom-value ${isZooming ? 'bottom-ai-tools__zoom-value--active' : ''}`}
-            aria-live="polite"
-          >
-            {zoomPercent}
-          </span>
-
-          <button type="button" className="bottom-ai-tools__circle-btn--flat" onClick={() => handleZoom('out')} aria-label="Zoom out">
-            <span className="bottom-ai-tools__math-symbol">-</span>
-          </button>
-
-          <button type="button" className="bottom-ai-tools__pill bottom-ai-tools__pill--reset" onClick={() => resetTransform()} aria-label="Reset view">
-            Reset View
-          </button>
-        </div>
-
-        <div className="bottom-ai-tools__group--bg">
+        <div className={`bottom-ai-tools__view-tools ${viewOpen ? 'bottom-ai-tools__view-tools--open' : ''}`}>
           <button
             type="button"
-            className={`bottom-ai-tools__circle-btn--mode ${mode === 'cursor' ? 'bottom-ai-tools__circle-btn--mode--selected bottom-ai-tools__circle-btn--mode--active' : ''}`}
-            onClick={() => onModeChange?.('cursor')}
-            aria-label="Cursor mode"
-            aria-pressed={mode === 'cursor'}
+            className="bottom-ai-tools__view-toggle"
+            onClick={() => setViewOpen((current) => !current)}
+            aria-label={viewOpen ? 'Hide view tools' : 'Show view tools'}
+            aria-expanded={viewOpen}
           >
-            <img src={cursorIcon} alt="" aria-hidden="true" className="bottom-ai-tools__icon" />
+            <img src={eyeIcon} alt="" aria-hidden="true" className="bottom-ai-tools__view-icon" />
           </button>
 
-          <button
-            type="button"
-            className={`bottom-ai-tools__circle-btn--mode ${mode === 'hand' ? 'bottom-ai-tools__circle-btn--mode--selected bottom-ai-tools__circle-btn--mode--active' : ''}`}
-            onClick={() => onModeChange?.('hand')}
-            aria-label="Hand mode"
-            aria-pressed={mode === 'hand'}
-          >
-            <img src={handIcon} alt="" aria-hidden="true" className="bottom-ai-tools__icon" />
-          </button>
+          <div className="bottom-ai-tools__view-panel">
+            <div className="bottom-ai-tools__zoom-reset">
+              <button type="button" className="bottom-ai-tools__circle-btn--flat" onClick={() => handleZoom('in')} aria-label="Zoom in">
+                <span className="bottom-ai-tools__math-symbol">+</span>
+              </button>
+
+              <span
+                className={`bottom-ai-tools__zoom-value ${isZooming ? 'bottom-ai-tools__zoom-value--active' : ''}`}
+                aria-live="polite"
+              >
+                {zoomPercent}
+              </span>
+
+              <button type="button" className="bottom-ai-tools__circle-btn--flat" onClick={() => handleZoom('out')} aria-label="Zoom out">
+                <span className="bottom-ai-tools__math-symbol">-</span>
+              </button>
+
+              <button type="button" className="bottom-ai-tools__pill bottom-ai-tools__pill--reset" onClick={() => resetTransform()} aria-label="Reset view">
+                Reset View
+              </button>
+            </div>
+
+            <div className="bottom-ai-tools__group--bg">
+              <button
+                type="button"
+                className={`bottom-ai-tools__circle-btn--mode ${mode === 'cursor' ? 'bottom-ai-tools__circle-btn--mode--selected bottom-ai-tools__circle-btn--mode--active' : ''}`}
+                onClick={() => onModeChange?.('cursor')}
+                aria-label="Cursor mode"
+                aria-pressed={mode === 'cursor'}
+              >
+                <img src={cursorIcon} alt="" aria-hidden="true" className="bottom-ai-tools__icon" />
+              </button>
+
+              <button
+                type="button"
+                className={`bottom-ai-tools__circle-btn--mode ${mode === 'hand' ? 'bottom-ai-tools__circle-btn--mode--selected bottom-ai-tools__circle-btn--mode--active' : ''}`}
+                onClick={() => onModeChange?.('hand')}
+                aria-label="Hand mode"
+                aria-pressed={mode === 'hand'}
+              >
+                <img src={handIcon} alt="" aria-hidden="true" className="bottom-ai-tools__icon" />
+              </button>
+            </div>
+          </div>
         </div>
 
         <BottomAIActionCluster onAskNora={onModeChange} onTaskOpen={onTaskOpen} />

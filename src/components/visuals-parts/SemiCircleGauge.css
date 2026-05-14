@@ -1,12 +1,11 @@
 .semi-circle-gauge {
-  --gauge-glow: rgba(187, 224, 65, 0.26);
-  --gauge-track: rgba(224, 241, 153, 0.58);
-  --gauge-progress: #88bd0b;
-  --gauge-tick: rgba(162, 203, 48, 0.45);
-  --gauge-cap-ring: #ffffff;
-  --gauge-cap: #a8c646;
-  --gauge-text: #1c1d20;
-  --gauge-text-muted: #9da0a6;
+  --gauge-glow:       rgba(168, 210, 40, 0.42);
+  --gauge-track:      rgba(218, 238, 144, 0.88);
+  --gauge-progress:   #78b000;
+  --gauge-cap-ring:   #ffffff;
+  --gauge-cap:        #8abe10;
+  --gauge-text:       #6aa800;
+  --gauge-text-muted: #6aa800;
 
   position: relative;
   display: grid;
@@ -18,21 +17,23 @@
 }
 
 .semi-circle-gauge--blue {
-  --gauge-glow: rgba(96, 165, 250, 0.3);
-  --gauge-track: rgba(147, 197, 253, 0.5);
-  --gauge-progress: #3b82f6;
-  --gauge-tick: rgba(29, 78, 216, 0.28);
-  --gauge-cap-ring: #ffffff;
-  --gauge-cap: #60a5fa;
+  --gauge-glow:       rgba(96, 165, 250, 0.40);
+  --gauge-track:      rgba(147, 197, 253, 0.80);
+  --gauge-progress:   #3b82f6;
+  --gauge-cap-ring:   #ffffff;
+  --gauge-cap:        #60a5fa;
+  --gauge-text:       #2563eb;
+  --gauge-text-muted: #2563eb;
 }
 
 .semi-circle-gauge--orange {
-  --gauge-glow: rgba(245, 158, 11, 0.3);
-  --gauge-track: rgba(253, 186, 116, 0.5);
-  --gauge-progress: #f97316;
-  --gauge-tick: rgba(194, 65, 12, 0.28);
-  --gauge-cap-ring: #ffffff;
-  --gauge-cap: #fb923c;
+  --gauge-glow:       rgba(245, 158, 11, 0.40);
+  --gauge-track:      rgba(253, 186, 116, 0.80);
+  --gauge-progress:   #f97316;
+  --gauge-cap-ring:   #ffffff;
+  --gauge-cap:        #fb923c;
+  --gauge-text:       #ea580c;
+  --gauge-text-muted: #ea580c;
 }
 
 .semi-circle-gauge__title {
@@ -51,47 +52,13 @@
   overflow: visible;
 }
 
-.semi-circle-gauge__glow,
-.semi-circle-gauge__track,
-.semi-circle-gauge__progress,
-.semi-circle-gauge__clip-path {
-  fill: none;
-  stroke-linecap: round;
-}
-
-.semi-circle-gauge__glow {
-  stroke: var(--gauge-glow);
-  stroke-width: 76;
-  filter: blur(18px);
-  opacity: 0.86;
-}
-
-.semi-circle-gauge__track {
-  stroke: var(--gauge-track);
-  stroke-width: 58;
-}
-
 .semi-circle-gauge__progress {
-  stroke: var(--gauge-progress);
-  stroke-width: 39;
   animation: semiGaugeIn 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.semi-circle-gauge__clip-path {
-  stroke: #fff;
-  stroke-width: 40;
-}
-
-.semi-circle-gauge__tick {
-  stroke: var(--gauge-tick);
-  stroke-width: 4;
-  stroke-linecap: butt;
-  opacity: 1;
 }
 
 .semi-circle-gauge__cap-ring {
   fill: var(--gauge-cap-ring);
-  filter: drop-shadow(0 4px 10px rgba(45, 55, 72, 0.12));
+  filter: drop-shadow(0 3px 6px rgba(45, 55, 72, 0.18));
   animation: semiGaugeCap 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-box: fill-box;
   transform-origin: center;
@@ -105,38 +72,30 @@
 }
 
 .semi-circle-gauge__value {
-  font-size: 29px;
-  font-weight: 800;
+  font-size: 26px;
+  font-weight: 600;
   fill: var(--gauge-text);
-  letter-spacing: -0.15px;
+  letter-spacing: 0.1px;
   dominant-baseline: middle;
   pointer-events: none;
 }
 
 .semi-circle-gauge__current {
   fill: var(--gauge-text);
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .semi-circle-gauge__target {
   fill: var(--gauge-text-muted);
-  font-size: 27px;
+  font-size: 24px;
   font-weight: 500;
 }
 
 @keyframes semiGaugeIn {
-  from {
-    stroke-dasharray: 0 100;
-  }
+  from { stroke-dasharray: 0 100; }
 }
 
 @keyframes semiGaugeCap {
-  from {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
 }

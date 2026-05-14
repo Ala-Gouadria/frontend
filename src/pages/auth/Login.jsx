@@ -3,6 +3,7 @@ import './Login.css'
 import noraLoginLogo from '../../assets/logo/Nora-Login-Logo.png'
 import loginBackground from '../../assets/background/Login-background.jpg'
 import * as authApi from '../../api/auth.js'
+import PillButton from '../../components/pages-parts/PillButton'
 
 function PasswordInput({ value, onChange, placeholder = 'Enter your password' }) {
   const [visible, setVisible] = useState(false)
@@ -140,10 +141,10 @@ export default function Login({ onSuccess, onSignup, onResetPassword }) {
 
         {error ? <p className="auth-error">{error}</p> : null}
 
-        <button type="submit" className="auth-submit-btn" disabled={loading}>
-          <span>{loading ? 'Signing in…' : 'Sign in'}</span>
-          <i aria-hidden="true" />
-        </button>
+        <PillButton type="submit" width="100%" height="48px" variant="primary" disabled={loading}>
+          {loading ? 'SIGNING IN…' : 'SIGN IN'}
+        </PillButton>
+
 
         <p className="auth-footer-copy">
           Don't have an account? <button type="button" onClick={onSignup}>Sign Up</button>

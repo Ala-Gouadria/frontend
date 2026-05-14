@@ -4,7 +4,7 @@ import {
   MiniLineChart,
   StripedBars,
 } from '../../visuals-parts'
-import { conversionFunnelCardData } from '../../../features/Analytics/data/analyticsMockData'
+import { conversionFunnelCardData } from '../../../api/analyticsMockData'
 import './ConversionFunnelCard.css'
 
 function percentNumber(value) {
@@ -62,11 +62,13 @@ export function ConversionFunnelCard({ data = conversionFunnelCardData }) {
       <section>
         <span className="analytics-card__label">{data.totalConversionLabel}</span>
         <strong className="analytics-card__value analytics-card__value--good">{data.totalConversionValue}</strong>
-        <MiniLineChart
-          points={data.bottomChart.points}
-          fillPoints={data.bottomChart.fillPoints}
-          className="conversion-funnel-card__bottom-chart"
-        />
+        <div className="conversion-funnel-card__bottom-chart-wrap">
+          <MiniLineChart
+            points={data.bottomChart.points}
+            fillPoints={data.bottomChart.fillPoints}
+            className="conversion-funnel-card__bottom-chart"
+          />
+        </div>
       </section>
 
       <footer className="analytics-card__footer">

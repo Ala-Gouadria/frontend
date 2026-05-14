@@ -1,5 +1,5 @@
 import { WebsiteArcGauge } from '../../visuals-parts'
-import { pagePerformanceCardData } from '../../../features/Website & Traffic/data/websiteTrafficMockData'
+import { pagePerformanceCardData } from '../../../api/websiteTrafficMockData'
 import {
   CardFooter,
   CardHeader,

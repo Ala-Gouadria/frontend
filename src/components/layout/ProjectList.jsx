@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './ProjectList.css'
-import xWorldLogo from '../../assets/logo/Nora_Componennts_Logo.png'
+import xWorldLogo from '../../assets/logo/Xword-Logo.png'
+import zynovaLogo from '../../assets/logo/Zynova-Logo.png'
 
 const PROJECTS = [
   {
@@ -31,16 +32,7 @@ function ProjectAvatar({ variant, className = '' }) {
 
   return (
     <div className={`project-brand project-brand--zynova ${className}`}>
-      <svg viewBox="0 0 100 100" aria-hidden="true" className="project-brand__svg">
-        <defs>
-          <linearGradient id="zynova-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#177cff" />
-            <stop offset="100%" stopColor="#0f4ce0" />
-          </linearGradient>
-        </defs>
-        <circle cx="50" cy="50" r="50" fill="url(#zynova-bg)" />
-        <path d="M33 30H66L43 56H61L34 72H56" fill="none" stroke="white" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+      <img src={zynovaLogo} alt="Zynova" className="project-brand__img" />
     </div>
   )
 }
@@ -124,6 +116,11 @@ export default function ProjectList({ onNavigate }) {
     onNavigate?.('memory')
   }
 
+  const openActivityLog = () => {
+    handleClose()
+    onNavigate?.('activityLog')
+  }
+
   const openPricing = () => {
     handleClose()
     onNavigate?.('pricing')
@@ -133,6 +130,17 @@ export default function ProjectList({ onNavigate }) {
     handleClose()
     onNavigate?.('notifications')
   }
+
+  const handleLogout = () => {
+    handleClose()
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem('nora:isAuthenticated')
+      window.localStorage.removeItem('nora:setupComplete')
+      window.localStorage.removeItem('nora:view')
+      window.location.reload()
+    }
+  }
+
 
   return (
     <div className="project-list" ref={wrapperRef}>
@@ -195,9 +203,10 @@ export default function ProjectList({ onNavigate }) {
             <div className="project-dropdown__links">
               <button type="button" className="project-dropdown__link" onClick={openEvents}>Events</button>
               <button type="button" className="project-dropdown__link" onClick={openMemory}>Memory</button>
+              <button type="button" className="project-dropdown__link" onClick={openActivityLog}>Activity Log</button>
               <button type="button" className="project-dropdown__link" onClick={openSettings}>Settings</button>
               <button type="button" className="project-dropdown__link" onClick={openPricing}>Upgrade Your Plan</button>
-              <button type="button" className="project-dropdown__link project-dropdown__link--danger" onClick={handleClose}>Log Out</button>
+              <button type="button" className="project-dropdown__link project-dropdown__link--danger" onClick={handleLogout}>Log Out</button>
             </div>
           </div>
         </div>

@@ -1,0 +1,55 @@
+.platform-engagement-card {
+  min-width: 0;
+  height: 72px;
+  padding: 6px 7px 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 2px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.platform-engagement-card--blue {
+  background:
+    linear-gradient(180deg, rgba(236, 249, 255, 0.86), rgba(224, 244, 255, 0.74));
+  --platform-engagement-color: #007ce3;
+}
+
+.platform-engagement-card--pink {
+  background:
+    linear-gradient(180deg, rgba(255, 238, 246, 0.9), rgba(255, 229, 241, 0.78));
+  --platform-engagement-color: #e44177;
+}
+
+.platform-engagement-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 20px;
+}
+
+.platform-engagement-card__icon {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.platform-engagement-card__delta {
+  color: var(--platform-engagement-color);
+  font-size: 0.72rem;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.platform-engagement-card__chart {
+  width: calc(100% + 14px);
+  min-height: 42px;
+  height: 42px;
+  margin: -1px -7px 0;
+}
+
+.platform-engagement-card__chart .mini-line-chart__line {
+  stroke-width: 3.5;
+}

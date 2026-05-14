@@ -1,0 +1,73 @@
+.social-platform-badge {
+  min-width: 79px;
+  height: 32px;
+  padding: 0 12px 0 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-radius: 8px;
+  box-shadow: 0 8px 14px rgba(24, 24, 27, 0.08);
+}
+
+.social-platform-badge--blue {
+  background: linear-gradient(180deg, #dcf4ff 0%, #cde9ff 100%);
+}
+
+.social-platform-badge--pink {
+  background: linear-gradient(180deg, #ffc5e0 0%, #f5a8cf 100%);
+}
+
+.social-platform-badge__icon {
+  width: 19px;
+  height: 19px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.social-platform-badge__check {
+  position: relative;
+  width: 16px;
+  height: 14px;
+  flex: 0 0 auto;
+}
+
+.social-platform-badge__check::before,
+.social-platform-badge__check::after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  border-radius: 999px;
+  background: #13233d;
+  transform-origin: left center;
+}
+
+.social-platform-badge__check::before {
+  left: 1px;
+  top: 8px;
+  width: 7px;
+  transform: rotate(38deg);
+}
+
+.social-platform-badge__check::after {
+  left: 6px;
+  top: 10px;
+  width: 11px;
+  transform: rotate(-45deg);
+}
+
+.social-platform-badge__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px dotted rgba(24, 24, 27, 0.45);
+  border-top-color: rgba(24, 24, 27, 0.95);
+  border-radius: 50%;
+  flex: 0 0 auto;
+  animation: socialPlatformSpin 0.9s linear infinite;
+}
+
+@keyframes socialPlatformSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}

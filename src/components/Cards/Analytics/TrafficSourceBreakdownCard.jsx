@@ -4,7 +4,7 @@ import {
   MiniLineChart,
   StripedBars,
 } from '../../visuals-parts'
-import { trafficSourceBreakdownCardData } from '../../../features/Analytics/data/analyticsMockData'
+import { trafficSourceBreakdownCardData } from '../../../api/analyticsMockData'
 import './TrafficSourceBreakdownCard.css'
 
 function percentNumber(value) {

@@ -27,11 +27,12 @@ export default function PillButton({
   className = '',
   style = {},
   variant,
+  type = 'button',
 }) {
   const isCompact =
     compact !== undefined
       ? compact
-      : typeof width === 'string' && parseInt(width, 10) < 300
+      : typeof width === 'string' && width.endsWith('px') && parseInt(width, 10) < 300
   const resolvedVariant = inferVariant(children, variant)
 
   return (
@@ -43,7 +44,7 @@ export default function PillButton({
         className={`pill-btn pill-btn--${resolvedVariant}${isCompact ? ' pill-btn--compact' : ''}`}
         onClick={onClick}
         disabled={disabled}
-        type="button"
+        type={type}
       >
         {children ? <span className="pill-btn__label">{children}</span> : null}
         <span className="pill-btn__dots" aria-hidden="true">

@@ -4,7 +4,7 @@ import {
   MiniLineChart,
   QualityBlocks,
 } from '../../visuals-parts'
-import { salesReportCardData } from '../../../features/Analytics/data/analyticsMockData'
+import { salesReportCardData } from '../../../api/analyticsMockData'
 import './SalesReportCard.css'
 
 function toneFromValue(value) {

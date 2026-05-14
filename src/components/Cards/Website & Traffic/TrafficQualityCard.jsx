@@ -1,5 +1,5 @@
 import { DottedDataBars, MiniLineChart, WebsiteArcGauge } from '../../visuals-parts'
-import { trafficQualityCardData } from '../../../features/Website & Traffic/data/websiteTrafficMockData'
+import { trafficQualityCardData } from '../../../api/websiteTrafficMockData'
 import {
   CardFooter,
   CardHeader,

@@ -10,6 +10,7 @@
 
   position: relative;
   display: inline-block;
+  width: var(--pill-width, 520px);
   isolation: isolate;
 }
 
@@ -101,7 +102,7 @@
 .pill-btn--primary {
   background:
     radial-gradient(circle at 13% 22%, rgba(255, 255, 255, 0.18), transparent 34%),
-    linear-gradient(90deg, #4f86f7 0%, #6b9fff 45%, #d4b0e4 78%, #ecc8e0 100%);
+    linear-gradient(90deg, #3b82f6 0%, #6baeff 100%);
 }
 
 .pill-wrap--primary::before {

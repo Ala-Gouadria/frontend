@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { weekTaskApi } from '../../api/weekTaskApi'
-import { TaskAcceptanceBars, TaskHistoryLineChart } from '../visuals-parts'
+import { MiniLineChart, QualityBlocks } from '../visuals-parts'
 import PillButton from '../pages-parts/PillButton'
 import './Weektask.css'
 
@@ -16,10 +16,42 @@ function filterCreated(tasks, filterValue) {
   return tasks
 }
 
-function getReferenceChartData(points = []) {
-  if (points.length < 2) return points
+// FIX 1 & 2: Convert numeric data array to SVG points string with reduced height for more compact chart
+function dataToPoints(data = []) {
+  if (!data || data.length < 2) return ''
+  const width = 172
+  const height = 44  // reduced from 50 for shorter/compact chart
+  const min = Math.min(...data)
+  const max = Math.max(...data)
+  const step = width / (data.length - 1)
 
-  return [22, 14, 16, 18, 44, 25, 23, 26, 18, 22, 21, 24, 22, 28, 16, 32, 36, 42, 46, 18]
+  return data
+    .map((value, index) => {
+      const x = index * step
+      const y = max === min
+        ? height / 2
+        : height - ((value - min) / (max - min)) * height
+      return `${x.toFixed(1)},${y.toFixed(1)}`
+    })
+    .join(' ')
+}
+
+function dataToFillPoints(data = []) {
+  if (!data || data.length < 2) return ''
+  const points = dataToPoints(data)
+  const width = 172
+  return `0,58 ${points} ${width},58`
+}
+
+// Convert cells array from API to QualityBlocks groups format
+function cellsToBlocks(cells = []) {
+  const groups = {}
+  cells.forEach((cell) => {
+    const tone = cell.tone ?? 'green'
+    if (!groups[tone]) groups[tone] = 0
+    groups[tone]++
+  })
+  return Object.entries(groups).map(([tone, count]) => ({ tone, count }))
 }
 
 function PendingCircle() {
@@ -111,9 +143,19 @@ export default function WeekTask({ onClose }) {
     [allCreated, createdFilter],
   )
 
-  const chartData = useMemo(
-    () => getReferenceChartData(chartState.points),
+  const chartPoints = useMemo(
+    () => dataToPoints(chartState.points),
     [chartState.points],
+  )
+
+  const chartFillPoints = useMemo(
+    () => dataToFillPoints(chartState.points),
+    [chartState.points],
+  )
+
+  const qualityBlocks = useMemo(
+    () => cellsToBlocks(createdSummary.cells),
+    [createdSummary.cells],
   )
 
   const progressDash = `${(stats.completionRate || 0) * 1.005} 100.5`
@@ -196,7 +238,13 @@ export default function WeekTask({ onClose }) {
         </div>
 
         <div className="wt-chart-card">
-          <TaskHistoryLineChart data={chartData} tone="green" />
+          <MiniLineChart
+            points={chartPoints}
+            fillPoints={chartFillPoints}
+            tone="green"
+            className="wt-mini-line-chart"
+          />
+          <span className="wt-chart-badge">{chartState.average}</span>
         </div>
 
         <section className="wt-section">
@@ -277,7 +325,10 @@ export default function WeekTask({ onClose }) {
             </span>
           </div>
 
-          <TaskAcceptanceBars cells={createdSummary.cells} className="wt-quality-blocks" />
+          <QualityBlocks
+            blocks={qualityBlocks}
+            className="wt-quality-blocks"
+          />
 
           <div className="wt-task-list wt-task-list--created">
             {visibleCreated.map((task, index) => (

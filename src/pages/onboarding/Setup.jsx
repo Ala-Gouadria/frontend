@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './Setup.css'
-
-import { onboardingFlowApi } from '../../api/onboardingFlowApi'
+import { setupApi } from '../../api/setupApi'
 import NoraLogo from '../../assets/logo/Nora-logo.png'
 import ProfileIcon from '../../assets/icons/Set-up-Nav/Profilesetup.png'
 import BusinessIcon from '../../assets/icons/Set-up-Nav/Businesssetup.png'
@@ -11,7 +10,7 @@ import ChannelsIcon from '../../assets/icons/Set-up-Nav/Channels&Integration.png
 import ContentIcon from '../../assets/icons/Set-up-Nav/Contentdirection.png'
 import GoalIcon from '../../assets/icons/Set-up-Nav/BusinessGoal.png'
 import OptimIcon from '../../assets/icons/Set-up-Nav/OptimizationInputs.png'
-
+import PillButton from '../../components/pages-parts/PillButton'
 const STEP_ICONS = {
   profile: ProfileIcon,
   business: BusinessIcon,
@@ -212,7 +211,7 @@ export default function Setup({ onComplete }) {
     let active = true
 
     ;(async () => {
-      const response = await onboardingFlowApi.getFlow()
+      const response = await setupApi.getFlow()
       if (!active) {
         return
       }
@@ -253,7 +252,7 @@ export default function Setup({ onComplete }) {
     setSaving(true)
 
     try {
-      const response = await onboardingFlowApi.saveStep({
+      const response = await setupApi.saveStep({
         steps,
         values: nextValues,
         stepId,
@@ -300,7 +299,7 @@ export default function Setup({ onComplete }) {
     setSaving(true)
 
     try {
-      const uploaded = await onboardingFlowApi.uploadFieldFiles(fieldId, files)
+      const uploaded = await setupApi.uploadFieldFiles(fieldId, files)
       setValues((current) => ({
         ...current,
         [currentStep.id]: {
@@ -366,7 +365,7 @@ export default function Setup({ onComplete }) {
     if (isLastStep) {
       setSaving(true)
       try {
-        const response = await onboardingFlowApi.completeFlow({ steps, values: nextValues })
+        const response = await setupApi.completeFlow({ steps, values: nextValues })
         setStepProgress(response.stepProgress)
         setOverallProgress(response.overallProgress)
         setStatusMessage(response.summary)
@@ -503,12 +502,14 @@ export default function Setup({ onComplete }) {
                 <button type="button" className="ob-btn-skip" onClick={() => { void handleSkip() }} disabled={isLastStep || saving}>
                   Skip for now
                 </button>
-                <button type="button" className="ob-btn-next" onClick={() => { void handleNext() }} disabled={saving}>
-                  <span className="ob-btn-label">{saving ? 'SAVING' : isLastStep ? 'FINISH' : 'NEXT'}</span>
-                  <span className="ob-grid-dots">
-                    {[...Array(6)].map((_, index) => <span key={index} />)}
-                  </span>
-                </button>
+                <PillButton
+                  onClick={() => { void handleNext() }}
+                  disabled={saving}
+                  width="136px"
+                  height="36px"
+                >
+                  {saving ? 'SAVING...' : isLastStep ? 'FINISH' : 'NEXT'}
+                </PillButton>
               </div>
             </div>
           </div>

@@ -3,7 +3,7 @@ import {
   AiInsight,
   SegmentedStripedBar,
 } from '../../visuals-parts'
-import { taskExecutionCardData } from '../../../features/Automation & Execution/data/automationExecutionMockData.js'
+import { taskExecutionCardData } from '../../../api/automationExecutionMockData.js'
 import './Automation & ExecutionCardShared.css'
 import './TaskExecutionCard.css'
 

@@ -2,13 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import './NoraWorkspace.css'
 import NoraAvatar from './NoraChatAvatar'
 import noraComponentLogo from '../../assets/logo/Nora_Componennts_Logo.png'
-import imageIcon from '../../assets/icons/Nora-AI-Icon/image-add-icon.png'
-import attachmentIcon from '../../assets/icons/Nora-AI-Icon/attachment-icon.png'
-import uploadFileIcon from '../../assets/icons/Nora-AI-Icon/upload-file-icon.png'
-import micIcon from '../../assets/icons/Nora-AI-Icon/mic-icon.png'
-import sentIcon from '../../assets/icons/Nora-AI-Icon/sent-icon.png'
+import imageIcon from '../../assets/icons/Nora-AI-Icon/image-add-icon.svg'
+import attachmentIcon from '../../assets/icons/Nora-AI-Icon/attachment-icon.svg'
+import micIcon from '../../assets/icons/Nora-AI-Icon/mic-icon.svg'
+import sentIcon from '../../assets/icons/Nora-AI-Icon/sent-icon.svg'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
-
+import ProjectList from '../layout/ProjectList'
 const WELCOME_HEADLINE = 'An AI system that manages, automates, and grows your business.'
 const WELCOME_TEXT = 'Welcome back. I can help you grow, automate, and organize your business.'
 
@@ -225,20 +224,6 @@ function CloseIcon({ expanded = false }) {
   )
 }
 
-function CompanyPill() {
-  return (
-    <button type="button" className="nora-company-pill" aria-label="Current company">
-      <span className="nora-company-pill__mark">
-        <span />
-      </span>
-      <span className="nora-company-pill__name">xWorldLTD</span>
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <path d="m5.8 8.2 4.2 4.2 4.2-4.2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </button>
-  )
-}
-
 function Composer({
   draft,
   onDraftChange,
@@ -367,7 +352,7 @@ function Composer({
   )
 }
 
-export default function NoraWorkspace({ open, onClose, pairedWithTask = false }) {
+export default function NoraWorkspace({ open, onClose, onNavigate, pairedWithTask = false, fullMode = false }) {
   const [services, setServices] = useState([])
   const [conversationList, setConversationList] = useState([])
   const [activeConversationId, setActiveConversationId] = useState(null)
@@ -457,7 +442,7 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false })
         setServices(nextServices)
         setConversationList(nextConversations)
 
-        if (pairedWithTask && nextConversations.length > 0) {
+        if ((pairedWithTask || fullMode) && nextConversations.length > 0) {
           const conversation = await noraWorkspaceApi.getConversation(nextConversations[0].id)
           if (!active) {
             return
@@ -487,7 +472,7 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false })
     return () => {
       active = false
     }
-  }, [open, pairedWithTask])
+  }, [open, pairedWithTask, fullMode])
 
   useEffect(() => {
     if (!open) {
@@ -686,7 +671,7 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false })
 
   return (
     <div
-      className={`nora-panel ${pairedWithTask ? 'nora-panel--paired' : 'nora-panel--single'} ${showConversation ? 'nora-panel--conversation' : 'nora-panel--welcome'}`}
+      className={`nora-panel ${pairedWithTask ? 'nora-panel--paired' : 'nora-panel--single'} ${fullMode ? 'nora-panel--full' : ''} ${showConversation ? 'nora-panel--conversation' : 'nora-panel--welcome'}`}
     >
       <HistorySidebar
         conversations={conversationList}
@@ -704,16 +689,25 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false })
         <div className="nora-glow-top-right" />
         <div className="nora-glow-bottom-left" />
 
-        {showConversation && !pairedWithTask ? <CompanyPill /> : null}
-
-        <button
-          onClick={onClose}
-          className={`nora-close-btn ${showConversation ? 'nora-close-btn--expand' : ''}`}
-          type="button"
-          aria-label="Close Nora workspace"
-        >
-          <CloseIcon expanded={showConversation} />
-        </button>
+        {showConversation && !pairedWithTask && !fullMode ? (
+  <div className="nora-project-list-wrapper">
+    <ProjectList onNavigate={onClose} />
+  </div>
+) : null}
+        {fullMode ? (
+          <div className="nora-full-project-list">
+            <ProjectList onNavigate={onNavigate} />
+          </div>
+        ) : (
+          <button
+            onClick={onClose}
+            className={`nora-close-btn ${showConversation ? 'nora-close-btn--expand' : ''}`}
+            type="button"
+            aria-label="Close Nora workspace"
+          >
+            <CloseIcon expanded={showConversation} />
+          </button>
+        )}
 
         <header className="nora-header">
           <div className="nora-header-title">

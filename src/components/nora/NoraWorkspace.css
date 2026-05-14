@@ -9,10 +9,35 @@
     transform: translateX(34px) scale(0.988);
     filter: blur(8px);
   }
-
   to {
     opacity: 1;
     transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes noraSideHistoryIn {
+  from {
+    opacity: 0;
+    transform: translateX(76px);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes noraSideMainIn {
+  from {
+    opacity: 0;
+    transform: translateX(102px);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
     filter: blur(0);
   }
 }
@@ -22,7 +47,6 @@
     opacity: 0;
     transform: translateY(12px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -47,6 +71,7 @@
 }
 
 .nora-panel--single.nora-panel--welcome,
+.nora-panel--single.nora-panel--conversation,
 .nora-panel--paired {
   width: 948px;
 }
@@ -56,10 +81,35 @@
 }
 
 .nora-panel--single.nora-panel--conversation {
-  width: calc(100vw - 132px);
   right: 24px;
 }
 
+.nora-panel--single:not(.nora-panel--full) {
+  gap: 20px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
+  pointer-events: none;
+}
+
+.nora-panel--full {
+  top: 20px;
+  right: 20px;
+  bottom: 20px;
+  width: calc(100vw - 126px) !important;
+  border-radius: 23px;
+  border-color: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 26px 70px rgba(17, 31, 58, 0.13),
+    0 10px 26px rgba(17, 31, 58, 0.08);
+  animation: none;
+}
+
+/* ── SIDEBAR ── */
 .nora-history-sidebar {
   position: relative;
   z-index: 2;
@@ -69,10 +119,8 @@
   display: flex;
   flex-direction: column;
   padding: 35px 31px 34px 39px;
-  border-right: 1px solid rgba(221, 229, 241, 0.96);
-  background:
-    radial-gradient(circle at 58% 86%, rgba(178, 212, 255, 0.68), transparent 35%),
-    linear-gradient(180deg, #ffffff 0%, #ffffff 58%, #d9ecff 100%);
+  border-right: 1px solid rgba(221, 229, 241, 0.4);
+  background: transparent;
 }
 
 .nora-sidebar-glow,
@@ -81,13 +129,38 @@
   display: none;
 }
 
+.nora-panel--single:not(.nora-panel--full) .nora-history-sidebar {
+  flex-basis: 278px;
+  border: 3px solid #ffffff;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 6% 88%, rgba(86, 158, 255, 0.34), transparent 43%),
+    linear-gradient(115deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.82) 58%, rgba(244, 250, 255, 0.72) 100%);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow:
+    0 34px 76px rgba(17, 31, 58, 0.2),
+    0 12px 30px rgba(35, 104, 196, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+  animation: noraSideHistoryIn 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  pointer-events: auto;
+}
+
+.nora-panel--full .nora-history-sidebar {
+  border-right: 1px solid rgba(226, 232, 242, 0.28);
+  background:
+    radial-gradient(circle at 0% 88%, rgba(82, 157, 255, 0.56), transparent 40%),
+    linear-gradient(108deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.94) 58%, rgba(245, 251, 255, 0.84) 100%);
+  backdrop-filter: blur(18px) saturate(1.12);
+  -webkit-backdrop-filter: blur(18px) saturate(1.12);
+}
+
 .nora-sidebar-title {
   margin: 0 0 82px;
   color: #111111;
   font-size: 16px;
   line-height: 1;
   font-weight: 700;
-  letter-spacing: 0;
 }
 
 .nora-new-chat-btn {
@@ -139,8 +212,6 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 1;
-  letter-spacing: 0;
-  text-transform: none;
 }
 
 .nora-history-list {
@@ -175,7 +246,7 @@
 
 .nora-history-item:hover,
 .nora-history-item.active {
-  background: #eeeeef;
+  background: rgba(255, 255, 255, 0.52);
 }
 
 .nora-history-item__content {
@@ -211,6 +282,7 @@
   cursor: pointer;
 }
 
+/* ── MAIN CONTENT ── */
 .nora-main-content {
   position: relative;
   flex: 1 1 auto;
@@ -222,6 +294,58 @@
     radial-gradient(circle at 90% 0%, rgba(65, 143, 255, 0.58), transparent 35%),
     radial-gradient(circle at 4% 76%, rgba(118, 185, 255, 0.46), transparent 38%),
     linear-gradient(112deg, #ffffff 0%, #fbfdff 42%, #dceeff 100%);
+}
+
+.nora-panel--full .nora-main-content {
+  background:
+    radial-gradient(circle at 90% 1%, rgba(63, 145, 255, 0.66), transparent 38%),
+    radial-gradient(circle at 4% 80%, rgba(88, 168, 255, 0.54), transparent 42%),
+    radial-gradient(circle at 72% 96%, rgba(245, 194, 228, 0.34), transparent 32%),
+    linear-gradient(112deg, #ffffff 0%, #fbfdff 39%, #d9edff 100%);
+}
+
+.nora-panel--full .nora-bg-dot-grid {
+  opacity: 0.96;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.88) 0.85px, transparent 1.25px);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.26) 13%, rgba(0, 0, 0, 0.96) 100%);
+}
+
+.nora-panel--single:not(.nora-panel--full) .nora-main-content {
+  border: 3px solid #ffffff;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 93% 5%, rgba(47, 132, 255, 0.82), transparent 43%),
+    radial-gradient(circle at 6% 82%, rgba(72, 159, 255, 0.64), transparent 48%),
+    radial-gradient(circle at 70% 96%, rgba(250, 187, 226, 0.46), transparent 36%),
+    linear-gradient(112deg, rgba(255, 255, 255, 0.9) 0%, rgba(226, 243, 255, 0.84) 48%, rgba(145, 197, 255, 0.9) 100%);
+  backdrop-filter: blur(24px) saturate(1.18);
+  -webkit-backdrop-filter: blur(24px) saturate(1.18);
+  box-shadow:
+    0 34px 82px rgba(17, 31, 58, 0.22),
+    0 16px 42px rgba(40, 123, 226, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+  animation: noraSideMainIn 580ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
+  pointer-events: auto;
+}
+
+.nora-panel--single:not(.nora-panel--full) .nora-main-content::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 18% 72%, rgba(28, 126, 255, 0.34), transparent 34%),
+    radial-gradient(circle at 82% 13%, rgba(52, 137, 255, 0.38), transparent 38%);
+  filter: blur(28px);
+  opacity: 0.82;
+}
+
+.nora-panel--single:not(.nora-panel--full) .nora-bg-dot-grid {
+  opacity: 1;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0.9px, transparent 1.25px);
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.72) 42%, rgba(0, 0, 0, 0.96) 100%);
 }
 
 .nora-bg-dot-grid {
@@ -322,68 +446,55 @@
   right: 18px;
 }
 
-.nora-company-pill {
-  position: absolute;
-  top: 20px;
-  right: 22px;
+.nora-full-project-list {
+  position: relative;
   z-index: 3;
-  min-width: 176px;
-  height: 52px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 4px 13px 4px 5px;
-  border: 3px solid #ffffff;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.93);
-  color: #111111;
-  box-shadow: 0 10px 28px rgba(21, 42, 83, 0.1);
-  cursor: pointer;
 }
 
-.nora-company-pill__mark {
-  position: relative;
+.nora-panel--full .project-list {
+  top: 23px;
+  right: 22px;
+  z-index: 56;
+  gap: 0;
+  padding: 4px;
+  border: 3px solid #ffffff;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 28px rgba(21, 42, 83, 0.1);
+}
+
+.nora-panel--full .project-notification-button {
+  display: none;
+}
+
+.nora-panel--full .project-trigger {
+  min-width: 176px;
+  height: 48px;
+  gap: 10px;
+  padding: 4px 12px 4px 5px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.nora-panel--full .project-trigger:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.nora-panel--full .project-trigger__avatar {
   width: 43px;
   height: 43px;
-  border-radius: 50%;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 32%),
-    linear-gradient(135deg, #075ec7 0%, #0f7ee8 48%, #003884 100%);
-  box-shadow: inset 0 2px 7px rgba(255, 255, 255, 0.45), 0 5px 12px rgba(0, 94, 196, 0.24);
 }
 
-.nora-company-pill__mark::before,
-.nora-company-pill__mark::after,
-.nora-company-pill__mark span {
-  content: "";
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 21px;
-  height: 2px;
-  border-radius: 999px;
-  background: #ffffff;
-  transform: rotate(24deg);
-}
-
-.nora-company-pill__mark::after {
-  transform: rotate(-24deg);
-}
-
-.nora-company-pill__mark span {
-  left: 13px;
-  right: 13px;
-  top: 17px;
-  opacity: 0.8;
-}
-
-.nora-company-pill__name {
+.nora-panel--full .project-trigger__name {
   font-size: 14px;
-  font-weight: 700;
-  line-height: 1;
 }
 
+.nora-panel--full .project-trigger__chevron {
+  width: 17px;
+  height: 17px;
+}
+
+/* ── WELCOME ── */
 .nora-welcome-scene {
   flex: 1 1 auto;
   min-height: 0;
@@ -430,6 +541,7 @@
   display: none;
 }
 
+/* ── CONVERSATION ── */
 .nora-conversation-scene {
   flex: 1 1 auto;
   min-height: 0;
@@ -443,7 +555,11 @@
 }
 
 .nora-panel--single.nora-panel--conversation .nora-conversation-scene {
-  padding: 60px min(18vw, 350px) 20px;
+  padding: 58px 18px 18px;
+}
+
+.nora-panel--full.nora-panel--conversation .nora-conversation-scene {
+  padding: 60px min(18vw, 350px) 18px;
 }
 
 .nora-chat-row {
@@ -508,6 +624,7 @@
   opacity: 0.48;
 }
 
+/* ── ATTACHMENTS ── */
 .nora-attachments-grid {
   display: flex;
   flex-wrap: wrap;
@@ -562,12 +679,19 @@
   display: none;
 }
 
+/* ── COMPOSER ── */
 .nora-composer {
   flex: 0 0 auto;
   padding: 0 18px 18px;
 }
 
 .nora-panel--single.nora-panel--conversation .nora-composer {
+  width: 100%;
+  margin: 0;
+  padding: 0 18px 18px;
+}
+
+.nora-panel--full.nora-panel--conversation .nora-composer {
   width: min(754px, calc(100% - 160px));
   margin: 0 auto;
   padding-bottom: 34px;
@@ -590,19 +714,20 @@
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
-  margin: 0 0 8px;
-  padding: 4px 2px;
+  padding: 12px 16px 14px;
+  min-height: 50px;
 }
 
+
 .nora-file-chip {
-  min-height: 28px;
+  min-height: 30px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 0 10px 0 8px;
-  border: 1px solid rgba(209, 219, 234, 0.86);
+  padding: 0 12px;
+  border: none;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.94);
   color: #111111;
   font-size: 12px;
   font-weight: 500;
@@ -610,19 +735,16 @@
 }
 
 .nora-file-chip__type {
-  display: block;
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
-  background: rgba(100, 120, 160, 0.18);
-  flex-shrink: 0;
+  display: none;
 }
 
 .nora-file-remove {
   padding: 0;
+  margin-left: 4px;
   border: 0;
   background: transparent;
-  color: #111111;
+  color: #888;
+  font-size: 13px;
   cursor: pointer;
 }
 
@@ -630,14 +752,10 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  margin-bottom: 7px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94);
-  color: #111111;
+  padding: 8px 16px;
+  color: #fff;
   font-size: 12px;
 }
-
 .nora-recording-dot {
   width: 7px;
   height: 7px;
@@ -647,42 +765,40 @@
 
 .nora-textarea {
   width: 100%;
-  min-height: 84px;
+  min-height: 90px;
   display: block;
   resize: none;
-  padding: 16px 18px;
+  padding: 18px 20px;
   border: 0;
-  border-radius: 13px;
+  border-radius: 0;
   outline: none;
   background: rgba(255, 255, 255, 0.98);
   color: #111111;
   font-size: 14px;
   line-height: 1.4;
-  box-shadow: none;
 }
-
 .nora-textarea::placeholder {
   color: #8e98a7;
-  font-style: normal;
 }
 
 .nora-textarea:focus {
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.78);
+  outline: none;
 }
 
 .nora-composer-actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 10px;
-  padding: 0 2px;
+  padding: 8px 16px 14px;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 0 0 15px 15px;
 }
 
 .nora-composer-left-actions,
 .nora-composer-right-actions {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 10px;
 }
 
 .nora-icon-btn,
@@ -698,9 +814,10 @@
   box-shadow: none;
   cursor: pointer;
 }
+
 .nora-icon-btn:hover,
 .nora-icon-btn.light:hover {
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .nora-icon-btn:disabled {
@@ -709,7 +826,7 @@
 }
 
 .nora-icon-btn--recording {
-  background: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 59, 59, 0.1);
 }
 
 .nora-composer-icon {
@@ -722,6 +839,7 @@
   filter: brightness(0) saturate(100%);
 }
 
+/* ── NOTICES ── */
 .nora-notice,
 .nora-workspace-loading {
   align-self: center;
@@ -735,6 +853,7 @@
   box-shadow: 0 12px 26px rgba(49, 84, 130, 0.08);
 }
 
+/* ── RESPONSIVE ── */
 @media (max-width: 1500px) {
   .nora-panel--paired {
     right: 464px;
@@ -745,18 +864,16 @@
   .nora-panel,
   .nora-panel--single.nora-panel--welcome,
   .nora-panel--paired,
+  .nora-panel--full,
   .nora-panel--single.nora-panel--conversation {
     right: 14px;
-    width: calc(100vw - 28px);
+    width: calc(100vw - 28px) !important;
   }
 
   .nora-panel--single.nora-panel--conversation .nora-composer {
     width: min(754px, calc(100% - 56px));
   }
 
-  .nora-company-pill {
-    display: none;
-  }
 }
 
 @media (max-width: 760px) {
@@ -770,6 +887,13 @@
     display: none;
   }
 
+  .nora-panel--full {
+    top: 14px;
+    right: 14px;
+    bottom: 14px;
+    width: calc(100vw - 28px) !important;
+  }
+
   .nora-welcome-scene {
     padding: 108px 24px 16px;
   }
@@ -780,7 +904,8 @@
   }
 
   .nora-conversation-scene,
-  .nora-panel--single.nora-panel--conversation .nora-conversation-scene {
+  .nora-panel--single.nora-panel--conversation .nora-conversation-scene,
+  .nora-panel--full.nora-panel--conversation .nora-conversation-scene {
     padding: 38px 18px 18px;
   }
 
@@ -788,4 +913,17 @@
     width: 100%;
     padding: 0 14px 14px;
   }
+
+  .nora-panel--full.nora-panel--conversation .nora-composer {
+    width: 100%;
+    padding: 0 14px 14px;
+  }
+}
+.nora-project-list-wrapper {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  z-index: 3;
+  transform: scale(0.72);
+  transform-origin: top right;
 }

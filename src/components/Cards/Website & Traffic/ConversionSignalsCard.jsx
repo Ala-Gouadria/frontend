@@ -1,4 +1,4 @@
-import { conversionSignalsCardData } from '../../../features/Website & Traffic/data/websiteTrafficMockData'
+import { conversionSignalsCardData } from '../../../api/websiteTrafficMockData'
 import {
   CardFooter,
   CardHeader,
