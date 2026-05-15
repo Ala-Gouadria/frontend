@@ -16,7 +16,13 @@ const WORKSPACE_ROWS = [
   { label: 'Integration', view: 'settings-integrations' },
   { label: 'Team Management', view: 'settings-team' },
 ]
-const BILLING_ROWS = ['Payment Method', 'Billing History', 'Report a Bug', 'Terms of Use', 'Privacy Policy']
+const BILLING_ROWS = [
+  { label: 'Payment Method' },
+  { label: 'Billing History' },
+  { label: 'Report a Bug' },
+  { label: 'Terms of Use', view: 'settings-terms' },
+  { label: 'Privacy Policy', view: 'settings-privacy' },
+]
 
 function SettingsCard({ children, className = '' }) {
   return <section className={`settings-card ${className}`}>{children}</section>
@@ -87,8 +93,8 @@ export default function Settings({ onNavigate }) {
         </SettingsCard>
 
         <SettingsCard>
-          {BILLING_ROWS.map((label) => (
-            <SettingsRow key={label} label={label} />
+          {BILLING_ROWS.map((row) => (
+            <SettingsRow key={row.label} label={row.label} onClick={row.view ? () => onNavigate?.(row.view) : undefined} />
           ))}
         </SettingsCard>
 

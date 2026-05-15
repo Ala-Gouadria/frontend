@@ -15,6 +15,7 @@ import PricingPage from '../pages/pricing/PricingPage'
 import Settings from '../pages/settings/Settings'
 import Integrations from '../pages/settings/Integrations'
 import Team from '../pages/settings/Team'
+import Terms from '../pages/settings/Terms'
 import Notifications from '../pages/notifications/Notifications'
 import Assets from '../pages/assets/Assets'
 import ActivityLog from '../pages/activityLog/activityLog'
@@ -81,6 +82,7 @@ export default function App() {
     previewAnalyticsCards || tokenStore.getAccessToken() !== null || setupComplete,
   )
   const [authView, setAuthView] = useState('login')
+  const [termsInitialSection, setTermsInitialSection] = useState('privacy-policy')
   const [view, setView] = useState(
     previewAnalyticsCards
       ? 'analytics-cards-preview'
@@ -164,6 +166,18 @@ export default function App() {
       return
     }
 
+    if (id === 'settings-terms') {
+      setTermsInitialSection('terms-conditions')
+      navigateTo('settings-terms')
+      return
+    }
+
+    if (id === 'settings-privacy') {
+      setTermsInitialSection('privacy-policy')
+      navigateTo('settings-terms')
+      return
+    }
+
     if (id === 'notifications') {
       navigateTo('notifications')
       return
@@ -235,6 +249,10 @@ export default function App() {
 
   if (view === 'settings-team') {
     return <Team onNavigate={handleNavigation} />
+  }
+
+  if (view === 'settings-terms') {
+    return <Terms initialSection={termsInitialSection} onNavigate={handleNavigation} />
   }
 
   if (view === 'notifications') {
