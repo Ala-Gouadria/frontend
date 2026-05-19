@@ -25,24 +25,28 @@ const TONE_COLORS = {
 }
 
 export function TaskHistoryLineChart({ data, tone = 'green', className = '' }) {
-  if (!data || data.length < 2) return null
+  const safeData = Array.isArray(data)
+    ? data.map(Number).filter(Number.isFinite)
+    : []
+
+  if (safeData.length < 2) return null
 
   const palette = TONE_COLORS[tone] ?? TONE_COLORS.green
   const width = 520
   const height = 170
   const paddingTop = 14
   const paddingBottom = 26
-  const min = Math.min(...data)
-  const max = Math.max(...data)
+  const min = Math.min(...safeData)
+  const max = Math.max(...safeData)
   const usableHeight = height - paddingTop - paddingBottom
-  const step = width / (data.length - 1)
+  const step = width / (safeData.length - 1)
   const normalizeY = (value) => (
     max === min
       ? paddingTop + usableHeight / 2
       : paddingTop + usableHeight - ((value - min) / (max - min)) * usableHeight
   )
 
-  const points = data.map((value, index) => ({
+  const points = safeData.map((value, index) => ({
     x: index * step,
     y: normalizeY(value),
     value,
@@ -56,7 +60,7 @@ export function TaskHistoryLineChart({ data, tone = 'green', className = '' }) {
   }, '')
 
   const areaPath = `${linePath} L ${points.at(-1).x} ${height} L ${points[0].x} ${height} Z`
-  const badgeIndex = Math.max(data.length - 7, 1)
+  const badgeIndex = Math.max(safeData.length - 7, 1)
   const badgePoint = points[badgeIndex]
   const endPoint = points.at(-1)
 

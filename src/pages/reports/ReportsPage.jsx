@@ -534,12 +534,28 @@ function AIReportsPanel() {
 
   const loadReports = useCallback(() => {
     setLoading(true)
-    reportsApi.list({ pageSize: 10 }).then(({ items }) => {
+    return reportsApi.list({ pageSize: 10 }).then(({ items }) => {
       setReports(items)
     }).catch(() => {}).finally(() => setLoading(false))
   }, [])
 
-  useEffect(() => { loadReports() }, [loadReports])
+  useEffect(() => {
+    let cancelled = false
+
+    reportsApi.list({ pageSize: 10 }).then(({ items }) => {
+      if (!cancelled) {
+        setReports(items)
+      }
+    }).catch(() => {}).finally(() => {
+      if (!cancelled) {
+        setLoading(false)
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const handleGenerate = async (type) => {
     setError('')

@@ -141,6 +141,12 @@ function getArcPoint(cx, cy, radius, progress) {
   }
 }
 
+function clampNumber(value, min, max, fallback = min) {
+  const number = Number(value)
+  const safeValue = Number.isFinite(number) ? number : fallback
+  return Math.max(min, Math.min(safeValue, max))
+}
+
 export function ReportSemiGauge({
   current,
   target,
@@ -149,7 +155,7 @@ export function ReportSemiGauge({
   tone = 'green',
   className = '',
 }) {
-  const safeProgress = Math.max(0, Math.min(progress, 1))
+  const safeProgress = clampNumber(progress, 0, 1)
   const capPosition = getArcPoint(180, 160, 148, safeProgress)
   const label = valueLabel ?? `${current}/${target}`
 
@@ -190,7 +196,7 @@ export function ReportMetricGrid({ children, columns = 5, className = '' }) {
 }
 
 export function ReportProgressBar({ value = 0, tone = 'green', cap = true, className = '' }) {
-  const safeValue = Math.max(0, Math.min(value, 100))
+  const safeValue = clampNumber(value, 0, 100)
 
   return (
     <div className={joinClassNames('report-progress-bar', `report-progress-bar--${tone}`, className)}>
@@ -201,7 +207,7 @@ export function ReportProgressBar({ value = 0, tone = 'green', cap = true, class
 }
 
 export function ReportStripBar({ value = 0, tone = 'green', className = '' }) {
-  const safeValue = Math.max(0, Math.min(value, 100))
+  const safeValue = clampNumber(value, 0, 100)
 
   return (
     <div className={joinClassNames('report-strip-bar', `report-strip-bar--${tone}`, className)}>
@@ -244,7 +250,7 @@ export function ReportActivityRings({ rings = [], className = '' }) {
         <span
           key={ring.id ?? `ring-${index}`}
           className={joinClassNames('report-activity-ring', `report-activity-ring--${ring.tone ?? 'green'}`)}
-          style={{ '--ring-progress': `${Math.max(0, Math.min(ring.progress ?? 0.75, 1)) * 360}deg` }}
+          style={{ '--ring-progress': `${clampNumber(ring.progress ?? 0.75, 0, 1, 0.75) * 360}deg` }}
         />
       ))}
     </div>

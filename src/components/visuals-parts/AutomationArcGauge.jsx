@@ -4,8 +4,10 @@ function classNames(...values) {
   return values.filter(Boolean).join(' ')
 }
 
-function clamp(value) {
-  return Math.max(0, Math.min(value, 1))
+function clampProgress(value, fallback = 0) {
+  const number = Number(value)
+  const safeValue = Number.isFinite(number) ? number : fallback
+  return Math.max(0, Math.min(safeValue, 1))
 }
 
 function parseLabelParts(label) {
@@ -42,7 +44,7 @@ const OUTER_R    = R + 36
 const INNER_R    = R + 18
 
 export function AutomationArcGauge({ progress = 0.7, label = '70% In Progress', detail, className = '' }) {
-  const safeProgress = clamp(progress)
+  const safeProgress = clampProgress(progress, 0.7)
   const cap          = arcPoint(safeProgress)
   const tooltip      = detail ?? `${label} • ${Math.round(safeProgress * 100)}%`
   const { percent, rest } = parseLabelParts(label)

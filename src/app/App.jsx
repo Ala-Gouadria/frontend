@@ -209,13 +209,6 @@ export default function App() {
     navigateTo(readStoredFlag(STORAGE_KEYS.setupComplete) ? readStoredView() || 'map' : 'setup')
   }
 
-  const handleLogout = async () => {
-    await authApi.logout().catch(() => {})
-    setIsAuthenticated(false)
-    setAuthView('login')
-    navigateTo('map')
-  }
-
   const completeSetup = () => {
     writeStorage(STORAGE_KEYS.authenticated, 'true')
     writeStorage(STORAGE_KEYS.setupComplete, 'true')

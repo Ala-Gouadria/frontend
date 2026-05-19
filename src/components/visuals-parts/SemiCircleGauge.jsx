@@ -5,8 +5,10 @@ function classNames(...values) {
   return values.filter(Boolean).join(' ')
 }
 
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(value, max))
+function clamp(value, min, max, fallback = min) {
+  const number = Number(value)
+  const safeValue = Number.isFinite(number) ? number : fallback
+  return Math.max(min, Math.min(safeValue, max))
 }
 
 const ARC = {
@@ -67,7 +69,9 @@ export function SemiCircleGauge({
   const maskId = 'm' + id
   const gradId = 'g' + id
 
-  const safeProgress = clamp(progress ?? (target ? current / target : 0), 0, 1)
+  const safeTarget = Number(target)
+  const derivedProgress = Number.isFinite(safeTarget) && safeTarget !== 0 ? Number(current) / safeTarget : 0
+  const safeProgress = clamp(progress ?? derivedProgress, 0, 1)
   const capPosition = getArcPoint(safeProgress)
   const pathData = getPathData()
   const progressTicks = TICK_PROGRESS.filter(tp => tp <= safeProgress + 0.014)

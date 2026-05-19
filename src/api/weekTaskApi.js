@@ -43,7 +43,7 @@ export const weekTaskApi = {
     }
   },
 
-  async getChartData(_range = 'today', _mode = 'completed') {
+  async getChartData() {
     try {
       const activity = await dashboardApi.getActivity()
       // Backend returns an array of recent activity records; derive a simple point series
