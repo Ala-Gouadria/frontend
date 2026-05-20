@@ -1,4 +1,4 @@
-import { get, post, del } from './client.js'
+import { get, post, patch, del } from './client.js'
 
 export const chatApi = {
   async listSessions() {
@@ -11,6 +11,10 @@ export const chatApi = {
 
   async createSession({ title, agentType } = {}) {
     return post('/api/v1/chat/sessions', { title, agentType })
+  },
+
+  async updateSession(sessionId, data = {}) {
+    return patch(`/api/v1/chat/sessions/${sessionId}`, data)
   },
 
   async sendMessage(sessionId, { message, attachments = [] }) {

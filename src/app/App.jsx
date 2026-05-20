@@ -20,7 +20,7 @@ import Notifications from '../pages/notifications/Notifications'
 import Assets from '../pages/assets/Assets'
 import ActivityLog from '../pages/activityLog/activityLog'
 import AnalyticsCardsPreview from '../pages/analyticsCardsPreview/AnalyticsCardsPreview'
-import NoraChatPage from '../pages/chat/NoraChatPage'
+import NoraChatPage from '../pages/chatnora/norachat'
 import '../styles/responsive-overrides.css'
 
 /* global __APP_SESSION__ */

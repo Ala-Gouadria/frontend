@@ -1,4 +1,4 @@
-import { NORA_SERVICES } from './noraWorkspaceMockData'
+import { NORA_SEED_CONVERSATIONS, NORA_SERVICES } from './noraWorkspaceMockData'
 import { chatApi } from './chatApi.js'
 import { orchestrationsApi } from './orchestrationsApi.js'
 
@@ -14,14 +14,43 @@ function formatSize(size = 0) {
   return `${size} B`
 }
 
+const TITLE_OVERRIDES_KEY = 'nora:conversationTitleOverrides'
+
+function readTitleOverrides() {
+  if (typeof window === 'undefined') return {}
+
+  try {
+    return JSON.parse(window.localStorage.getItem(TITLE_OVERRIDES_KEY) ?? '{}')
+  } catch {
+    return {}
+  }
+}
+
+function writeTitleOverride(conversationId, title) {
+  if (typeof window === 'undefined') return
+
+  try {
+    const overrides = readTitleOverrides()
+    window.localStorage.setItem(TITLE_OVERRIDES_KEY, JSON.stringify({ ...overrides, [conversationId]: title }))
+  } catch {
+    // Local title persistence is best effort only.
+  }
+}
+
+function applyTitleOverride(session) {
+  const title = readTitleOverrides()[session.id]
+  return title ? { ...session, title } : session
+}
+
 function mapSession(session) {
+  const sessionWithTitle = applyTitleOverride(session)
   const messages = session.messages ?? []
   const lastUser = [...messages].reverse().find((m) => m.role === 'user')
   return {
-    id: session.id,
-    title: session.title ?? 'Chat',
-    serviceId: session.agentType ?? 'general',
-    updatedAt: session.updatedAt ?? session.createdAt,
+    id: sessionWithTitle.id,
+    title: sessionWithTitle.title ?? 'Chat',
+    serviceId: sessionWithTitle.agentType ?? sessionWithTitle.serviceId ?? 'general',
+    updatedAt: sessionWithTitle.updatedAt ?? sessionWithTitle.createdAt,
     preview: lastUser?.content ?? lastUser?.text ?? 'Start a new conversation',
     messageCount: messages.length,
   }
@@ -38,13 +67,21 @@ function mapMessage(msg) {
 }
 
 function mapFullSession(session) {
+  const sessionWithTitle = applyTitleOverride(session)
   return {
-    id: session.id,
-    title: session.title ?? 'Chat',
-    serviceId: session.agentType ?? 'general',
-    updatedAt: session.updatedAt ?? session.createdAt,
-    messages: (session.messages ?? []).map(mapMessage),
+    id: sessionWithTitle.id,
+    title: sessionWithTitle.title ?? 'Chat',
+    serviceId: sessionWithTitle.agentType ?? sessionWithTitle.serviceId ?? 'general',
+    updatedAt: sessionWithTitle.updatedAt ?? sessionWithTitle.createdAt,
+    messages: (sessionWithTitle.messages ?? []).map(mapMessage),
   }
+}
+
+function seedConversations() {
+  return NORA_SEED_CONVERSATIONS.map((conversation) => ({
+    ...conversation,
+    agentType: conversation.serviceId,
+  }))
 }
 
 export const noraWorkspaceApi = {
@@ -58,13 +95,21 @@ export const noraWorkspaceApi = {
       const items = Array.isArray(sessions) ? sessions : (sessions?.data ?? [])
       return items.map(mapSession)
     } catch {
-      return []
+      return seedConversations().map(mapSession)
     }
   },
 
   async getConversation(conversationId) {
-    const session = await chatApi.getSession(conversationId)
-    return mapFullSession(session)
+    try {
+      const session = await chatApi.getSession(conversationId)
+      return mapFullSession(session)
+    } catch {
+      const seedConversation = seedConversations().find((conversation) => conversation.id === conversationId)
+      if (seedConversation) {
+        return mapFullSession(seedConversation)
+      }
+      throw new Error('Conversation not found.')
+    }
   },
 
   async createConversation({ serviceId = 'general', title } = {}) {
@@ -73,6 +118,23 @@ export const noraWorkspaceApi = {
       agentType: serviceId,
     })
     return mapFullSession({ ...session, messages: [] })
+  },
+
+  async renameConversation(conversationId, title) {
+    const cleanTitle = String(title ?? '').trim()
+    if (!cleanTitle) {
+      throw new Error('Conversation title cannot be empty.')
+    }
+
+    writeTitleOverride(conversationId, cleanTitle)
+
+    try {
+      const session = await chatApi.updateSession(conversationId, { title: cleanTitle })
+      return mapFullSession({ ...session, title: cleanTitle })
+    } catch {
+      const current = seedConversations().find((conversation) => conversation.id === conversationId)
+      return mapFullSession({ ...(current ?? { id: conversationId, messages: [] }), title: cleanTitle })
+    }
   },
 
   // Attachment upload is local (no backend endpoint for ephemeral chat attachments yet)

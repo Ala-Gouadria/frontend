@@ -58,7 +58,7 @@
   top: 24px;
   right: 24px;
   bottom: 24px;
-  z-index: 54;
+  z-index: 80;
   display: flex;
   overflow: hidden;
   border: 3px solid #ffffff;
@@ -96,16 +96,16 @@
 }
 
 .nora-panel--full {
-  top: 20px;
-  right: 20px;
-  bottom: 20px;
-  width: calc(100vw - 126px) !important;
-  border-radius: 23px;
-  border-color: rgba(255, 255, 255, 0.96);
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow:
-    0 26px 70px rgba(17, 31, 58, 0.13),
-    0 10px 26px rgba(17, 31, 58, 0.08);
+  top: 24px;
+  right: 24px;
+  bottom: 24px;
+  width: min(860px, calc(100vw - 56px)) !important;
+  gap: 18px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
   animation: none;
 }
 
@@ -128,59 +128,66 @@
 .nora-history-sidebar::after {
   display: none;
 }
-
+/* ── SIDEBAR BACKGROUND — lighter, more transparent ── */
 .nora-panel--single:not(.nora-panel--full) .nora-history-sidebar {
-  flex-basis: 278px;
-  border: 3px solid #ffffff;
-  border-radius: 22px;
   background:
-    radial-gradient(circle at 6% 88%, rgba(86, 158, 255, 0.34), transparent 43%),
-    linear-gradient(115deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.82) 58%, rgba(244, 250, 255, 0.72) 100%);
-  backdrop-filter: blur(24px) saturate(1.2);
-  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    radial-gradient(circle at 6% 88%, rgba(86, 158, 255, 0.12), transparent 43%),
+    linear-gradient(115deg, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.65) 58%, rgba(244,250,255,0.58) 100%);
+  backdrop-filter: blur(20px) saturate(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(1.1);
   box-shadow:
-    0 34px 76px rgba(17, 31, 58, 0.2),
-    0 12px 30px rgba(35, 104, 196, 0.13),
-    inset 0 1px 0 rgba(255, 255, 255, 0.96);
-  animation: noraSideHistoryIn 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  pointer-events: auto;
+    0 8px 32px rgba(17, 31, 58, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  border: 1.5px solid rgba(255,255,255,0.72);
+  padding: 28px 24px 24px 28px; /* tighter padding */
 }
 
-.nora-panel--full .nora-history-sidebar {
-  border-right: 1px solid rgba(226, 232, 242, 0.28);
-  background:
-    radial-gradient(circle at 0% 88%, rgba(82, 157, 255, 0.56), transparent 40%),
-    linear-gradient(108deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.94) 58%, rgba(245, 251, 255, 0.84) 100%);
-  backdrop-filter: blur(18px) saturate(1.12);
-  -webkit-backdrop-filter: blur(18px) saturate(1.12);
-}
-
+/* ── HISTORY title — smaller, Delight font ── */
 .nora-sidebar-title {
-  margin: 0 0 82px;
+  margin: 0 0 24px; /* was 58px — reduce gap */
   color: #111111;
-  font-size: 16px;
-  line-height: 1;
+  font-size: 14px;
   font-weight: 700;
+  font-family: 'Delight', 'Urbanist', sans-serif;
+  letter-spacing: -0.01em;
 }
 
+/* ── NEW CHAT button — tighter, Urbanist ── */
 .nora-new-chat-btn {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  min-height: 27px;
-  width: 100%;
-  margin: 0 0 27px;
-  padding: 0;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: #111111;
-  font-size: 15px;
+  gap: 10px;
+  margin: 0 0 14px; /* was 21px */
+  font-size: 13.5px;
+  font-family: 'Urbanist', sans-serif;
   font-weight: 500;
-  text-align: left;
-  cursor: pointer;
 }
 
+/* ── RECENTS label — Urbanist ── */
+.nora-recents-title {
+  margin: 0 0 8px; /* was 12px */
+  color: #b0b7c3;
+  font-size: 12px;
+  font-family: 'Urbanist', sans-serif;
+  font-weight: 400;
+}
+
+/* ── HISTORY items — tighter gap, Urbanist ── */
+.nora-history-list {
+  gap: 6px; /* was 12px */
+}
+
+.nora-history-item-text {
+  font-size: 13px;
+  font-family: 'Urbanist', sans-serif;
+  font-weight: 400;
+  color: #1a1a2e;
+}
+
+/* ── VIEW ALL — Urbanist ── */
+.nora-view-all-btn {
+  font-size: 12.5px;
+  font-family: 'Urbanist', sans-serif;
+  font-weight: 600;
+}
 .nora-new-chat-btn:hover,
 .nora-new-chat-btn.active {
   background: transparent;
@@ -206,7 +213,7 @@
 }
 
 .nora-recents-title {
-  margin: 0 0 15px;
+  margin: 0 0 12px;
   padding: 0;
   color: #a6adb8;
   font-size: 14px;
@@ -219,7 +226,7 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 13px;
+  gap: 12px;
   overflow-y: auto;
   scrollbar-width: none;
 }
@@ -229,13 +236,13 @@
 }
 
 .nora-history-item {
-  min-height: 31px;
+  min-height: 24px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 0 8px;
+  padding: 0;
   border: 0;
   border-radius: 7px;
   background: transparent;
@@ -246,7 +253,7 @@
 
 .nora-history-item:hover,
 .nora-history-item.active {
-  background: rgba(255, 255, 255, 0.52);
+  background: transparent;
 }
 
 .nora-history-item__content {
@@ -271,7 +278,7 @@
 
 .nora-view-all-btn {
   align-self: flex-start;
-  margin: 18px 0 0;
+  margin: 12px 0 0;
   padding: 0;
   border: 0;
   background: transparent;
@@ -297,27 +304,35 @@
 }
 
 .nora-panel--full .nora-main-content {
+  flex: 0 1 610px;
+  border: 3px solid #ffffff;
+  border-radius: 17px;
   background:
     radial-gradient(circle at 90% 1%, rgba(63, 145, 255, 0.66), transparent 38%),
     radial-gradient(circle at 4% 80%, rgba(88, 168, 255, 0.54), transparent 42%),
     radial-gradient(circle at 72% 96%, rgba(245, 194, 228, 0.34), transparent 32%),
     linear-gradient(112deg, #ffffff 0%, #fbfdff 39%, #d9edff 100%);
+  backdrop-filter: blur(24px) saturate(1.16);
+  -webkit-backdrop-filter: blur(24px) saturate(1.16);
+  box-shadow:
+    0 34px 82px rgba(17, 31, 58, 0.18),
+    0 16px 42px rgba(40, 123, 226, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
 }
 
 .nora-panel--full .nora-bg-dot-grid {
-  opacity: 0.96;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.88) 0.85px, transparent 1.25px);
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.26) 13%, rgba(0, 0, 0, 0.96) 100%);
+  opacity: 0.92;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0.72px, transparent 1.05px);
+  background-size: 10px 10px;
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 12%, rgba(0, 0, 0, 0.92) 100%);
 }
 
 .nora-panel--single:not(.nora-panel--full) .nora-main-content {
   border: 3px solid #ffffff;
   border-radius: 22px;
-  background:
-    radial-gradient(circle at 93% 5%, rgba(47, 132, 255, 0.82), transparent 43%),
-    radial-gradient(circle at 6% 82%, rgba(72, 159, 255, 0.64), transparent 48%),
-    radial-gradient(circle at 70% 96%, rgba(250, 187, 226, 0.46), transparent 36%),
-    linear-gradient(112deg, rgba(255, 255, 255, 0.9) 0%, rgba(226, 243, 255, 0.84) 48%, rgba(145, 197, 255, 0.9) 100%);
+    background:
+    radial-gradient(circle at 93% 2%, rgba(47, 132, 255, 0.12), transparent 38%),
+    linear-gradient(112deg, #ffffff 0%, #f7fbff 60%, #eef5ff 100%);
   backdrop-filter: blur(24px) saturate(1.18);
   -webkit-backdrop-filter: blur(24px) saturate(1.18);
   box-shadow:
@@ -329,23 +344,13 @@
 }
 
 .nora-panel--single:not(.nora-panel--full) .nora-main-content::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  z-index: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  background:
-    radial-gradient(circle at 18% 72%, rgba(28, 126, 255, 0.34), transparent 34%),
-    radial-gradient(circle at 82% 13%, rgba(52, 137, 255, 0.38), transparent 38%);
-  filter: blur(28px);
-  opacity: 0.82;
+  display: none;
 }
 
 .nora-panel--single:not(.nora-panel--full) .nora-bg-dot-grid {
-  opacity: 1;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0.9px, transparent 1.25px);
-  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.72) 42%, rgba(0, 0, 0, 0.96) 100%);
+  opacity: 0.55;
+  background-image: radial-gradient(circle, rgba(100,140,200,0.35) 0.9px, transparent 1.25px);
+  mask-image: linear-gradient(135deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.85) 100%);
 }
 
 .nora-bg-dot-grid {
@@ -375,27 +380,69 @@
 }
 
 .nora-header {
-  min-height: 61px;
-  flex: 0 0 61px;
+  min-height: 52px;
+  flex: 0 0 52px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0 72px;
+  justify-content: flex-start;
+  padding: 0 54px 0 15px;
 }
 
 .nora-header-title {
+  min-width: 0;
   display: inline-flex;
   align-items: center;
-  gap: 11px;
+  gap: 9px;
   color: #111111;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1;
   font-weight: 400;
 }
 
+.nora-panel--full.nora-panel--conversation .nora-notice {
+  display: none;
+}
+
+.nora-title-edit-form {
+  min-width: min(360px, 72vw);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nora-title-edit-input {
+  min-width: 0;
+  flex: 1 1 auto;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(47, 128, 255, 0.45);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #111111;
+  font-size: 13px;
+  outline: none;
+}
+
+.nora-title-edit-input:focus {
+  border-color: #2f80ff;
+  box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.12);
+}
+
+.nora-title-save-btn {
+  height: 34px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 10px;
+  background: #2f80ff;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .nora-title-edit-btn {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   display: inline-grid;
   place-items: center;
   padding: 0;
@@ -406,8 +453,8 @@
 }
 
 .nora-title-edit-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }
 
 .nora-title-edit-btn:hover {
@@ -423,8 +470,8 @@
 
 .nora-close-btn {
   position: absolute;
-  top: 27px;
-  right: 28px;
+  top: 17px;
+  right: 18px;
   z-index: 3;
   width: 24px;
   height: 24px;
@@ -444,54 +491,6 @@
 .nora-close-btn--expand {
   top: 18px;
   right: 18px;
-}
-
-.nora-full-project-list {
-  position: relative;
-  z-index: 3;
-}
-
-.nora-panel--full .project-list {
-  top: 23px;
-  right: 22px;
-  z-index: 56;
-  gap: 0;
-  padding: 4px;
-  border: 3px solid #ffffff;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 10px 28px rgba(21, 42, 83, 0.1);
-}
-
-.nora-panel--full .project-notification-button {
-  display: none;
-}
-
-.nora-panel--full .project-trigger {
-  min-width: 176px;
-  height: 48px;
-  gap: 10px;
-  padding: 4px 12px 4px 5px;
-  background: transparent;
-  box-shadow: none;
-}
-
-.nora-panel--full .project-trigger:hover {
-  transform: none;
-  box-shadow: none;
-}
-
-.nora-panel--full .project-trigger__avatar {
-  width: 43px;
-  height: 43px;
-}
-
-.nora-panel--full .project-trigger__name {
-  font-size: 14px;
-}
-
-.nora-panel--full .project-trigger__chevron {
-  width: 17px;
-  height: 17px;
 }
 
 /* ── WELCOME ── */
@@ -559,13 +558,13 @@
 }
 
 .nora-panel--full.nora-panel--conversation .nora-conversation-scene {
-  padding: 60px min(18vw, 350px) 18px;
+  padding: 4px 14px 16px;
 }
 
 .nora-chat-row {
   display: flex;
   width: 100%;
-  margin-bottom: 52px;
+  margin-bottom: 46px;
   animation: noraMessageIn 320ms ease both;
 }
 
@@ -578,20 +577,20 @@
 }
 
 .nora-message-bubble {
-  max-width: min(640px, 74%);
-  padding: 10px 12px;
+  max-width: min(520px, 78%);
+  padding: 9px 11px;
   border: 0;
   border-radius: 7px;
   background: rgba(255, 255, 255, 0.9);
   color: #111111;
   box-shadow: none;
-  font-size: 14px;
-  line-height: 1.38;
+  font-size: 13px;
+  line-height: 1.36;
   font-weight: 400;
 }
 
 .nora-message-bubble.assistant {
-  max-width: min(660px, 82%);
+  max-width: min(520px, 86%);
   background: transparent;
 }
 
@@ -692,9 +691,9 @@
 }
 
 .nora-panel--full.nora-panel--conversation .nora-composer {
-  width: min(754px, calc(100% - 160px));
+  width: calc(100% - 28px);
   margin: 0 auto;
-  padding-bottom: 34px;
+  padding: 0 0 14px;
 }
 
 .nora-composer-container {
@@ -702,7 +701,7 @@
   overflow: hidden;
   padding: 0;
   border: 1.5px solid #2f80ff;
-  border-radius: 17px;
+  border-radius: 15px;
   background: linear-gradient(105deg, #2f80ff 0%, #92b4ff 54%, #f0c5e5 100%);
 }
 
@@ -714,13 +713,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
-  padding: 12px 16px 14px;
-  min-height: 50px;
+  padding: 9px 14px 8px;
+  min-height: 37px;
 }
 
 
 .nora-file-chip {
-  min-height: 30px;
+  min-height: 26px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -729,7 +728,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.94);
   color: #111111;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   line-height: 1;
 }
@@ -765,16 +764,16 @@
 
 .nora-textarea {
   width: 100%;
-  min-height: 90px;
+  min-height: 74px;
   display: block;
   resize: none;
-  padding: 18px 20px;
+  padding: 16px 18px 10px;
   border: 0;
   border-radius: 0;
   outline: none;
   background: rgba(255, 255, 255, 0.98);
   color: #111111;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.4;
 }
 .nora-textarea::placeholder {
@@ -789,9 +788,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px 14px;
+  padding: 5px 15px 11px;
   background: rgba(255, 255, 255, 0.98);
-  border-radius: 0 0 15px 15px;
+  border-radius: 0 0 14px 14px;
 }
 
 .nora-composer-left-actions,
@@ -803,8 +802,8 @@
 
 .nora-icon-btn,
 .nora-icon-btn.light {
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   display: grid;
   place-items: center;
   padding: 0;
@@ -830,8 +829,8 @@
 }
 
 .nora-composer-icon {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
 }
 
@@ -864,10 +863,14 @@
   .nora-panel,
   .nora-panel--single.nora-panel--welcome,
   .nora-panel--paired,
-  .nora-panel--full,
   .nora-panel--single.nora-panel--conversation {
     right: 14px;
     width: calc(100vw - 28px) !important;
+  }
+
+  .nora-panel--full {
+    right: 24px;
+    width: min(860px, calc(100vw - 56px)) !important;
   }
 
   .nora-panel--single.nora-panel--conversation .nora-composer {
@@ -918,12 +921,4 @@
     width: 100%;
     padding: 0 14px 14px;
   }
-}
-.nora-project-list-wrapper {
-  position: absolute;
-  top: 16px;
-  right: 18px;
-  z-index: 3;
-  transform: scale(0.72);
-  transform-origin: top right;
 }
