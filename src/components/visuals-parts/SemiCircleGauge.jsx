@@ -105,12 +105,27 @@ export function SemiCircleGauge({
 </g>
 
           {/* Horizontal fade gradient — transparent at both ends */}
-          <linearGradient id={gradId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="510" y2="0">
-            <stop offset="0%"  stopColor="white" stopOpacity="0" />
-            <stop offset="22%" stopColor="white" stopOpacity="1" />
-            <stop offset="65%" stopColor="white" stopOpacity="1" />
-            <stop offset="96%" stopColor="white" stopOpacity="0" />
-          </linearGradient>
+          <linearGradient
+  id={gradId}
+  gradientUnits="userSpaceOnUse"
+  x1="0"
+  y1="0"
+  x2="510"
+  y2="0"
+>
+  <stop offset="0%" stopColor="white" stopOpacity="0" />
+  <stop offset="8%" stopColor="white" stopOpacity="0.08" />
+  <stop offset="16%" stopColor="white" stopOpacity="0.35" />
+  <stop offset="24%" stopColor="white" stopOpacity="0.75" />
+  <stop offset="32%" stopColor="white" stopOpacity="1" />
+
+  <stop offset="72%" stopColor="white" stopOpacity="1" />
+
+  <stop offset="84%" stopColor="white" stopOpacity="0.75" />
+  <stop offset="92%" stopColor="white" stopOpacity="0.35" />
+  <stop offset="97%" stopColor="white" stopOpacity="0.08" />
+  <stop offset="100%" stopColor="white" stopOpacity="0" />
+</linearGradient>
 
           {/* Mask covers viewBox + overflow to catch glow bleed */}
           <mask id={maskId} maskUnits="userSpaceOnUse" x="-60" y="-60" width="630" height="380">
@@ -125,9 +140,12 @@ export function SemiCircleGauge({
             d={pathData}
             fill="none"
             stroke="var(--gauge-glow)"
-            strokeWidth="72"
+            strokeWidth="70"
             strokeLinecap="butt"
-            style={{ filter: 'blur(28px)', opacity: 0.65 }}
+           style={{
+  filter: 'blur(38px)',
+  opacity: 0.18
+}}
           />
 
           {/* Pale background track */}
@@ -171,8 +189,8 @@ export function SemiCircleGauge({
         </g>
 
         {/* Knob — outside mask, always fully visible */}
-        <circle cx={capPosition.x} cy={capPosition.y} r="20" className="semi-circle-gauge__cap-ring" />
-        <circle cx={capPosition.x} cy={capPosition.y} r="13" className="semi-circle-gauge__cap" />
+        <circle cx={capPosition.x} cy={capPosition.y} r="22" className="semi-circle-gauge__cap-ring" />
+        <circle cx={capPosition.x} cy={capPosition.y} r="15" className="semi-circle-gauge__cap" />
 
         {/* Value label */}
         <text x="255" y="148" textAnchor="middle" className="semi-circle-gauge__value">
