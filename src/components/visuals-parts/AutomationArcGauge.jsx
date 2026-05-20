@@ -59,8 +59,10 @@ export function AutomationArcGauge({ progress = 0.7, label = '70% In Progress', 
             x2={GRAD_END.x}   y2={GRAD_END.y}
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%"   stopColor="#d6f570" />
-            <stop offset="100%" stopColor="#527800" />
+            <stop offset="0%" stopColor="rgba(214,245,112,.08)" />
+<stop offset="18%" stopColor="#d7ef63" />
+<stop offset="55%" stopColor="#a8d11c" />
+<stop offset="100%" stopColor="#7fb000" />
           </linearGradient>
           <linearGradient
             id="trackGradient"
@@ -68,8 +70,8 @@ export function AutomationArcGauge({ progress = 0.7, label = '70% In Progress', 
             x2={TRACK_MID.x} y2={TRACK_MID.y}
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%"   stopColor="rgba(185,215,130,0.5)" />
-            <stop offset="100%" stopColor="rgba(185,215,130,0)" />
+            <stop offset="0%" stopColor="rgba(226,226,226,.92)" />
+<stop offset="100%" stopColor="rgba(242,242,242,.18)" />
           </linearGradient>
         </defs>
 
@@ -95,7 +97,7 @@ export function AutomationArcGauge({ progress = 0.7, label = '70% In Progress', 
           pathLength="100"
           strokeDasharray={`${safeProgress * 100} 100`}
         />
-        <circle cx={cap.x} cy={cap.y} r="14" className="automation-arc-gauge__cap" />
+        <circle cx={cap.x} cy={cap.y} r="11" className="automation-arc-gauge__cap" />
       </svg>
 
       <strong className="automation-arc-gauge__label">

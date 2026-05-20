@@ -19,7 +19,7 @@
 
 .automation-arc-gauge__track {
   stroke: url(#trackGradient);
-  stroke-width: 24;
+  stroke-width: 16;
 }
 
 .automation-arc-gauge__progress {
@@ -27,12 +27,17 @@
   stroke-width: 24;
   animation: automationArcGrow 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transition: stroke-width 160ms ease;
+  filter:
+    drop-shadow(0 0 8px rgba(193,224,54,.42))
+    drop-shadow(0 0 18px rgba(193,224,54,.18));
 }
 
 .automation-arc-gauge__cap {
-  fill: #5c8a00;
+  fill: #b6d62a;
   stroke: #fff;
-  stroke-width: 6;
+  stroke-width: 4;
+filter:
+    drop-shadow(0 2px 4px rgba(0,0,0,.06));
   transition: transform 160ms ease, filter 160ms ease;
   transform-origin: center;
 }
@@ -82,7 +87,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: 148px;
+top: 128px;
   text-align: center;
   font-size: 0.9rem;
   font-weight: 400;
