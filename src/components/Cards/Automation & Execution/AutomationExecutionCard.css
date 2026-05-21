@@ -63,7 +63,6 @@
   gap: 3px;
 }
 
-/* Base block: tall, narrow, flex-stretch to fill row */
 .automation-execution-card__lane-blocks .quality-blocks__block {
   height: 52px;
   border-radius: 0px;
@@ -73,13 +72,18 @@
   box-shadow: none;
 }
 
-
-/* Soften gloss sheen on all blocks */
-.automation-execution-card__lane-blocks .quality-blocks__block::after {
-  opacity: 0.3;
+/* Active blocks — radial lit-center gradient replaces flat color */
+.automation-execution-card__lane--green .automation-execution-card__lane-blocks .quality-blocks__block--green {
+  background: radial-gradient(ellipse 90% 70% at 50% 40%, #c8f060 0%, #6abe00 55%, #4a8c00 100%);
+}
+.automation-execution-card__lane--blue .automation-execution-card__lane-blocks .quality-blocks__block--blue {
+  background: radial-gradient(ellipse 90% 70% at 50% 40%, #80ccff 0%, #2882ff 55%, #1050d0 100%);
+}
+.automation-execution-card__lane--orange .automation-execution-card__lane-blocks .quality-blocks__block--orange {
+  background: radial-gradient(ellipse 90% 70% at 50% 40%, #ffcc70 0%, #ff7820 55%, #d84800 100%);
 }
 
-/* Active blocks — soft colored glow matching each tone */
+/* Active blocks — soft colored drop shadow */
 .automation-execution-card__lane-blocks .quality-blocks__block--green {
   box-shadow: 0 4px 10px rgba(90, 170, 0, 0.28);
 }
@@ -90,23 +94,30 @@
   box-shadow: 0 4px 10px rgba(255, 118, 41, 0.28);
 }
 
-/* Muted (inactive) — pastel tint, no glow, no gloss */
+/* Active blocks — white hotspot on top of gradient */
+.automation-execution-card__lane-blocks .quality-blocks__block::after {
+  opacity: 0 !important;
+}
+/* Muted (inactive) — flat pastel, no gradient, no glow, no hotspot */
 .automation-execution-card__lane-blocks .quality-blocks__block--green-muted {
   --block-color: #bfe09a;
+  background: var(--block-color);
   box-shadow: none;
 }
 .automation-execution-card__lane-blocks .quality-blocks__block--blue-muted {
   --block-color: #a8cef5;
+  background: var(--block-color);
   box-shadow: none;
 }
 .automation-execution-card__lane-blocks .quality-blocks__block--orange-muted {
   --block-color: #f7cead;
+  background: var(--block-color);
   box-shadow: none;
 }
 .automation-execution-card__lane-blocks .quality-blocks__block--green-muted::after,
 .automation-execution-card__lane-blocks .quality-blocks__block--blue-muted::after,
 .automation-execution-card__lane-blocks .quality-blocks__block--orange-muted::after {
-  opacity: 0;
+  opacity: 0 !important;
 }
 
 /* ── ── */
