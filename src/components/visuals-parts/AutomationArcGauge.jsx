@@ -70,8 +70,9 @@ export function AutomationArcGauge({ progress = 0.7, label = '70% In Progress', 
             x2={TRACK_MID.x} y2={TRACK_MID.y}
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%" stopColor="rgba(226,226,226,.92)" />
-<stop offset="100%" stopColor="rgba(242,242,242,.18)" />
+            <stop offset="0%" stopColor="rgba(235,235,235,.95)" />
+<stop offset="55%" stopColor="rgba(235,235,235,.72)" />
+<stop offset="100%" stopColor="rgba(235,235,235,0)" />
           </linearGradient>
         </defs>
 

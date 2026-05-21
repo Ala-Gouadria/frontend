@@ -24,7 +24,7 @@
 
 .automation-arc-gauge__progress {
   stroke: url(#progressGradient);
-  stroke-width: 24;
+  stroke-width: 16;
   animation: automationArcGrow 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transition: stroke-width 160ms ease;
   filter:
