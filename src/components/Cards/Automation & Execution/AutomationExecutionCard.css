@@ -53,26 +53,63 @@
   font-weight: 400;
 }
 
-.automation-execution-card__lane--green .automation-execution-card__lane-head {
-  color: #408c00;
+.automation-execution-card__lane--green  .automation-execution-card__lane-head { color: #408c00; }
+.automation-execution-card__lane--blue   .automation-execution-card__lane-head { color: #0578ff; }
+.automation-execution-card__lane--orange .automation-execution-card__lane-head { color: #ff7629; }
+
+/* ── QualityBlocks lane overrides ── */
+
+.automation-execution-card__lane-blocks {
+  gap: 3px;
 }
 
-.automation-execution-card__lane--blue .automation-execution-card__lane-head {
-  color: #0578ff;
+/* Base block: tall, narrow, flex-stretch to fill row */
+.automation-execution-card__lane-blocks .quality-blocks__block {
+  height: 52px;
+  border-radius: 0px;
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  box-shadow: none;
 }
 
-.automation-execution-card__lane--orange .automation-execution-card__lane-head {
-  color: #ff7629;
+
+/* Soften gloss sheen on all blocks */
+.automation-execution-card__lane-blocks .quality-blocks__block::after {
+  opacity: 0.3;
 }
 
-.automation-execution-card__lane .segmented-striped-bar__segment {
-  height: 32px;
-  border-radius: 4px;
+/* Active blocks — soft colored glow matching each tone */
+.automation-execution-card__lane-blocks .quality-blocks__block--green {
+  box-shadow: 0 4px 10px rgba(90, 170, 0, 0.28);
+}
+.automation-execution-card__lane-blocks .quality-blocks__block--blue {
+  box-shadow: 0 4px 10px rgba(5, 120, 255, 0.28);
+}
+.automation-execution-card__lane-blocks .quality-blocks__block--orange {
+  box-shadow: 0 4px 10px rgba(255, 118, 41, 0.28);
 }
 
-.automation-execution-card__lane .segmented-striped-bar {
-  gap: 4px;
+/* Muted (inactive) — pastel tint, no glow, no gloss */
+.automation-execution-card__lane-blocks .quality-blocks__block--green-muted {
+  --block-color: #bfe09a;
+  box-shadow: none;
 }
+.automation-execution-card__lane-blocks .quality-blocks__block--blue-muted {
+  --block-color: #a8cef5;
+  box-shadow: none;
+}
+.automation-execution-card__lane-blocks .quality-blocks__block--orange-muted {
+  --block-color: #f7cead;
+  box-shadow: none;
+}
+.automation-execution-card__lane-blocks .quality-blocks__block--green-muted::after,
+.automation-execution-card__lane-blocks .quality-blocks__block--blue-muted::after,
+.automation-execution-card__lane-blocks .quality-blocks__block--orange-muted::after {
+  opacity: 0;
+}
+
+/* ── ── */
 
 .automation-execution-card .analytics-card__footer {
   margin-top: 3px;
