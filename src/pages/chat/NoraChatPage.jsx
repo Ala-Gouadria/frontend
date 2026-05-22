@@ -8,7 +8,7 @@ export default function NoraChatPage({ onNavigate }) {
     <main className="nora-chat-page">
       <Photo />
       <MainNav activeId="chat" onSelect={onNavigate} />
-      <NoraWorkspace open fullMode onNavigate={onNavigate} onClose={() => onNavigate?.('stars')} />
+      <NoraWorkspace open onClose={() => onNavigate?.('stars')} />
     </main>
   )
 }

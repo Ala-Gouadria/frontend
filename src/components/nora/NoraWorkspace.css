@@ -97,7 +97,7 @@
   right: 24px;
 }
 
-.nora-panel--single:not(.nora-panel--full) {
+.nora-panel--single {
   gap: 20px;
   overflow: visible;
   border: 0;
@@ -108,26 +108,11 @@
   pointer-events: none;
 }
 
-.nora-panel--single:not(.nora-panel--full)::before,
-.nora-panel--full::before {
+.nora-panel--single::before {
   z-index: -1;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(6px) saturate(1.04);
   -webkit-backdrop-filter: blur(6px) saturate(1.04);
-}
-
-.nora-panel--full {
-  top: 24px;
-  right: 24px;
-  bottom: 24px;
-  width: min(948px, calc(100vw - 56px)) !important;
-  gap: 18px;
-  overflow: visible;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  animation: none;
 }
 
 /* ── SIDEBAR ── */
@@ -159,7 +144,7 @@
   display: none;
 }
 /* ── SIDEBAR BACKGROUND — lighter, more transparent ── */
-.nora-panel--single:not(.nora-panel--full) .nora-history-sidebar {
+.nora-panel--single .nora-history-sidebar {
   background:
     radial-gradient(circle at 4% 82%, rgba(116, 180, 255, 0.04), transparent 34%),
     linear-gradient(110deg, rgba(255, 255, 255, 0.74) 0%, rgba(255, 255, 255, 0.62) 55%, rgba(255, 255, 255, 0.52) 100%);
@@ -339,31 +324,7 @@
     linear-gradient(112deg, #ffffff 0%, #fbfdff 42%, #dceeff 100%);
 }
 
-.nora-panel--full .nora-main-content {
-  flex: 0 1 652px;
-  border: 3px solid #ffffff;
-  border-radius: 17px;
-  background:
-    radial-gradient(circle at 88% 5%, rgba(63, 145, 255, 0.5), transparent 39%),
-    radial-gradient(circle at 5% 80%, rgba(88, 168, 255, 0.46), transparent 42%),
-    radial-gradient(circle at 72% 96%, rgba(245, 194, 228, 0.34), transparent 32%),
-    linear-gradient(112deg, rgba(255, 255, 255, 0.82) 0%, rgba(251, 253, 255, 0.72) 39%, rgba(217, 237, 255, 0.82) 100%);
-  backdrop-filter: blur(24px) saturate(1.16);
-  -webkit-backdrop-filter: blur(24px) saturate(1.16);
-  box-shadow:
-    0 34px 82px rgba(17, 31, 58, 0.18),
-    0 16px 42px rgba(40, 123, 226, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.96);
-}
-
-.nora-panel--full .nora-bg-dot-grid {
-  opacity: 0.86;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0.72px, transparent 1.05px);
-  background-size: 10px 10px;
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 12%, rgba(0, 0, 0, 0.92) 100%);
-}
-
-.nora-panel--single:not(.nora-panel--full) .nora-main-content {
+.nora-panel--single .nora-main-content {
   border: 3px solid #ffffff;
   border-radius: 22px;
     background:
@@ -379,11 +340,11 @@
   pointer-events: auto;
 }
 
-.nora-panel--single:not(.nora-panel--full) .nora-main-content::before {
+.nora-panel--single .nora-main-content::before {
   display: none;
 }
 
-.nora-panel--single:not(.nora-panel--full) .nora-bg-dot-grid {
+.nora-panel--single .nora-bg-dot-grid {
   opacity: 0.55;
   background-image: radial-gradient(circle, rgba(100,140,200,0.35) 0.9px, transparent 1.25px);
   mask-image: linear-gradient(135deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.85) 100%);
@@ -433,10 +394,6 @@
   font-size: 13px;
   line-height: 1;
   font-weight: 400;
-}
-
-.nora-panel--full.nora-panel--conversation .nora-notice {
-  display: none;
 }
 
 .nora-title-edit-form {
@@ -593,10 +550,6 @@
   padding: 58px 18px 18px;
 }
 
-.nora-panel--full.nora-panel--conversation .nora-conversation-scene {
-  padding: 42px 14px 16px;
-}
-
 .nora-chat-row {
   display: flex;
   width: 100%;
@@ -724,12 +677,6 @@
   width: 100%;
   margin: 0;
   padding: 0 18px 18px;
-}
-
-.nora-panel--full.nora-panel--conversation .nora-composer {
-  width: calc(100% - 28px);
-  margin: 0 auto;
-  padding: 0 0 14px;
 }
 
 .nora-composer-container {
@@ -904,11 +851,6 @@
     width: calc(100vw - 28px) !important;
   }
 
-  .nora-panel--full {
-    right: 24px;
-    width: min(948px, calc(100vw - 56px)) !important;
-  }
-
   .nora-panel--single.nora-panel--conversation .nora-composer {
     width: min(754px, calc(100% - 56px));
   }
@@ -926,13 +868,6 @@
     display: none;
   }
 
-  .nora-panel--full {
-    top: 14px;
-    right: 14px;
-    bottom: 14px;
-    width: calc(100vw - 28px) !important;
-  }
-
   .nora-welcome-scene {
     padding: 108px 24px 16px;
   }
@@ -943,17 +878,11 @@
   }
 
   .nora-conversation-scene,
-  .nora-panel--single.nora-panel--conversation .nora-conversation-scene,
-  .nora-panel--full.nora-panel--conversation .nora-conversation-scene {
+  .nora-panel--single.nora-panel--conversation .nora-conversation-scene {
     padding: 38px 18px 18px;
   }
 
   .nora-panel--single.nora-panel--conversation .nora-composer {
-    width: 100%;
-    padding: 0 14px 14px;
-  }
-
-  .nora-panel--full.nora-panel--conversation .nora-composer {
     width: 100%;
     padding: 0 14px 14px;
   }

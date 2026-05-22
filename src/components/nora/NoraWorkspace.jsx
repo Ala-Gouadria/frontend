@@ -418,7 +418,7 @@ function Composer({
   )
 }
 
-export default function NoraWorkspace({ open, onClose, pairedWithTask = false, fullMode = false }) {
+export default function NoraWorkspace({ open, onClose, pairedWithTask = false }) {
   const [services, setServices] = useState([])
   const [conversationList, setConversationList] = useState([])
   const [activeConversationId, setActiveConversationId] = useState(null)
@@ -518,7 +518,7 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false, f
         setServices(nextServices)
         setConversationList(nextConversations)
 
-        if ((pairedWithTask || fullMode) && nextConversations.length > 0) {
+        if (pairedWithTask && nextConversations.length > 0) {
           const conversation = await noraWorkspaceApi.getConversation(nextConversations[0].id)
           if (!active) {
             return
@@ -550,7 +550,7 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false, f
     return () => {
       active = false
     }
-  }, [open, pairedWithTask, fullMode])
+  }, [open, pairedWithTask])
 
   useEffect(() => {
     if (!open) {
@@ -821,7 +821,7 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false, f
 
   return (
     <div
-      className={`nora-panel ${pairedWithTask ? 'nora-panel--paired' : 'nora-panel--single'} ${fullMode ? 'nora-panel--full' : ''} ${showConversation ? 'nora-panel--conversation' : 'nora-panel--welcome'}`}
+      className={`nora-panel ${pairedWithTask ? 'nora-panel--paired' : 'nora-panel--single'} ${showConversation ? 'nora-panel--conversation' : 'nora-panel--welcome'}`}
     >
       <HistorySidebar
         conversations={conversationList}

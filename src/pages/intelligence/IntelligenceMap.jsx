@@ -785,7 +785,6 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   const [dragState, setDragState] = useState(null)
   const [collapsedNodes, setCollapsedNodes] = useState(() => createInitialCollapsedNodes())
   const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false)
-  const [workspaceMode, setWorkspaceMode] = useState('split')
   const panelsPaired = isWorkspaceOpen && isTaskOpen
   const shouldShowWorkspace = isWorkspaceOpen
   const shouldShowTaskPanel = isTaskOpen
@@ -1018,9 +1017,7 @@ return (
       {shouldShowWorkspace ? (
         <NoraWorkspace
           open={shouldShowWorkspace}
-          mode={workspaceMode}
           onClose={() => setIsWorkspaceOpen(false)}
-          onModeChange={setWorkspaceMode}
           pairedWithTask={panelsPaired}
         />
       ) : null}
