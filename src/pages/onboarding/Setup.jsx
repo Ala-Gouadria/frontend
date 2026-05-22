@@ -461,9 +461,34 @@ export default function Setup({ onComplete }) {
                 </h2>
                 <p className="ob-card-sub">{currentStep.subtitle}</p>
               </div>
-              <div className="ob-pill">
-                <span className="ob-pill-dot" />
-                <span className="ob-pill-txt">{visualCurrentStepPercent}% Progress</span>
+              <div className="setup-step-progress" aria-label={`${visualCurrentStepPercent}% Progress`}>
+                <svg className="setup-step-progress-ring" viewBox="0 0 170 56" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="setupStepProgressTrack" x1="0" y1="0" x2="146" y2="0">
+                      <stop offset="0%" stopColor="#d9ebff" />
+                      <stop offset="68%" stopColor="#d9e7ff" />
+                      <stop offset="100%" stopColor="#f6cfe9" />
+                    </linearGradient>
+                    <linearGradient id="setupStepProgressFill" x1="0" y1="0" x2="146" y2="0">
+                      <stop offset="0%" stopColor="#2f80ed" />
+                      <stop offset="72%" stopColor="#2f80ed" />
+                      <stop offset="100%" stopColor="#e7b8e7" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    className="setup-step-progress-track"
+                    d="M 22 28 A 20 20 0 0 1 42 8 L 128 8 A 20 20 0 0 1 148 28 A 20 20 0 0 1 128 48 L 42 48 A 20 20 0 0 1 22 28"
+                  />
+                  <path
+                    className="setup-step-progress-fill"
+                    d="M 22 28 A 20 20 0 0 0 42 48 L 94 48"
+                  />
+                  <path className="setup-step-progress-cap" d="M 103 8 L 133 8" />
+                  <circle className="setup-step-progress-dot" cx="22" cy="28" r="8" />
+                </svg>
+                <span className="setup-step-progress-text">
+                  <strong>{visualCurrentStepPercent}%</strong> Progress
+                </span>
               </div>
             </div>
 
