@@ -462,7 +462,7 @@ export default function Setup({ onComplete }) {
                 <p className="ob-card-sub">{currentStep.subtitle}</p>
               </div>
               <div className="setup-step-progress" aria-label={`${visualCurrentStepPercent}% Progress`}>
-                <svg className="setup-step-progress-ring" viewBox="0 0 170 56" aria-hidden="true">
+                <svg className="setup-step-progress-ring" viewBox="0 0 136 36" aria-hidden="true">
                   <defs>
                     <linearGradient id="setupStepProgressTrack" x1="0" y1="0" x2="146" y2="0">
                       <stop offset="0%" stopColor="#d9ebff" />
@@ -477,14 +477,14 @@ export default function Setup({ onComplete }) {
                   </defs>
                   <path
                     className="setup-step-progress-track"
-                    d="M 22 28 A 20 20 0 0 1 42 8 L 128 8 A 20 20 0 0 1 148 28 A 20 20 0 0 1 128 48 L 42 48 A 20 20 0 0 1 22 28"
+                    d="M 14 18 A 14 14 0 0 1 28 4 L 108 4 A 14 14 0 0 1 122 18 A 14 14 0 0 1 108 32 L 28 32 A 14 14 0 0 1 14 18"
                   />
                   <path
                     className="setup-step-progress-fill"
-                    d="M 22 28 A 20 20 0 0 0 42 48 L 94 48"
+                    d="M 14 18 A 14 14 0 0 0 28 32 L 62 32"
                   />
-                  <path className="setup-step-progress-cap" d="M 103 8 L 133 8" />
-                  <circle className="setup-step-progress-dot" cx="22" cy="28" r="8" />
+                  <path className="setup-step-progress-cap" d="M 86 4 L 112 4" />
+                  <circle className="setup-step-progress-dot" cx="14" cy="18" r="6" />
                 </svg>
                 <span className="setup-step-progress-text">
                   <strong>{visualCurrentStepPercent}%</strong> Progress

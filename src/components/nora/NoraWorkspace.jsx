@@ -9,6 +9,17 @@ import sentIcon from '../../assets/icons/Nora-AI-Icon/sent-icon.svg'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
 const WELCOME_HEADLINE = 'An AI system that manages, automates, and grows your business.'
 const WELCOME_TEXT = 'Welcome back. I can help you grow, automate, and organize your business.'
+const FIGMA_HISTORY_TITLES = [
+  'Cadence of Light',
+  'Sonic Waves Interplay',
+  'Harmony in Dissonance',
+  'Synthesized Dreams Unfold',
+  'Chorus of Vibrations',
+  'Melodic Echoes Dance',
+  'Lyrical Journey Awaits',
+  'Rhythmic Harmony Pulse',
+  'Resonating Heartbeats Connect',
+]
 
 function formatClock(value) {
   return new Intl.DateTimeFormat('en', {
@@ -139,7 +150,18 @@ function HistorySidebar({
   showAll,
   onToggleShowAll,
 }) {
-  const visibleItems = showAll ? conversations : conversations.slice(0, 7)
+  const visibleItems = showAll ? conversations : conversations.slice(0, FIGMA_HISTORY_TITLES.length)
+  const displayItems = FIGMA_HISTORY_TITLES.map((title, index) => {
+    const conversation = visibleItems[index]
+    return {
+      id: conversation?.id ?? `figma-history-${index}`,
+      title: conversation?.title ?? title,
+      preview: conversation?.preview ?? '',
+      updatedAt: conversation?.updatedAt ?? new Date().toISOString(),
+      displayTitle: title,
+      isPlaceholder: !conversation,
+    }
+  })
 
   return (
     <aside className="nora-history-sidebar">
@@ -156,15 +178,19 @@ function HistorySidebar({
       <div className="nora-recents-title">Recents</div>
 
       <div className="nora-history-list">
-        {visibleItems.map((conversation) => (
+        {displayItems.map((conversation) => (
           <button
             key={conversation.id}
             type="button"
-            onClick={() => onSelect(conversation.id)}
+            onClick={() => {
+              if (!conversation.isPlaceholder) {
+                onSelect(conversation.id)
+              }
+            }}
             className={`nora-history-item ${activeConversationId === conversation.id ? 'active' : ''}`}
           >
             <div className="nora-history-item__content">
-              <span className="nora-history-item-text">{conversation.title}</span>
+              <span className="nora-history-item-text">{conversation.displayTitle}</span>
               <span className="nora-history-item-preview">{conversation.preview}</span>
             </div>
             <span className="nora-history-item-time">{formatHistoryTime(conversation.updatedAt)}</span>
@@ -172,11 +198,9 @@ function HistorySidebar({
         ))}
       </div>
 
-      {conversations.length > 7 ? (
-        <button type="button" className="nora-view-all-btn" onClick={onToggleShowAll}>
-          {showAll ? 'Show less' : 'View all'}
-        </button>
-      ) : null}
+      <button type="button" className="nora-view-all-btn" onClick={onToggleShowAll}>
+        {showAll ? 'Show less' : 'View all'}
+      </button>
     </aside>
   )
 }
@@ -425,6 +449,10 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false, f
 
   const currentMessages = useMemo(() => activeConversation?.messages ?? [], [activeConversation])
   const showConversation = currentMessages.length > 0
+  const displayConversationTitle =
+    activeConversation?.serviceId === 'social' || activeConversation?.title === 'Instagram'
+      ? 'Instagram Growth Plan'
+      : activeConversation?.title ?? 'New Chat'
 
   const stopRecordingTimer = () => {
     if (recordingTimerRef.current) {
@@ -821,7 +849,7 @@ export default function NoraWorkspace({ open, onClose, pairedWithTask = false, f
 
         <header className="nora-header">
           <ConversationTitle
-            title={activeConversation?.title ?? 'New Chat'}
+            title={displayConversationTitle}
             canEdit={Boolean(activeConversationId)}
             isEditing={isEditingTitle}
             draftTitle={titleDraft}

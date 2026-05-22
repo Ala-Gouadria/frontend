@@ -368,11 +368,11 @@ textarea {
 }
 
 .setup-root .setup-step-progress {
-  width: 170px;
-  height: 56px;
-  margin-top: 0;
+  width: 136px;
+  height: 36px;
+  margin-top: 8px;
   position: relative;
-  flex: 0 0 170px;
+  flex: 0 0 136px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -382,8 +382,8 @@ textarea {
 .setup-root .setup-step-progress-ring {
   position: absolute;
   inset: 0;
-  width: 170px;
-  height: 56px;
+  width: 136px;
+  height: 36px;
   overflow: visible;
 }
 
@@ -396,17 +396,17 @@ textarea {
 
 .setup-root .setup-step-progress-track {
   stroke: url("#setupStepProgressTrack");
-  stroke-width: 7;
+  stroke-width: 4;
 }
 
 .setup-root .setup-step-progress-fill {
   stroke: url("#setupStepProgressFill");
-  stroke-width: 7;
+  stroke-width: 4;
 }
 
 .setup-root .setup-step-progress-cap {
   stroke: #d0c7f2;
-  stroke-width: 7;
+  stroke-width: 4;
 }
 
 .setup-root .setup-step-progress-dot {
@@ -419,15 +419,15 @@ textarea {
   z-index: 1;
   display: inline-flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 3px;
   color: #2f80ed;
-  font-size: 16px;
+  font-size: 12px;
   line-height: 1;
   font-weight: 400;
 }
 
 .setup-root .setup-step-progress-text strong {
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 800;
 }
 
