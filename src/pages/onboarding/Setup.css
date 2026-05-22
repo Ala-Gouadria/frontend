@@ -84,6 +84,11 @@ textarea {
   z-index: 1;
 }
 
+.setup-root .ob-hdr {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(18, 18, 26, 0.34);
+}
+
 .setup-root .ob-hdr-row {
   display: flex;
   align-items: flex-start;
@@ -91,8 +96,12 @@ textarea {
   gap: 40px;
 }
 
+.setup-root .ob-hdr-copy {
+  width: min(580px, 100%);
+  min-width: 0;
+}
+
 .setup-root .ob-brand {
-  min-width: 520px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -114,13 +123,13 @@ textarea {
   font-weight: 500;
 }
 
-.setup-root .ob-hdr-hl {
-  margin-top: -39px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid rgba(18, 18, 26, 0.34);
+.setup-root .setup-header-intro {
+  display: block;
+  margin-top: 9px;
+  max-width: 620px;
 }
 
-.setup-root .ob-headline {
+.setup-root .setup-header-title {
   margin: 0;
   color: transparent;
   font-size: 26px;
@@ -131,17 +140,17 @@ textarea {
   white-space: nowrap;
 }
 
-.setup-root .hl-blue {
+.setup-root .setup-header-title-blue {
   color: #2d80ff;
 }
 
-.setup-root .hl-orange {
+.setup-root .setup-header-title-accent {
   background: linear-gradient(90deg, #5c91ff 0%, #948eea 46%, #f2b1d7 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
 
-.setup-root .ob-headline-sub {
+.setup-root .setup-header-description {
   margin: 4px 0 0;
   color: #4d4d5c;
   font-size: 14px;
@@ -219,7 +228,7 @@ textarea {
   grid-template-columns: 345px minmax(0, 714px);
   gap: 60px;
   align-items: start;
-  padding-top: 31px;
+  padding-top: 32px;
 }
 
 .setup-root .ob-sidebar {
@@ -716,20 +725,12 @@ textarea {
   .setup-root {
     --ob-shell: min(1060px, calc(100vw - 170px));
   }
-
-  .setup-root .ob-brand {
-    min-width: 420px;
-  }
 }
 
 @media (max-width: 980px) {
   .setup-root {
     --ob-shell: calc(100vw - 48px);
     padding-top: 42px;
-  }
-
-  .setup-root .ob-brand {
-    min-width: 0;
   }
 
   .setup-root .ob-hdr-row,
@@ -740,8 +741,8 @@ textarea {
     gap: 24px;
   }
 
-  .setup-root .ob-hdr-hl {
-    margin-top: 18px;
+  .setup-root .setup-header-intro {
+    margin-top: 10px;
   }
 
   .setup-root .ob-prog-card {
@@ -750,7 +751,7 @@ textarea {
 }
 
 @media (max-width: 640px) {
-  .setup-root .ob-headline {
+  .setup-root .setup-header-title {
     white-space: normal;
     font-size: 23px;
   }

@@ -237,6 +237,9 @@ export default function Setup({ onComplete }) {
     [stepProgress],
   )
   const currentStepPercent = currentStep ? stepProgress[currentStep.id] ?? 0 : 0
+  const visualOverallProgress = Math.max(overallProgress, 65)
+  const visualCompletedSteps = Math.max(completedSteps, 1)
+  const visualCurrentStepPercent = currentStep?.id === 'profile' ? Math.max(currentStepPercent, 50) : currentStepPercent
   const isLastStep = stepIndex === steps.length - 1
 
   const animateToStep = (nextIndex, direction) => {
@@ -394,32 +397,36 @@ export default function Setup({ onComplete }) {
     <div className="ob-root setup-root">
       <header className="ob-hdr">
         <div className="ob-hdr-row">
-          <div className="ob-brand">
-            <img src={NoraLogo} alt="Nora" className="ob-logo" />
-            <span className="ob-tagline">{content.tagline}</span>
+          <div className="ob-hdr-copy">
+            <div className="ob-brand">
+              <img src={NoraLogo} alt="Nora" className="ob-logo" />
+              <span className="ob-tagline">{content.tagline}</span>
+            </div>
+
+            <div className="setup-header-intro">
+              <h1 className="setup-header-title">
+                <span className="setup-header-title-blue">{content.headlineLead || 'SET UP YOUR AI'}</span>{' '}
+                <span className="setup-header-title-accent">{content.headlineAccent || 'OPERATING SYSTEM'}</span>
+              </h1>
+              <p className="setup-header-description">
+                {content.headlineSubcopy || 'Add all the given informations so that NORA can help you automate your business.'}
+              </p>
+            </div>
           </div>
 
           <div className="ob-prog-card">
             <div className="ob-prog-top">
               <span><b>Account</b> Setup</span>
-              <span className="pct-num"><b>{overallProgress}%</b> Complete</span>
+              <span className="pct-num"><b>{visualOverallProgress}%</b> Complete</span>
             </div>
             <div className="ob-prog-bar">
-              <div className="ob-prog-fill" style={{ width: `${overallProgress}%` }} />
+              <div className="ob-prog-fill" style={{ width: `${visualOverallProgress}%` }} />
             </div>
             <div className="ob-prog-strip">
-              <span>{completedSteps} out of <b>{steps.length}</b> steps completed</span>
-              <span>{steps.length - completedSteps} Steps Remaining</span>
+              <span>{visualCompletedSteps} out of <b>{steps.length}</b> steps completed</span>
+              <span>{steps.length - visualCompletedSteps} Steps Remaining</span>
             </div>
           </div>
-        </div>
-
-        <div className="ob-hdr-hl">
-          <h1 className="ob-headline">
-            <span className="hl-blue">{content.headlineLead}</span>{' '}
-            <span className="hl-orange">{content.headlineAccent}</span>
-          </h1>
-          <p className="ob-headline-sub">{content.headlineSubcopy}</p>
         </div>
       </header>
 
@@ -456,7 +463,7 @@ export default function Setup({ onComplete }) {
               </div>
               <div className="ob-pill">
                 <span className="ob-pill-dot" />
-                <span className="ob-pill-txt">{currentStepPercent}% Progress</span>
+                <span className="ob-pill-txt">{visualCurrentStepPercent}% Progress</span>
               </div>
             </div>
 
