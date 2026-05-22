@@ -70,6 +70,17 @@
   animation: noraPanelIn 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.nora-panel::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
 .nora-panel--single.nora-panel--welcome,
 .nora-panel--single.nora-panel--conversation,
 .nora-panel--paired {
@@ -93,6 +104,14 @@
   box-shadow: none;
   animation: none;
   pointer-events: none;
+}
+
+.nora-panel--single:not(.nora-panel--full)::before,
+.nora-panel--full::before {
+  z-index: -1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px) saturate(1.04);
+  -webkit-backdrop-filter: blur(5px) saturate(1.04);
 }
 
 .nora-panel--full {
@@ -122,13 +141,13 @@
   border: 3px solid rgba(255, 255, 255, 0.92);
   border-radius: 17px;
   background:
-    radial-gradient(circle at 0% 72%, rgba(119, 181, 255, 0.14), transparent 38%),
-    linear-gradient(112deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.56) 58%, rgba(248, 252, 255, 0.46) 100%);
-  backdrop-filter: blur(28px) saturate(1.18);
-  -webkit-backdrop-filter: blur(28px) saturate(1.18);
+    radial-gradient(circle at 4% 82%, rgba(116, 180, 255, 0.08), transparent 34%),
+    linear-gradient(110deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.74) 55%, rgba(255, 255, 255, 0.64) 100%);
+  backdrop-filter: blur(32px) saturate(1.08);
+  -webkit-backdrop-filter: blur(32px) saturate(1.08);
   box-shadow:
-    0 28px 66px rgba(17, 31, 58, 0.16),
-    0 12px 28px rgba(47, 128, 255, 0.08),
+    0 28px 66px rgba(17, 31, 58, 0.14),
+    0 12px 28px rgba(47, 128, 255, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.98);
 }
 
@@ -140,13 +159,13 @@
 /* ── SIDEBAR BACKGROUND — lighter, more transparent ── */
 .nora-panel--single:not(.nora-panel--full) .nora-history-sidebar {
   background:
-    radial-gradient(circle at 0% 72%, rgba(119, 181, 255, 0.14), transparent 38%),
-    linear-gradient(112deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.56) 58%, rgba(248, 252, 255, 0.46) 100%);
-  backdrop-filter: blur(28px) saturate(1.18);
-  -webkit-backdrop-filter: blur(28px) saturate(1.18);
+    radial-gradient(circle at 4% 82%, rgba(116, 180, 255, 0.08), transparent 34%),
+    linear-gradient(110deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.74) 55%, rgba(255, 255, 255, 0.64) 100%);
+  backdrop-filter: blur(32px) saturate(1.08);
+  -webkit-backdrop-filter: blur(32px) saturate(1.08);
   box-shadow:
-    0 28px 66px rgba(17, 31, 58, 0.16),
-    0 12px 28px rgba(47, 128, 255, 0.08),
+    0 28px 66px rgba(17, 31, 58, 0.14),
+    0 12px 28px rgba(47, 128, 255, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.98);
   border: 3px solid rgba(255, 255, 255, 0.92);
   padding: 22px 30px 28px 30px;
