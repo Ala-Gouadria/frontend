@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import PillButton from '../pages-parts/PillButton'
 import './SplashScreen.css'
 
-import bgSrc from '../../assets/splash_screen/bg.svg'
 import logoSrc from '../../assets/splash_screen/logo.svg'
 
 function clampProgress(value) {
@@ -57,8 +56,10 @@ export default function SplashScreen({
     <main className="splash-screen" aria-busy="true" aria-live="polite" style={progressStyle}>
       <section className="splash-screen__content" aria-label={title}>
         <div className="splash-screen__orb-wrap">
-          <img src={bgSrc} alt="" className="splash-screen__orb-glow" aria-hidden="true" />
-          <div className="splash-screen__ring" aria-hidden="true" />
+          <svg className="splash-screen__ring" viewBox="0 0 423 423" aria-hidden="true">
+            <circle className="splash-screen__ring-track" cx="211.5" cy="211.5" r="199" pathLength="100" />
+            <circle className="splash-screen__ring-progress" cx="211.5" cy="211.5" r="199" pathLength="100" />
+          </svg>
           <div className="splash-screen__orb">
             <span className="splash-screen__percent">{displayProgress}%</span>
             <span className="splash-screen__logo-mask">
