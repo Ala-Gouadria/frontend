@@ -16,6 +16,7 @@ import GoalIcon from '../../assets/icons/Set-up-Nav/BusinessGoal.png'
 import OptimIcon from '../../assets/icons/Set-up-Nav/OptimizationInputs.png'
 import { onboardingFlowApi } from '../../api/onboardingFlowApi'
 import PillButton from '../../components/pages-parts/PillButton'
+import SplashScreen from '../../components/SplashScreen/SplashScreen'
 
 const STEP_ICONS = {
   profile: ProfileIcon,
@@ -386,14 +387,7 @@ export default function OnboardingFlow({ activeNavId = 'database', onNavigate })
   }
 
   if (loading || !content || !currentStep) {
-    return (
-      <div className="ob-root">
-        <Photo />
-        <MainNav activeId={activeNavId} onSelect={onNavigate} />
-        <ProjectList onNavigate={onNavigate} />
-        <div className="ob-loading">Loading onboarding flow...</div>
-      </div>
-    )
+    return <SplashScreen />
   }
 
   return (

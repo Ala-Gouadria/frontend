@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './Setup.css'
 import { setupApi } from '../../api/setupApi'
+import SplashScreen from '../../components/SplashScreen/SplashScreen'
 import NoraLogo from '../../assets/logo/Nora-logo.png'
 import ProfileIcon from '../../assets/icons/Set-up-Nav/Profilesetup.png'
 import BusinessIcon from '../../assets/icons/Set-up-Nav/Businesssetup.png'
@@ -386,11 +387,7 @@ export default function Setup({ onComplete }) {
   }
 
   if (loading || !content || !currentStep) {
-    return (
-      <div className="ob-root setup-root">
-        <div className="ob-loading">Loading onboarding flow...</div>
-      </div>
-    )
+    return <SplashScreen />
   }
 
   return (

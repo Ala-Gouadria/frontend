@@ -125,20 +125,37 @@
   display: flex;
   flex-direction: column;
   padding: 22px 30px 28px 30px;
-  border: 3px solid rgba(255, 255, 255, 0.92);
+  border: 3px solid rgba(255, 255, 255, 0.96);
   border-radius: 17px;
   background:
-    radial-gradient(circle at 4% 82%, rgba(116, 180, 255, 0.04), transparent 34%),
-    linear-gradient(110deg, rgba(255, 255, 255, 0.74) 0%, rgba(255, 255, 255, 0.62) 55%, rgba(255, 255, 255, 0.52) 100%);
-  backdrop-filter: blur(34px) saturate(1.05);
-  -webkit-backdrop-filter: blur(34px) saturate(1.05);
+    radial-gradient(circle at 0% 88%, rgba(116, 180, 255, 0.24), transparent 39%),
+    linear-gradient(106deg, rgba(255, 255, 255, 0.84) 0%, rgba(255, 255, 255, 0.68) 56%, rgba(255, 255, 255, 0.5) 100%);
+  backdrop-filter: blur(46px) saturate(1.08);
+  -webkit-backdrop-filter: blur(46px) saturate(1.08);
   box-shadow:
-    0 28px 66px rgba(17, 31, 58, 0.14),
-    0 12px 28px rgba(47, 128, 255, 0.05),
+    -18px 0 54px rgba(255, 255, 255, 0.42),
+    0 28px 66px rgba(17, 31, 58, 0.09),
+    0 16px 34px rgba(47, 128, 255, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.98);
 }
 
-.nora-sidebar-glow,
+.nora-sidebar-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 0% 88%, rgba(86, 165, 255, 0.22), transparent 40%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.04));
+  filter: blur(18px);
+}
+
+.nora-history-sidebar > :not(.nora-sidebar-glow) {
+  position: relative;
+  z-index: 1;
+}
+
 .nora-history-sidebar::before,
 .nora-history-sidebar::after {
   display: none;
@@ -146,15 +163,16 @@
 /* ── SIDEBAR BACKGROUND — lighter, more transparent ── */
 .nora-panel--single .nora-history-sidebar {
   background:
-    radial-gradient(circle at 4% 82%, rgba(116, 180, 255, 0.04), transparent 34%),
-    linear-gradient(110deg, rgba(255, 255, 255, 0.74) 0%, rgba(255, 255, 255, 0.62) 55%, rgba(255, 255, 255, 0.52) 100%);
-  backdrop-filter: blur(34px) saturate(1.05);
-  -webkit-backdrop-filter: blur(34px) saturate(1.05);
+    radial-gradient(circle at 0% 88%, rgba(116, 180, 255, 0.24), transparent 39%),
+    linear-gradient(106deg, rgba(255, 255, 255, 0.84) 0%, rgba(255, 255, 255, 0.68) 56%, rgba(255, 255, 255, 0.5) 100%);
+  backdrop-filter: blur(46px) saturate(1.08);
+  -webkit-backdrop-filter: blur(46px) saturate(1.08);
   box-shadow:
-    0 28px 66px rgba(17, 31, 58, 0.14),
-    0 12px 28px rgba(47, 128, 255, 0.05),
+    -18px 0 54px rgba(255, 255, 255, 0.42),
+    0 28px 66px rgba(17, 31, 58, 0.09),
+    0 16px 34px rgba(47, 128, 255, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.98);
-  border: 3px solid rgba(255, 255, 255, 0.92);
+  border: 3px solid rgba(255, 255, 255, 0.96);
   padding: 22px 30px 28px 30px;
 }
 
