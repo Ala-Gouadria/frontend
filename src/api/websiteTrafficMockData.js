@@ -32,8 +32,8 @@ export const websiteTrafficStatusCardData = {
   revenueLabel: 'Revenue Status',
   revenueValue: 'Sales Slowing',
   topChart: {
-    points: '0,30 18,38 36,36 54,18 72,14 90,24 108,22 126,26 144,24 162,28 180,26 198,28 216,36 234,12 252,8 270,28',
-    fillPoints: '0,44 0,30 18,38 36,36 54,18 72,14 90,24 108,22 126,26 144,24 162,28 180,26 198,28 216,36 234,12 252,8 270,28 270,44',
+    points: '0,30 13,38 26,36 39,18 52,14 65,24 78,22 91,26 104,24 117,28 130,26 143,28 156,36 169,12 182,8 194,28',
+    fillPoints: '0,44 0,30 13,38 26,36 39,18 52,14 65,24 78,22 91,26 104,24 117,28 130,26 143,28 156,36 169,12 182,8 194,28 194,44',
   },
   problemTitle: 'Main Drop Point',
   problemText: 'Users leaving early because of weak engagement',

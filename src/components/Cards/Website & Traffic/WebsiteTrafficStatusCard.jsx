@@ -1,8 +1,7 @@
-import { MiniLineChart, WebsiteStagePath } from '../../visuals-parts'
+import { MiniLineChart, QualityBlocks, WebsiteStagePath } from '../../visuals-parts'
 import { websiteTrafficStatusCardData } from '../../../api/websiteTrafficMockData'
 import {
   BlockLegend,
-  BlockMix,
   CardFooter,
   CardHeader,
 } from './WebsiteCardParts'
@@ -39,7 +38,7 @@ export function WebsiteTrafficStatusCard({ data = websiteTrafficStatusCardData }
       <section className="website-traffic-status-card__quality">
         <h3>{data.qualityTitle}</h3>
         <BlockLegend items={data.legend} />
-        <BlockMix blocks={data.blocks} segments={15} />
+        <QualityBlocks blocks={data.blocks} className="website-traffic-status-card__quality-blocks" />
       </section>
 
       <CardFooter insight={data.insight} ctaLabel={data.ctaLabel} />
