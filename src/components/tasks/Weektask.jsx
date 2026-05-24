@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { weekTaskApi } from '../../api/weekTaskApi'
-import { MiniLineChart, QualityBlocks } from '../visuals-parts'
+import {
+  WEEK_TASK_CHART_DATASETS,
+  WEEK_TASK_CREATED,
+  WEEK_TASK_HISTORY,
+  WEEK_TASK_STATS,
+} from '../../api/weekTaskMockData'
+import { QualityBlocks, TaskHistoryLineChart } from '../visuals-parts'
 import PillButton from '../pages-parts/PillButton'
 import './Weektask.css'
 
@@ -16,33 +22,6 @@ function filterCreated(tasks, filterValue) {
   return tasks
 }
 
-// FIX 1 & 2: Convert numeric data array to SVG points string with reduced height for more compact chart
-function dataToPoints(data = []) {
-  if (!data || data.length < 2) return ''
-  const width = 172
-  const height = 44  // reduced from 50 for shorter/compact chart
-  const min = Math.min(...data)
-  const max = Math.max(...data)
-  const step = width / (data.length - 1)
-
-  return data
-    .map((value, index) => {
-      const x = index * step
-      const y = max === min
-        ? height / 2
-        : height - ((value - min) / (max - min)) * height
-      return `${x.toFixed(1)},${y.toFixed(1)}`
-    })
-    .join(' ')
-}
-
-function dataToFillPoints(data = []) {
-  if (!data || data.length < 2) return ''
-  const points = dataToPoints(data)
-  const width = 172
-  return `0,58 ${points} ${width},58`
-}
-
 // Convert cells array from API to QualityBlocks groups format
 function cellsToBlocks(cells = []) {
   const groups = {}
@@ -52,6 +31,41 @@ function cellsToBlocks(cells = []) {
     groups[tone]++
   })
   return Object.entries(groups).map(([tone, count]) => ({ tone, count }))
+}
+
+function createFallbackSummary() {
+  const acceptedCount = WEEK_TASK_CREATED.filter((task) => task.accepted).length
+  const declinedCount = WEEK_TASK_CREATED.length - acceptedCount
+  const acceptedPct = Math.round((acceptedCount / WEEK_TASK_CREATED.length) * 100)
+
+  return {
+    acceptedCount,
+    declinedCount,
+    acceptedPct,
+    declinedPct: 100 - acceptedPct,
+    cells: WEEK_TASK_CREATED.map((task) => ({
+      id: `fallback-cell-${task.id}`,
+      tone: task.accepted ? 'green' : 'red',
+    })),
+  }
+}
+
+function isEmptyStats(nextStats) {
+  return !nextStats || ((nextStats.total ?? 0) === 0 && (nextStats.completed ?? 0) === 0)
+}
+
+function isEmptyChart(nextChartState) {
+  return !Array.isArray(nextChartState?.points)
+    || nextChartState.points.length < 2
+    || nextChartState.points.every((point) => Number(point) === 0)
+}
+
+function normalizeHistoryTask(task, index) {
+  return {
+    status: task.status ?? (task.completedAt ? 'completed' : 'created'),
+    time: task.time ?? task.completedAgo ?? task.createdAgo ?? `${index + 1}m ago`,
+    ...task,
+  }
 }
 
 function PendingCircle() {
@@ -108,10 +122,13 @@ export default function WeekTask({ onClose }) {
 
       if (cancelled) return
 
-      setStats(nextStats)
-      setAllHistory(nextHistory)
-      setAllCreated(nextCreated)
-      setCreatedSummary(nextSummary)
+      setStats(isEmptyStats(nextStats) ? {
+        ...WEEK_TASK_STATS,
+        completionRate: Math.round((WEEK_TASK_STATS.completed / WEEK_TASK_STATS.total) * 100),
+      } : nextStats)
+      setAllHistory(nextHistory.length ? nextHistory.map(normalizeHistoryTask) : WEEK_TASK_HISTORY)
+      setAllCreated(nextCreated.length ? nextCreated : WEEK_TASK_CREATED)
+      setCreatedSummary(nextSummary.cells?.length ? nextSummary : createFallbackSummary())
       setLoading(false)
     })()
 
@@ -125,7 +142,16 @@ export default function WeekTask({ onClose }) {
 
     ;(async () => {
       const nextChartState = await weekTaskApi.getChartData(chartRange, overviewMode)
-      if (!cancelled) setChartState(nextChartState)
+      if (!cancelled) {
+        setChartState(isEmptyChart(nextChartState)
+          ? {
+              points: WEEK_TASK_CHART_DATASETS[overviewMode][chartRange],
+              latest: WEEK_TASK_CHART_DATASETS[overviewMode][chartRange].at(-1),
+              average: 28,
+              tone: 'green',
+            }
+          : nextChartState)
+      }
     })()
 
     return () => {
@@ -141,16 +167,6 @@ export default function WeekTask({ onClose }) {
   const visibleCreated = useMemo(
     () => filterCreated(allCreated, createdFilter).slice(0, 5),
     [allCreated, createdFilter],
-  )
-
-  const chartPoints = useMemo(
-    () => dataToPoints(chartState.points),
-    [chartState.points],
-  )
-
-  const chartFillPoints = useMemo(
-    () => dataToFillPoints(chartState.points),
-    [chartState.points],
   )
 
   const qualityBlocks = useMemo(
@@ -238,11 +254,10 @@ export default function WeekTask({ onClose }) {
         </div>
 
         <div className="wt-chart-card">
-          <MiniLineChart
-            points={chartPoints}
-            fillPoints={chartFillPoints}
+          <TaskHistoryLineChart
+            data={chartState.points}
             tone="green"
-            className="wt-mini-line-chart"
+            className="wt-history-chart"
           />
           <span className="wt-chart-badge">{chartState.average}</span>
         </div>
@@ -346,12 +361,12 @@ export default function WeekTask({ onClose }) {
 
         <div className="wt-actions">
           <div className="wt-pill-btn-wrap wt-pill-btn-wrap--decline">
-            <PillButton width="100%" height="28px" compact onClick={() => setCreatedFilter('declined')}>
+            <PillButton width="100%" height="40px" compact onClick={() => setCreatedFilter('declined')}>
               DECLINE
             </PillButton>
           </div>
           <div className="wt-pill-btn-wrap wt-pill-btn-wrap--accept">
-            <PillButton width="100%" height="28px" compact onClick={() => setCreatedFilter('accepted')}>
+            <PillButton width="100%" height="40px" compact onClick={() => setCreatedFilter('accepted')}>
               ACCEPTED
             </PillButton>
           </div>
