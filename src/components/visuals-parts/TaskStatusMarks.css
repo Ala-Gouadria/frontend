@@ -1,0 +1,58 @@
+.task-dashed-ring,
+.task-progress-ring {
+  display: block;
+  color: #91c60b;
+  overflow: visible;
+}
+
+.task-dashed-ring {
+  filter: drop-shadow(0 3px 6px rgba(145, 198, 11, 0.16));
+}
+
+.task-dashed-ring__stroke {
+  transform-origin: 50% 50%;
+  animation:
+    taskDashedRingSpin 2.6s linear infinite,
+    taskDashedRingBreathe 1.8s ease-in-out infinite;
+}
+
+.task-progress-ring {
+  filter: drop-shadow(0 7px 14px rgba(128, 184, 10, 0.18));
+}
+
+.task-progress-ring__track {
+  opacity: 0.16;
+}
+
+.task-progress-ring__value {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  animation:
+    taskProgressRingDraw 780ms cubic-bezier(0.16, 1, 0.3, 1) both,
+    taskProgressRingPulse 2.2s ease-in-out 820ms infinite;
+}
+
+@keyframes taskDashedRingSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes taskDashedRingBreathe {
+  0%, 100% {
+    stroke-width: 2;
+    opacity: 0.82;
+  }
+  50% {
+    stroke-width: 2.4;
+    opacity: 1;
+  }
+}
+
+@keyframes taskProgressRingDraw {
+  from { stroke-dashoffset: var(--task-progress-ring-circumference); }
+  to { stroke-dashoffset: var(--task-progress-ring-offset); }
+}
+
+@keyframes taskProgressRingPulse {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(145, 198, 11, 0)); }
+  50% { filter: drop-shadow(0 0 6px rgba(145, 198, 11, 0.42)); }
+}

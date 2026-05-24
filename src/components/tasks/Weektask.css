@@ -93,18 +93,9 @@
   filter: drop-shadow(0 7px 14px rgba(128, 184, 10, 0.22));
 }
 
-.wt-progress-ring svg {
+.wt-progress-ring .task-progress-ring {
   width: 26px;
   height: 26px;
-}
-
-.wt-progress-ring__track {
-  stroke: rgba(168, 213, 29, 0.18);
-}
-
-.wt-progress-ring__value {
-  stroke: currentColor;
-  transition: stroke-dasharray 240ms ease;
 }
 
 .wt-header-title {
@@ -138,8 +129,7 @@
 .wt-count-dot {
   width: 11px;
   height: 11px;
-  border: 1.5px dashed currentColor;
-  border-radius: 999px;
+  flex-shrink: 0;
 }
 
 .wt-close-btn {
@@ -386,7 +376,8 @@
   margin-top: 1px;
 }
 
-.wt-check svg {
+.wt-check svg,
+.wt-check .task-dashed-ring {
   width: 22px;
   height: 22px;
 }
@@ -583,7 +574,7 @@
   }
 
   .wt-progress-ring,
-  .wt-progress-ring svg {
+  .wt-progress-ring .task-progress-ring {
     width: 30px;
     height: 30px;
   }
@@ -659,7 +650,8 @@
   }
 
   .wt-check,
-  .wt-check svg {
+  .wt-check svg,
+  .wt-check .task-dashed-ring {
     width: 20px;
     height: 20px;
   }

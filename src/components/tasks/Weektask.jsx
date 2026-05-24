@@ -6,7 +6,7 @@ import {
   WEEK_TASK_HISTORY,
   WEEK_TASK_STATS,
 } from '../../api/weekTaskMockData'
-import { QualityBlocks, TaskHistoryLineChart } from '../visuals-parts'
+import { QualityBlocks, TaskDashedRing, TaskHistoryLineChart, TaskProgressRing } from '../visuals-parts'
 import PillButton from '../pages-parts/PillButton'
 import './Weektask.css'
 
@@ -66,22 +66,6 @@ function normalizeHistoryTask(task, index) {
     time: task.time ?? task.completedAgo ?? task.createdAgo ?? `${index + 1}m ago`,
     ...task,
   }
-}
-
-function PendingCircle() {
-  return (
-    <svg viewBox="0 0 20 20" width="20" height="20" fill="none" aria-hidden="true">
-      <circle
-        cx="10"
-        cy="10"
-        r="7.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeDasharray="3 4"
-        strokeLinecap="round"
-      />
-    </svg>
-  )
 }
 
 function CompletedCircle() {
@@ -174,8 +158,6 @@ export default function WeekTask({ onClose }) {
     [createdSummary.cells],
   )
 
-  const progressDash = `${(stats.completionRate || 0) * 1.005} 100.5`
-
   if (loading || chartState.points.length === 0) {
     return (
       <div className="wt-root">
@@ -192,26 +174,13 @@ export default function WeekTask({ onClose }) {
         <div className="wt-header">
           <div className="wt-header-left">
             <div className="wt-progress-ring" aria-hidden="true">
-              <svg viewBox="0 0 38 38">
-                <circle cx="19" cy="19" r="15.2" fill="none" className="wt-progress-ring__track" strokeWidth="3.8" />
-                <circle
-                  cx="19"
-                  cy="19"
-                  r="15.2"
-                  fill="none"
-                  className="wt-progress-ring__value"
-                  strokeWidth="3.8"
-                  strokeDasharray={progressDash}
-                  strokeLinecap="round"
-                  transform="rotate(-90 19 19)"
-                />
-              </svg>
+              <TaskProgressRing progress={stats.completionRate} size={26} strokeWidth={4} title="" />
             </div>
             <p className="wt-header-title">Track your task history here</p>
           </div>
           <div className="wt-header-right">
             <span className="wt-count-badge">
-              <span className="wt-count-dot" aria-hidden="true" />
+              <TaskDashedRing size={11} strokeWidth={1.5} className="wt-count-dot" title="" />
               {stats.completed}/{stats.total}
             </span>
             <button type="button" className="wt-close-btn" onClick={onClose} aria-label="Close">
@@ -286,7 +255,7 @@ export default function WeekTask({ onClose }) {
                 style={{ animationDelay: `${120 + index * 35}ms` }}
               >
                 <span className="wt-check">
-                  {task.status === 'completed' ? <CompletedCircle /> : <PendingCircle />}
+                  {task.status === 'completed' ? <CompletedCircle /> : <TaskDashedRing title="" />}
                 </span>
                 <div className="wt-task-info">
                   <span className="wt-task-title">{task.title}</span>
@@ -352,7 +321,7 @@ export default function WeekTask({ onClose }) {
                 className="wt-task-row wt-task-row--created"
                 style={{ animationDelay: `${220 + index * 35}ms` }}
               >
-                <span className="wt-check"><PendingCircle /></span>
+                <span className="wt-check"><TaskDashedRing title="" /></span>
                 <span className="wt-task-title">{task.title}</span>
               </div>
             ))}
