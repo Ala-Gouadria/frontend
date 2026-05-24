@@ -1,3 +1,5 @@
+import './StatusPill.css'
+
 export { ActivityRings } from './ActivityRings'
 export { ActivityProgressPill } from './ActivityProgressPill'
 export { AiActionButton, AiInsight } from './AiInsight'
@@ -17,6 +19,7 @@ export { SocialPlatformBadge } from './SocialPlatformBadge'
 export { SocialPostPreview } from './SocialPostPreview'
 export { StackedBars } from './StackedBars'
 export { StageFlow } from './StageFlow'
+export { StatusPill } from './StatusPill'
 export { StripedBars } from './StripedBars'
 export { TaskAcceptanceBars } from './TaskAcceptanceBars'
 export { TaskHistoryLineChart } from './TaskHistoryLineChart'

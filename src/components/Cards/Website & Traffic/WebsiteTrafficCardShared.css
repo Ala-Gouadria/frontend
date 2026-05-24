@@ -51,30 +51,23 @@
 }
 
 .website-card__status {
-  min-width: 88px;
-  min-height: 42px;
-  padding: 0 22px;
+  min-width: 51px;
+  min-height: 26px;
+  padding: 0 11px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
   background:
-    radial-gradient(circle at 22% 42%, rgba(232, 255, 82, 0.95) 0%, rgba(200, 230, 35, 0.78) 28%, transparent 58%),
-    radial-gradient(circle at 82% 35%, rgba(60, 112, 0, 0.5) 0%, transparent 54%),
-    linear-gradient(180deg, #cfe943 0%, #6eaa00 100%);
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.78), transparent 35%),
+    linear-gradient(180deg, #d8ed4c 0%, #81b604 100%);
   box-shadow:
-    0 21px 31px rgba(138, 199, 0, 0.24),
-    0 0 0 15px rgba(217, 247, 68, 0.22),
-    17px -7px 23px rgba(57, 104, 0, 0.24) inset,
-    -17px 7px 26px rgba(229, 255, 88, 0.3) inset,
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    0 7px 13px rgba(84, 133, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
   color: #fff;
-  font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
-  font-size: 1.12rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0;
-  text-shadow: 0 1px 2px rgba(72, 122, 0, 0.16);
+  animation: websiteStatusGlow 1.8s ease-in-out infinite alternate;
 }
 
 .website-card__label {
@@ -405,19 +398,14 @@
 @keyframes websiteStatusGlow {
   from {
     box-shadow:
-      0 21px 31px rgba(138, 199, 0, 0.24),
-      0 0 0 15px rgba(217, 247, 68, 0.2),
-      17px -7px 23px rgba(57, 104, 0, 0.24) inset,
-      -17px 7px 26px rgba(229, 255, 88, 0.28) inset,
-      inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      0 7px 13px rgba(84, 133, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
   }
   to {
     box-shadow:
-      0 23px 34px rgba(138, 199, 0, 0.27),
-      0 0 0 17px rgba(217, 247, 68, 0.22),
-      17px -7px 23px rgba(57, 104, 0, 0.25) inset,
-      -17px 7px 26px rgba(229, 255, 88, 0.3) inset,
-      inset 0 1px 0 rgba(255, 255, 255, 0.24);
+      0 10px 20px rgba(132, 184, 7, 0.38),
+      0 0 0 6px rgba(208, 235, 52, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.58);
   }
 }
 
