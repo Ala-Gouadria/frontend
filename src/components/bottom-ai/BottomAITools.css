@@ -251,6 +251,7 @@
   transform: scale(1.05);
 }
 
+/* ── Ask Nora pill ────────────────────────────────────────── */
 .bottom-ai-tools__pill--ask {
   min-width: 260px;
   height: 50px;
@@ -260,8 +261,24 @@
     0 8px 18px rgba(15, 23, 42, 0.16),
     inset 0 -4px 0 rgba(15, 23, 42, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: transform 0.16s ease, box-shadow 0.3s ease, border 0.3s ease, background 0.3s ease;
 }
 
+.bottom-ai-tools__pill--ask--active {
+  border: 3px solid transparent;
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #f472b6, #a855f7, #6366f1, #3b82f6) border-box;
+  box-shadow:
+    0 8px 22px rgba(168, 85, 247, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.bottom-ai-tools__pill--ask--active .bottom-ai-tools__logo-icon {
+  filter: none;
+}
+
+/* ── Status group ─────────────────────────────────────────── */
 .bottom-ai-tools__status-group {
   height: 50px;
   display: inline-flex;
@@ -285,7 +302,7 @@
   box-shadow: none;
 }
 
-/* ── Task pill — original, unchanged ─────────────────────── */
+/* ── Task pill ────────────────────────────────────────────── */
 .bottom-ai-tools__pill--task {
   min-width: 160px;
   background: #ffffff;
@@ -293,19 +310,6 @@
   border-right: 4px solid #0d0d0d !important;
 }
 
-.bottom-ai-tools__task-ring {
-  width: 22px;
-  height: 22px;
-  border: 2px solid #b5d42d;       /* thinner — was 3px */
-  border-radius: 50%;
-  border-top-color: transparent;    /* gap at top */
-  flex-shrink: 0;
-  animation: bottom-ai-tools-spin 1s linear infinite;
-}
-
-.bottom-ai-tools__task-ring--spinning {
-  animation: bottom-ai-tools-spin 1s linear infinite;
-}
 .bottom-ai-tools__task-ring-wrap {
   display: flex;
   align-items: center;
@@ -315,18 +319,19 @@
 
 @keyframes bottom-ai-tools-ring-in {
   from { opacity: 0; transform: scale(0.2); width: 0; }
-  to   { opacity: 1; transform: scale(1);   width: 24px; }
+  to   { opacity: 1; transform: scale(1);   width: 22px; }
 }
 
 .bottom-ai-tools__task-ring {
-  width: 24px;
-  height: 24px;
-  border: 3px solid #b5d42d;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #b5d42d;
   border-radius: 50%;
   border-top-color: transparent;
   flex-shrink: 0;
-  animation: bottom-ai-tools-spin 1s linear infinite;  /* always spins when mounted */
+  animation: bottom-ai-tools-spin 1s linear infinite;
 }
+
 /* ── Analyzing pill ───────────────────────────────────────── */
 .bottom-ai-tools__pill--analyzing {
   min-width: 220px;
@@ -338,7 +343,6 @@
   transition: transform 0.16s ease;
 }
 
-/* Green download-fill sweeps in from left when running */
 .bottom-ai-tools__analyzing-fill {
   position: absolute;
   inset: 0;
@@ -352,7 +356,6 @@
   transform: translateX(0%);
 }
 
-/* Shimmer pass over the fill once active */
 .bottom-ai-tools__pill--analyzing--running .bottom-ai-tools__analyzing-fill::after {
   content: '';
   position: absolute;
@@ -367,7 +370,6 @@
   animation: bottom-ai-tools-shimmer 1.8s infinite 0.6s;
 }
 
-/* Idle shimmer (original behaviour, only shown when not running) */
 .bottom-ai-tools__analyzing-shimmer {
   position: absolute;
   inset: 0;
@@ -381,7 +383,6 @@
   animation: bottom-ai-tools-shimmer 2s infinite;
 }
 
-/* Start / Stop icon stack */
 .bottom-ai-tools__analyzing-icon-wrap {
   position: relative;
   z-index: 1;
@@ -405,12 +406,14 @@
   pointer-events: none;
 }
 
+/* ── Shared icons & labels ────────────────────────────────── */
 .bottom-ai-tools__logo-icon {
   width: 24px;
   height: 16px;
   object-fit: contain;
   filter: brightness(0) saturate(100%);
   flex-shrink: 0;
+  transition: filter 0.3s ease;
 }
 
 .bottom-ai-tools__icon {
@@ -428,6 +431,7 @@
   white-space: nowrap;
 }
 
+/* ── Keyframes ────────────────────────────────────────────── */
 @keyframes bottom-ai-tools-spin {
   100% { transform: rotate(360deg); }
 }

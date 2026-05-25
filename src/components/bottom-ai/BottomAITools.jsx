@@ -9,19 +9,27 @@ import handIcon from '../../assets/icons/Nora-AI-Icon/four-finger-icon.svg'
 import startIcon from '../../assets/icons/Nora-AI-Icon/Start-icon.svg'
 import stopIcon from '../../assets/icons/Nora-AI-Icon/Stop-icon.svg'
 import noraLogo from '../../assets/logo/Ask-Nora-Logo.png'
-
+import noraComponentsLogo from '../../assets/logo/Nora_Componennts_Logo.svg'
 function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
+    const [isAsking, setIsAsking] = useState(false)      // ← must be here
   const [isTaskRunning, setIsTaskRunning] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
-
   return (
     <>
       <button
         type="button"
-        className="bottom-ai-tools__pill bottom-ai-tools__pill--ask"
-        onClick={() => onAskNora?.('ask-nora')}
+        className={`bottom-ai-tools__pill bottom-ai-tools__pill--ask ${isAsking ? 'bottom-ai-tools__pill--ask--active' : ''}`}
+        onClick={() => {
+          setIsAsking(r => !r)
+          onAskNora?.('ask-nora')
+        }}
       >
-        <img src={noraLogo} alt="" aria-hidden="true" className="bottom-ai-tools__logo-icon" />
+        <img
+          src={isAsking ? noraComponentsLogo : noraLogo}
+          alt=""
+          aria-hidden="true"
+          className="bottom-ai-tools__logo-icon"
+        />
         <span className="bottom-ai-tools__label">Ask Nora about your business</span>
       </button>
 
