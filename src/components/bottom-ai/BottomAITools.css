@@ -300,9 +300,13 @@
   border-radius: 50%;
   border-top-color: transparent;
   flex-shrink: 0;
+  opacity: 0;  /* ← add this */
+  transition: opacity 0.2s ease;  /* ← add this */
 }
 
+/* running — spin */
 .bottom-ai-tools__task-ring--spinning {
+  opacity: 1;  /* ← add this */
   animation: bottom-ai-tools-spin 1s linear infinite;
 }
 
