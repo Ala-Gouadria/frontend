@@ -294,22 +294,39 @@
 }
 
 .bottom-ai-tools__task-ring {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #b5d42d;       /* thinner — was 3px */
+  border-radius: 50%;
+  border-top-color: transparent;    /* gap at top */
+  flex-shrink: 0;
+  animation: bottom-ai-tools-spin 1s linear infinite;
+}
+
+.bottom-ai-tools__task-ring--spinning {
+  animation: bottom-ai-tools-spin 1s linear infinite;
+}
+.bottom-ai-tools__task-ring-wrap {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  animation: bottom-ai-tools-ring-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes bottom-ai-tools-ring-in {
+  from { opacity: 0; transform: scale(0.2); width: 0; }
+  to   { opacity: 1; transform: scale(1);   width: 24px; }
+}
+
+.bottom-ai-tools__task-ring {
   width: 24px;
   height: 24px;
   border: 3px solid #b5d42d;
   border-radius: 50%;
   border-top-color: transparent;
   flex-shrink: 0;
-  opacity: 0;  /* ← add this */
-  transition: opacity 0.2s ease;  /* ← add this */
+  animation: bottom-ai-tools-spin 1s linear infinite;  /* always spins when mounted */
 }
-
-/* running — spin */
-.bottom-ai-tools__task-ring--spinning {
-  opacity: 1;  /* ← add this */
-  animation: bottom-ai-tools-spin 1s linear infinite;
-}
-
 /* ── Analyzing pill ───────────────────────────────────────── */
 .bottom-ai-tools__pill--analyzing {
   min-width: 220px;

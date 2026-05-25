@@ -35,7 +35,11 @@ function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
             onTaskOpen?.()
           }}
         >
-          <span className={`bottom-ai-tools__task-ring ${isTaskRunning ? 'bottom-ai-tools__task-ring--spinning' : ''}`} />
+         {isTaskRunning && (
+  <span className="bottom-ai-tools__task-ring-wrap">
+    <span className="bottom-ai-tools__task-ring" />
+  </span>
+)}
           <span className="bottom-ai-tools__label">Task Overview</span>
         </button>
 
