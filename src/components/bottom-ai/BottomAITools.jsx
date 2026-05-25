@@ -6,11 +6,17 @@ import { useControls, useTransformEffect } from 'react-zoom-pan-pinch'
 import cursorIcon from '../../assets/icons/Nora-AI-Icon/cursor-icon.svg'
 import eyeIcon from '../../assets/icons/Nora-AI-Icon/eye-icon.svg'
 import handIcon from '../../assets/icons/Nora-AI-Icon/four-finger-icon.svg'
+import startIcon from '../../assets/icons/Nora-AI-Icon/Start-icon.svg'
 import stopIcon from '../../assets/icons/Nora-AI-Icon/Stop-icon.svg'
 import noraLogo from '../../assets/logo/Ask-Nora-Logo.png'
 
 function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
   const [isTaskRunning, setIsTaskRunning] = useState(false)
+
+  const handleTaskToggle = () => {
+    setIsTaskRunning(r => !r)
+    onTaskOpen?.()
+  }
 
   return (
     <>
@@ -26,13 +32,29 @@ function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
       <div className="bottom-ai-tools__status-group">
         <button
           type="button"
-          className="bottom-ai-tools__pill bottom-ai-tools__pill--task"
-          onClick={() => {
-            setIsTaskRunning(r => !r)
-            onTaskOpen?.()
-          }}
+          className={`bottom-ai-tools__pill bottom-ai-tools__pill--task ${isTaskRunning ? 'bottom-ai-tools__pill--task--running' : ''}`}
+          onClick={handleTaskToggle}
+          aria-pressed={isTaskRunning}
+          aria-label={isTaskRunning ? 'Stop task' : 'Start task'}
         >
-          <span className={`bottom-ai-tools__task-ring ${isTaskRunning ? 'bottom-ai-tools__task-ring--spinning' : ''}`} />
+          {/* Green fill layer — animates like a download bar */}
+          <span className={`bottom-ai-tools__task-fill ${isTaskRunning ? 'bottom-ai-tools__task-fill--active' : ''}`} />
+
+          <span className="bottom-ai-tools__task-icon-wrap">
+            <img
+              src={startIcon}
+              alt=""
+              aria-hidden="true"
+              className={`bottom-ai-tools__task-icon bottom-ai-tools__task-icon--start ${isTaskRunning ? 'bottom-ai-tools__task-icon--hidden' : ''}`}
+            />
+            <img
+              src={stopIcon}
+              alt=""
+              aria-hidden="true"
+              className={`bottom-ai-tools__task-icon bottom-ai-tools__task-icon--stop ${isTaskRunning ? '' : 'bottom-ai-tools__task-icon--hidden'}`}
+            />
+          </span>
+
           <span className="bottom-ai-tools__label">Task Overview</span>
         </button>
 
