@@ -12,11 +12,7 @@ import noraLogo from '../../assets/logo/Ask-Nora-Logo.png'
 
 function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
   const [isTaskRunning, setIsTaskRunning] = useState(false)
-
-  const handleTaskToggle = () => {
-    setIsTaskRunning(r => !r)
-    onTaskOpen?.()
-  }
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
 
   return (
     <>
@@ -30,39 +26,49 @@ function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
       </button>
 
       <div className="bottom-ai-tools__status-group">
+        {/* Task Overview — original spinning ring, unchanged */}
         <button
           type="button"
-          className={`bottom-ai-tools__pill bottom-ai-tools__pill--task ${isTaskRunning ? 'bottom-ai-tools__pill--task--running' : ''}`}
-          onClick={handleTaskToggle}
-          aria-pressed={isTaskRunning}
-          aria-label={isTaskRunning ? 'Stop task' : 'Start task'}
+          className="bottom-ai-tools__pill bottom-ai-tools__pill--task"
+          onClick={() => {
+            setIsTaskRunning(r => !r)
+            onTaskOpen?.()
+          }}
         >
-          {/* Green fill layer — animates like a download bar */}
-          <span className={`bottom-ai-tools__task-fill ${isTaskRunning ? 'bottom-ai-tools__task-fill--active' : ''}`} />
+          <span className={`bottom-ai-tools__task-ring ${isTaskRunning ? 'bottom-ai-tools__task-ring--spinning' : ''}`} />
+          <span className="bottom-ai-tools__label">Task Overview</span>
+        </button>
 
-          <span className="bottom-ai-tools__task-icon-wrap">
+        {/* Analyzing — start/stop icon swap + green download fill */}
+        <button
+          type="button"
+          className={`bottom-ai-tools__pill bottom-ai-tools__pill--analyzing ${isAnalyzing ? 'bottom-ai-tools__pill--analyzing--running' : ''}`}
+          onClick={() => setIsAnalyzing(r => !r)}
+          aria-pressed={isAnalyzing}
+          aria-label={isAnalyzing ? 'Stop analyzing' : 'Start analyzing'}
+        >
+          {/* Green fill sweeps in from left like a download bar */}
+          <span className={`bottom-ai-tools__analyzing-fill ${isAnalyzing ? 'bottom-ai-tools__analyzing-fill--active' : ''}`} />
+
+          {/* Shimmer on top of the green fill when idle (original behaviour) */}
+          {!isAnalyzing && <span className="bottom-ai-tools__analyzing-shimmer" />}
+
+          {/* Start / Stop icon swap */}
+          <span className="bottom-ai-tools__analyzing-icon-wrap">
             <img
               src={startIcon}
               alt=""
               aria-hidden="true"
-              className={`bottom-ai-tools__task-icon bottom-ai-tools__task-icon--start ${isTaskRunning ? 'bottom-ai-tools__task-icon--hidden' : ''}`}
+              className={`bottom-ai-tools__analyzing-icon ${isAnalyzing ? 'bottom-ai-tools__analyzing-icon--hidden' : ''}`}
             />
             <img
               src={stopIcon}
               alt=""
               aria-hidden="true"
-              className={`bottom-ai-tools__task-icon bottom-ai-tools__task-icon--stop ${isTaskRunning ? '' : 'bottom-ai-tools__task-icon--hidden'}`}
+              className={`bottom-ai-tools__analyzing-icon ${isAnalyzing ? '' : 'bottom-ai-tools__analyzing-icon--hidden'}`}
             />
           </span>
 
-          <span className="bottom-ai-tools__label">Task Overview</span>
-        </button>
-
-        <button type="button" className="bottom-ai-tools__pill bottom-ai-tools__pill--analyzing">
-          <span className="bottom-ai-tools__analyzing-shimmer" />
-          <span className="bottom-ai-tools__stop-wrap">
-            <img src={stopIcon} alt="" aria-hidden="true" className="bottom-ai-tools__stop-icon" />
-          </span>
           <span className="bottom-ai-tools__label">Analyzing competitors m...</span>
         </button>
       </div>
