@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
@@ -67,9 +68,9 @@ function PlusIcon() {
   )
 }
 
-function SyncIcon() {
+function SyncIcon({ className }) {
   return (
-    <svg viewBox="0 0 18 18" aria-hidden="true">
+    <svg className={className} viewBox="0 0 18 18" aria-hidden="true">
       <path d="M13.8 5.5A5.7 5.7 0 0 0 4 7.1" />
       <path d="M13.8 3.2v2.3h-2.3" />
       <path d="M4.2 12.5A5.7 5.7 0 0 0 14 10.9" />
@@ -78,12 +79,14 @@ function SyncIcon() {
   )
 }
 
-function IntegrationCard({ item, index }) {
-  const synced = item.state === 'synced'
+function IntegrationCard({ item, index, onConnect, onSync }) {
+  const isConnecting = item.state === 'connecting'
+  const isSynced = item.state === 'synced'
+  const isSyncing = item.state === 'syncing'
 
   return (
     <article
-      className={`integrate-card ${synced ? 'integrate-card--synced' : ''}`}
+      className={`integrate-card ${isSynced || isSyncing ? 'integrate-card--synced' : ''} ${isConnecting ? 'integrate-card--connecting' : ''}`}
       style={{ '--integrate-delay': `${130 + index * 70}ms` }}
     >
       <div className="integrate-card__body">
@@ -98,17 +101,69 @@ function IntegrationCard({ item, index }) {
 
       <button
         type="button"
-        className={`integrate-card__action ${synced ? 'integrate-card__action--synced' : ''}`}
-        aria-label={synced ? `${item.name} synced` : `Connect ${item.name}`}
+        className={`integrate-card__action ${
+          isSynced || isSyncing ? 'integrate-card__action--synced' : ''
+        } ${isConnecting ? 'integrate-card__action--connecting' : ''}`}
+        onClick={() => {
+          if (isSynced) {
+            onSync(item.id)
+          } else if (item.state === 'connect') {
+            onConnect(item.id)
+          }
+        }}
+        disabled={isConnecting || isSyncing}
+        aria-label={
+          isSynced
+            ? `Sync ${item.name}`
+            : isConnecting
+            ? `Connecting to ${item.name}`
+            : `Connect ${item.name}`
+        }
       >
-        <span>{synced ? 'Synced' : 'Connect'}</span>
-        {synced ? <SyncIcon /> : <PlusIcon />}
+        <span>
+          {isConnecting
+            ? 'Connecting...'
+            : isSyncing
+            ? 'Syncing...'
+            : isSynced
+            ? 'Synced'
+            : 'Connect'}
+        </span>
+        {isSynced || isSyncing || isConnecting ? (
+          <SyncIcon className={isConnecting || isSyncing ? 'integrate-icon--spin' : ''} />
+        ) : (
+          <PlusIcon />
+        )}
       </button>
     </article>
   )
 }
 
 export default function Integrate({ activeNavId = 'connect', onNavigate }) {
+  const [integrations, setIntegrations] = useState(INTEGRATIONS)
+
+  const handleConnect = (id) => {
+    setIntegrations((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, state: 'connecting' } : item))
+    )
+    setTimeout(() => {
+      setIntegrations((prev) =>
+        prev.map((item) => (item.id === id ? { ...item, state: 'synced' } : item))
+      )
+    }, 1500)
+  }
+
+  const handleSync = (id) => {
+    setIntegrations((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, state: 'syncing' } : item))
+    )
+    setTimeout(() => {
+      setIntegrations((prev) =>
+        prev.map((item) => (item.id === id ? { ...item, state: 'synced' } : item))
+      )
+    }, 1200)
+  }
+
   return (
     <main className="integrate-page" style={{ '--integrate-dot-bg': `url("${bgDot}")` }}>
       <Photo />
@@ -132,8 +187,14 @@ export default function Integrate({ activeNavId = 'connect', onNavigate }) {
         <div className="integrate-divider" />
 
         <div className="integrate-grid">
-          {INTEGRATIONS.map((item, index) => (
-            <IntegrationCard key={item.id} item={item} index={index} />
+          {integrations.map((item, index) => (
+            <IntegrationCard
+              key={item.id}
+              item={item}
+              index={index}
+              onConnect={handleConnect}
+              onSync={handleSync}
+            />
           ))}
         </div>
       </section>
