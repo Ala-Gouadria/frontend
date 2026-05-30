@@ -156,7 +156,7 @@
 }
 /* ── SIDEBAR BACKGROUND — lighter, more transparent ── */
 .nora-panel--single .nora-history-sidebar {
-  background: rgba(255,255,255,0.84);
+  background: #ffffff;
 }
 /* ── HISTORY title — smaller, Delight font ── */
 .nora-sidebar-title {
@@ -865,8 +865,36 @@
   }
 
   .nora-history-sidebar {
-    display: none;
-  }
+  position: relative;
+  z-index: 2;
+
+  flex: 0 0 278px;
+  width: 278px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  padding: 22px 30px;
+
+  border-radius: 22px;
+
+  /* cleaner border */
+  border: 1.5px solid rgba(255,255,255,0.95);
+
+  /* MORE WHITE */
+  background: rgba(255,255,255,0.94);
+
+  /* softer glass */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  /* cleaner shadow */
+  box-shadow:
+    0 8px 30px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
 
   .nora-welcome-scene {
     padding: 108px 24px 16px;
