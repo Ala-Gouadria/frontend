@@ -11,7 +11,7 @@ const PROJECTS = [
   },
   {
     id: 2,
-    name: 'ZynovaStudio',
+    name: 'Zynova Studio',
     variant: 'zynova',
   },
 ]
