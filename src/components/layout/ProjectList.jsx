@@ -8,21 +8,18 @@ const PROJECTS = [
     id: 1,
     name: 'XWorldLTD',
     variant: 'xworld',
-    balance: {
-      total: 10000,
-      remaining: 1649,
-    },
   },
   {
     id: 2,
     name: 'Zynova Studio',
     variant: 'zynova',
-    balance: {
-      total: 7500,
-      remaining: 4920,
-    },
   },
 ]
+
+const BALANCE = {
+  total: 10000,
+  remaining: 1649,
+}
 
 function formatCredits(value) {
   return new Intl.NumberFormat('en-US').format(value)
@@ -148,8 +145,8 @@ export default function ProjectList({ onNavigate }) {
     }
   }
 
-  const totalCredits = active.balance?.total ?? 0
-  const remainingCredits = active.balance?.remaining ?? 0
+  const totalCredits = BALANCE.total
+  const remainingCredits = BALANCE.remaining
   const balanceRatio = totalCredits > 0 ? Math.max(0, Math.min(1, remainingCredits / totalCredits)) : 0
   const balanceDegrees = `${Math.round(balanceRatio * 360)}deg`
 
