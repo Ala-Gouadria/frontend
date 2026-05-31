@@ -119,44 +119,44 @@
 .nora-history-sidebar {
   position: relative;
   z-index: 2;
-
   flex: 0 0 278px;
   width: 278px;
-
   display: flex;
   flex-direction: column;
-
   overflow: hidden;
-
-  padding: 22px 30px 22px 30px;
-
+  overflow: hidden;
+  padding: 22px 30px;
   border-radius: 22px;
-
-  /* softer border */
-  border: 2px solid rgba(255,255,255,0.9);
-
-  /* FULL WHITE */
-  background: rgba(255,255,255,0.82);
-
-  /* softer glass */
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-
-  /* subtle shadow */
+  border: 1.5px solid rgba(255, 255, 255, 0.96);
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   box-shadow:
-    0 10px 35px rgba(20, 30, 50, 0.08),
-    inset 0 1px 0 rgba(255,255,255,0.9);
+    0 12px 34px rgba(20, 30, 50, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
 }
 
+.nora-history-sidebar > * {
+  position: relative;
+  z-index: 1;
+}
 
-
-.nora-history-sidebar::before,
 .nora-history-sidebar::after {
   display: none;
+}
+
+.nora-history-sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  background: #ffffff;
 }
 /* ── SIDEBAR BACKGROUND — lighter, more transparent ── */
 .nora-panel--single .nora-history-sidebar {
   background: #ffffff;
+  pointer-events: auto;
 }
 /* ── HISTORY title — smaller, Delight font ── */
 .nora-sidebar-title {
@@ -865,36 +865,15 @@
   }
 
   .nora-history-sidebar {
-  position: relative;
-  z-index: 2;
-
-  flex: 0 0 278px;
-  width: 278px;
-
-  display: flex;
-  flex-direction: column;
-
-  overflow: hidden;
-
-  padding: 22px 30px;
-
-  border-radius: 22px;
-
-  /* cleaner border */
-  border: 1.5px solid rgba(255,255,255,0.95);
-
-  /* MORE WHITE */
-  background: rgba(255,255,255,0.94);
-
-  /* softer glass */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-
-  /* cleaner shadow */
-  box-shadow:
-    0 8px 30px rgba(15, 23, 42, 0.06),
-    inset 0 1px 0 rgba(255,255,255,0.9);
-}
+    padding: 20px 24px;
+    border: 1.5px solid rgba(255, 255, 255, 0.96);
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow:
+      0 8px 30px rgba(15, 23, 42, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
 
   .nora-welcome-scene {
     padding: 108px 24px 16px;
