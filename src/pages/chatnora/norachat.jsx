@@ -152,7 +152,7 @@ function HistorySidebar({
   showAll,
   onToggleShowAll,
 }) {
-  const visibleItems = showAll ? conversations : conversations.slice(0, 7)
+  const visibleItems = showAll ? conversations : conversations.slice(0, 8)
 
   return (
     <aside className="nora-history-sidebar">
