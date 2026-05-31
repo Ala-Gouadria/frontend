@@ -8,17 +8,24 @@ const PROJECTS = [
     id: 1,
     name: 'XWorldLTD',
     variant: 'xworld',
+    balance: {
+      total: 10000,
+      remaining: 1649,
+    },
   },
   {
     id: 2,
     name: 'Zynova Studio',
     variant: 'zynova',
+    balance: {
+      total: 7500,
+      remaining: 4920,
+    },
   },
 ]
 
-const BALANCE = {
-  total: '10,000 Credits',
-  remaining: '1,649',
+function formatCredits(value) {
+  return new Intl.NumberFormat('en-US').format(value)
 }
 
 function ProjectAvatar({ variant, className = '' }) {
@@ -141,6 +148,10 @@ export default function ProjectList({ onNavigate }) {
     }
   }
 
+  const totalCredits = active.balance?.total ?? 0
+  const remainingCredits = active.balance?.remaining ?? 0
+  const balanceRatio = totalCredits > 0 ? Math.max(0, Math.min(1, remainingCredits / totalCredits)) : 0
+  const balanceDegrees = `${Math.round(balanceRatio * 360)}deg`
 
   return (
     <div className="project-list" ref={wrapperRef}>
@@ -180,7 +191,11 @@ export default function ProjectList({ onNavigate }) {
             <div className="project-balance">
               <div className="project-balance__header">
                 <div className="project-balance__label">
-                  <span className="project-balance__ring" aria-hidden="true" />
+                  <span
+                    className="project-balance__ring"
+                    aria-hidden="true"
+                    style={{ '--project-balance-progress': balanceDegrees }}
+                  />
                   <span>Balance</span>
                 </div>
                 <button type="button" className="project-balance__upgrade" onClick={openPricing}>
@@ -191,11 +206,11 @@ export default function ProjectList({ onNavigate }) {
               <div className="project-balance__rows">
                 <div className="project-balance__row">
                   <span className="project-balance__muted">Total</span>
-                  <span className="project-balance__value">{BALANCE.total}</span>
+                  <span className="project-balance__value">{formatCredits(totalCredits)} Credits</span>
                 </div>
                 <div className="project-balance__row">
                   <span className="project-balance__muted">Remaining</span>
-                  <span className="project-balance__value">{BALANCE.remaining}</span>
+                  <span className="project-balance__value">{formatCredits(remainingCredits)}</span>
                 </div>
               </div>
             </div>

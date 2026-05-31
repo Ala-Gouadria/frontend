@@ -193,28 +193,45 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 2.5px solid #dde2e7;
-  border-right-color: #28c768;
-  border-bottom-color: #28c768;
-  box-sizing: border-box;
-  transform: rotate(42deg);
+  background: conic-gradient(
+    from -90deg,
+    #28c768 0deg,
+    #28c768 var(--project-balance-progress, 180deg),
+    #dde2e7 var(--project-balance-progress, 180deg),
+    #dde2e7 360deg
+  );
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.project-balance__ring::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: #ffffff;
 }
 
 .project-balance__upgrade {
-  min-width: 92px;
-  height: 32px;
-  padding: 0 18px;
-  border-radius: 10px;
-  border: 1px solid rgba(137, 163, 255, 0.95);
-  background: linear-gradient(180deg, #6ea6ff 0%, #4f8fff 54%, #6d9eff 100%);
+  width: 89px;
+  height: 26px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(157, 183, 255, 0.95);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 34%),
+    linear-gradient(180deg, #79afff 0%, #548fff 58%, #6d84ff 100%);
   color: #ffffff;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 400;
+  line-height: 1;
   letter-spacing: 0;
+  text-shadow: 0 1px 1px rgba(52, 92, 202, 0.24);
   box-shadow:
-    0 6px 14px rgba(72, 126, 255, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.48),
-    0 0 0 1px rgba(184, 199, 255, 0.42);
+    0 2px 7px rgba(87, 127, 255, 0.32),
+    0 0 0 1px rgba(196, 209, 255, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58),
+    inset 0 -1px 0 rgba(72, 108, 228, 0.16);
   cursor: pointer;
   transition: transform 160ms ease, box-shadow 160ms ease;
 }
@@ -222,9 +239,10 @@
 .project-balance__upgrade:hover {
   transform: translateY(-1px);
   box-shadow:
-    0 8px 18px rgba(72, 126, 255, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.52),
-    0 0 0 1px rgba(184, 199, 255, 0.5);
+    0 3px 9px rgba(87, 127, 255, 0.36),
+    0 0 0 1px rgba(196, 209, 255, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    inset 0 -1px 0 rgba(72, 108, 228, 0.18);
 }
 
 .project-balance__rows {
