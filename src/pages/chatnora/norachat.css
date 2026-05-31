@@ -997,7 +997,7 @@
 .nora-chat-page .nora-panel--full .nora-history-sidebar {
   flex: 0 0 278px;
   width: 278px;
-  padding: 18px 28px 28px 17px;
+  padding: 14px 26px 22px 12px;
   border: 0;
   border-radius: 0;
   background:
@@ -1009,62 +1009,69 @@
 }
 
 .nora-chat-page .nora-sidebar-title {
-  margin-bottom: 52px;
-  font-size: 14px;
+  margin-bottom: 46px;
+  font-size: 13px;
   font-weight: 700;
 }
 
 .nora-chat-page .nora-new-chat-btn {
-  gap: 11px;
-  margin-bottom: 14px;
-  font-size: 15px;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-left: 6px;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .nora-chat-page .nora-new-chat-icon,
 .nora-chat-page .nora-new-chat-icon img {
-  width: 27px !important;
-  height: 16px !important;
+  width: 26px !important;
+  height: 15px !important;
 }
 
 .nora-chat-page .nora-recents-title {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  padding-left: 6px;
   color: #afb6c3;
   font-size: 12px;
   font-weight: 400;
 }
 
 .nora-chat-page .nora-history-list {
-  gap: 12px;
+  gap: 10px;
 }
 
 .nora-chat-page .nora-history-item {
   min-height: 30px;
-  padding: 0 10px;
-  border-radius: 10px;
+  padding: 0 10px 0 8px;
+  border-radius: 9px;
   align-items: center;
 }
 
 .nora-chat-page .nora-history-item.active {
-  background: rgba(233, 233, 233, 0.82);
+  background: rgba(239, 239, 239, 0.9);
 }
 
 .nora-chat-page .nora-history-item-text {
   font-size: 13px;
-  line-height: 1.1;
+  line-height: 1.05;
+  font-weight: 400;
 }
 
 .nora-history-item-more {
   flex: 0 0 auto;
-  color: #6f737b;
-  font-size: 18px;
+  color: #6d7178;
+  font-size: 17px;
   line-height: 1;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
 }
 
 .nora-chat-page .nora-view-all-btn {
-  margin-top: 8px;
+  margin-top: 10px;
+  padding-left: 6px;
+  color: #3d7cff;
   font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .nora-chat-page .nora-panel--full .nora-main-content {
