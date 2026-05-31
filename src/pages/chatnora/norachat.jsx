@@ -52,6 +52,15 @@ function deriveConversationTitle(text, fallbackLabel) {
   return cleaned.length > 42 ? `${cleaned.slice(0, 39).trimEnd()}...` : cleaned
 }
 
+function isFloatingPromptMessage(message, index) {
+  if (message.role !== 'user' || index === 0) {
+    return false
+  }
+
+  const normalized = String(message.text ?? '').replace(/\s+/g, ' ').trim()
+  return normalized.length > 0 && normalized.length <= 32
+}
+
 function AttachmentPreview({ attachment, compact = false }) {
   if (attachment.type === 'image') {
     return (
@@ -94,12 +103,13 @@ function AttachmentPreview({ attachment, compact = false }) {
   )
 }
 
-function MessageBubble({ message }) {
+function MessageBubble({ message, index }) {
   const lines = String(message.text ?? '').split('\n').filter(Boolean)
+  const useFloatingPrompt = isFloatingPromptMessage(message, index)
 
   return (
-    <div className={`nora-chat-row nora-chat-row--${message.role}`}>
-      <div className={`nora-message-bubble ${message.role}`}>
+    <div className={`nora-chat-row nora-chat-row--${message.role} ${useFloatingPrompt ? 'nora-chat-row--floating-prompt' : ''}`}>
+      <div className={`nora-message-bubble ${message.role} ${useFloatingPrompt ? 'nora-message-bubble--floating-prompt' : ''}`}>
         {message.serviceLabel ? (
           <span className="nora-inline-service-tag">{message.serviceLabel}</span>
         ) : null}
@@ -170,6 +180,9 @@ function HistorySidebar({
               <span className="nora-history-item-text">{conversation.title}</span>
               <span className="nora-history-item-preview">{conversation.preview}</span>
             </div>
+            {activeConversationId === conversation.id ? (
+              <span className="nora-history-item-more" aria-hidden="true">...</span>
+            ) : null}
             <span className="nora-history-item-time">{formatHistoryTime(conversation.updatedAt)}</span>
           </button>
         ))}
@@ -868,8 +881,8 @@ function NoraChatWorkspace({ open, onClose, onNavigate, pairedWithTask = false, 
           <div className="nora-conversation-scene">
             {isLoadingConversation ? <div className="nora-workspace-loading">Loading conversation...</div> : null}
 
-            {currentMessages.map((message) => (
-              <MessageBubble key={message.id} message={message} />
+            {currentMessages.map((message, index) => (
+              <MessageBubble key={message.id} message={message} index={index} />
             ))}
 
             <div ref={conversationEndRef} />
