@@ -126,6 +126,38 @@
   background: #fbfbfb;
 }
 
+.settings-lang-switcher {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.settings-lang-btn {
+  height: 31px;
+  padding: 0 18px;
+  border-radius: 8px;
+  border: 1.2px solid rgba(20, 20, 20, 0.38);
+  background: #ffffff;
+  color: #111111;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  letter-spacing: -0.04em;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.settings-lang-btn:hover {
+  border-color: rgba(20, 20, 20, 0.62);
+  transform: translateY(-1px);
+}
+
+.settings-lang-btn--active {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
+
 .settings-card--security {
   margin-top: 22px;
 }

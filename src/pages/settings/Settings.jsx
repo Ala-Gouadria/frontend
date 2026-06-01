@@ -1,29 +1,10 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
 import { BottomAIStatusTools } from '../../components/bottom-ai/BottomAITools'
 import './Settings.css'
-
-const PROFILE_ROWS = [
-  { label: 'E-Mail Address', value: 'abtahi.shipar@gmail.com' },
-  { label: 'Given Name', value: 'Abtahi Shipar', action: 'Update' },
-  { label: 'Current Plan', value: 'Free', action: 'Upgrade' },
-  { label: 'Change Password', value: 'Update your password', action: 'Upgrade' },
-  { label: 'Language', value: 'English', action: 'Update' },
-]
-
-const WORKSPACE_ROWS = [
-  { label: 'Integration', view: 'settings-integrations' },
-  { label: 'Team Management', view: 'settings-team' },
-]
-const BILLING_ROWS = [
-  { label: 'Payment Method' },
-  { label: 'Billing History' },
-  { label: 'Report a Bug' },
-  { label: 'Terms of Use', view: 'settings-terms' },
-  { label: 'Privacy Policy', view: 'settings-privacy' },
-]
 
 function SettingsCard({ children, className = '' }) {
   return <section className={`settings-card ${className}`}>{children}</section>
@@ -58,6 +39,33 @@ function SettingsRow({ label, value, action, onClick }) {
   )
 }
 
+function LanguageRow({ label, currentLang, onLanguageChange }) {
+  return (
+    <div className="settings-row">
+      <div>
+        <strong>{label}</strong>
+      </div>
+      {/* use span so .settings-row div rule does not apply */}
+      <span className="settings-lang-switcher">
+        <button
+          type="button"
+          className={`settings-lang-btn ${currentLang === 'en' ? 'settings-lang-btn--active' : ''}`}
+          onClick={() => onLanguageChange('en')}
+        >
+          English
+        </button>
+        <button
+          type="button"
+          className={`settings-lang-btn ${currentLang === 'ar' ? 'settings-lang-btn--active' : ''}`}
+          onClick={() => onLanguageChange('ar')}
+        >
+          العربية
+        </button>
+      </span>
+    </div>
+  )
+}
+
 function Toggle({ enabled = true, onToggle }) {
   const handleToggle = (e) => {
     e.stopPropagation()
@@ -77,20 +85,42 @@ function Toggle({ enabled = true, onToggle }) {
 }
 
 export default function Settings({ onNavigate }) {
-  // State for toggles
+  const { t, i18n } = useTranslation()
+  const currentLang = i18n.language?.startsWith('ar') ? 'ar' : 'en'
+
+  const handleLanguageChange = (lang) => {
+    i18n.changeLanguage(lang)
+  }
+
   const [notificationsEnabled, setNotificationsEnabled] = useState(true)
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false)
 
-  // Handlers for destructive actions
+  const profileRows = [
+    { label: t('settings.emailAddress'), value: 'abtahi.shipar@gmail.com' },
+    { label: t('settings.givenName'), value: 'Abtahi Shipar', action: t('settings.update') },
+    { label: t('settings.currentPlan'), value: t('settings.free'), action: t('settings.upgrade') },
+    { label: t('settings.changePassword'), value: t('settings.updatePassword'), action: t('settings.upgrade') },
+  ]
+
+  const workspaceRows = [
+    { label: t('settings.integration'), view: 'settings-integrations' },
+    { label: t('settings.teamManagement'), view: 'settings-team' },
+  ]
+
+  const billingRows = [
+    { label: t('settings.paymentMethod') },
+    { label: t('settings.billingHistory') },
+    { label: t('settings.reportBug') },
+    { label: t('settings.termsOfUse'), view: 'settings-terms' },
+    { label: t('settings.privacyPolicy'), view: 'settings-privacy' },
+  ]
+
   const handleSignOutAllDevices = () => {
     const confirmed = window.confirm('Sign out of all devices?\n\nYou will be logged out on all browsers and devices. You will need to sign in again on each device.')
     if (confirmed) {
-      // Clear any session tokens / local storage indicators
       localStorage.removeItem('authToken')
       sessionStorage.clear()
-      // Optionally notify other tabs
       localStorage.setItem('logout-event', Date.now().toString())
-      // Navigate to login page if onNavigate supports it, otherwise reload
       if (onNavigate && typeof onNavigate === 'function') {
         onNavigate('login')
       } else {
@@ -105,13 +135,9 @@ export default function Settings({ onNavigate }) {
       'This action is IRREVERSIBLE. All your projects, data, and settings will be permanently deleted.\n\n' +
       'Type "DELETE MY ACCOUNT" below to confirm:'
     )
-    
     if (confirmed === 'DELETE MY ACCOUNT') {
-      // Perform account deletion (API call would go here)
-      // Clear all user data
       localStorage.clear()
       sessionStorage.clear()
-      // Redirect to goodbye/landing page
       if (onNavigate && typeof onNavigate === 'function') {
         onNavigate('goodbye')
       } else {
@@ -130,49 +156,54 @@ export default function Settings({ onNavigate }) {
 
       <div className="settings-content">
         <header className="settings-header">
-          <h1>Settings</h1>
-          <p>Manage your profile and workspace memberships.</p>
+          <h1>{t('settings.title')}</h1>
+          <p>{t('settings.subtitle')}</p>
         </header>
 
         <div className="settings-divider" />
 
         <SettingsCard>
-          {PROFILE_ROWS.map((row) => (
+          {profileRows.map((row) => (
             <SettingsRow key={row.label} {...row} />
           ))}
+          <LanguageRow
+            label={t('settings.language')}
+            currentLang={currentLang}
+            onLanguageChange={handleLanguageChange}
+          />
         </SettingsCard>
 
         <SettingsCard>
-          {WORKSPACE_ROWS.map((row) => (
+          {workspaceRows.map((row) => (
             <SettingsRow key={row.label} label={row.label} onClick={() => onNavigate?.(row.view)} />
           ))}
         </SettingsCard>
 
         <SettingsCard>
-          {BILLING_ROWS.map((row) => (
+          {billingRows.map((row) => (
             <SettingsRow key={row.label} label={row.label} onClick={row.view ? () => onNavigate?.(row.view) : undefined} />
           ))}
         </SettingsCard>
 
         <SettingsCard className="settings-card--security">
           <div className="settings-row settings-row--control">
-            <strong>Notifications</strong>
+            <strong>{t('settings.notifications')}</strong>
             <Toggle enabled={notificationsEnabled} onToggle={setNotificationsEnabled} />
           </div>
           <div className="settings-row settings-row--control">
-            <strong>Two-Factor Authentication</strong>
+            <strong>{t('settings.twoFactor')}</strong>
             <Toggle enabled={twoFactorEnabled} onToggle={setTwoFactorEnabled} />
           </div>
           <div className="settings-row settings-row--control">
-            <strong>Sign out of all devices</strong>
+            <strong>{t('settings.signOutAllDevices')}</strong>
             <button type="button" className="settings-outline-button" onClick={handleSignOutAllDevices}>
-              Sign Out
+              {t('settings.signOut')}
             </button>
           </div>
           <div className="settings-row settings-row--control">
-            <strong className="settings-danger-text">Delete Entire Account</strong>
+            <strong className="settings-danger-text">{t('settings.deleteAccount')}</strong>
             <button type="button" className="settings-outline-button settings-outline-button--danger" onClick={handleDeleteAccount}>
-              Delete
+              {t('settings.delete')}
             </button>
           </div>
         </SettingsCard>

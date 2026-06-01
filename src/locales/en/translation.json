@@ -1,1 +1,28 @@
-{}
+{
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your profile and workspace memberships.",
+    "emailAddress": "E-Mail Address",
+    "givenName": "Given Name",
+    "currentPlan": "Current Plan",
+    "free": "Free",
+    "changePassword": "Change Password",
+    "updatePassword": "Update your password",
+    "language": "Language",
+    "update": "Update",
+    "upgrade": "Upgrade",
+    "integration": "Integration",
+    "teamManagement": "Team Management",
+    "paymentMethod": "Payment Method",
+    "billingHistory": "Billing History",
+    "reportBug": "Report a Bug",
+    "termsOfUse": "Terms of Use",
+    "privacyPolicy": "Privacy Policy",
+    "notifications": "Notifications",
+    "twoFactor": "Two-Factor Authentication",
+    "signOutAllDevices": "Sign out of all devices",
+    "signOut": "Sign Out",
+    "deleteAccount": "Delete Entire Account",
+    "delete": "Delete"
+  }
+}

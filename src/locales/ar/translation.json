@@ -1,1 +1,28 @@
-{}
+{
+  "settings": {
+    "title": "الإعدادات",
+    "subtitle": "إدارة ملفك الشخصي وعضوية مساحة العمل.",
+    "emailAddress": "عنوان البريد الإلكتروني",
+    "givenName": "الاسم",
+    "currentPlan": "الخطة الحالية",
+    "free": "مجاني",
+    "changePassword": "تغيير كلمة المرور",
+    "updatePassword": "تحديث كلمة المرور",
+    "language": "اللغة",
+    "update": "تحديث",
+    "upgrade": "ترقية",
+    "integration": "التكامل",
+    "teamManagement": "إدارة الفريق",
+    "paymentMethod": "طريقة الدفع",
+    "billingHistory": "سجل الفواتير",
+    "reportBug": "الإبلاغ عن خطأ",
+    "termsOfUse": "شروط الاستخدام",
+    "privacyPolicy": "سياسة الخصوصية",
+    "notifications": "الإشعارات",
+    "twoFactor": "المصادقة الثنائية",
+    "signOutAllDevices": "تسجيل الخروج من جميع الأجهزة",
+    "signOut": "تسجيل الخروج",
+    "deleteAccount": "حذف الحساب بالكامل",
+    "delete": "حذف"
+  }
+}
