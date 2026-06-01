@@ -932,14 +932,6 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   const handleTaskToggle = () => {
     setIsTaskOpen((current) => !current)
   }
-
-  const handleOpenWorkspace = () => {
-    setIsWorkspaceOpen(true)
-  }
-
-  const handleOpenTask = () => {
-    setIsTaskOpen(true)
-  }
 return (
   <>
     <div
@@ -961,14 +953,7 @@ return (
           transformOrigin: 'center center',
           willChange: 'transform',
           transition: 'transform 580ms cubic-bezier(0.22, 1, 0.36, 1)',
-          ...(isAnyPanelOpen
-            ? {
-                transform: 'scale(1) translateX(0px)',
-                pointerEvents: 'none',
-              }
-            : {
-                transform: 'scale(1) translateX(0px)',
-              }),
+          transform: 'scale(1) translateX(0px)',
         }}
       >
         <Photo />
@@ -1040,8 +1025,6 @@ return (
           open={shouldShowWorkspace}
           onClose={() => setIsWorkspaceOpen(false)}
           pairedWithTask={panelsPaired}
-          canOpenTask={!isTaskOpen}
-          onOpenTask={handleOpenTask}
         />
       ) : null}
       {/* ── Task Overview panel — slides in from the left ── */}
@@ -1062,11 +1045,7 @@ return (
             borderRadius: 24,
           }}
         >
-          <WeekTask
-            onClose={() => setIsTaskOpen(false)}
-            canOpenWorkspace={!isWorkspaceOpen}
-            onOpenWorkspace={handleOpenWorkspace}
-          />
+          <WeekTask onClose={() => setIsTaskOpen(false)} />
         </div>
       ) : null}
     </div>

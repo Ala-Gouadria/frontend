@@ -422,8 +422,6 @@ export default function NoraWorkspace({
   open,
   onClose,
   pairedWithTask = false,
-  canOpenTask = false,
-  onOpenTask,
 }) {
   const [services, setServices] = useState([])
   const [conversationList, setConversationList] = useState([])
@@ -844,16 +842,6 @@ export default function NoraWorkspace({
         <div className="nora-bg-dot-grid" />
         <div className="nora-glow-top-right" />
         <div className="nora-glow-bottom-left" />
-        <button
-          onClick={onOpenTask}
-          className={`nora-panel-link-btn ${canOpenTask ? '' : 'nora-panel-link-btn--hidden'}`}
-          type="button"
-          aria-label="Open task overview"
-          tabIndex={canOpenTask ? 0 : -1}
-        >
-          Task Overview
-        </button>
-
         <button
           onClick={onClose}
           className={`nora-close-btn ${showConversation ? 'nora-close-btn--expand' : ''}`}
