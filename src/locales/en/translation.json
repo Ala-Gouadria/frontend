@@ -274,5 +274,64 @@
     "changeRole": "Change Role",
     "deactivate": "Deactivate",
     "activate": "Activate"
+  },
+  "onboarding": {
+    "tagline": "Nora learns from your business knowledge-base",
+    "knowledgeBase": "Business Knowledge-Base",
+    "knowledgeSub": "View and customize information here for best output",
+    "done": "Done",
+    "complete": "Complete",
+    "stepsCompleted": "out of {{total}} steps completed",
+    "stepsRemaining": "{{count}} Steps Remaining",
+    "progress": "% Progress",
+    "whyMatters": "WHY THIS MATTERS",
+    "cancel": "Cancel",
+    "skipForNow": "Skip for now",
+    "saving": "SAVING…",
+    "finish": "FINISH",
+    "save": "SAVE",
+    "optional": "(optional)",
+    "dropOrBrowse": "Drop or Browse",
+    "sidebarTitle": "Setup steps",
+    "sidebarSubcopy": "Each step builds a deeper business profile for Nora.",
+    "steps": {
+      "profile":      { "label": "Profile setup",          "titleLead": "Profile",       "titleTail": "setup",        "subtitle": "This helps Nora identify your business and personalize your workspace from the start.",                           "whyMatters": "A clear owner profile helps Nora tailor messaging, workspace defaults, and strategic recommendations." },
+      "business":     { "label": "Business setup",         "titleLead": "Business",      "titleTail": "setup",        "subtitle": "Nora uses this to understand what you sell, how you position it, and how your business makes money.",           "whyMatters": "Business context gives Nora better recommendations for offers, campaigns, pricing, and automation priorities." },
+      "brand":        { "label": "Brand Identity",         "titleLead": "Brand",         "titleTail": "identity",     "subtitle": "This helps Nora match your visual style, language, and overall brand presentation.",                           "whyMatters": "A consistent identity helps Nora produce on-brand visuals, tone, and positioning suggestions." },
+      "audience":     { "label": "Targeted Audience",      "titleLead": "Target",        "titleTail": "audience",     "subtitle": "Nora uses this to create messaging, content, and campaigns that speak to the right people.",                   "whyMatters": "Audience clarity improves copy, hooks, targeting, and the quality of generated growth ideas." },
+      "channels":     { "label": "Channels & Integration", "titleLead": "Channels &",    "titleTail": "Integration",  "subtitle": "Nora uses your active channels to connect publishing, measurement, and cross-platform recommendations.",        "whyMatters": "Connected channels let Nora align ideas with the platforms where your brand already performs best." },
+      "content":      { "label": "Content direction",      "titleLead": "Content",       "titleTail": "direction",    "subtitle": "This tells Nora what type of content to create, how often to publish, and what style to lean into.",           "whyMatters": "Content preferences help Nora generate faster ideas that feel native to your audience and channels." },
+      "goals":        { "label": "Business Goal",          "titleLead": "Business",      "titleTail": "goals",        "subtitle": "Nora will prioritize strategy, campaigns, and automation around your primary business outcome.",               "whyMatters": "Clear goals help Nora sort what matters now versus what can wait." },
+      "optimization": { "label": "Optimization Inputs",    "titleLead": "Optimization",  "titleTail": "inputs",       "subtitle": "Optional inputs that help Nora learn faster, benchmark smarter, and improve output quality.",                  "whyMatters": "The more context you give Nora here, the more specific and useful future output becomes." }
+    },
+    "fields": {
+      "firstName": "First Name", "lastName": "Last Name", "industry": "Industry",
+      "profileImage": "Upload profile image", "logo": "Upload logo",
+      "websiteUrl": "Website URL", "businessType": "Business Type", "pricingRange": "Pricing range", "offerAssets": "Upload offer or pricing material",
+      "primaryColor": "Primary Color", "secondaryColor": "Secondary Color", "brandTone": "Brand tone", "brandStory": "Brand Story", "brandAssets": "Upload brand assets",
+      "ageRange": "Age Range", "primaryLocation": "Primary Location", "painPoints": "Main pain points to solve", "audienceInterests": "Audience interests and behavior",
+      "instagram": "Instagram", "facebookPage": "Facebook Page", "linkedIn": "LinkedIn", "threads": "Threads", "keyLandingPages": "Key Landing Pages",
+      "contentTypes": "Content Type", "postFrequency": "Post Frequency", "visualStyle": "Visual Style", "ctaStyle": "CTA Style",
+      "mainGoal": "Main Goal", "monthlyTarget": "Monthly Target", "conversionGoal": "Conversion focus", "successSignal": "Success signal",
+      "brandAdmire": "Brand you admire", "competitorLinks": "Competitors links", "existingAssets": "Upload existing assets", "priorityMetric": "Priority Metric"
+    }
+  },
+  "integrate": {
+    "kicker": "Nora tracks and automates your social media",
+    "title1": "INTEGRATE",
+    "title2": "SOCIAL MEDIA",
+    "subtitle": "Connect your social media accounts to unlock real-time performance tracking and seamless automation.",
+    "connect": "Connect",
+    "synced": "Synced",
+    "connecting": "Connecting...",
+    "syncing": "Syncing...",
+    "platforms": {
+      "pinterest": "Connect a Pinterest account so Nora can monitor performance, publish content, and track audience activity.",
+      "facebook":  "Connect a Facebook Page so Nora can monitor performance, publish content, and track audience activity.",
+      "reddit":    "Connect a Reddit account so Nora can monitor performance, publish content, and track audience activity.",
+      "instagram": "Connect an Instagram account so Nora can monitor performance, publish content, and track audience activity.",
+      "x":         "Connect an X account so Nora can monitor performance, publish content, and track audience activity.",
+      "tiktok":    "Connect a TikTok account so Nora can monitor performance, publish content, and track audience activity."
+    }
   }
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import * as tokenStore from '../api/tokenStore.js'
 import * as authApi from '../api/auth.js'
 import Login from '../pages/auth/Login'
@@ -76,6 +77,17 @@ function writeStorage(key, value) {
 }
 
 export default function App() {
+  const { i18n } = useTranslation()
+
+  // Sync lang and RTL class whenever the language changes.
+  // We use a class instead of dir="rtl" on <html> to avoid flipping the
+  // physical margin-left offsets that position content beside the nav.
+  useEffect(() => {
+    const isArabic = i18n.language?.startsWith('ar')
+    document.documentElement.lang = i18n.language || 'en'
+    document.documentElement.classList.toggle('is-rtl', isArabic)
+  }, [i18n.language])
+
   const previewAnalyticsCards = isAnalyticsCardsPreviewRequest()
   const setupComplete = readStoredFlag(STORAGE_KEYS.setupComplete)
   const storedView = readStoredView()

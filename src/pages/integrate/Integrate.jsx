@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
@@ -80,6 +81,7 @@ function SyncIcon({ className }) {
 }
 
 function IntegrationCard({ item, index, onConnect, onSync }) {
+  const { t } = useTranslation()
   const isConnecting = item.state === 'connecting'
   const isSynced = item.state === 'synced'
   const isSyncing = item.state === 'syncing'
@@ -95,7 +97,7 @@ function IntegrationCard({ item, index, onConnect, onSync }) {
         </div>
         <div className="integrate-card__copy">
           <h2>{item.name}</h2>
-          <p>{item.description}</p>
+          <p>{t(`integrate.platforms.${item.id}`, { defaultValue: item.description })}</p>
         </div>
       </div>
 
@@ -122,12 +124,12 @@ function IntegrationCard({ item, index, onConnect, onSync }) {
       >
         <span>
           {isConnecting
-            ? 'Connecting...'
+            ? t('integrate.connecting')
             : isSyncing
-            ? 'Syncing...'
+            ? t('integrate.syncing')
             : isSynced
-            ? 'Synced'
-            : 'Connect'}
+            ? t('integrate.synced')
+            : t('integrate.connect')}
         </span>
         {isSynced || isSyncing || isConnecting ? (
           <SyncIcon className={isConnecting || isSyncing ? 'integrate-icon--spin' : ''} />
@@ -140,6 +142,7 @@ function IntegrationCard({ item, index, onConnect, onSync }) {
 }
 
 export default function Integrate({ activeNavId = 'connect', onNavigate }) {
+  const { t } = useTranslation()
   const [integrations, setIntegrations] = useState(INTEGRATIONS)
 
   const handleConnect = (id) => {
@@ -174,14 +177,12 @@ export default function Integrate({ activeNavId = 'connect', onNavigate }) {
         <header className="integrate-hero">
           <div className="integrate-kicker">
             <img src={miniLogo} alt="" />
-            <span>Nora tracks and automates your social media</span>
+            <span>{t('integrate.kicker')}</span>
           </div>
           <h1 id="integrate-title">
-            <span>INTEGRATE</span> SOCIAL MEDIA
+            <span>{t('integrate.title1')}</span> {t('integrate.title2')}
           </h1>
-          <p>
-            Connect your social media accounts to unlock real-time performance tracking and seamless automation.
-          </p>
+          <p>{t('integrate.subtitle')}</p>
         </header>
 
         <div className="integrate-divider" />
