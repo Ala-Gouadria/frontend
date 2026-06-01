@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
@@ -35,6 +36,7 @@ function BackIcon() {
 }
 
 export default function Team({ onNavigate }) {
+  const { t } = useTranslation()
   const [members, setMembers] = useState([])
   const [query, setQuery] = useState('')
   const [roleFilter, setRoleFilter] = useState('All Roles')
@@ -104,12 +106,12 @@ export default function Team({ onNavigate }) {
       <section className="settings-workspace__content settings-workspace__content--table">
         <button type="button" className="workspace-back-button" onClick={() => onNavigate?.('settings')}>
           <BackIcon />
-          <span>Back to Settings</span>
+          <span>{t('team.backToSettings')}</span>
         </button>
 
         <header className="workspace-heading">
-          <h1>Team Configuration</h1>
-          <p>Manage your team here</p>
+          <h1>{t('team.title')}</h1>
+          <p>{t('team.subtitle')}</p>
         </header>
 
         <div className="settings-workspace__divider" />
@@ -122,23 +124,23 @@ export default function Team({ onNavigate }) {
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="search team member name or email."
+                placeholder={t('team.searchPlaceholder')}
               />
             </label>
 
             <select value={roleFilter} onChange={(event) => setRoleFilter(event.target.value)} aria-label="Filter by role">
-              <option>All Roles</option>
+              <option value="All Roles">{t('team.allRoles')}</option>
               {ROLES.map((role) => <option key={role}>{role}</option>)}
             </select>
 
             <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)} aria-label="Filter by status">
-              <option>All Status</option>
-              <option>Active</option>
-              <option>Inactive</option>
+              <option value="All Status">{t('team.allStatus')}</option>
+              <option value="Active">{t('team.active')}</option>
+              <option value="Inactive">{t('team.inactive')}</option>
             </select>
 
             <button type="button" className="team-invite-button" onClick={inviteMember}>
-              <span>Invite Member</span>
+              <span>{t('team.inviteMember')}</span>
               <PlusIcon />
             </button>
           </div>
@@ -147,12 +149,12 @@ export default function Team({ onNavigate }) {
             <table className="team-table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Last Active</th>
-                  <th>Actions</th>
+                  <th>{t('team.colName')}</th>
+                  <th>{t('team.colEmail')}</th>
+                  <th>{t('team.colRole')}</th>
+                  <th>{t('team.colStatus')}</th>
+                  <th>{t('team.colLastActive')}</th>
+                  <th>{t('team.colActions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -170,7 +172,7 @@ export default function Team({ onNavigate }) {
                     <td>
                       <div className="team-actions">
                         <button type="button" onClick={() => changeRole(member)} disabled={pendingId === member.id}>
-                          Change Role
+                          {t('team.changeRole')}
                         </button>
                         <button
                           type="button"
@@ -178,7 +180,7 @@ export default function Team({ onNavigate }) {
                           onClick={() => toggleStatus(member)}
                           disabled={pendingId === member.id}
                         >
-                          {member.status === 'Active' ? 'Deactivate' : 'Activate'}
+                          {member.status === 'Active' ? t('team.deactivate') : t('team.activate')}
                         </button>
                       </div>
                     </td>

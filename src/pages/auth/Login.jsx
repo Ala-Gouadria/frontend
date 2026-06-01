@@ -1,11 +1,12 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './Login.css'
 import noraLoginLogo from '../../assets/logo/Nora-Login-Logo.png'
 import loginBackground from '../../assets/background/Login-background.jpg'
 import * as authApi from '../../api/auth.js'
 import PillButton from '../../components/pages-parts/PillButton'
 
-function PasswordInput({ value, onChange, placeholder = 'Enter your password' }) {
+function PasswordInput({ value, onChange, placeholder }) {
   const [visible, setVisible] = useState(false)
 
   return (
@@ -33,31 +34,17 @@ function PasswordInput({ value, onChange, placeholder = 'Enter your password' })
   )
 }
 
-/* ── Official Google coloured G ── */
 function GoogleIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-      <path
-        fill="#4285F4"
-        d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908C16.658 14.013 17.64 11.706 17.64 9.2z"
-      />
-      <path
-        fill="#34A853"
-        d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"
-      />
-      <path
-        fill="#FBBC05"
-        d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"
-      />
-      <path
-        fill="#EA4335"
-        d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"
-      />
+      <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908C16.658 14.013 17.64 11.706 17.64 9.2z" />
+      <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" />
+      <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" />
+      <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" />
     </svg>
   )
 }
 
-/* ── Apple silhouette icon ── */
 function AppleIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 814 1000" aria-hidden="true" fill="#1a1a1a">
@@ -67,17 +54,19 @@ function AppleIcon() {
 }
 
 function SocialButton({ provider }) {
+  const { t } = useTranslation()
   return (
     <button type="button" className="auth-social-btn">
       <span className="auth-social-mark">
         {provider === 'Google' ? <GoogleIcon /> : <AppleIcon />}
       </span>
-      <span>Continue with {provider}</span>
+      <span>{t('login.continueWith', { provider })}</span>
     </button>
   )
 }
 
 export default function Login({ onSuccess, onSignup, onResetPassword }) {
+  const { t } = useTranslation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -92,9 +81,9 @@ export default function Login({ onSuccess, onSignup, onResetPassword }) {
       onSuccess?.()
     } catch (err) {
       if (err.isAuth?.()) {
-        setError('Email or password is wrong.')
+        setError(t('login.errorWrongCredentials'))
       } else {
-        setError(err.message ?? 'Login failed. Please try again.')
+        setError(err.message ?? t('login.errorFailed'))
       }
     } finally {
       setLoading(false)
@@ -105,8 +94,8 @@ export default function Login({ onSuccess, onSignup, onResetPassword }) {
     <main className="auth-page" style={{ backgroundImage: `url(${loginBackground})` }}>
       <form className="auth-panel auth-panel--login" onSubmit={handleSubmit}>
         <img src={noraLoginLogo} alt="Nora" className="auth-logo" />
-        <h1>Sign in to automate your business</h1>
-        <p className="auth-subtitle">Welcome back! Please sign in to continue</p>
+        <h1>{t('login.title')}</h1>
+        <p className="auth-subtitle">{t('login.subtitle')}</p>
 
         <div className="auth-social-row">
           <SocialButton provider="Google" />
@@ -115,12 +104,12 @@ export default function Login({ onSuccess, onSignup, onResetPassword }) {
 
         <div className="auth-divider">
           <span />
-          <strong>Or</strong>
+          <strong>{t('login.or')}</strong>
           <span />
         </div>
 
         <label className="auth-field">
-          <span>Email</span>
+          <span>{t('login.email')}</span>
           <input
             value={email}
             onChange={(event) => setEmail(event.target.value)}
@@ -131,23 +120,26 @@ export default function Login({ onSuccess, onSignup, onResetPassword }) {
         </label>
 
         <label className="auth-field">
-          <span>Password</span>
-          <PasswordInput value={password} onChange={(event) => setPassword(event.target.value)} />
+          <span>{t('login.password')}</span>
+          <PasswordInput
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder={t('login.password')}
+          />
         </label>
 
         <button type="button" className="auth-text-link auth-forgot-link" onClick={onResetPassword}>
-          Forgot password?
+          {t('login.forgotPassword')}
         </button>
 
         {error ? <p className="auth-error">{error}</p> : null}
 
         <PillButton type="submit" width="100%" height="48px" variant="primary" disabled={loading}>
-          {loading ? 'SIGNING IN…' : 'SIGN IN'}
+          {loading ? t('login.signingIn') : t('login.signIn')}
         </PillButton>
 
-
         <p className="auth-footer-copy">
-          Don't have an account? <button type="button" onClick={onSignup}>Sign Up</button>
+          {t('login.noAccount')} <button type="button" onClick={onSignup}>{t('login.signUp')}</button>
         </p>
       </form>
     </main>

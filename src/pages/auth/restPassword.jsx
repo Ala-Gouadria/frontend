@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './restPassword.css'
 import noraLoginLogo from '../../assets/logo/Nora-Login-Logo.png'
 import loginBackground from '../../assets/background/Login-background.jpg'
 import * as authApi from '../../api/auth.js'
 
-function PasswordInput({ value, onChange, autoComplete }) {
+function PasswordInput({ value, onChange, autoComplete, placeholder }) {
   const [visible, setVisible] = useState(false)
 
   return (
@@ -13,7 +14,7 @@ function PasswordInput({ value, onChange, autoComplete }) {
         value={value}
         onChange={onChange}
         type={visible ? 'text' : 'password'}
-        placeholder="Enter your password"
+        placeholder={placeholder}
         autoComplete={autoComplete}
       />
       <button
@@ -33,6 +34,7 @@ function PasswordInput({ value, onChange, autoComplete }) {
 }
 
 export default function RestPassword({ onLogin }) {
+  const { t } = useTranslation()
   const [step, setStep] = useState('forgot') // 'forgot' | 'sent' | 'reset'
   const [email, setEmail] = useState('')
   const [token, setToken] = useState('')
@@ -49,7 +51,7 @@ export default function RestPassword({ onLogin }) {
       await authApi.forgotPassword({ email: email.trim() })
       setStep('sent')
     } catch (err) {
-      setError(err.message ?? 'Request failed. Please try again.')
+      setError(err.message ?? t('resetPassword.errorFailed'))
     } finally {
       setLoading(false)
     }
@@ -59,12 +61,12 @@ export default function RestPassword({ onLogin }) {
     event.preventDefault()
 
     if (password.length < 8) {
-      setError('Password must be at least 8 characters.')
+      setError(t('resetPassword.errorMinLength'))
       return
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.')
+      setError(t('resetPassword.errorMismatch'))
       return
     }
 
@@ -74,7 +76,7 @@ export default function RestPassword({ onLogin }) {
       await authApi.resetPassword({ token: token.trim(), newPassword: password })
       onLogin?.()
     } catch (err) {
-      setError(err.message ?? 'Reset failed. Check your token and try again.')
+      setError(err.message ?? t('resetPassword.errorResetFailed'))
     } finally {
       setLoading(false)
     }
@@ -85,10 +87,9 @@ export default function RestPassword({ onLogin }) {
       <main className="auth-page" style={{ backgroundImage: `url(${loginBackground})` }}>
         <div className="auth-panel auth-panel--reset">
           <img src={noraLoginLogo} alt="Nora" className="auth-logo" />
-          <h1>Check your email</h1>
+          <h1>{t('resetPassword.checkEmail')}</h1>
           <p className="auth-subtitle">
-            A password reset link has been sent to <strong>{email}</strong>. Copy the token from the
-            link and enter it below.
+            {t('resetPassword.emailSentTo')} <strong>{email}</strong>. {t('resetPassword.copyToken')}
           </p>
           <button
             type="button"
@@ -96,11 +97,11 @@ export default function RestPassword({ onLogin }) {
             style={{ marginTop: '1rem' }}
             onClick={() => setStep('reset')}
           >
-            <span>Enter reset token</span>
+            <span>{t('resetPassword.enterToken')}</span>
             <i aria-hidden="true" />
           </button>
           <p className="auth-footer-copy">
-            <button type="button" onClick={onLogin}>Back to login</button>
+            <button type="button" onClick={onLogin}>{t('resetPassword.backToLogin')}</button>
           </p>
         </div>
       </main>
@@ -112,54 +113,63 @@ export default function RestPassword({ onLogin }) {
       <main className="auth-page" style={{ backgroundImage: `url(${loginBackground})` }}>
         <form className="auth-panel auth-panel--reset" onSubmit={handleReset}>
           <img src={noraLoginLogo} alt="Nora" className="auth-logo" />
-          <h1>Create new password</h1>
+          <h1>{t('resetPassword.createNew')}</h1>
 
           <label className="auth-field">
-            <span>Reset token</span>
+            <span>{t('resetPassword.resetToken')}</span>
             <input
               value={token}
               onChange={(event) => setToken(event.target.value)}
               type="text"
-              placeholder="Paste token from email"
+              placeholder={t('resetPassword.pasteToken')}
               autoComplete="off"
             />
           </label>
 
           <label className="auth-field">
-            <span>New password</span>
-            <PasswordInput value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="new-password" />
+            <span>{t('resetPassword.newPassword')}</span>
+            <PasswordInput
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="new-password"
+              placeholder={t('resetPassword.newPassword')}
+            />
           </label>
 
           <label className="auth-field">
-            <span>Confirm password</span>
-            <PasswordInput value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="new-password" />
+            <span>{t('resetPassword.confirmPasswordLabel')}</span>
+            <PasswordInput
+              value={confirmPassword}
+              onChange={(event) => setConfirmPassword(event.target.value)}
+              autoComplete="new-password"
+              placeholder={t('resetPassword.confirmPasswordLabel')}
+            />
           </label>
 
-          <p className="auth-helper">Must be at least 8 characters.</p>
+          <p className="auth-helper">{t('resetPassword.passwordHint')}</p>
           {error ? <p className="auth-error">{error}</p> : null}
 
           <button type="submit" className="auth-submit-btn" disabled={loading}>
-            <span>{loading ? 'Resetting…' : 'Set new password'}</span>
+            <span>{loading ? t('resetPassword.resetting') : t('resetPassword.setNew')}</span>
             <i aria-hidden="true" />
           </button>
           <p className="auth-footer-copy">
-            <button type="button" onClick={onLogin}>Back to login</button>
+            <button type="button" onClick={onLogin}>{t('resetPassword.backToLogin')}</button>
           </p>
         </form>
       </main>
     )
   }
 
-  // step === 'forgot'
   return (
     <main className="auth-page" style={{ backgroundImage: `url(${loginBackground})` }}>
       <form className="auth-panel auth-panel--reset" onSubmit={handleForgot}>
         <img src={noraLoginLogo} alt="Nora" className="auth-logo" />
-        <h1>Reset your password</h1>
-        <p className="auth-subtitle">Enter your email and we'll send you a reset link.</p>
+        <h1>{t('resetPassword.title')}</h1>
+        <p className="auth-subtitle">{t('resetPassword.subtitle')}</p>
 
         <label className="auth-field">
-          <span>Email</span>
+          <span>{t('resetPassword.email')}</span>
           <input
             value={email}
             onChange={(event) => setEmail(event.target.value)}
@@ -172,12 +182,12 @@ export default function RestPassword({ onLogin }) {
         {error ? <p className="auth-error">{error}</p> : null}
 
         <button type="submit" className="auth-submit-btn" disabled={loading}>
-          <span>{loading ? 'Sending…' : 'Send reset link'}</span>
+          <span>{loading ? t('resetPassword.sending') : t('resetPassword.sendLink')}</span>
           <i aria-hidden="true" />
         </button>
 
         <p className="auth-footer-copy">
-          <button type="button" onClick={onLogin}>Back to login</button>
+          <button type="button" onClick={onLogin}>{t('resetPassword.backToLogin')}</button>
         </p>
       </form>
     </main>

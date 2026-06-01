@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
@@ -69,6 +70,7 @@ function memoryMatchesFilters(memory, filters) {
 }
 
 export default function MemoryPage({ onNavigate }) {
+  const { t } = useTranslation()
   const [memories, setMemories] = useState([])
   const [filterOptions, setFilterOptions] = useState({ categories: [], durations: [], statuses: [] })
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
@@ -143,14 +145,14 @@ export default function MemoryPage({ onNavigate }) {
       <main className="memory-page__viewport">
         <div className="memory-page__content">
           <header className="memory-page__header">
-            <h1>Memory</h1>
-            <p>A record of Nora's decisions, outcomes, and reasoning.</p>
+            <h1>{t('memory.title')}</h1>
+            <p>{t('memory.subtitle')}</p>
           </header>
 
           <section className="memory-page__toolbar">
-            <Segmented label="Category" items={filterOptions.categories} active={filters.category} onChange={(value) => updateFilter('category', value)} />
+            <Segmented label={t('memory.category')} items={filterOptions.categories} active={filters.category} onChange={(value) => updateFilter('category', value)} />
             <Segmented
-              label="Duration"
+              label={t('memory.duration')}
               items={filterOptions.durations}
               active={filters.duration}
               onChange={(value) => updateFilter('duration', value)}
@@ -166,17 +168,17 @@ export default function MemoryPage({ onNavigate }) {
                   <SearchIcon />
                   <input
                     type="search"
-                    placeholder="Search events, agents, or systems..."
+                    placeholder={t('memory.searchPlaceholder')}
                     value={filters.query}
                     onChange={(event) => updateFilter('query', event.target.value)}
                   />
                 </label>
-                <Segmented label="Status" items={filterOptions.statuses} active={filters.status} onChange={(value) => updateFilter('status', value)} align="right" />
+                <Segmented label={t('memory.status')} items={filterOptions.statuses} active={filters.status} onChange={(value) => updateFilter('status', value)} align="right" />
               </div>
 
               <div className="memory-page__list">
-                {loading ? <div className="memory-page__empty">Loading memory...</div> : null}
-                {!loading && !visibleMemories.length ? <div className="memory-page__empty">No memory records match these filters.</div> : null}
+                {loading ? <div className="memory-page__empty">{t('memory.loading')}</div> : null}
+                {!loading && !visibleMemories.length ? <div className="memory-page__empty">{t('memory.noMatch')}</div> : null}
                 {visibleMemories.map((item) => (
                   <button
                     key={item.id}
@@ -205,28 +207,28 @@ export default function MemoryPage({ onNavigate }) {
             </div>
 
             <aside className="memory-page__detail">
-              <h2>Decision Details</h2>
+              <h2>{t('memory.decisionDetails')}</h2>
               {selected ? (
                 <div key={`${selected.id}-${detailKey}`} className="memory-page__detail-body">
                   <dl>
                     <div>
-                      <dt>Decision</dt>
+                      <dt>{t('memory.decision')}</dt>
                       <dd>{selected.decision}</dd>
                     </div>
                     <div>
-                      <dt>Decision duration</dt>
+                      <dt>{t('memory.decisionDuration')}</dt>
                       <dd>{selected.decisionDuration}</dd>
                     </div>
                     <div>
-                      <dt>Outcome</dt>
+                      <dt>{t('memory.outcome')}</dt>
                       <dd>{selected.outcome}</dd>
                     </div>
                     <div>
-                      <dt>Reasoning</dt>
+                      <dt>{t('memory.reasoning')}</dt>
                       <dd>{selected.reasoning}</dd>
                     </div>
                     <div>
-                      <dt>Details</dt>
+                      <dt>{t('memory.details')}</dt>
                       <dd>{selected.details}</dd>
                     </div>
                   </dl>
@@ -237,7 +239,7 @@ export default function MemoryPage({ onNavigate }) {
                   </div>
                 </div>
               ) : (
-                <div className="memory-page__empty memory-page__empty--detail">Select a memory to view Nora's reasoning.</div>
+                <div className="memory-page__empty memory-page__empty--detail">{t('memory.selectToView')}</div>
               )}
             </aside>
           </section>

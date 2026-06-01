@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './norachat.css'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
@@ -10,8 +11,6 @@ import micIcon from '../../assets/icons/Nora-AI-Icon/mic-icon.svg'
 import sentIcon from '../../assets/icons/Nora-AI-Icon/sent-icon.svg'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
 import ProjectList from '../../components/layout/ProjectList'
-const WELCOME_HEADLINE = 'An AI system that manages, automates, and grows your business.'
-const WELCOME_TEXT = 'Welcome back. I can help you grow, automate, and organize your business.'
 
 function formatClock(value) {
   return new Intl.DateTimeFormat('en', {
@@ -152,21 +151,22 @@ function HistorySidebar({
   showAll,
   onToggleShowAll,
 }) {
+  const { t } = useTranslation()
   const visibleItems = showAll ? conversations : conversations.slice(0, 8)
 
   return (
     <aside className="nora-history-sidebar">
       <div className="nora-sidebar-glow" />
-      <div className="nora-sidebar-title">History</div>
+      <div className="nora-sidebar-title">{t('chat.history')}</div>
 
       <button type="button" onClick={onNewChat} className={`nora-new-chat-btn ${activeConversationId ? '' : 'active'}`}>
         <div className="nora-new-chat-icon">
           <img src={noraComponentLogo} alt="Nora" style={{ width: 18, height: 18, objectFit: 'contain' }} />
         </div>
-        <span>New Chat</span>
+        <span>{t('chat.newChat')}</span>
       </button>
 
-      <div className="nora-recents-title">Recents</div>
+      <div className="nora-recents-title">{t('chat.recents')}</div>
 
       <div className="nora-history-list">
         {visibleItems.map((conversation) => (
@@ -190,7 +190,7 @@ function HistorySidebar({
 
       {conversations.length > 7 ? (
         <button type="button" className="nora-view-all-btn" onClick={onToggleShowAll}>
-          {showAll ? 'Show less' : 'View all'}
+          {showAll ? t('chat.showLess') : t('chat.viewAll')}
         </button>
       ) : null}
     </aside>
@@ -207,6 +207,8 @@ function ConversationTitle({
   onCancel,
   onSave,
 }) {
+  const { t } = useTranslation()
+
   if (canEdit && isEditing) {
     return (
       <form className="nora-title-edit-form" onSubmit={onSave}>
@@ -223,7 +225,7 @@ function ConversationTitle({
           aria-label="Conversation title"
           autoFocus
         />
-        <button type="submit" className="nora-title-save-btn">Save</button>
+        <button type="submit" className="nora-title-save-btn">{t('chat.save')}</button>
       </form>
     )
   }
@@ -294,6 +296,7 @@ function Composer({
   recordingSeconds,
   isSending,
 }) {
+  const { t } = useTranslation()
   const imageInputRef = useRef(null)
   const fileInputRef = useRef(null)
   const audioInputRef = useRef(null)
@@ -330,7 +333,7 @@ function Composer({
         {isRecording ? (
           <div className="nora-recording-badge">
             <span className="nora-recording-dot" />
-            Recording voice note {formatRecordingDuration(recordingSeconds)}
+            {t('chat.recordingNote')} {formatRecordingDuration(recordingSeconds)}
           </div>
         ) : null}
 
@@ -343,7 +346,7 @@ function Composer({
               onSend()
             }
           }}
-          placeholder="Ask Nora about your business"
+          placeholder={t('chat.placeholder')}
           rows={2}
           className="nora-textarea"
         />
@@ -411,6 +414,7 @@ function Composer({
 }
 
 function NoraChatWorkspace({ open, onClose, onNavigate, pairedWithTask = false, fullMode = false }) {
+  const { t } = useTranslation()
   const [services, setServices] = useState([])
   const [conversationList, setConversationList] = useState([])
   const [activeConversationId, setActiveConversationId] = useState(null)
@@ -577,7 +581,7 @@ function NoraChatWorkspace({ open, onClose, onNavigate, pairedWithTask = false, 
       return
     }
 
-    setTitleDraft(activeConversation.title ?? 'New Chat')
+    setTitleDraft(activeConversation.title ?? t('chat.newChat'))
     setIsEditingTitle(true)
   }
 
@@ -850,7 +854,7 @@ function NoraChatWorkspace({ open, onClose, onNavigate, pairedWithTask = false, 
 
         <header className="nora-header">
           <ConversationTitle
-            title={activeConversation?.title ?? 'New Chat'}
+            title={activeConversation?.title ?? t('chat.newChat')}
             canEdit={Boolean(activeConversationId)}
             isEditing={isEditingTitle}
             draftTitle={titleDraft}
@@ -876,10 +880,10 @@ function NoraChatWorkspace({ open, onClose, onNavigate, pairedWithTask = false, 
         {notice ? <div className="nora-notice">{notice}</div> : null}
 
         {isInitializing ? (
-          <div className="nora-workspace-loading">Loading Nora workspace...</div>
+          <div className="nora-workspace-loading">{t('chat.loadingWorkspace')}</div>
         ) : showConversation ? (
           <div className="nora-conversation-scene">
-            {isLoadingConversation ? <div className="nora-workspace-loading">Loading conversation...</div> : null}
+            {isLoadingConversation ? <div className="nora-workspace-loading">{t('chat.loadingConversation')}</div> : null}
 
             {currentMessages.map((message, index) => (
               <MessageBubble key={message.id} message={message} index={index} />
@@ -890,15 +894,15 @@ function NoraChatWorkspace({ open, onClose, onNavigate, pairedWithTask = false, 
         ) : (
           <div className="nora-welcome-scene">
             <NoraAvatar size={140} logoWidth={68} />
-            <h2 className="nora-welcome-headline">{WELCOME_HEADLINE}</h2>
+            <h2 className="nora-welcome-headline">{t('chat.welcomeHeadline')}</h2>
             <p className="nora-welcome-text">
-              {WELCOME_TEXT}
+              {t('chat.welcomeText')}
               <span className="nora-caret" />
             </p>
 
             {activeService ? (
               <div className="nora-empty-state">
-                <p className="nora-empty-state__eyebrow">Test Nora services</p>
+                <p className="nora-empty-state__eyebrow">{t('chat.testServices')}</p>
                 <p className="nora-empty-state__body">{activeService.description}</p>
                 <div className="nora-quick-prompts">
                   {activeService.suggestions.map((suggestion) => (
