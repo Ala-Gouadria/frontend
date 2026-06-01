@@ -77,7 +77,7 @@ function CompletedCircle() {
   )
 }
 
-export default function WeekTask({ onClose }) {
+export default function WeekTask({ onClose, canOpenWorkspace = false, onOpenWorkspace }) {
   const [stats, setStats] = useState({ completed: 0, total: 0, completionRate: 0 })
   const [chartState, setChartState] = useState({ points: [], latest: 0 })
   const [overviewMode, setOverviewMode] = useState('completed')
@@ -183,6 +183,15 @@ export default function WeekTask({ onClose }) {
               <TaskDashedRing size={11} strokeWidth={1.5} className="wt-count-dot" title="" />
               {stats.completed}/{stats.total}
             </span>
+            {canOpenWorkspace ? (
+              <button
+                type="button"
+                className="wt-open-workspace-btn"
+                onClick={onOpenWorkspace}
+              >
+                Ask Nora
+              </button>
+            ) : null}
             <button type="button" className="wt-close-btn" onClick={onClose} aria-label="Close">
               <svg viewBox="0 0 18 18" width="12" height="12" fill="none" aria-hidden="true">
                 <path d="M5.3 5.3 12.7 12.7M12.7 5.3 5.3 12.7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />

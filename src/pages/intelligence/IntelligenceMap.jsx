@@ -788,6 +788,7 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   const panelsPaired = isWorkspaceOpen && isTaskOpen
   const shouldShowWorkspace = isWorkspaceOpen
   const shouldShowTaskPanel = isTaskOpen
+  const isAnyPanelOpen = shouldShowWorkspace || shouldShowTaskPanel
 
   useEffect(() => {
     let mountTimer
@@ -918,6 +919,27 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
       return next
     })
   }
+
+  const closeAllPanels = () => {
+    setIsWorkspaceOpen(false)
+    setIsTaskOpen(false)
+  }
+
+  const handleWorkspaceToggle = () => {
+    setIsWorkspaceOpen((current) => !current)
+  }
+
+  const handleTaskToggle = () => {
+    setIsTaskOpen((current) => !current)
+  }
+
+  const handleOpenWorkspace = () => {
+    setIsWorkspaceOpen(true)
+  }
+
+  const handleOpenTask = () => {
+    setIsTaskOpen(true)
+  }
 return (
   <>
     <div
@@ -939,7 +961,7 @@ return (
           transformOrigin: 'center center',
           willChange: 'transform',
           transition: 'transform 580ms cubic-bezier(0.22, 1, 0.36, 1)',
-          ...(shouldShowWorkspace
+          ...(isAnyPanelOpen
             ? {
                 transform: 'scale(1) translateX(0px)',
                 pointerEvents: 'none',
@@ -969,12 +991,10 @@ return (
   scale={scale}
   initialScale={INITIAL_SCALE}
   mode={toolMode}
-  onTaskOpen={() => {
-    setIsTaskOpen((current) => !current)
-  }}
+  onTaskOpen={handleTaskToggle}
   onModeChange={(nextMode) => {
     if (nextMode === 'ask-nora') {
-      setIsWorkspaceOpen((current) => !current)
+      handleWorkspaceToggle()
       return
     }
     setToolMode(nextMode)
@@ -998,66 +1018,56 @@ return (
       </div>
 
       {/* ── Click-outside overlay — real backdrop blur ── */}
-      <div
-        onClick={shouldShowWorkspace ? () => setIsWorkspaceOpen(false) : undefined}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 44,
-          backdropFilter: 'none',
-          WebkitBackdropFilter: 'none',
-          background: 'rgba(0, 0, 0, 0)',
-          transition: 'background 220ms ease',
-          pointerEvents: shouldShowWorkspace ? 'auto' : 'none',
-          cursor: shouldShowWorkspace ? 'pointer' : 'default',
-        }}
-        aria-hidden="true"
-      />
+      {isAnyPanelOpen ? (
+        <div
+          onClick={closeAllPanels}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 44,
+            backdropFilter: 'none',
+            WebkitBackdropFilter: 'none',
+            background: 'rgba(0, 0, 0, 0)',
+            transition: 'background 220ms ease',
+            cursor: 'pointer',
+          }}
+          aria-hidden="true"
+        />
+      ) : null}
 
       {shouldShowWorkspace ? (
         <NoraWorkspace
           open={shouldShowWorkspace}
           onClose={() => setIsWorkspaceOpen(false)}
           pairedWithTask={panelsPaired}
+          canOpenTask={!isTaskOpen}
+          onOpenTask={handleOpenTask}
         />
       ) : null}
       {/* ── Task Overview panel — slides in from the left ── */}
       {shouldShowTaskPanel ? (
-        <>
-          <div
-            onClick={() => setIsTaskOpen(false)}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 54,
-              backdropFilter: 'blur(0px) brightness(1)',
-              WebkitBackdropFilter: 'blur(0px) brightness(1)',
-              background: 'rgba(0,0,0,0)',
-              transition: 'background 500ms cubic-bezier(0.22,1,0.36,1)',
-              cursor: 'pointer',
-            }}
-            aria-hidden="true"
+        <div
+          className={panelsPaired ? 'intelligence-week-panel intelligence-week-panel--paired' : 'intelligence-week-panel'}
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            position: 'fixed',
+            top: 24,
+            right: 24,
+            bottom: 24,
+            zIndex: 55,
+            width: panelsPaired ? '496px' : 'min(520px, calc(100vw - 48px))',
+            overflowY: 'auto',
+            transition: 'transform 520ms cubic-bezier(0.22,1,0.36,1)',
+            boxShadow: '-18px 0 48px rgba(20,35,76,0.12)',
+            borderRadius: 24,
+          }}
+        >
+          <WeekTask
+            onClose={() => setIsTaskOpen(false)}
+            canOpenWorkspace={!isWorkspaceOpen}
+            onOpenWorkspace={handleOpenWorkspace}
           />
-
-          <div
-            className={panelsPaired ? 'intelligence-week-panel intelligence-week-panel--paired' : 'intelligence-week-panel'}
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              position: 'fixed',
-              top: 24,
-              right: 24,
-              bottom: 24,
-              zIndex: 55,
-              width: panelsPaired ? '496px' : 'min(520px, calc(100vw - 48px))',
-              overflowY: 'auto',
-              transition: 'transform 520ms cubic-bezier(0.22,1,0.36,1)',
-              boxShadow: '-18px 0 48px rgba(20,35,76,0.12)',
-              borderRadius: 24,
-            }}
-          >
-            <WeekTask onClose={() => setIsTaskOpen(false)} />
-          </div>
-        </>
+        </div>
       ) : null}
     </div>
     
