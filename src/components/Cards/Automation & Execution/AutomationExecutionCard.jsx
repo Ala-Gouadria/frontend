@@ -72,6 +72,7 @@ export function AutomationExecutionCard({ data = automationExecutionCardData }) 
             <div
               key={lane.label}
               className={`automation-execution-card__lane automation-execution-card__lane--${tone}`}
+              style={{ '--lane-fill': `${getPercent(lane.value)}%` }}
             >
               <div className="automation-execution-card__lane-head">
                 <span>{lane.label}</span>

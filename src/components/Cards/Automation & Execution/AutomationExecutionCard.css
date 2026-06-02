@@ -1,6 +1,7 @@
 .automation-execution-card {
-  min-height: 600px;
-  gap: 16px;
+  min-height: 520px;
+  gap: 12px;
+  overflow: hidden;
 }
 
 .automation-execution-card__state {
@@ -8,11 +9,11 @@
 }
 
 .automation-execution-card__gauge {
-  width: min(100%, 300px);
-  height: 176px;
+  width: min(100%, 240px);
+  height: 140px;
   justify-self: center;
-  margin-top: -10px;
-  margin-bottom: -4px;
+  margin-top: -6px;
+  margin-bottom: -2px;
   overflow: visible;
 }
 
@@ -22,10 +23,36 @@
   overflow: visible;
 }
 
+/* Softer, diffused gauge — blurred arc, faint ticks, plain dot cap */
+.automation-execution-card__gauge .automation-arc-gauge__progress {
+  stroke-width: 14;
+  filter:
+    blur(1.6px)
+    drop-shadow(0 0 12px rgba(193, 224, 54, 0.3));
+}
+
+.automation-execution-card__gauge .automation-arc-gauge__track {
+  stroke-width: 14;
+  opacity: 0.6;
+  filter: blur(0.8px);
+}
+
+.automation-execution-card__gauge .automation-arc-gauge__tick {
+  stroke: #b7d966;
+  stroke-width: 2;
+  opacity: 0.7;
+}
+
+.automation-execution-card__gauge .automation-arc-gauge__cap {
+  fill: #b2d433;
+  stroke-width: 0;
+  filter: blur(0.4px);
+}
+
 .automation-execution-card__lanes {
   display: grid;
-  gap: 12px;
-  margin-top: -3px;
+  gap: 8px;
+  margin-top: 0;
 }
 
 .automation-execution-card__lanes h3 {
@@ -37,7 +64,7 @@
 
 .automation-execution-card__lane {
   display: grid;
-  gap: 8px;
+  gap: 4px;
 }
 
 .automation-execution-card__lane-head {
@@ -61,43 +88,53 @@
 
 .automation-execution-card__lane-blocks {
   gap: 3px;
+  /* Soft fade across the fill boundary (set per-lane via --lane-fill) */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(var(--lane-fill, 100%) - 28%),
+    rgba(0, 0, 0, 0.25) var(--lane-fill, 100%),
+    rgba(0, 0, 0, 0.7) calc(var(--lane-fill, 100%) + 8%),
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(var(--lane-fill, 100%) - 28%),
+    rgba(0, 0, 0, 0.25) var(--lane-fill, 100%),
+    rgba(0, 0, 0, 0.7) calc(var(--lane-fill, 100%) + 8%),
+    #000 100%
+  );
 }
 
 .automation-execution-card__lane-blocks .quality-blocks__block {
-  height: 52px;
-  border-radius: 0px;
+  height: 28px;
+  border-radius: 4px;
   flex: 1 1 0;
   min-width: 0;
   width: auto;
   box-shadow: none;
 }
 
-/* Active blocks — radial lit-center gradient replaces flat color */
-.automation-execution-card__lane--green .automation-execution-card__lane-blocks .quality-blocks__block--green {
-  background: radial-gradient(ellipse 90% 70% at 50% 40%, #c8f060 0%, #6abe00 55%, #4a8c00 100%);
+/* Flat look — no stripes, no gloss, no shadows */
+.automation-execution-card__lane-blocks .quality-blocks__block::before {
+  display: none;
 }
-.automation-execution-card__lane--blue .automation-execution-card__lane-blocks .quality-blocks__block--blue {
-  background: radial-gradient(ellipse 90% 70% at 50% 40%, #80ccff 0%, #2882ff 55%, #1050d0 100%);
-}
-.automation-execution-card__lane--orange .automation-execution-card__lane-blocks .quality-blocks__block--orange {
-  background: radial-gradient(ellipse 90% 70% at 50% 40%, #ffcc70 0%, #ff7820 55%, #d84800 100%);
-}
-
-/* Active blocks — soft colored drop shadow */
-.automation-execution-card__lane-blocks .quality-blocks__block--green {
-  box-shadow: 0 4px 10px rgba(90, 170, 0, 0.28);
-}
-.automation-execution-card__lane-blocks .quality-blocks__block--blue {
-  box-shadow: 0 4px 10px rgba(5, 120, 255, 0.28);
-}
-.automation-execution-card__lane-blocks .quality-blocks__block--orange {
-  box-shadow: 0 4px 10px rgba(255, 118, 41, 0.28);
-}
-
-/* Active blocks — white hotspot on top of gradient */
 .automation-execution-card__lane-blocks .quality-blocks__block::after {
   opacity: 0 !important;
 }
+
+/* Active blocks — flat solid color */
+.automation-execution-card__lane--green .automation-execution-card__lane-blocks .quality-blocks__block--green {
+  background: #6cb80a;
+}
+.automation-execution-card__lane--blue .automation-execution-card__lane-blocks .quality-blocks__block--blue {
+  background: #2f80ed;
+}
+.automation-execution-card__lane--orange .automation-execution-card__lane-blocks .quality-blocks__block--orange {
+  background: #f07a20;
+}
+
 /* Muted (inactive) — flat pastel, no gradient, no glow, no hotspot */
 .automation-execution-card__lane-blocks .quality-blocks__block--green-muted {
   --block-color: #bfe09a;
@@ -123,5 +160,5 @@
 /* ── ── */
 
 .automation-execution-card .analytics-card__footer {
-  margin-top: 3px;
+  margin-top: 0;
 }
