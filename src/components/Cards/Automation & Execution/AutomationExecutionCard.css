@@ -9,21 +9,12 @@
 }
 
 .automation-execution-card__gauge {
-  width: min(100%, 240px);
-  height: 140px;
-  justify-self: center;
-  margin-top: -6px;
-  margin-bottom: -2px;
+  width: auto;
+  justify-self: stretch;
+  margin: -4px -10px 4px;
   overflow: visible;
 }
 
-.automation-execution-card__gauge .automation-arc-gauge__svg {
-  width: 100%;
-  height: auto;
-  overflow: visible;
-}
-
-/* Softer, diffused gauge — blurred arc, faint ticks, plain dot cap */
 .automation-execution-card__gauge .automation-arc-gauge__progress {
   stroke-width: 14;
   filter:
@@ -87,44 +78,19 @@
 /* ── QualityBlocks lane overrides ── */
 
 .automation-execution-card__lane-blocks {
-  gap: 3px;
-  /* Soft fade across the fill boundary (set per-lane via --lane-fill) */
-  -webkit-mask-image: linear-gradient(
-    to right,
-    #000 0%,
-    #000 calc(var(--lane-fill, 100%) - 28%),
-    rgba(0, 0, 0, 0.25) var(--lane-fill, 100%),
-    rgba(0, 0, 0, 0.7) calc(var(--lane-fill, 100%) + 8%),
-    #000 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    #000 0%,
-    #000 calc(var(--lane-fill, 100%) - 28%),
-    rgba(0, 0, 0, 0.25) var(--lane-fill, 100%),
-    rgba(0, 0, 0, 0.7) calc(var(--lane-fill, 100%) + 8%),
-    #000 100%
-  );
+  gap: 5px;               /* wider gap between blocks */
 }
 
 .automation-execution-card__lane-blocks .quality-blocks__block {
-  height: 28px;
-  border-radius: 4px;
+  height: 48px;           /* taller blocks */
+  border-radius: 0 !important;  /* hard 90° corners — overrides QualityBlocks.css */
   flex: 1 1 0;
   min-width: 0;
   width: auto;
-  box-shadow: none;
+  overflow: hidden;       /* clip ::before stripes to sharp edges */
 }
 
-/* Flat look — no stripes, no gloss, no shadows */
-.automation-execution-card__lane-blocks .quality-blocks__block::before {
-  display: none;
-}
-.automation-execution-card__lane-blocks .quality-blocks__block::after {
-  opacity: 0 !important;
-}
-
-/* Active blocks — flat solid color */
+/* Active blocks — keep animation + gloss + stripes, override color only */
 .automation-execution-card__lane--green .automation-execution-card__lane-blocks .quality-blocks__block--green {
   background: #6cb80a;
 }
@@ -135,26 +101,31 @@
   background: #f07a20;
 }
 
-/* Muted (inactive) — flat pastel, no gradient, no glow, no hotspot */
+/* Muted (inactive) — pale pastel, static, no stripes */
 .automation-execution-card__lane-blocks .quality-blocks__block--green-muted {
   --block-color: #bfe09a;
   background: var(--block-color);
   box-shadow: none;
+  animation: none;
 }
 .automation-execution-card__lane-blocks .quality-blocks__block--blue-muted {
   --block-color: #a8cef5;
   background: var(--block-color);
   box-shadow: none;
+  animation: none;
 }
 .automation-execution-card__lane-blocks .quality-blocks__block--orange-muted {
   --block-color: #f7cead;
   background: var(--block-color);
   box-shadow: none;
+  animation: none;
 }
-.automation-execution-card__lane-blocks .quality-blocks__block--green-muted::after,
-.automation-execution-card__lane-blocks .quality-blocks__block--blue-muted::after,
-.automation-execution-card__lane-blocks .quality-blocks__block--orange-muted::after {
-  opacity: 0 !important;
+
+/* Muted — no moving stripes, keep gloss sheen */
+.automation-execution-card__lane-blocks .quality-blocks__block--green-muted::before,
+.automation-execution-card__lane-blocks .quality-blocks__block--blue-muted::before,
+.automation-execution-card__lane-blocks .quality-blocks__block--orange-muted::before {
+  display: none;
 }
 
 /* ── ── */

@@ -1,18 +1,17 @@
 .quality-blocks {
   container-type: inline-size;
   display: flex;
-  align-items: center;
-  gap: clamp(4px, 0.65cqw, 7px);
+  align-items: stretch;
+  gap: clamp(3px, 0.55cqw, 6px);
   min-width: 0;
   overflow: hidden;
 }
 
 .quality-blocks__block {
-  flex: 0 1 clamp(14px, 3.05cqw, 28px);
-  width: clamp(14px, 3.05cqw, 28px);
-  min-width: 10px;
-  height: clamp(31px, 6.15cqw, 52px);
-  border-radius: 5px;
+  flex: 1 1 0;
+  min-width: 0;
+  height: clamp(34px, 6.8cqw, 54px);
+  border-radius: 6px;
   cursor: crosshair;
   position: relative;
   overflow: hidden;
@@ -52,6 +51,13 @@
   animation: qualityBlocksMove 1.8s linear infinite;
 }
 
+/* muted blocks — no stripes, no animation */
+.quality-blocks__block--green-muted::before,
+.quality-blocks__block--blue-muted::before,
+.quality-blocks__block--orange-muted::before {
+  display: none;
+}
+
 /* gloss sheen */
 .quality-blocks__block::after {
   content: '';
@@ -67,18 +73,38 @@
   pointer-events: none;
 }
 
-/* color variants — solid base, ramp via --block-color per block */
-.quality-blocks__block--green  { --block-color: #7ec41a; }
-.quality-blocks__block--orange { --block-color: #f07a20; }
+/* ── Active tones ───────────────────────────── */
+.quality-blocks__block--green  { --block-color: #6aaa10; }
+.quality-blocks__block--blue   { --block-color: #3d82e0; }
+.quality-blocks__block--orange { --block-color: #f5a020; }
 .quality-blocks__block--red    { --block-color: #f05050; }
-.quality-blocks__block--blue   { --block-color: #2f80ed; }
+
+/* ── Muted (inactive) tones — pale, no gloss stripes ── */
+.quality-blocks__block--green-muted  {
+  --block-color: #cfe08f;
+  box-shadow: none;
+  animation: none;
+  opacity: 0.75;
+}
+.quality-blocks__block--blue-muted   {
+  --block-color: #bdd4f5;
+  box-shadow: none;
+  animation: none;
+  opacity: 0.75;
+}
+.quality-blocks__block--orange-muted {
+  --block-color: #fde3ba;
+  box-shadow: none;
+  animation: none;
+  opacity: 0.75;
+}
 
 @keyframes qualityBlockIn {
   from { opacity: 0; transform: scaleY(0.6); }
-  to   { opacity: 1; transform: scaleY(1);   }
+  to   { opacity: 1; transform: scaleY(1); }
 }
 
 @keyframes qualityBlocksMove {
-  from { transform: translateX(0);    }
+  from { transform: translateX(0); }
   to   { transform: translateX(20px); }
 }

@@ -16,47 +16,40 @@ export default function NoraAvatar({
           50%  { transform: translateX(30%) scaleX(1.6); opacity: 1; }
           100% { transform: translateX(-30%) scaleX(1.6); opacity: 0.75; }
         }
-
         @keyframes colorDriftReverse {
           0%   { transform: translateX(25%) scaleX(1.5); opacity: 0.6; }
           50%  { transform: translateX(-25%) scaleX(1.5); opacity: 0.9; }
           100% { transform: translateX(25%) scaleX(1.5); opacity: 0.6; }
         }
-
         @keyframes hueIdle {
-          0%   { filter: hue-rotate(0deg) saturate(1); }
-          33%  { filter: hue-rotate(20deg) saturate(1.2); }
+          0%   { filter: hue-rotate(0deg)   saturate(1);   }
+          33%  { filter: hue-rotate(20deg)  saturate(1.2); }
           66%  { filter: hue-rotate(-15deg) saturate(1.1); }
-          100% { filter: hue-rotate(0deg) saturate(1); }
+          100% { filter: hue-rotate(0deg)   saturate(1);   }
         }
-
-        @keyframes heartbeat {
-          0%   { transform: scale(1); filter: brightness(1); }
-          15%  { transform: scale(1.18); filter: brightness(1.6); }
-          30%  { transform: scale(1.08); filter: brightness(1.2); }
-          45%  { transform: scale(1.22); filter: brightness(1.8); }
-          65%  { transform: scale(1.05); filter: brightness(1.3); }
-          80%  { transform: scale(1.12); filter: brightness(1.5); }
-          100% { transform: scale(1); filter: brightness(1); }
-        }
-
-        @keyframes glowBurst {
-          0%   { opacity: 0.15; transform: scale(1); }
-          40%  { opacity: 0.6; transform: scale(1.5); }
-          100% { opacity: 0; transform: scale(2.2); }
-        }
-
-        .nora-sphere-idle { animation: hueIdle 6s ease-in-out infinite; cursor: pointer; }
-        .nora-sphere-active { animation: heartbeat 0.9s ease-in-out forwards; cursor: pointer; }
-        .color-layer-1 { animation: colorDrift 4s ease-in-out infinite; }
-        .color-layer-2 { animation: colorDriftReverse 5.5s ease-in-out infinite; }
-        .glow-burst-ring { animation: glowBurst 0.9s ease-out forwards; }
+        /* color-only animation lives here — no transform, no transition conflict */
+        .nora-sphere-hue  { animation: hueIdle 6s ease-in-out infinite; }
+        .nora-color-1     { animation: colorDrift 4s ease-in-out infinite; }
+        .nora-color-2     { animation: colorDriftReverse 5.5s ease-in-out infinite; }
       `}</style>
 
+      {/*
+        Outer wrapper owns ONLY the scale transition.
+        No animation runs here, so transform is never contested.
+      */}
       <div
-        style={{ position: 'relative', width: size, height: size }}
         onClick={onClick}
+        style={{
+          position: 'relative',
+          width: size,
+          height: size,
+          transform: active ? 'scale(1.14)' : 'scale(1)',
+          transition: 'transform 440ms cubic-bezier(.22,1,.36,1)',
+          willChange: 'transform',
+          cursor: 'pointer',
+        }}
       >
+        {/* ambient static glow — never changes */}
         <div
           style={{
             position: 'absolute',
@@ -68,23 +61,30 @@ export default function NoraAvatar({
           }}
         />
 
-        {active && (
-          <div
-            className="glow-burst-ring"
-            style={{
-              position: 'absolute',
-              inset: '-10px',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(99,150,255,0.55) 0%, transparent 70%)',
-              filter: 'blur(10px)',
-              pointerEvents: 'none',
-              zIndex: 0,
-            }}
-          />
-        )}
-
+        {/*
+          Active glow ring — always in DOM.
+          Only opacity transitions, no transform or filter changes = cheap.
+        */}
         <div
-          className={active ? 'nora-sphere-active' : 'nora-sphere-idle'}
+          style={{
+            position: 'absolute',
+            inset: '-10px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(99,150,255,0.55) 0%, transparent 70%)',
+            filter: 'blur(10px)',
+            pointerEvents: 'none',
+            zIndex: 0,
+            opacity: active ? 1 : 0,
+            transition: 'opacity 440ms cubic-bezier(.22,1,.36,1)',
+          }}
+        />
+
+        {/*
+          Sphere shell — owns hueIdle (filter only).
+          No transition here so animation and transition never fight.
+        */}
+        <div
+          className="nora-sphere-hue"
           style={{
             position: 'relative',
             width: size,
@@ -101,7 +101,7 @@ export default function NoraAvatar({
           }}
         >
           <div
-            className="color-layer-1"
+            className="nora-color-1"
             style={{
               position: 'absolute',
               inset: 0,
@@ -113,7 +113,7 @@ export default function NoraAvatar({
           />
 
           <div
-            className="color-layer-2"
+            className="nora-color-2"
             style={{
               position: 'absolute',
               inset: 0,
