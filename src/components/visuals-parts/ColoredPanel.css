@@ -1,0 +1,50 @@
+.colored-panel {
+  --colored-panel-bg: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
+  --colored-panel-shadow: rgba(255, 106, 0, 0.24);
+
+  overflow: hidden;
+  border-radius: 18px;
+  padding: 0 7px 7px;
+  background: var(--colored-panel-bg);
+  box-shadow: 0 12px 24px var(--colored-panel-shadow);
+  transition: transform 190ms ease, box-shadow 190ms ease;
+}
+
+.colored-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px var(--colored-panel-shadow);
+}
+
+.colored-panel--orange {
+  --colored-panel-bg: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
+  --colored-panel-shadow: rgba(255, 106, 0, 0.24);
+}
+
+.colored-panel--green {
+  --colored-panel-bg: linear-gradient(90deg, #D5E64C 0%, #5F8F00 100%);
+  --colored-panel-shadow: rgba(95, 143, 0, 0.22);
+}
+
+.colored-panel--red {
+  --colored-panel-bg: var(--theRed, #FF5757);
+  --colored-panel-shadow: rgba(255, 87, 87, 0.28);
+}
+
+.colored-panel__title {
+  min-height: 34px;
+  padding: 11px 14px;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  font-family: "Poppins", Manrope, "Segoe UI", sans-serif;
+}
+
+.colored-panel__body {
+  min-height: 44px;
+  padding: 15px 14px 16px;
+  display: grid;
+  gap: 12px;
+  background: #ffffff;
+  border-radius: 12px;
+}
