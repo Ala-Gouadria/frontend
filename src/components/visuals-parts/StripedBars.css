@@ -9,6 +9,11 @@
     #6ea60e 100%
   );
   --striped-glow: rgba(127, 162, 13, 0.22);
+  --striped-track: linear-gradient(
+    90deg,
+    rgba(213, 230, 76, 0.3) 0%,
+    rgba(95, 143, 0, 0.3) 100%
+  );
 }
 
 .striped-bars--orange {
@@ -20,6 +25,7 @@
     #c05008 100%
   );
   --striped-glow: rgba(255, 127, 35, 0.22);
+  --striped-track: #FFC30033;
 }
 
 .striped-bars--blue {
@@ -31,6 +37,7 @@
     #0d4faa 100%
   );
   --striped-glow: rgba(47, 128, 237, 0.22);
+  --striped-track: rgba(47, 128, 237, 0.18);
 }
 
 .striped-bars__head {
@@ -50,7 +57,7 @@
   height: 14px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(190, 222, 130, 0.32);
+  background: var(--striped-track);
   cursor: crosshair;
   transition: box-shadow 180ms ease, transform 180ms ease;
 }

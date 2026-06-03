@@ -2,17 +2,20 @@
   display: grid;
   gap: 6px;
   --progress-fill: linear-gradient(90deg, #D5E64C 0%, #5F8F00 100%);
-  --progress-cap: #5F8F00;
+  --progress-cap: #6FA011;
+  --progress-track: #eaf2c8;
 }
 
 .progress-bars--blue {
   --progress-fill: linear-gradient(90deg, #5aa0ff 0%, #307fff 100%);
-  --progress-cap: #2f80ed;
+  --progress-cap: #1c5fcc;
+  --progress-track: #d7e7ff;
 }
 
 .progress-bars--orange {
   --progress-fill: linear-gradient(90deg, #ffb989 0%, #ff7f23 100%);
-  --progress-cap: #ff7f23;
+  --progress-cap: #c54e08;
+  --progress-track: #ffe2cc;
 }
 
 .progress-bars__head {
@@ -30,10 +33,9 @@
 
 .progress-bars__track {
   position: relative;
-  height: 26px;
-  overflow: hidden;
-  border-radius: 4px;
-  background: linear-gradient(90deg, rgba(213, 229, 135, 0.52) 0%, rgba(202, 215, 169, 0.38) 100%);
+  height: 32px;
+  border-radius: 10px;
+  background: var(--progress-track);
   cursor: crosshair;
   transition:
     transform 180ms ease,
@@ -55,12 +57,16 @@
 
 .progress-bars__cap {
   position: absolute;
-  top: 2px;
-  width: 8px;
-  height: 22px;
+  top: 50%;
+  width: 12px;
+  height: calc(100% + 4px);
   border-radius: 999px;
   background: var(--progress-cap);
-  transform: translateX(-50%);
+  box-shadow:
+    0 0 0 3px #ffffff,
+    0 2px 6px rgba(0, 0, 0, 0.18);
+  transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 @keyframes progressBarsGrow {
