@@ -44,3 +44,11 @@ textarea {
 html.is-rtl {
   font-family: "Tajawal", "Segoe UI", sans-serif;
 }
+
+/* Urbanist across all 32 analytics/marketing cards (any element whose
+   class contains "-card" — covers analytics-card, website-card, gs-card,
+   smc-card, lead-*-card, etc. — and all of their descendants). */
+[class*="-card"],
+[class*="-card"] * {
+  font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
+}

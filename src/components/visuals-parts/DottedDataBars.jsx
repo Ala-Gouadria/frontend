@@ -8,7 +8,7 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(value, max))
 }
 
-function densifyColumns(columns, targetLength = 12) {
+function densifyColumns(columns, targetLength = 14) {
   if (columns.length >= targetLength || columns.length === 0) return columns
 
   return Array.from({ length: targetLength }, (_, index) => {
@@ -43,17 +43,20 @@ export function DottedDataBars({
   )
 
   const maxCount    = Math.max(...normalizedColumns.map(c => c.count), 1)
-  const DOT_R       = 1.9
-  const ROW_COUNT   = 8
-  const COL_GAP     = 8.6    // horizontal distance between column centres
-  const DOT_GAP     = 6.2    // vertical distance between dot centres
-  const WIDTH       = 118
-  const HEIGHT      = 58
+  const DOT_SIZE    = 1.6     // square edge length (viewBox units)
+  const ROW_COUNT   = 7
+  const COL_GAP     = 4.2     // horizontal distance between column centres
+  const DOT_GAP     = 4.0     // vertical distance between dot centres
+  const PAD_X       = 2
+  const PAD_Y       = 3
+  const WIDTH       = COL_GAP * normalizedColumns.length + PAD_X * 2
+  const HEIGHT      = ROW_COUNT * DOT_GAP + PAD_Y * 2
 
   return (
     <svg
       className={classNames('dotted-data-bars', `dotted-data-bars--${tone}`, className)}
       viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+      preserveAspectRatio="xMidYMax meet"
       aria-hidden="true"
     >
       {normalizedColumns.map((column, colIdx) => {
@@ -62,30 +65,25 @@ export function DottedDataBars({
           1,
           ROW_COUNT
         )
-        const cx = DOT_R + colIdx * COL_GAP
+        const cx = PAD_X + DOT_SIZE / 2 + colIdx * COL_GAP
 
         return (
           <g key={column.label}>
-            {Array.from({ length: ROW_COUNT }).map((_, rowIdx) => {
-              const isVisible = rowIdx < visibleCount
-              const cy = HEIGHT - DOT_R - rowIdx * DOT_GAP
+            {Array.from({ length: visibleCount }).map((_, rowIdx) => {
+              const cy = HEIGHT - PAD_Y - DOT_SIZE / 2 - rowIdx * DOT_GAP
 
               return (
-                <circle
+                <rect
                   key={`${column.label}-${rowIdx}`}
-                  cx={cx}
-                  cy={cy}
-                  r={DOT_R}
-                  className={classNames(
-                    'dotted-data-bars__dot',
-                    isVisible && 'dotted-data-bars__dot--visible'
-                  )}
+                  x={cx - DOT_SIZE / 2}
+                  y={cy - DOT_SIZE / 2}
+                  width={DOT_SIZE}
+                  height={DOT_SIZE}
+                  className="dotted-data-bars__dot dotted-data-bars__dot--visible"
                   style={{ '--dot-index': rowIdx }}
                 >
-                  {isVisible && (
-                    <title>{`${column.label}: ${column.value ?? column.count}`}</title>
-                  )}
-                </circle>
+                  <title>{`${column.label}: ${column.value ?? column.count}`}</title>
+                </rect>
               )
             })}
           </g>
