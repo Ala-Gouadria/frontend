@@ -1,6 +1,7 @@
 import {
   AiActionButton,
   AiInsight,
+  ColoredPanel,
   DottedDataBars,
   MiniLineChart,
 } from '../../visuals-parts'
@@ -30,18 +31,15 @@ export function PerformanceSummaryCard({ data = performanceSummaryCardData }) {
         />
       </section>
 
-      <section className="analytics-card__panel">
-        <div className="analytics-card__panel-title">{data.panelTitle}</div>
-        <div className="analytics-card__panel-body analytics-card__panel-grid analytics-card__panel-grid--three">
-          {data.results.map((metric) => (
-            <div className="analytics-card__mini-stat" key={metric.label}>
-              <span>{metric.label}</span>
-              <span>{metric.value}</span>
-              <DottedDataBars columns={metric.columns} tone="green" />
-            </div>
-          ))}
-        </div>
-      </section>
+      <ColoredPanel title={data.panelTitle} tone="orange" bodyClassName="analytics-card__panel-grid analytics-card__panel-grid--three">
+        {data.results.map((metric) => (
+          <div className="analytics-card__mini-stat" key={metric.label}>
+            <span>{metric.label}</span>
+            <span>{metric.value}</span>
+            <DottedDataBars columns={metric.columns} tone="green" />
+          </div>
+        ))}
+      </ColoredPanel>
 
       <footer className="analytics-card__footer">
         <AiInsight>{data.insight}</AiInsight>

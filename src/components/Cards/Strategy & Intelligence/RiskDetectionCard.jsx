@@ -1,6 +1,6 @@
 import './StrategyIntelligenceCardShared.css'
 import './RiskDetectionCard.css'
-import { MiniLineChart, AiInsight, AiActionButton } from '../../visuals-parts'
+import { MiniLineChart, ColoredPanel, AiInsight, AiActionButton } from '../../visuals-parts'
 
 const defaultRisks = [
   {
@@ -46,35 +46,29 @@ export function RiskDetectionCard({
         <span className="analytics-card__status">{status}</span>
       </div>
 
-      <div className="rd-card__panel">
-        <div className="rd-card__panel-title">Reasons</div>
-        <div className="analytics-card__panel-body">
-          {risks.map((risk, i) => (
-            <div key={i} className="rd-card__risk-row">
-              <div className="analytics-card__row">
-                <span className="rd-card__risk-label">{risk.label}</span>
-                <span className="rd-card__risk-delta">{risk.delta}</span>
-              </div>
-              <span className={`rd-card__risk-status rd-card__risk-status--${risk.statusTone}`}>
-                {risk.statusText}
-              </span>
-              <MiniLineChart
-                points={risk.points}
-                fillPoints={risk.fillPoints}
-                tone="red"
-                className="analytics-card__compact-chart"
-              />
+      <ColoredPanel title="Reasons" tone="red">
+        {risks.map((risk, i) => (
+          <div key={i} className="rd-card__risk-row">
+            <div className="analytics-card__row">
+              <span className="rd-card__risk-label">{risk.label}</span>
+              <span className="rd-card__risk-delta">{risk.delta}</span>
             </div>
-          ))}
-        </div>
-      </div>
+            <span className={`rd-card__risk-status rd-card__risk-status--${risk.statusTone}`}>
+              {risk.statusText}
+            </span>
+            <MiniLineChart
+              points={risk.points}
+              fillPoints={risk.fillPoints}
+              tone="red"
+              className="analytics-card__compact-chart"
+            />
+          </div>
+        ))}
+      </ColoredPanel>
 
-      <div className="analytics-card__panel">
-        <div className="analytics-card__panel-title">Reasons</div>
-        <div className="analytics-card__panel-body">
-          <p className="rd-card__reason-text">{reasonText}</p>
-        </div>
-      </div>
+      <ColoredPanel title="Reasons" tone="orange">
+        <p className="rd-card__reason-text">{reasonText}</p>
+      </ColoredPanel>
 
       <AiInsight>{aiText}</AiInsight>
       <AiActionButton />

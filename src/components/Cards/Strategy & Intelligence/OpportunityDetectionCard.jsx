@@ -1,6 +1,6 @@
 import './StrategyIntelligenceCardShared.css'
 import './OpportunityDetectionCard.css'
-import { MiniLineChart, AiInsight, AiActionButton } from '../../visuals-parts'
+import { MiniLineChart, ColoredPanel, AiInsight, AiActionButton } from '../../visuals-parts'
 
 const defaultOpportunities = [
   {
@@ -49,32 +49,26 @@ export function OpportunityDetectionCard({
         <MiniLineChart className="analytics-card__top-chart" tone="green" />
       </div>
 
-      <div className="od-card__panel">
-        <div className="od-card__panel-title">3 high Potential Area</div>
-        <div className="analytics-card__panel-body">
-          {opportunities.map((opp) => (
-            <div key={opp.label} className="od-card__opp-row">
-              <div className="analytics-card__row">
-                <span className="od-card__opp-label">{opp.label}</span>
-                <span className="od-card__opp-delta">{opp.delta}</span>
-              </div>
-              <MiniLineChart
-                points={opp.points}
-                fillPoints={opp.fillPoints}
-                tone="green"
-                className="analytics-card__compact-chart"
-              />
+      <ColoredPanel title="3 high Potential Area" tone="green">
+        {opportunities.map((opp) => (
+          <div key={opp.label} className="od-card__opp-row">
+            <div className="analytics-card__row">
+              <span className="od-card__opp-label">{opp.label}</span>
+              <span className="od-card__opp-delta">{opp.delta}</span>
             </div>
-          ))}
-        </div>
-      </div>
+            <MiniLineChart
+              points={opp.points}
+              fillPoints={opp.fillPoints}
+              tone="green"
+              className="analytics-card__compact-chart"
+            />
+          </div>
+        ))}
+      </ColoredPanel>
 
-      <div className="analytics-card__panel">
-        <div className="analytics-card__panel-title">Reasons</div>
-        <div className="analytics-card__panel-body">
-          <p className="od-card__reason-text">{reasonText}</p>
-        </div>
-      </div>
+      <ColoredPanel title="Reasons" tone="orange">
+        <p className="od-card__reason-text">{reasonText}</p>
+      </ColoredPanel>
 
       <AiInsight>{aiText}</AiInsight>
       <AiActionButton />

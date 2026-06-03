@@ -25,9 +25,9 @@
 .system-monitoring-card__panel {
   overflow: hidden;
   border-radius: 18px;
-  background: linear-gradient(180deg, #ffb067 0%, #ff7b1d 100%);
+  background: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
   padding: 0 5px 5px;
-  box-shadow: 0 10px 24px rgba(255, 123, 29, 0.22);
+  box-shadow: 0 10px 24px rgba(255, 106, 0, 0.24);
 }
 
 .system-monitoring-card__panel h3 {
@@ -35,8 +35,10 @@
   padding: 13px 14px 11px;
   background: transparent;
   font-size: 0.82rem;
-  font-weight: 400;
-  color: #1f1f1f;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  font-family: "Poppins", Manrope, "Segoe UI", sans-serif;
 }
 
 .system-monitoring-card__metrics {

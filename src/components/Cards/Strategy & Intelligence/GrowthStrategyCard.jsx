@@ -1,6 +1,6 @@
 import './StrategyIntelligenceCardShared.css'
 import './GrowthStrategyCard.css'
-import { MiniLineChart, StackedBars, AiInsight, AiActionButton } from '../../visuals-parts'
+import { MiniLineChart, StackedBars, ColoredPanel, AiInsight, AiActionButton } from '../../visuals-parts'
 
 const defaultSegments = [
   { label: 'Strong Hook', value: 25, tone: 'blue' },
@@ -56,31 +56,28 @@ export function GrowthStrategyCard({
         <StackedBars segments={segments} />
       </div>
 
-      <div className="analytics-card__panel">
-        <div className="analytics-card__panel-title">Reasons</div>
-        <div className="analytics-card__panel-body">
-          <div className="analytics-card__source-list">
-            {content.map((item) => (
-              <div key={item.label}>
-                <div className="analytics-card__source-head">
-                  <div className="gs-card__content-row">
-                    <span className={`gs-card__dot gs-card__dot--${item.tone}`} />
-                    <span className="gs-card__content-label">{item.label}</span>
-                  </div>
-                  <span className="gs-card__content-value">{item.value}</span>
+      <ColoredPanel title="Reasons" tone="orange">
+        <div className="analytics-card__source-list">
+          {content.map((item) => (
+            <div key={item.label}>
+              <div className="analytics-card__source-head">
+                <div className="gs-card__content-row">
+                  <span className={`gs-card__dot gs-card__dot--${item.tone}`} />
+                  <span className="gs-card__content-label">{item.label}</span>
                 </div>
+                <span className="gs-card__content-value">{item.value}</span>
               </div>
-            ))}
-          </div>
-          <div className="gs-card__blocks">
-            {Object.entries(blockCounts).flatMap(([tone, count]) =>
-              Array.from({ length: count }).map((_, i) => (
-                <span key={`${tone}-${i}`} className={`gs-card__block gs-card__block--${tone}`} />
-              ))
-            )}
-          </div>
+            </div>
+          ))}
         </div>
-      </div>
+        <div className="gs-card__blocks">
+          {Object.entries(blockCounts).flatMap(([tone, count]) =>
+            Array.from({ length: count }).map((_, i) => (
+              <span key={`${tone}-${i}`} className={`gs-card__block gs-card__block--${tone}`} />
+            ))
+          )}
+        </div>
+      </ColoredPanel>
 
       <AiInsight>{aiText}</AiInsight>
       <AiActionButton />

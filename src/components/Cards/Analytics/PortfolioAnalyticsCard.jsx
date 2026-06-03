@@ -1,6 +1,7 @@
 import {
   AiActionButton,
   AiInsight,
+  ColoredPanel,
   DottedDataBars,
   MiniLineChart,
   SemiCircleGauge,
@@ -31,22 +32,19 @@ export function PortfolioAnalyticsCard({ data = portfolioAnalyticsCardData }) {
         />
       </section>
 
-      <section className="analytics-card__panel">
-        <div className="analytics-card__panel-title">{data.panelTitle}</div>
-        <div className="analytics-card__panel-body analytics-card__panel-grid analytics-card__panel-grid--three">
-          {data.summaryItems.map((item) => (
-            <div className="analytics-card__mini-stat" key={item.label}>
-              <span>{item.label}</span>
-              <span>{item.value}</span>
-              {item.type === 'line' ? (
-                <MiniLineChart points={item.points} fillPoints={item.fillPoints} />
-              ) : (
-                <DottedDataBars columns={item.columns} tone="green" />
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
+      <ColoredPanel title={data.panelTitle} tone="orange" bodyClassName="analytics-card__panel-grid analytics-card__panel-grid--three">
+        {data.summaryItems.map((item) => (
+          <div className="analytics-card__mini-stat" key={item.label}>
+            <span>{item.label}</span>
+            <span>{item.value}</span>
+            {item.type === 'line' ? (
+              <MiniLineChart points={item.points} fillPoints={item.fillPoints} />
+            ) : (
+              <DottedDataBars columns={item.columns} tone="green" />
+            )}
+          </div>
+        ))}
+      </ColoredPanel>
 
       <section>
         <h3 className="analytics-card__section-title">{data.gaugeTitle}</h3>

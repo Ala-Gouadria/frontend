@@ -1,6 +1,7 @@
 import {
   AiActionButton,
   AiInsight,
+  ColoredPanel,
   MiniLineChart,
   QualityBlocks,
 } from '../../visuals-parts'
@@ -34,18 +35,15 @@ export function SalesReportCard({ data = salesReportCardData }) {
         />
       </section>
 
-      <section className="analytics-card__panel">
-        <div className="analytics-card__panel-title">{data.panelTitle}</div>
-        <div className="analytics-card__panel-body analytics-card__panel-grid">
-          {data.results.map((result) => (
-            <div className="analytics-card__mini-stat" key={result.label}>
-              <span>{result.label}</span>
-              <span>{result.value}</span>
-              <MiniLineChart points={result.points} fillPoints={result.fillPoints} tooltips={result.tooltips} tone={toneFromValue(result.value)} />
-            </div>
-          ))}
-        </div>
-      </section>
+      <ColoredPanel title={data.panelTitle} tone="orange" bodyClassName="analytics-card__panel-grid">
+        {data.results.map((result) => (
+          <div className="analytics-card__mini-stat" key={result.label}>
+            <span>{result.label}</span>
+            <span>{result.value}</span>
+            <MiniLineChart points={result.points} fillPoints={result.fillPoints} tooltips={result.tooltips} tone={toneFromValue(result.value)} />
+          </div>
+        ))}
+      </ColoredPanel>
 
       <section>
         <h3 className="analytics-card__section-title">{data.sourceTitle}</h3>
