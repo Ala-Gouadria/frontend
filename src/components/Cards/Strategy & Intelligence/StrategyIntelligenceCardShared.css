@@ -89,9 +89,9 @@
 
 .analytics-card__panel {
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 18px;
   background: linear-gradient(180deg, #ffb257 0%, #ff7612 100%);
-  padding: 0 5px 5px;
+  padding: 0 7px 7px;
   box-shadow: 0 12px 24px rgba(211, 119, 26, 0.24);
   transition: transform 190ms ease, box-shadow 190ms ease;
 }
@@ -102,8 +102,8 @@
 }
 
 .analytics-card__panel-title {
-  min-height: 28px;
-  padding: 9px 12px;
+  min-height: 34px;
+  padding: 11px 14px;
   background: transparent;
   color: #fff;
   font-size: 0.78rem;
@@ -111,7 +111,8 @@
 }
 
 .analytics-card__panel-body {
-  padding: 11px 12px 12px;
+  min-height: 44px;
+  padding: 15px 14px 16px;
   display: grid;
   gap: 12px;
   background: #fff;
