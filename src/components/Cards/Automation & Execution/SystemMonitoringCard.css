@@ -3,6 +3,7 @@
   gap: 15px;
 }
 
+/* ── System pulse ────────────────────────────────────────────────────────── */
 .system-monitoring-card__pulse {
   display: grid;
   gap: 4px;
@@ -20,6 +21,7 @@
   font-weight: 600;
 }
 
+/* ── Reasons panel ───────────────────────────────────────────────────────── */
 .system-monitoring-card__panel {
   overflow: hidden;
   border: 2px solid #ff7b1d;
@@ -45,7 +47,7 @@
 .system-monitoring-card__metric {
   min-width: 0;
   display: grid;
-  gap: 5px;
+  gap: 3px;
 }
 
 .system-monitoring-card__metric span {
@@ -53,15 +55,17 @@
   color: #232327;
 }
 
+/* Bold, legible metric values to match design */
 .system-monitoring-card__metric strong {
-  color: rgba(24, 24, 27, 0.68);
-  font-size: 0.72rem;
+  color: #111114;
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 .system-monitoring-card__metric .dotted-data-bars {
   width: 100%;
   height: 45px;
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
 .system-monitoring-card__metric .dotted-data-bars__dot--visible {
@@ -72,9 +76,10 @@
   fill: #ff8d8d;
 }
 
+/* ── Service health ──────────────────────────────────────────────────────── */
 .system-monitoring-card__services {
   display: grid;
-  gap: 9px;
+  gap: 11px;
 }
 
 .system-monitoring-card__section-head {
@@ -83,16 +88,17 @@
   justify-content: space-between;
   gap: 12px;
   font-size: 0.8rem;
+  color: #171719;
 }
 
 .system-monitoring-card__service-list {
   display: grid;
-  gap: 9px;
+  gap: 12px;
 }
 
 .system-monitoring-card__service {
   display: grid;
-  gap: 7px;
+  gap: 8px;
 }
 
 .system-monitoring-card__service-head {
@@ -102,33 +108,50 @@
   gap: 12px;
 }
 
-.system-monitoring-card__service-head strong {
+/* Left: service name + status note */
+.system-monitoring-card__service-head > div:first-child strong {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #111114;
   line-height: 1.2;
-  font-weight: 400;
 }
 
-.system-monitoring-card__service-head span {
+.system-monitoring-card__service-head > div:first-child span {
   display: block;
   margin-top: 2px;
-  font-size: 0.76rem;
-  color: rgba(24, 24, 27, 0.4);
+  font-size: 0.74rem;
+  color: rgba(24, 24, 27, 0.42);
 }
 
+/* Right: uptime % (gray) + latency (bold blue) */
 .system-monitoring-card__service-head > div:last-child {
   text-align: right;
+  flex-shrink: 0;
+}
+
+.system-monitoring-card__service-head > div:last-child span {
+  display: block;
+  font-size: 0.74rem;
+  color: rgba(24, 24, 27, 0.42);
+  line-height: 1.2;
 }
 
 .system-monitoring-card__service-head > div:last-child strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.84rem;
+  font-weight: 700;
   color: #0578ff;
-  font-weight: 600;
+  line-height: 1.2;
 }
 
-.system-monitoring-card__note--slow {
-  color: rgba(24, 24, 27, 0.4) !important;
+/* Tall segments with sharp 90° corners */
+.system-monitoring-card__service .segmented-striped-bar {
+  gap: 5px;
 }
 
 .system-monitoring-card__service .segmented-striped-bar__segment {
-  height: 15px;
+  height: 26px;
+  border-radius: 0;
 }

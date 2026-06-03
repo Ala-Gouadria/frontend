@@ -1,11 +1,13 @@
 .task-execution-card {
   min-height: 488px;
+  gap: 14px;
 }
 
+/* ── Stats rows ─────────────────────────────────────────────────────────── */
 .task-execution-card__stats {
   display: grid;
-  gap: 17px;
-  margin-top: 1px;
+  margin-top: 2px;
+  border-top: 1px solid rgba(24, 24, 27, 0.07);
 }
 
 .task-execution-card__stat {
@@ -13,58 +15,70 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  font-size: 0.76rem;
+  padding: 10px 0;
+  font-size: 0.8rem;
   color: rgba(24, 24, 27, 0.58);
+  border-bottom: 1px solid rgba(24, 24, 27, 0.07);
 }
 
 .task-execution-card__stat strong {
-  color: #438c00;
-  font-size: 0.72rem;
+  color: #3a9200;
+  font-size: 0.88rem;
   font-weight: 700;
 }
 
 .task-execution-card__stat--red strong {
-  color: #ff2738;
+  color: #e02d3c;
 }
 
+/* ── Active tasks panel ──────────────────────────────────────────────────── */
 .task-execution-card__panel {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   margin-top: 2px;
 }
 
-.task-execution-card__panel-title,
-.task-execution-card__task-head {
+.task-execution-card__panel-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-}
-
-.task-execution-card__panel-title {
   font-size: 0.8rem;
+  font-weight: 600;
   color: #171719;
 }
 
 .task-execution-card__tasks {
   display: grid;
-  gap: 10px;
+  gap: 14px;
 }
 
 .task-execution-card__task {
   display: grid;
-  gap: 7px;
+  gap: 8px;
 }
 
 .task-execution-card__task-head {
-  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  font-size: 0.77rem;
+  color: rgba(24, 24, 27, 0.68);
 }
 
 .task-execution-card__task-head strong {
   color: #0578ff;
-  font-size: 0.75rem;
+  font-size: 0.77rem;
+  font-weight: 700;
+}
+
+/* Taller segments, sharp 90° corners ───────────────────────────────────── */
+.task-execution-card__task .segmented-striped-bar {
+  gap: 5px;
 }
 
 .task-execution-card__task .segmented-striped-bar__segment {
-  height: 15px;
+  height: 26px;
+  border-radius: 0;
 }

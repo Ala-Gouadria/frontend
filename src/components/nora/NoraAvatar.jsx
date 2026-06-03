@@ -11,31 +11,31 @@ export default function NoraAvatar({
   return (
     <>
       <style>{`
+        /* All keyframes use only transform/opacity — fully GPU-composited, zero CPU rasterisation */
         @keyframes colorDrift {
           0%   { transform: translateX(-30%) scaleX(1.6); opacity: 0.75; }
-          50%  { transform: translateX(30%) scaleX(1.6); opacity: 1; }
+          50%  { transform: translateX(30%)  scaleX(1.6); opacity: 1;    }
           100% { transform: translateX(-30%) scaleX(1.6); opacity: 0.75; }
         }
         @keyframes colorDriftReverse {
-          0%   { transform: translateX(25%) scaleX(1.5); opacity: 0.6; }
+          0%   { transform: translateX(25%)  scaleX(1.5); opacity: 0.6; }
           50%  { transform: translateX(-25%) scaleX(1.5); opacity: 0.9; }
-          100% { transform: translateX(25%) scaleX(1.5); opacity: 0.6; }
+          100% { transform: translateX(25%)  scaleX(1.5); opacity: 0.6; }
         }
-        @keyframes hueIdle {
-          0%   { filter: hue-rotate(0deg)   saturate(1);   }
-          33%  { filter: hue-rotate(20deg)  saturate(1.2); }
-          66%  { filter: hue-rotate(-15deg) saturate(1.1); }
-          100% { filter: hue-rotate(0deg)   saturate(1);   }
+        @keyframes spherePulse {
+          0%   { opacity: 0.82; }
+          50%  { opacity: 1;    }
+          100% { opacity: 0.82; }
         }
-        /* color-only animation lives here — no transform, no transition conflict */
-        .nora-sphere-hue  { animation: hueIdle 6s ease-in-out infinite; }
-        .nora-color-1     { animation: colorDrift 4s ease-in-out infinite; }
-        .nora-color-2     { animation: colorDriftReverse 5.5s ease-in-out infinite; }
+        .nora-color-1  { animation: colorDrift        4s   ease-in-out infinite; }
+        .nora-color-2  { animation: colorDriftReverse  5.5s ease-in-out infinite; }
+        .nora-sphere-pulse { animation: spherePulse   5s   ease-in-out infinite; }
       `}</style>
 
       {/*
-        Outer wrapper owns ONLY the scale transition.
-        No animation runs here, so transform is never contested.
+        Outer wrapper: owns ONLY the scale transition.
+        willChange promotes this to its own GPU layer so the transition
+        never needs to touch any child's compositing layer.
       */}
       <div
         onClick={onClick}
@@ -44,12 +44,12 @@ export default function NoraAvatar({
           width: size,
           height: size,
           transform: active ? 'scale(1.14)' : 'scale(1)',
-          transition: 'transform 440ms cubic-bezier(.22,1,.36,1)',
+          transition: 'transform 420ms cubic-bezier(.22,1,.36,1)',
           willChange: 'transform',
           cursor: 'pointer',
         }}
       >
-        {/* ambient static glow — never changes */}
+        {/* static ambient glow — never animates */}
         <div
           style={{
             position: 'absolute',
@@ -62,8 +62,8 @@ export default function NoraAvatar({
         />
 
         {/*
-          Active glow ring — always in DOM.
-          Only opacity transitions, no transform or filter changes = cheap.
+          Active glow ring — always in DOM, transitions opacity only.
+          No filter change, no transform change → cheapest possible composite.
         */}
         <div
           style={{
@@ -75,16 +75,16 @@ export default function NoraAvatar({
             pointerEvents: 'none',
             zIndex: 0,
             opacity: active ? 1 : 0,
-            transition: 'opacity 440ms cubic-bezier(.22,1,.36,1)',
+            transition: 'opacity 420ms cubic-bezier(.22,1,.36,1)',
           }}
         />
 
         {/*
-          Sphere shell — owns hueIdle (filter only).
-          No transition here so animation and transition never fight.
+          Sphere shell — no animation, no transition, no filter.
+          Static element = no compositing cost when parent transitions.
         */}
         <div
-          className="nora-sphere-hue"
+          className="nora-sphere-pulse"
           style={{
             position: 'relative',
             width: size,
