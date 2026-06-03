@@ -67,7 +67,7 @@ export function MiniLineChart({
   return (
     <svg
       className={classNames('mini-line-chart', `mini-line-chart--${tone}`, className)}
-      viewBox="0 0 194 58"
+      viewBox="0 0 172 58"
       preserveAspectRatio="none"
       aria-hidden="true"
     >
