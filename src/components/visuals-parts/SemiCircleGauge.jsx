@@ -68,6 +68,8 @@ export function SemiCircleGauge({
   const clipId = 'c' + id
   const maskId = 'm' + id
   const gradId = 'g' + id
+  const progGradId = 'p' + id
+  const glowGradId = 'gl' + id
 
   const safeTarget = Number(target)
   const derivedProgress = Number.isFinite(safeTarget) && safeTarget !== 0 ? Number(current) / safeTarget : 0
@@ -114,18 +116,31 @@ export function SemiCircleGauge({
   y2="0"
 >
   <stop offset="0%" stopColor="white" stopOpacity="0" />
-  <stop offset="8%" stopColor="white" stopOpacity="0.08" />
-  <stop offset="16%" stopColor="white" stopOpacity="0.35" />
-  <stop offset="24%" stopColor="white" stopOpacity="0.75" />
-  <stop offset="32%" stopColor="white" stopOpacity="1" />
+  <stop offset="6%" stopColor="white" stopOpacity="0.10" />
+  <stop offset="14%" stopColor="white" stopOpacity="0.40" />
+  <stop offset="22%" stopColor="white" stopOpacity="0.80" />
+  <stop offset="30%" stopColor="white" stopOpacity="1" />
 
-  <stop offset="72%" stopColor="white" stopOpacity="1" />
+  <stop offset="74%" stopColor="white" stopOpacity="1" />
 
   <stop offset="84%" stopColor="white" stopOpacity="0.75" />
   <stop offset="92%" stopColor="white" stopOpacity="0.35" />
   <stop offset="97%" stopColor="white" stopOpacity="0.08" />
   <stop offset="100%" stopColor="white" stopOpacity="0" />
 </linearGradient>
+
+          {/* Progress fill gradient — pale yellow-green left → deep green middle → fade right */}
+          <linearGradient
+            id={progGradId}
+            gradientUnits="userSpaceOnUse"
+            x1="0" y1="0" x2="510" y2="0"
+          >
+            <stop offset="0%" stopColor="var(--gauge-progress-start)" stopOpacity="0.55" />
+            <stop offset="22%" stopColor="var(--gauge-progress-start)" stopOpacity="1" />
+            <stop offset="55%" stopColor="var(--gauge-progress-mid)" stopOpacity="1" />
+            <stop offset="80%" stopColor="var(--gauge-progress-end)" stopOpacity="1" />
+            <stop offset="100%" stopColor="var(--gauge-progress-end)" stopOpacity="0.85" />
+          </linearGradient>
 
           {/* Mask covers viewBox + overflow to catch glow bleed */}
           <mask id={maskId} maskUnits="userSpaceOnUse" x="-60" y="-60" width="630" height="380">
@@ -135,34 +150,43 @@ export function SemiCircleGauge({
 
         <g mask={'url(#' + maskId + ')'}>
 
-          {/* Soft outer glow */}
+          {/* Pale outer halo — full arc, very soft */}
           <path
             d={pathData}
             fill="none"
-            stroke="var(--gauge-glow)"
-            strokeWidth="70"
+            stroke="var(--gauge-halo)"
+            strokeWidth="64"
             strokeLinecap="butt"
-           style={{
-  filter: 'blur(38px)',
-  opacity: 0.18
-}}
+            style={{ filter: 'blur(18px)', opacity: 0.9 }}
           />
 
-          {/* Pale background track */}
+          {/* Faint background track — just visible behind unfilled portion */}
           <path
             d={pathData}
             fill="none"
             stroke="var(--gauge-track)"
-            strokeWidth="54"
+            strokeWidth="40"
             strokeLinecap="butt"
           />
 
-          {/* Green progress fill */}
+          {/* Soft glow tied to progress only */}
           <path
             d={pathData}
             fill="none"
-            stroke="var(--gauge-progress)"
-            strokeWidth="28"
+            stroke={'url(#' + progGradId + ')'}
+            strokeWidth="56"
+            strokeLinecap="butt"
+            pathLength="100"
+            strokeDasharray={safeProgress * 100 + ' 100'}
+            style={{ filter: 'blur(10px)', opacity: 0.45 }}
+          />
+
+          {/* Green progress fill — thick plump band with horizontal gradient */}
+          <path
+            d={pathData}
+            fill="none"
+            stroke={'url(#' + progGradId + ')'}
+            strokeWidth="38"
             strokeLinecap="butt"
             pathLength="100"
             strokeDasharray={safeProgress * 100 + ' 100'}

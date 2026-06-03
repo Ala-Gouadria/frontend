@@ -3,3 +3,33 @@
 .sales-report-card .quality-blocks {
   margin-top: 10px;
 }
+
+.sales-report-card .analytics-card__legend {
+  gap: 18px;
+  margin-top: 4px;
+}
+
+.sales-report-card .analytics-card__legend-item {
+  gap: 8px;
+  font-size: 0.74rem;
+  color: rgba(24, 24, 27, 0.62);
+}
+
+.sales-report-card .analytics-card__swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.sales-report-card .analytics-card__swatch--blue {
+  background: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
+}
+
+.sales-report-card .analytics-card__swatch--green {
+  background: #6FA011;
+}
+
+.sales-report-card .analytics-card__swatch--orange {
+  background: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
+}
