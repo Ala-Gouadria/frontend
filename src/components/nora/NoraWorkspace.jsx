@@ -6,6 +6,7 @@ import imageIcon from '../../assets/icons/Nora-AI-Icon/image-add-icon.svg'
 import attachmentIcon from '../../assets/icons/Nora-AI-Icon/attachment-icon.svg'
 import micIcon from '../../assets/icons/Nora-AI-Icon/mic-icon.svg'
 import sentIcon from '../../assets/icons/Nora-AI-Icon/sent-icon.svg'
+import fileIcon from '../../assets/icons/Nora-AI-Icon/file-icon.svg'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
 const WELCOME_HEADLINE = 'An AI system that manages, automates, and grows your business.'
 const WELCOME_TEXT = 'Welcome back. I can help you grow, automate, and organize your business.'
@@ -325,9 +326,9 @@ function Composer({
           <div className="nora-files-list">
             {pendingAttachments.map((attachment) => (
               <div key={attachment.id} className="nora-file-chip">
-                <span className={`nora-file-chip__type nora-file-chip__type--${attachment.type}`} />
-                <span>{attachment.name}</span>
-                <button type="button" className="nora-file-remove" onClick={() => onRemoveAttachment(attachment.id)}>
+                <img src={fileIcon} alt="" aria-hidden="true" className="nora-file-chip__icon" />
+                <span className="nora-file-chip__name">{attachment.name}</span>
+                <button type="button" className="nora-file-remove" onClick={() => onRemoveAttachment(attachment.id)} aria-label="Remove attachment">
                   x
                 </button>
               </div>
