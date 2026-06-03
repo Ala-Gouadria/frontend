@@ -1,6 +1,15 @@
 .nora-panel * {
   box-sizing: border-box;
-  font-family: Manrope, "DM Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-family: "Urbanist", "Manrope", "DM Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* Headings/titles in the Nora panel use Delight */
+.nora-sidebar-title,
+.nora-header-title,
+.nora-header-title span,
+.nora-welcome-headline,
+.nora-empty-state__eyebrow {
+  font-family: "Delight", "Urbanist", "Segoe UI", sans-serif;
 }
 
 @keyframes noraPanelIn {
@@ -124,16 +133,17 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  overflow: hidden;
   padding: 22px 30px;
   border-radius: 22px;
-  border: 1.5px solid rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.95);
   background: #ffffff;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  backdrop-filter: blur(40px) saturate(1.6);
+  -webkit-backdrop-filter: blur(40px) saturate(1.6);
   box-shadow:
-    0 12px 34px rgba(20, 30, 50, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    0 18px 44px rgba(20, 30, 50, 0.10),
+    0 6px 18px rgba(40, 90, 180, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  animation: noraSideHistoryIn 560ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both;
 }
 
 .nora-history-sidebar > * {
@@ -146,14 +156,11 @@
 }
 
 .nora-history-sidebar::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  display: block;
-  background: #ffffff;
+  display: none;
 }
-/* ── SIDEBAR BACKGROUND — lighter, more transparent ── */
+/* ── SIDEBAR BACKGROUND — solid white with blur pop-in ── */
+/* Specificity bumped to override the blue radial in norachat.css (.nora-panel--single:not(.nora-panel--full) ...) */
+.nora-panel--single:not(.nora-panel--full) .nora-history-sidebar,
 .nora-panel--single .nora-history-sidebar {
   background: #ffffff;
   pointer-events: auto;
