@@ -1,6 +1,6 @@
 import './StrategyIntelligenceCardShared.css'
 import './StrategyIntelligenceCard.css'
-import { StripedBars, DottedDataBars, AiInsight, AiActionButton } from '../../visuals-parts'
+import { StripedBars, ProgressBars, DottedDataBars, AiInsight, AiActionButton } from '../../visuals-parts'
 
 export function StrategyIntelligenceCard({
   status = 'Active',
@@ -34,7 +34,7 @@ export function StrategyIntelligenceCard({
           <span className="si-card__green-bold">{strategy}</span>
           <span className="si-card__green-bold">{strategyProgress}%</span>
         </div>
-        <StripedBars value={strategyProgress} tone="green" />
+        <ProgressBars value={strategyProgress} tone="green" />
       </div>
 
       <div className="si-card__section">

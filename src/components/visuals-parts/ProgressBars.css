@@ -1,8 +1,8 @@
 .progress-bars {
   display: grid;
   gap: 6px;
-  --progress-fill: linear-gradient(90deg, #d7eb41 0%, #89ac10 100%);
-  --progress-cap: #7da20a;
+  --progress-fill: linear-gradient(90deg, #D5E64C 0%, #5F8F00 100%);
+  --progress-cap: #5F8F00;
 }
 
 .progress-bars--blue {
