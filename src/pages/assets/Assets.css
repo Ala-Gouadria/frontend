@@ -6,9 +6,30 @@
   overflow-x: hidden;
   background: #eeeeef;
   color: #111111;
-  font-family: "Poppins", "Segoe UI", system-ui, sans-serif;
+  font-family: "Urbanist", "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1;
   padding-bottom: 170px;
   box-sizing: border-box;
+}
+
+/* Shared style for the "Assets" title and the section headings
+   (Images / Posts / Captions) — Delight Bold 28 with the
+   black → gray gradient from the design spec. */
+.assets-header h1,
+.assets-section h2 {
+  font-family: "Delight", "Poppins", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  background: linear-gradient(105.26deg, #000000 18.5%, #747474 81.5%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .assets-content {
@@ -26,17 +47,16 @@
 
 .assets-header h1 {
   margin: 0;
-  color: #111111;
-  font-size: 29px;
-  line-height: 1;
-  font-weight: 800;
 }
 
 .assets-header p {
-  margin: 5px 0 0;
+  margin: 6px 0 0;
   color: #8b8b8b;
-  font-size: 12px;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
+  font-size: 14px;
   font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1;
 }
 
 .assets-divider {
@@ -61,8 +81,11 @@
 
 .assets-control strong {
   color: #171717;
-  font-size: 12px;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
+  font-size: 14px;
   font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1;
 }
 
 .assets-segmented {
@@ -80,13 +103,15 @@
 .assets-segmented__button {
   min-width: 40px;
   height: 22px;
-  padding: 0 9px;
+  padding: 0 10px;
   border: none;
   border-radius: 7px;
   background: transparent;
   color: #111111;
-  font: inherit;
-  font-size: 10px;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
   cursor: pointer;
   transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
 }
@@ -98,15 +123,11 @@
 }
 
 .assets-section {
-  margin-top: 25px;
+  margin-top: 30px;
 }
 
 .assets-section h2 {
-  margin: 0 0 12px;
-  color: #111111;
-  font-size: 21px;
-  line-height: 1;
-  font-weight: 800;
+  margin: 0 0 14px;
 }
 
 .assets-image-grid,
