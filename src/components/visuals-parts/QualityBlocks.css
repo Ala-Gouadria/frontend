@@ -2,17 +2,17 @@
   container-type: inline-size;
   display: flex;
   align-items: stretch;
-  gap: 6px;
+  gap: clamp(4px, 0.8cqw, 9px);
   min-width: 0;
-  padding: 2px 0;
+  padding: 6px 2px;
   overflow: visible;
 }
 
 .quality-blocks__block {
   flex: 1 1 0;
   min-width: 0;
-  height: 36px;
-  border-radius: 2px;
+  height: clamp(42px, 8.4cqw, 64px);
+  border-radius: 0;
   cursor: crosshair;
   position: relative;
   overflow: hidden;
@@ -26,28 +26,68 @@
 
 .quality-blocks__block:hover {
   filter: saturate(1.06) brightness(1.03);
-  transform: translateY(-1px);
+  transform: translateY(-1.5px);
 }
 
-/* ── Active tones (solid) ───────────────────── */
+/* soft diagonal stripes — very subtle */
+.quality-blocks__block::before {
+  content: '';
+  position: absolute;
+  inset: -2px -20px;
+  background: repeating-linear-gradient(
+    72deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0) 6px,
+    rgba(255, 255, 255, 0.12) 6px,
+    rgba(255, 255, 255, 0.12) 8px
+  );
+  filter: blur(0.8px);
+  opacity: 0.7;
+  will-change: transform;
+  animation: qualityBlocksMove 1.8s linear infinite;
+}
+
+/* muted blocks — no stripes, no animation */
+.quality-blocks__block--green-muted::before,
+.quality-blocks__block--blue-muted::before,
+.quality-blocks__block--orange-muted::before {
+  display: none;
+}
+
+/* outer soft halo + vertical gloss */
+.quality-blocks__block::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.30) 0%,
+    rgba(255, 255, 255, 0.05) 45%,
+    rgba(0, 0, 0, 0.08) 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Active tones ───────────────────────────── */
 .quality-blocks__block--green {
-  --block-bg: #9BBC27;
-  --block-color: #9BBC27;
+  --block-bg: #6FA011;
+  --block-color: #6FA011;
 }
 .quality-blocks__block--blue {
-  --block-bg: #1877F2;
+  --block-bg: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
   --block-color: #1877F2;
 }
 .quality-blocks__block--orange {
-  --block-bg: #FFAE34;
-  --block-color: #FFAE34;
+  --block-bg: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
+  --block-color: #FF6A00;
 }
 .quality-blocks__block--red {
-  --block-bg: #FF4D4D;
-  --block-color: #FF4D4D;
+  --block-bg: var(--theRed, #FF5757);
+  --block-color: var(--theRed, #FF5757);
 }
 
-/* ── Muted (inactive) tones — pale ──────────── */
+/* ── Muted (inactive) tones — pale, no stripes ── */
 .quality-blocks__block--green-muted {
   --block-bg: #cfe08f;
   box-shadow: none;
@@ -72,8 +112,14 @@
   animation: none;
   opacity: 0.75;
 }
+.quality-blocks__block--red-muted::before { display: none; }
 
 @keyframes qualityBlockIn {
   from { opacity: 0; transform: scaleY(0.6); }
   to   { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes qualityBlocksMove {
+  from { transform: translateX(0); }
+  to   { transform: translateX(20px); }
 }
