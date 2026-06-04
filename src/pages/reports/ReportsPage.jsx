@@ -60,6 +60,8 @@ import {
   taskExecutionCardData,
   workflowAutomationCardData,
 } from '../../api/automationExecutionMockData'
+import downloadIconUrl from '../../assets/icons/Reports-Icon/download-icon.svg'
+import tableIconUrl from '../../assets/icons/Reports-Icon/table-icon.svg'
 import './ReportsPage.css'
 
 const CATEGORY_FILTERS = ['All', 'Social Media', 'Analytics', 'Strategy', 'Sales', 'Website', 'Automation']
@@ -122,24 +124,11 @@ function metricToDotColumns(metric) {
 }
 
 function DownloadIcon() {
-  return (
-    <svg viewBox="0 0 18 18" aria-hidden="true" className="reports-page__button-icon">
-      <path d="M9 3.2v7.1" />
-      <path d="m6.4 7.9 2.6 2.6 2.6-2.6" />
-      <rect x="4" y="11.2" width="10" height="3.8" rx="1.5" />
-    </svg>
-  )
+  return <img src={downloadIconUrl} alt="" aria-hidden="true" className="reports-page__button-icon" />
 }
 
 function GridIcon() {
-  return (
-    <svg viewBox="0 0 18 18" aria-hidden="true" className="reports-page__button-icon">
-      <rect x="3" y="3" width="5" height="5" rx="1.2" />
-      <rect x="10" y="3" width="5" height="5" rx="1.2" />
-      <rect x="3" y="10" width="5" height="5" rx="1.2" />
-      <rect x="10" y="10" width="5" height="5" rx="1.2" />
-    </svg>
-  )
+  return <img src={tableIconUrl} alt="" aria-hidden="true" className="reports-page__button-icon" />
 }
 
 function FilterRail({ label, items, active, onChange, align = 'left', trailingLabel }) {
@@ -645,8 +634,6 @@ export default function ReportsPage({ onNavigate }) {
             <h1>{t('reports.title')}</h1>
             <p>{t('reports.subtitle')}</p>
           </header>
-
-          <AIReportsPanel />
 
           <section className="reports-page__toolbar">
             <div className="reports-page__toolbar-row">
