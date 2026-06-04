@@ -1,6 +1,6 @@
-.terms-page {
-  width: 100vw;
-  height: 100vh;
+﻿.terms-page {
+  width: var(--vw);
+  height: var(--vh);
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
@@ -16,7 +16,7 @@
 .terms-shell {
   position: relative;
   z-index: 5;
-  width: min(1216px, calc(100vw - 704px));
+  width: min(1216px, calc(var(--vw) - 704px));
   margin: 68px 0 0;
   margin-left: clamp(330px, 18.85vw, 362px);
   animation: termsPageIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -301,7 +301,7 @@
 
 @media (max-width: 1180px) {
   .terms-shell {
-    width: calc(100vw - 180px);
+    width: calc(var(--vw) - 180px);
     margin-left: 120px;
   }
 
@@ -317,7 +317,7 @@
 
 @media (max-width: 860px) {
   .terms-shell {
-    width: calc(100vw - 32px);
+    width: calc(var(--vw) - 32px);
     margin: 104px auto 140px;
   }
 

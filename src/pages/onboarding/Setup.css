@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -18,10 +18,10 @@ textarea {
   --ob-ink: #12121a;
   --ob-muted: #8e8e9b;
   --ob-line: #b9d8ff;
-  --ob-shell: min(1138px, calc(100vw - 300px));
+  --ob-shell: min(1138px, calc(var(--vw) - 300px));
 
-  min-height: 100vh;
-  height: 100vh;
+  min-height: var(--vh);
+  height: var(--vh);
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
@@ -63,7 +63,7 @@ textarea {
 .setup-root .ob-loading {
   position: relative;
   z-index: 1;
-  width: min(420px, calc(100vw - 48px));
+  width: min(420px, calc(var(--vw) - 48px));
   margin: 220px auto 0;
   padding: 22px 26px;
   border: 1px solid rgba(185, 216, 255, 0.7);
@@ -746,13 +746,13 @@ textarea {
 
 @media (max-width: 1320px) {
   .setup-root {
-    --ob-shell: min(1060px, calc(100vw - 170px));
+    --ob-shell: min(1060px, calc(var(--vw) - 170px));
   }
 }
 
 @media (max-width: 980px) {
   .setup-root {
-    --ob-shell: calc(100vw - 48px);
+    --ob-shell: calc(var(--vw) - 48px);
     padding-top: 42px;
   }
 

@@ -1,12 +1,12 @@
-.splash-screen {
+﻿.splash-screen {
   --splash-blue: #2f80ed;
   --splash-ink: #12203a;
   --splash-dot: rgba(255, 255, 255, 0.68);
   --splash-progress-angle: 126deg;
 
   width: 100%;
-  min-height: 100vh;
-  height: 100vh;
+  min-height: var(--vh);
+  height: var(--vh);
   position: relative;
   display: flex;
   align-items: center;
@@ -41,8 +41,8 @@
 }
 
 .splash-screen__content {
-  width: min(860px, calc(100vw - 32px));
-  min-height: 100vh;
+  width: min(860px, calc(var(--vw) - 32px));
+  min-height: var(--vh);
   position: relative;
   z-index: 1;
   display: flex;

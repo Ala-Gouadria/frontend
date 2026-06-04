@@ -1,6 +1,6 @@
-.settings-page {
-  width: 100vw;
-  height: 100vh;
+﻿.settings-page {
+  width: var(--vw);
+  height: var(--vh);
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
@@ -14,7 +14,7 @@
 .settings-content {
   position: relative;
   z-index: 5;
-  width: min(1020px, calc(100vw - 520px));
+  width: min(1020px, calc(var(--vw) - 520px));
   margin: 62px 0 0;
   margin-left: clamp(180px, 18.9vw, 363px);
   animation: settingsPageIn 540ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -337,19 +337,19 @@
 
 @media (max-width: 1100px) {
   .settings-content {
-    width: calc(100vw - 180px);
+    width: calc(var(--vw) - 180px);
     margin-left: 120px;
   }
 }
 
 @media (max-width: 760px) {
   .settings-content {
-    width: calc(100vw - 32px);
+    width: calc(var(--vw) - 32px);
     margin: 104px auto 140px;
   }
 
   .settings-dock {
-    width: calc(100vw - 22px);
+    width: calc(var(--vw) - 22px);
     flex-direction: column;
     bottom: 12px;
   }

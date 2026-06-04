@@ -1,4 +1,4 @@
-.reports-page {
+﻿.reports-page {
   position: fixed;
   inset: 0;
   overflow: hidden;
@@ -17,7 +17,7 @@
 }
 
 .reports-page__content {
-  width: min(1172px, calc(100vw - 280px));
+  width: min(1172px, calc(var(--vw) - 280px));
   margin: 0 auto;
   animation: reportsPageIn 520ms cubic-bezier(.22,1,.36,1) both;
 }
@@ -600,7 +600,7 @@
 
 @media (max-width: 1280px) {
   .reports-page__content {
-    width: min(980px, calc(100vw - 160px));
+    width: min(980px, calc(var(--vw) - 160px));
   }
 
   .reports-page__single-layout,

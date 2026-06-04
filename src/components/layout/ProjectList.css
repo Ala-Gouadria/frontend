@@ -1,4 +1,4 @@
-.project-list {
+﻿.project-list {
   position: fixed;
   top: 24px;
   right: 24px;
@@ -391,6 +391,6 @@
   }
 
   .project-dropdown {
-    width: min(238px, calc(100vw - 24px));
+    width: min(238px, calc(var(--vw) - 24px));
   }
 }

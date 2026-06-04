@@ -1,4 +1,4 @@
-.nora-panel * {
+﻿.nora-panel * {
   box-sizing: border-box;
   font-family: "Poppins", "Urbanist", "Segoe UI", system-ui, -apple-system, sans-serif;
 }
@@ -99,7 +99,7 @@
   top: 24px;
   right: 24px;
   bottom: 24px;
-  width: min(860px, calc(100vw - 56px)) !important;
+  width: min(860px, calc(var(--vw) - 56px)) !important;
   gap: 18px;
   overflow: visible;
   border: 0;
@@ -109,7 +109,7 @@
   animation: none;
 }
 
-/* ── SIDEBAR ── */
+/* â”€â”€ SIDEBAR â”€â”€ */
 .nora-history-sidebar {
   position: relative;
   z-index: 2;
@@ -290,7 +290,7 @@
   cursor: pointer;
 }
 
-/* ── MAIN CONTENT ── */
+/* â”€â”€ MAIN CONTENT â”€â”€ */
 .nora-main-content {
   position: relative;
   flex: 1 1 auto;
@@ -506,7 +506,7 @@
   right: 18px;
 }
 
-/* ── WELCOME ── */
+/* â”€â”€ WELCOME â”€â”€ */
 .nora-welcome-scene {
   flex: 1 1 auto;
   min-height: 0;
@@ -553,7 +553,7 @@
   display: none;
 }
 
-/* ── CONVERSATION ── */
+/* â”€â”€ CONVERSATION â”€â”€ */
 .nora-conversation-scene {
   flex: 1 1 auto;
   min-height: 0;
@@ -636,7 +636,7 @@
   opacity: 0.48;
 }
 
-/* ── ATTACHMENTS ── */
+/* â”€â”€ ATTACHMENTS â”€â”€ */
 .nora-attachments-grid {
   display: flex;
   flex-wrap: wrap;
@@ -691,7 +691,7 @@
   display: none;
 }
 
-/* ── COMPOSER ── */
+/* â”€â”€ COMPOSER â”€â”€ */
 .nora-composer {
   flex: 0 0 auto;
   padding: 0 18px 18px;
@@ -851,7 +851,7 @@
   filter: brightness(0) saturate(100%);
 }
 
-/* ── NOTICES ── */
+/* â”€â”€ NOTICES â”€â”€ */
 .nora-notice,
 .nora-workspace-loading {
   align-self: center;
@@ -865,7 +865,7 @@
   box-shadow: 0 12px 26px rgba(49, 84, 130, 0.08);
 }
 
-/* ── RESPONSIVE ── */
+/* â”€â”€ RESPONSIVE â”€â”€ */
 @media (max-width: 1500px) {
   .nora-panel--paired {
     right: 464px;
@@ -878,12 +878,12 @@
   .nora-panel--paired,
   .nora-panel--single.nora-panel--conversation {
     right: 14px;
-    width: calc(100vw - 28px) !important;
+    width: calc(var(--vw) - 28px) !important;
   }
 
   .nora-panel--full {
     right: 24px;
-    width: min(860px, calc(100vw - 56px)) !important;
+    width: min(860px, calc(var(--vw) - 56px)) !important;
   }
 
   .nora-panel--single.nora-panel--conversation .nora-composer {
@@ -907,7 +907,7 @@
     top: 14px;
     right: 14px;
     bottom: 14px;
-    width: calc(100vw - 28px) !important;
+    width: calc(var(--vw) - 28px) !important;
   }
 
   .nora-welcome-scene {
@@ -946,7 +946,7 @@
 
 /* Chat route full-page composition */
 .nora-chat-page {
-  min-height: 100vh;
+  min-height: var(--vh);
   position: relative;
   overflow: hidden;
   background:

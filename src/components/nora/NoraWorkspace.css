@@ -1,4 +1,4 @@
-.nora-panel * {
+﻿.nora-panel * {
   box-sizing: border-box;
   font-family: "Urbanist", "Manrope", "DM Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
 }
@@ -124,7 +124,7 @@
   -webkit-backdrop-filter: blur(6px) saturate(1.04);
 }
 
-/* ── SIDEBAR ── */
+/* â”€â”€ SIDEBAR â”€â”€ */
 .nora-history-sidebar {
   position: relative;
   z-index: 2;
@@ -158,14 +158,14 @@
 .nora-history-sidebar::before {
   display: none;
 }
-/* ── SIDEBAR BACKGROUND — solid white with blur pop-in ── */
+/* â”€â”€ SIDEBAR BACKGROUND â€” solid white with blur pop-in â”€â”€ */
 /* Specificity bumped to override the blue radial in norachat.css (.nora-panel--single:not(.nora-panel--full) ...) */
 .nora-panel--single:not(.nora-panel--full) .nora-history-sidebar,
 .nora-panel--single .nora-history-sidebar {
   background: #ffffff;
   pointer-events: auto;
 }
-/* ── HISTORY title — smaller, Delight font ── */
+/* â”€â”€ HISTORY title â€” smaller, Delight font â”€â”€ */
 .nora-sidebar-title {
   margin: 0 0 55px;
   color: #111111;
@@ -175,7 +175,7 @@
   letter-spacing: -0.01em;
 }
 
-/* ── NEW CHAT button — tighter, Urbanist ── */
+/* â”€â”€ NEW CHAT button â€” tighter, Urbanist â”€â”€ */
 .nora-new-chat-btn {
   gap: 10px;
   min-height: 20px;
@@ -189,7 +189,7 @@
   font-weight: 500;
 }
 
-/* ── RECENTS label — Urbanist ── */
+/* â”€â”€ RECENTS label â€” Urbanist â”€â”€ */
 .nora-recents-title {
   margin: 0 0 13px;
   color: #b0b7c3;
@@ -198,7 +198,7 @@
   font-weight: 400;
 }
 
-/* ── HISTORY items — tighter gap, Urbanist ── */
+/* â”€â”€ HISTORY items â€” tighter gap, Urbanist â”€â”€ */
 .nora-history-list {
   gap: 13px;
 }
@@ -210,7 +210,7 @@
   color: #1a1a2e;
 }
 
-/* ── VIEW ALL — Urbanist ── */
+/* â”€â”€ VIEW ALL â€” Urbanist â”€â”€ */
 .nora-view-all-btn {
   font-size: 12.5px;
   font-family: 'Urbanist', sans-serif;
@@ -317,7 +317,7 @@
   cursor: pointer;
 }
 
-/* ── MAIN CONTENT ── */
+/* â”€â”€ MAIN CONTENT â”€â”€ */
 .nora-main-content {
   position: relative;
   flex: 1 1 auto;
@@ -493,7 +493,7 @@
   right: 18px;
 }
 
-/* ── WELCOME ── */
+/* â”€â”€ WELCOME â”€â”€ */
 .nora-welcome-scene {
   flex: 1 1 auto;
   min-height: 0;
@@ -540,7 +540,7 @@
   display: none;
 }
 
-/* ── CONVERSATION ── */
+/* â”€â”€ CONVERSATION â”€â”€ */
 .nora-conversation-scene {
   flex: 1 1 auto;
   min-height: 0;
@@ -619,7 +619,7 @@
   opacity: 0.48;
 }
 
-/* ── ATTACHMENTS ── */
+/* â”€â”€ ATTACHMENTS â”€â”€ */
 .nora-attachments-grid {
   display: flex;
   flex-wrap: wrap;
@@ -674,7 +674,7 @@
   display: none;
 }
 
-/* ── COMPOSER ── */
+/* â”€â”€ COMPOSER â”€â”€ */
 .nora-composer {
   flex: 0 0 auto;
   padding: 0 18px 18px;
@@ -881,7 +881,7 @@
   filter: brightness(0) saturate(100%);
 }
 
-/* ── NOTICES ── */
+/* â”€â”€ NOTICES â”€â”€ */
 .nora-notice,
 .nora-workspace-loading {
   align-self: center;
@@ -895,7 +895,7 @@
   box-shadow: 0 12px 26px rgba(49, 84, 130, 0.08);
 }
 
-/* ── RESPONSIVE ── */
+/* â”€â”€ RESPONSIVE â”€â”€ */
 @media (max-width: 1500px) {
   .nora-panel--paired {
     right: 542px;
@@ -908,7 +908,7 @@
   .nora-panel--paired,
   .nora-panel--single.nora-panel--conversation {
     right: 14px;
-    width: calc(100vw - 28px) !important;
+    width: calc(var(--vw) - 28px) !important;
   }
 
   .nora-panel--single.nora-panel--conversation .nora-composer {

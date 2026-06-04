@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 .auth-page {
-  width: 100vw;
-  height: 100vh;
+  width: var(--vw);
+  height: var(--vh);
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -13,27 +13,27 @@
 }
 
 .auth-panel {
-  width: min(430px, calc(100vw - 44px)); /* was 550px — goal panel is narrower */
+  width: min(430px, calc(var(--vw) - 44px)); /* was 550px â€” goal panel is narrower */
   margin-top: -26px;
   animation: authPanelIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .auth-logo {
-  width: 190px;          /* was 246px — matches goal's smaller logo */
+  width: 190px;          /* was 246px â€” matches goal's smaller logo */
   height: auto;
   display: block;
   margin: 0 0 -6px;
   object-fit: contain;
 }
 
-/* FIX #2 — smaller size + thinner weight to match goal mockup */
+/* FIX #2 â€” smaller size + thinner weight to match goal mockup */
 .auth-panel h1 {
   margin: 0;
   color: #050507;
-  font-size: 22px;         /* was 29px — goal heading is notably smaller */
+  font-size: 22px;         /* was 29px â€” goal heading is notably smaller */
   line-height: 1.05;
   font-weight: 700;
-  letter-spacing: -0.02em; /* slightly open — matches goal's single-line fit */
+  letter-spacing: -0.02em; /* slightly open â€” matches goal's single-line fit */
   text-transform: uppercase;
 }
 
@@ -73,7 +73,7 @@
   box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 16px 38px rgba(43, 31, 74, 0.08);
 }
 
-/* FIX #1 — just a flex container; the real icons live inside */
+/* FIX #1 â€” just a flex container; the real icons live inside */
 .auth-social-mark {
   width: 18px;
   height: 18px;
@@ -115,7 +115,7 @@
   font-weight: 400;
 }
 
-/* FIX #3 — more translucent glassmorphism: opacity down from 0.64 → 0.42 */
+/* FIX #3 â€” more translucent glassmorphism: opacity down from 0.64 â†’ 0.42 */
 .auth-field input,
 .auth-password-field input {
   width: 100%;
@@ -199,7 +199,7 @@
   font-size: 13px;
 }
 
-/* FIX #4 — button text weight matches goal (kept as 700 to stay readable) */
+/* FIX #4 â€” button text weight matches goal (kept as 700 to stay readable) */
 .auth-submit-btn {
   width: 100%;
   height: 44px;
@@ -213,7 +213,7 @@
   color: #ffffff;
   text-transform: uppercase;
   font-size: 15px;
-  font-weight: 700;           /* was 800 — matches goal's slightly thinner label */
+  font-weight: 700;           /* was 800 â€” matches goal's slightly thinner label */
   cursor: pointer;
   box-shadow: 0 10px 26px rgba(55, 142, 248, 0.24), inset 0 1px 0 rgba(255,255,255,0.45);
   transition: transform 150ms ease, filter 150ms ease;

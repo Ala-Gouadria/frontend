@@ -1,4 +1,4 @@
-/*
+﻿/*
   Central responsive pass.
   Keep page-specific CSS intact, then normalize the shared shells at common
   laptop/tablet/phone widths.
@@ -9,7 +9,7 @@
   .events-page__content,
   .memory-page__content,
   .pricing-page__content {
-    width: min(1180px, calc(100vw - 220px)) !important;
+    width: min(1180px, calc(var(--vw) - 220px)) !important;
   }
 
   .terms-shell,
@@ -20,7 +20,7 @@
   .assets-page__content,
   .notifications-content,
   .integrate-shell {
-    max-width: calc(100vw - 220px) !important;
+    max-width: calc(var(--vw) - 220px) !important;
   }
 }
 
@@ -45,7 +45,7 @@
   .assets-page__content,
   .notifications-content,
   .integrate-shell {
-    width: calc(100vw - 160px) !important;
+    width: calc(var(--vw) - 160px) !important;
     max-width: none !important;
     margin-left: 104px !important;
     margin-right: 24px !important;
@@ -81,7 +81,7 @@
   }
 
   .bottom-ai-tools {
-    width: min(760px, calc(100vw - 28px)) !important;
+    width: min(760px, calc(var(--vw) - 28px)) !important;
   }
 
   .bottom-ai-tools__row {
@@ -122,7 +122,7 @@
   .project-list {
     top: 16px !important;
     right: 12px !important;
-    max-width: calc(100vw - 96px) !important;
+    max-width: calc(var(--vw) - 96px) !important;
   }
 
   .project-notification-button {
@@ -194,7 +194,7 @@
 
   .bottom-ai-tools {
     bottom: 74px !important;
-    width: calc(100vw - 24px) !important;
+    width: calc(var(--vw) - 24px) !important;
   }
 
   .bottom-ai-tools__row {
@@ -242,7 +242,7 @@
   .assets-page__content,
   .notifications-content,
   .integrate-shell {
-    width: calc(100vw - 32px) !important;
+    width: calc(var(--vw) - 32px) !important;
     max-width: none !important;
     margin: 96px auto 156px !important;
     padding-top: 0 !important;

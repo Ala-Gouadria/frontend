@@ -60,6 +60,19 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* ── Global UI scale ───────────────────────────────────────────────
+     Single source of truth for how "zoomed-out" the whole app renders.
+     Change --app-scale to dial the default UI density:
+       1     = native (100%)
+       0.9   = 10% zoom-out
+       0.8   = 20% zoom-out (current default)
+     --vw and --vh are scaled viewport units. Anywhere the app would
+     have written `100vw` / `100vh`, use `var(--vw)` / `var(--vh)`
+     instead so layouts still cover the visible viewport after zoom. */
+  --app-scale: 0.8;
+  --vw: calc(100vw / var(--app-scale));
+  --vh: calc(100vh / var(--app-scale));
 }
 
 *,
@@ -76,13 +89,21 @@ body {
   overflow: hidden;
 }
 
+/* Scale the entire app via --app-scale. html's layout box is inflated
+   to 1/scale so its rendered (zoomed) size still fills the viewport. */
+html {
+  zoom: var(--app-scale);
+  width: var(--vw);
+  min-height: var(--vh);
+}
+
 body {
   background: #f4f6f8;
 }
 
 #root {
   width: 100%;
-  min-height: 100vh;
+  min-height: var(--vh);
 }
 
 button,

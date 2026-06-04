@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -14,9 +14,9 @@ textarea {
   font-family: inherit;
 }
 
-/* ═══════════════════════════════════════════════
-   BASE — OnboardingFlow (Knowledge-Base page)
-═══════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   BASE â€” OnboardingFlow (Knowledge-Base page)
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .ob-root {
   --ob-blue: #2f80ed;
   --ob-blue-soft: #8eb9ff;
@@ -24,7 +24,7 @@ textarea {
   --ob-deep: #1c1c24;
   --ob-muted: #8d8d93;
   --ob-line: #c8ddff;
-  height: 100vh;
+  height: var(--vh);
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
@@ -62,7 +62,7 @@ textarea {
 
 .ob-hdr,
 .ob-body {
-  width: min(1138px, calc(100vw - 300px));
+  width: min(1138px, calc(var(--vw) - 300px));
   margin: 0 auto;
   position: relative;
   z-index: 1;
@@ -220,7 +220,7 @@ textarea {
 }
 
 .ob-loading {
-  width: min(520px, calc(100vw - 80px));
+  width: min(520px, calc(var(--vw) - 80px));
   margin: 180px auto 0;
   position: relative;
   z-index: 1;
@@ -729,7 +729,7 @@ textarea {
 @media (max-width: 1320px) {
   .ob-hdr,
   .ob-body {
-    width: min(1060px, calc(100vw - 170px));
+    width: min(1060px, calc(var(--vw) - 170px));
   }
   .ob-brand { min-width: 420px; }
 }
@@ -737,7 +737,7 @@ textarea {
 @media (max-width: 980px) {
   .ob-hdr,
   .ob-body {
-    width: calc(100vw - 48px);
+    width: calc(var(--vw) - 48px);
   }
   .ob-brand { min-width: 0; }
   .ob-hdr-row { gap: 20px; }

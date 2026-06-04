@@ -1,6 +1,6 @@
-.settings-workspace {
-  width: 100vw;
-  height: 100vh;
+﻿.settings-workspace {
+  width: var(--vw);
+  height: var(--vh);
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
@@ -18,13 +18,13 @@
 }
 
 .settings-workspace__content--wide {
-  width: min(1224px, calc(100vw - 520px));
+  width: min(1224px, calc(var(--vw) - 520px));
   margin-left: clamp(180px, 19.9vw, 382px);
   padding-top: 76px;
 }
 
 .settings-workspace__content--table {
-  width: min(1050px, calc(100vw - 520px));
+  width: min(1050px, calc(var(--vw) - 520px));
   margin-left: clamp(210px, 22.6vw, 435px);
   padding-top: 76px;
 }
@@ -395,7 +395,7 @@
 @media (max-width: 1280px) {
   .settings-workspace__content--wide,
   .settings-workspace__content--table {
-    width: calc(100vw - 180px);
+    width: calc(var(--vw) - 180px);
     margin-left: 120px;
   }
 
@@ -421,7 +421,7 @@
 
   .settings-workspace__content--wide,
   .settings-workspace__content--table {
-    width: calc(100vw - 32px);
+    width: calc(var(--vw) - 32px);
     margin: 0 auto;
     padding-top: 102px;
   }

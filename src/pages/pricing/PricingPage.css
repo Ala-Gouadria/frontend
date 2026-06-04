@@ -1,4 +1,4 @@
-.pricing-page {
+﻿.pricing-page {
   position: fixed;
   inset: 0;
   overflow: hidden;
@@ -17,7 +17,7 @@
 }
 
 .pricing-page__content {
-  width: min(1440px, calc(100vw - 220px));
+  width: min(1440px, calc(var(--vw) - 220px));
   margin: 0 auto;
   animation: pricingPageIn 440ms cubic-bezier(.22,1,.36,1) both;
 }

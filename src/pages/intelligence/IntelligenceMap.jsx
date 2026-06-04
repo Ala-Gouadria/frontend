@@ -576,7 +576,16 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   }, [])
 
   // ── FIX #7 — viewportSize as ref instead of state ──────────────────────────
-  const viewportRef       = useRef({ width: window.innerWidth, height: window.innerHeight })
+  // Divide by --app-scale because html has CSS `zoom: var(--app-scale)`:
+  // window.innerWidth is the visual viewport, but layout coordinates are
+  // inflated to 1/scale so the orb must be centered against that wider box.
+  const appScale = parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue('--app-scale')
+  ) || 1
+  const viewportRef       = useRef({
+    width:  window.innerWidth  / appScale,
+    height: window.innerHeight / appScale,
+  })
   const initialPositionX  = useMemo(() => viewportRef.current.width  / 2 - AVATAR.x * INITIAL_SCALE, [])
   const initialPositionY  = useMemo(() => viewportRef.current.height / 2 - AVATAR.y * INITIAL_SCALE, [])
 
@@ -690,7 +699,7 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
     return s
   }, [visibleNodeIds])
 
-  const wrapperStyle = useMemo(() => ({ width: '100vw', height: '100vh' }), [])
+  const wrapperStyle = useMemo(() => ({ width: 'var(--vw)', height: 'var(--vh)' }), [])
   const contentStyle = useMemo(() => ({ width: `${CANVAS.width}px`, height: `${CANVAS.height}px` }), [])
 
   const panelsPaired       = isWorkspaceOpen && isTaskOpen
@@ -701,7 +710,7 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   return (
     <>
       <div style={{
-        width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative',
+        width: 'var(--vw)', height: 'var(--vh)', overflow: 'hidden', position: 'relative',
         background: 'linear-gradient(180deg, #ffffff 0%, #f4f6f8 100%)',
         cursor: draggingId ? 'grabbing' : toolMode === 'hand' ? 'grab' : 'default',
       }}>
@@ -773,7 +782,7 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
             className={panelsPaired ? 'intelligence-week-panel intelligence-week-panel--paired' : 'intelligence-week-panel'}
             onClick={e => e.stopPropagation()}
             style={{ position:'fixed', top:24, right:24, bottom:24, zIndex:55,
-              width: panelsPaired ? '496px' : 'min(520px, calc(100vw - 48px))',
+              width: panelsPaired ? '496px' : 'min(520px, calc(var(--vw) - 48px))',
               overflowY:'auto', transition:'transform 520ms cubic-bezier(0.22,1,0.36,1)',
               boxShadow:'-18px 0 48px rgba(20,35,76,0.12)', borderRadius:24 }}>
             <WeekTask onClose={() => setIsTaskOpen(false)} />
