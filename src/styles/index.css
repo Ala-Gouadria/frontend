@@ -76,12 +76,6 @@ body {
   overflow: hidden;
 }
 
-/* Render the whole app at 80% scale by default so the layout
-   matches what the browser used to show at 80% zoom. */
-body {
-  zoom: 0.8;
-}
-
 body {
   background: #f4f6f8;
 }
