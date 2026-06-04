@@ -6,7 +6,9 @@
   overflow-x: hidden;
   background: #eeeeef;
   color: #111111;
-  font-family: "Poppins", "Segoe UI", system-ui, sans-serif;
+  font-family: "Urbanist", "Segoe UI", system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.03em;
   padding-bottom: 170px;
   box-sizing: border-box;
 }
@@ -26,19 +28,26 @@
 
 .settings-header h1 {
   margin: 0;
-  font-size: 31px;
+  font-family: "Delight", "Poppins", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 28px;
   line-height: 1;
-  font-weight: 800;
-  letter-spacing: -0.055em;
-  color: #0a0a0a;
+  letter-spacing: 0.03em;
+  background: linear-gradient(105.26deg, #000000 18.5%, #747474 81.5%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .settings-header p {
-  margin: 5px 0 0;
-  color: #8f8f93;
-  font-size: 13px;
+  margin: 6px 0 0;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
   font-weight: 400;
-  letter-spacing: -0.02em;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .settings-divider {
@@ -91,31 +100,37 @@
 
 .settings-row strong {
   display: block;
-  color: #111111;
-  font-size: 13.5px;
-  font-weight: 600;
-  letter-spacing: -0.032em;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: #000000;
 }
 
 .settings-row span {
   display: block;
-  color: #8f8f93;
-  font-size: 14px;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
   font-weight: 400;
-  letter-spacing: -0.035em;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .settings-outline-button {
   min-width: 82px;
-  height: 31px;
+  height: 32px;
   padding: 0 18px;
   border-radius: 8px;
   border: 1.2px solid rgba(20, 20, 20, 0.38);
   background: #ffffff;
-  color: #111111;
-  font-size: 13px;
+  color: #000000;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
   font-weight: 500;
-  letter-spacing: -0.04em;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
   cursor: pointer;
   transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
 }
