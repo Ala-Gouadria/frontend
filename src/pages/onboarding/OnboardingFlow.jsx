@@ -522,8 +522,8 @@ export default function OnboardingFlow({ activeNavId = 'database', onNavigate })
                 <PillButton
                   onClick={() => { void handleNext() }}
                   disabled={saving}
-                  width="200px"
-                  height="52px"
+                  width="137px"
+                  height="38px"
                 >
                   {saving ? t('onboarding.saving') : isLastStep ? t('onboarding.finish') : t('onboarding.save')}
                 </PillButton>
