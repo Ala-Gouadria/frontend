@@ -672,10 +672,19 @@ export default function ReportsPage({ onNavigate }) {
               <div className="reports-page__compare-category">
                 <FilterRail label={t('reports.category')} items={CATEGORY_FILTERS} active={category} onChange={setCategory} />
               </div>
+              <div className="reports-page__compare-headers">
+                {COMPARE_COLUMNS.map((period) => (
+                  <CompareHeaderCard
+                    key={period.title}
+                    title={period.title}
+                    selectedCount={visibleKeys.length}
+                    dateLabel={period.dateLabel}
+                  />
+                ))}
+              </div>
               <div className="reports-page__compare-columns">
                 {COMPARE_COLUMNS.map((period) => (
                   <div key={period.title} className="reports-page__compare-column">
-                    <CompareHeaderCard title={period.title} selectedCount={visibleKeys.length} dateLabel={period.dateLabel} />
                     <RenderReports keys={visibleKeys} />
                   </div>
                 ))}

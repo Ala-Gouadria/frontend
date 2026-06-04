@@ -524,7 +524,7 @@
 
 .reports-page__compare-layout {
   display: grid;
-  gap: 31px;
+  gap: 28px;
 }
 
 .reports-page__compare-category {
@@ -532,10 +532,17 @@
   justify-content: center;
 }
 
+.reports-page__compare-headers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 60px;
+}
+
 .reports-page__compare-columns {
   position: relative;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 82px;
+  gap: 60px;
+  padding-top: 8px;
 }
 
 .reports-page__compare-columns::before {
@@ -550,41 +557,50 @@
 
 .reports-page__compare-column {
   display: grid;
-  gap: 34px;
+  gap: 40px;
   min-width: 0;
 }
 
 .reports-page__compare-card {
   display: grid;
-  gap: 10px;
-  padding: 20px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.18);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.94), 0 0 0 1px rgba(27,28,32,0.19);
+  gap: 12px;
+  padding: 22px 24px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96), 0 1px 0 rgba(255, 255, 255, 0.6), 0 0 0 1px rgba(27, 28, 32, 0.14), 0 6px 18px rgba(17, 18, 20, 0.06);
 }
 
 .reports-page__compare-card-head {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 14px;
-  font-size: 13px;
+}
+
+.reports-page__compare-card-head strong {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0a0a0a;
+  letter-spacing: 0.02em;
 }
 
 .reports-page__compare-card-head span,
 .reports-page__compare-label {
-  color: rgba(27, 28, 32, 0.58);
+  color: rgba(27, 28, 32, 0.55);
   font-size: 12px;
   font-weight: 700;
+}
+
+.reports-page__compare-label {
+  margin-top: 2px;
 }
 
 .reports-page__compare-pills {
   justify-self: start;
 }
 
-.reports-page__compare-column .reports-page__section {
-  transform: scale(0.94);
-  transform-origin: top left;
-  margin-bottom: -22px;
+.reports-page__compare-card .reports-page__export-button--wide {
+  margin-top: 8px;
 }
 
 @keyframes reportsPageIn {
@@ -604,7 +620,8 @@
   }
 
   .reports-page__single-layout,
-  .reports-page__compare-columns {
+  .reports-page__compare-columns,
+  .reports-page__compare-headers {
     grid-template-columns: 1fr;
   }
 
