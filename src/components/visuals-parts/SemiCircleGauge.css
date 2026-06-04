@@ -1,16 +1,16 @@
 .semi-circle-gauge {
-  --gauge-glow: rgba(188, 214, 116, 0.14);
-  --gauge-track: rgba(222, 233, 176, 0.42);
-  --gauge-progress: #8ab800;
-  --gauge-progress-start: #c9dc52;
+  --gauge-halo: rgba(170, 210, 50, 0.62);
+  --gauge-track: rgba(213, 230, 76, 0.10);
+  --gauge-progress: #6B9F00;
+  --gauge-progress-start: #D5E64C;
   --gauge-progress-mid: #8ab800;
-  --gauge-progress-end: #6a9400;
+  --gauge-progress-end: #5F8F00;
 
   --gauge-cap-ring: #ffffff;
-  --gauge-cap: #a7c538;
+  --gauge-cap: #6B9F00;
 
-  --gauge-text: #73a300;
-  --gauge-text-muted: rgba(115, 163, 0, 0.75);
+  --gauge-text: #5F8F00;
+  --gauge-text-muted: rgba(27, 28, 32, 0.45);
 
   position: relative;
   display: grid;
@@ -18,14 +18,7 @@
   width: 100%;
   padding: 2px 0 0;
 
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+  font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
 }
 
 .semi-circle-gauge--blue {
@@ -76,36 +69,37 @@
 
 .semi-circle-gauge__cap-ring {
   fill: white;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+  filter: drop-shadow(0 6px 16px rgba(95, 143, 0, 0.35));
   animation: semiGaugeCap 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-box: fill-box;
   transform-origin: center;
 }
 
 .semi-circle-gauge__cap {
-  fill: #a7c538;
+  fill: #6B9F00;
   animation: semiGaugeCap 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-box: fill-box;
   transform-origin: center;
 }
 
 .semi-circle-gauge__value {
-  font-size: 26px;
-  font-weight: 600;
+  font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
+  font-size: 56px;
+  font-weight: 800;
   fill: var(--gauge-text);
-  letter-spacing: 0.1px;
+  letter-spacing: 0.01em;
   dominant-baseline: middle;
   pointer-events: none;
 }
 
 .semi-circle-gauge__current {
-  fill: var(--gauge-text);
-  font-weight: 600;
+  fill: #5F8F00;
+  font-weight: 800;
 }
 
 .semi-circle-gauge__target {
-  fill: var(--gauge-text-muted);
-  font-size: 24px;
+  fill: rgba(27, 28, 32, 0.42);
+  font-size: 50px;
   font-weight: 500;
 }
 

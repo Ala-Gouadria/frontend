@@ -1,3 +1,5 @@
+import alertDiamondIconUrl from '../../assets/icons/Sales-component-icon/alert-diamond-icon.svg'
+import arrowIconUrl from '../../assets/icons/Sales-component-icon/spear-cion.svg'
 import './StageFlow.css'
 
 function classNames(...values) {
@@ -13,15 +15,23 @@ export function StageFlow({
     <div className={classNames('stage-flow', className)}>
       {stages.map((stage, index) => (
         <div key={stage} className="stage-flow__step">
-          <span className={classNames('stage-flow__pill', index === activeIndex && 'stage-flow__pill--active')} title={`${stage}${index === activeIndex ? ' active' : ''}`}>
+          <span
+            className={classNames('stage-flow__pill', index === activeIndex && 'stage-flow__pill--active')}
+            title={`${stage}${index === activeIndex ? ' active' : ''}`}
+          >
             {index === activeIndex ? (
-              <span className="stage-flow__status-icon" aria-hidden="true">
-                <span>!</span>
-              </span>
+              <img
+                src={alertDiamondIconUrl}
+                alt=""
+                aria-hidden="true"
+                className="stage-flow__status-icon"
+              />
             ) : null}
-            {stage}
+            <span className="stage-flow__pill-label">{stage}</span>
           </span>
-          {index < stages.length - 1 ? <span className="stage-flow__arrow">&gt;</span> : null}
+          {index < stages.length - 1 ? (
+            <img src={arrowIconUrl} alt="" aria-hidden="true" className="stage-flow__arrow" />
+          ) : null}
         </div>
       ))}
     </div>

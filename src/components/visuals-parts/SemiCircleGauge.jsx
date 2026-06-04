@@ -98,8 +98,8 @@ export function SemiCircleGauge({
         key={tp}
         x1={tick.x1} y1={tick.y1}
         x2={tick.x2} y2={tick.y2}
-        stroke="rgba(255,255,255,0.35)"
-        strokeWidth="1.5"
+        stroke="rgba(255,255,255,0.72)"
+        strokeWidth="2"
         strokeLinecap="butt"
       />
     )
@@ -129,17 +129,16 @@ export function SemiCircleGauge({
   <stop offset="100%" stopColor="white" stopOpacity="0" />
 </linearGradient>
 
-          {/* Progress fill gradient — pale yellow-green left → deep green middle → fade right */}
+          {/* Progress fill gradient — bright lime left → deep saturated green right */}
           <linearGradient
             id={progGradId}
             gradientUnits="userSpaceOnUse"
             x1="0" y1="0" x2="510" y2="0"
           >
-            <stop offset="0%" stopColor="var(--gauge-progress-start)" stopOpacity="0.55" />
-            <stop offset="22%" stopColor="var(--gauge-progress-start)" stopOpacity="1" />
-            <stop offset="55%" stopColor="var(--gauge-progress-mid)" stopOpacity="1" />
-            <stop offset="80%" stopColor="var(--gauge-progress-end)" stopOpacity="1" />
-            <stop offset="100%" stopColor="var(--gauge-progress-end)" stopOpacity="0.85" />
+            <stop offset="0%" stopColor="#D5E64C" stopOpacity="1" />
+            <stop offset="35%" stopColor="#9CC413" stopOpacity="1" />
+            <stop offset="70%" stopColor="#6B9F00" stopOpacity="1" />
+            <stop offset="100%" stopColor="#5F8F00" stopOpacity="1" />
           </linearGradient>
 
           {/* Mask covers viewBox + overflow to catch glow bleed */}
@@ -150,14 +149,14 @@ export function SemiCircleGauge({
 
         <g mask={'url(#' + maskId + ')'}>
 
-          {/* Pale outer halo — full arc, very soft */}
+          {/* Wide pale outer halo — soft yellow-green bleed extending well beyond arc */}
           <path
             d={pathData}
             fill="none"
             stroke="var(--gauge-halo)"
-            strokeWidth="64"
+            strokeWidth="110"
             strokeLinecap="butt"
-            style={{ filter: 'blur(18px)', opacity: 0.9 }}
+            style={{ filter: 'blur(34px)', opacity: 1 }}
           />
 
           {/* Faint background track — just visible behind unfilled portion */}
@@ -169,24 +168,24 @@ export function SemiCircleGauge({
             strokeLinecap="butt"
           />
 
-          {/* Soft glow tied to progress only */}
+          {/* Radial green bloom tied to progress — premium glow effect */}
           <path
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="56"
+            strokeWidth="80"
             strokeLinecap="butt"
             pathLength="100"
             strokeDasharray={safeProgress * 100 + ' 100'}
-            style={{ filter: 'blur(10px)', opacity: 0.45 }}
+            style={{ filter: 'blur(20px)', opacity: 0.55 }}
           />
 
-          {/* Green progress fill — thick plump band with horizontal gradient */}
+          {/* Green progress fill — crisp thick band with horizontal gradient */}
           <path
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="38"
+            strokeWidth="40"
             strokeLinecap="butt"
             pathLength="100"
             strokeDasharray={safeProgress * 100 + ' 100'}
@@ -212,9 +211,9 @@ export function SemiCircleGauge({
 
         </g>
 
-        {/* Knob — outside mask, always fully visible */}
-        <circle cx={capPosition.x} cy={capPosition.y} r="22" className="semi-circle-gauge__cap-ring" />
-        <circle cx={capPosition.x} cy={capPosition.y} r="15" className="semi-circle-gauge__cap" />
+        {/* Knob — outside mask, always fully visible. Thick white ring + saturated green inner */}
+        <circle cx={capPosition.x} cy={capPosition.y} r="37" className="semi-circle-gauge__cap-ring" />
+        <circle cx={capPosition.x} cy={capPosition.y} r="23" className="semi-circle-gauge__cap" />
 
         {/* Value label */}
         <text x="255" y="148" textAnchor="middle" className="semi-circle-gauge__value">

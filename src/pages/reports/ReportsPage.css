@@ -406,43 +406,11 @@
 
 .reports-page .stage-flow {
   margin-bottom: 8px;
-  min-height: 36px;
-  padding: 6px 10px;
-  gap: 8px;
-}
-
-.reports-page .stage-flow__step {
-  gap: 8px;
-}
-
-.reports-page .stage-flow__pill {
-  min-height: 25px;
-  padding: 0 14px;
-  font-size: 0.82rem;
-}
-
-.reports-page .stage-flow__arrow {
-  font-size: 1.45rem;
-}
-
-.reports-page .stage-flow__status-icon {
-  width: 18px;
-  height: 18px;
-  border-width: 2px;
-  border-radius: 5px;
 }
 
 .reports-page .quality-blocks {
   margin-top: -3px;
-  gap: 5px;
   overflow: visible;
-}
-
-.reports-page .quality-blocks__block {
-  flex-basis: 18px;
-  width: 18px;
-  height: 39px;
-  border-radius: 1px;
 }
 
 .reports-page__risk-row {
