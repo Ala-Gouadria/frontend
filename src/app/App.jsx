@@ -109,6 +109,7 @@ export default function App() {
     isAuthenticated: auth0Authenticated,
     isLoading: auth0Loading,
     getAccessTokenSilently,
+    getIdTokenClaims,
     loginWithRedirect,
   } = useAuth0()
 
@@ -159,8 +160,13 @@ export default function App() {
     setBootstrapping(true)
     ;(async () => {
       try {
-        const auth0Token = await getAccessTokenSilently()
-        await authApi.exchangeAuth0Token(auth0Token)
+        // Refresh the Auth0 session so the cached ID token is current, then hand
+        // the raw ID token to the backend exchange endpoint.
+        await getAccessTokenSilently().catch(() => {})
+        const claims = await getIdTokenClaims()
+        const idToken = claims?.__raw
+        if (!idToken) throw new Error('No Auth0 ID token available')
+        await authApi.exchangeAuth0Token(idToken)
         if (!cancelled) {
           setAuthError('')
           enterApp()
