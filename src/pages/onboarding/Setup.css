@@ -409,7 +409,7 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #2f80ed;
+  color: #1877F2;
 }
 
 .setup-root .setup-step-progress-ring {
@@ -421,30 +421,26 @@ textarea {
 }
 
 .setup-root .setup-step-progress-track,
-.setup-root .setup-step-progress-fill,
-.setup-root .setup-step-progress-cap {
+.setup-root .setup-step-progress-fill {
   fill: none;
   stroke-linecap: round;
 }
 
 .setup-root .setup-step-progress-track {
   stroke: url("#setupStepProgressTrack");
-  stroke-width: 4;
+  stroke-width: 3;
+  opacity: 0.45;
 }
 
 .setup-root .setup-step-progress-fill {
   stroke: url("#setupStepProgressFill");
   stroke-width: 4;
-}
-
-.setup-root .setup-step-progress-cap {
-  stroke: #d0c7f2;
-  stroke-width: 4;
+  transition: stroke-dashoffset 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .setup-root .setup-step-progress-dot {
-  fill: #2f80ed;
-  filter: drop-shadow(0 2px 3px rgba(47, 128, 237, 0.22));
+  fill: #1877F2;
+  filter: drop-shadow(0 2px 3px rgba(24, 119, 242, 0.28));
 }
 
 .setup-root .setup-step-progress-text {
@@ -453,15 +449,26 @@ textarea {
   display: inline-flex;
   align-items: baseline;
   gap: 3px;
-  color: #2f80ed;
+  font-family: 'Delight', 'Urbanist', 'Inter', 'Segoe UI', sans-serif;
   font-size: 12px;
   line-height: 1;
-  font-weight: 400;
+  font-weight: 700;
+  letter-spacing: -0.12px;
+  background: linear-gradient(97.07deg, #1877F2 6.35%, #6DA3FF 42.96%, #FFDFEA 94.89%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .setup-root .setup-step-progress-text strong {
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 12px;
+  font-weight: 700;
+  background: transparent;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: inherit;
+  color: inherit;
 }
 
 .setup-root .ob-sep {

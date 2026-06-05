@@ -458,35 +458,46 @@ export default function Setup({ onComplete }) {
                 </h2>
                 <p className="ob-card-sub">{currentStep.subtitle}</p>
               </div>
-              <div className="setup-step-progress" aria-label={`${visualCurrentStepPercent}% Progress`}>
-                <svg className="setup-step-progress-ring" viewBox="0 0 136 36" aria-hidden="true">
-                  <defs>
-                    <linearGradient id="setupStepProgressTrack" x1="0" y1="0" x2="146" y2="0">
-                      <stop offset="0%" stopColor="#d9ebff" />
-                      <stop offset="68%" stopColor="#d9e7ff" />
-                      <stop offset="100%" stopColor="#f6cfe9" />
-                    </linearGradient>
-                    <linearGradient id="setupStepProgressFill" x1="0" y1="0" x2="146" y2="0">
-                      <stop offset="0%" stopColor="#2f80ed" />
-                      <stop offset="72%" stopColor="#2f80ed" />
-                      <stop offset="100%" stopColor="#e7b8e7" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    className="setup-step-progress-track"
-                    d="M 14 18 A 14 14 0 0 1 28 4 L 108 4 A 14 14 0 0 1 122 18 A 14 14 0 0 1 108 32 L 28 32 A 14 14 0 0 1 14 18"
-                  />
-                  <path
-                    className="setup-step-progress-fill"
-                    d="M 14 18 A 14 14 0 0 0 28 32 L 62 32"
-                  />
-                  <path className="setup-step-progress-cap" d="M 86 4 L 112 4" />
-                  <circle className="setup-step-progress-dot" cx="14" cy="18" r="6" />
-                </svg>
-                <span className="setup-step-progress-text">
-                  <strong>{visualCurrentStepPercent}%</strong> Progress
-                </span>
-              </div>
+              {(() => {
+                const SETUP_PILL_LENGTH = 247.96
+                const pct = Math.max(0, Math.min(100, visualCurrentStepPercent)) / 100
+                const dashOffset = SETUP_PILL_LENGTH * (1 - pct)
+                const pillPath = 'M 14 18 A 14 14 0 0 0 28 32 L 108 32 A 14 14 0 0 0 122 18 A 14 14 0 0 0 108 4 L 28 4 A 14 14 0 0 0 14 18'
+                return (
+                  <div className="setup-step-progress" aria-label={`${visualCurrentStepPercent}% Progress`}>
+                    <svg className="setup-step-progress-ring" viewBox="0 0 136 36" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="setupStepProgressTrack" x1="0" y1="0" x2="136" y2="0" gradientUnits="userSpaceOnUse">
+                          <stop offset="6.35%" stopColor="#1877F2" />
+                          <stop offset="42.96%" stopColor="#6DA3FF" />
+                          <stop offset="94.89%" stopColor="#FFDFEA" />
+                        </linearGradient>
+                        <linearGradient id="setupStepProgressFill" x1="0" y1="0" x2="136" y2="0" gradientUnits="userSpaceOnUse">
+                          <stop offset="6.35%" stopColor="#1877F2" />
+                          <stop offset="94.89%" stopColor="#6DA3FF" />
+                        </linearGradient>
+                        <linearGradient id="setupStepProgressText" x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="6.35%" stopColor="#1877F2" />
+                          <stop offset="94.89%" stopColor="#6DA3FF" />
+                        </linearGradient>
+                      </defs>
+                      <path className="setup-step-progress-track" d={pillPath} />
+                      <path
+                        className="setup-step-progress-fill"
+                        d={pillPath}
+                        style={{
+                          strokeDasharray: SETUP_PILL_LENGTH,
+                          strokeDashoffset: dashOffset,
+                        }}
+                      />
+                      <circle className="setup-step-progress-dot" cx="14" cy="18" r="5" />
+                    </svg>
+                    <span className="setup-step-progress-text">
+                      <strong>{visualCurrentStepPercent}%</strong> Progress
+                    </span>
+                  </div>
+                )
+              })()}
             </div>
 
             <div className="ob-sep" />
