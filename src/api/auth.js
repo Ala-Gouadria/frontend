@@ -7,6 +7,15 @@ export async function login({ email, password }) {
   return data;
 }
 
+// Hybrid Auth0 flow: exchange an Auth0 token for a NORA session (the backend
+// validates it, enforces email_verified, provisions the user, and mints the
+// existing NORA access/refresh tokens). See AUTH0_INTEGRATION_PLAN.md.
+export async function exchangeAuth0Token(auth0Token) {
+  const data = await post('/api/v1/auth/auth0-exchange', { auth0Token });
+  tokenStore.setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });
+  return data;
+}
+
 export async function register({ email, password, firstName, lastName, companyName }) {
   const data = await post('/api/v1/auth/register', { email, password, firstName, lastName, companyName });
   tokenStore.setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });

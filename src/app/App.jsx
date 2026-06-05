@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useAuth0 } from '@auth0/auth0-react'
 import * as tokenStore from '../api/tokenStore.js'
 import * as authApi from '../api/auth.js'
 import Login from '../pages/auth/Login'
@@ -30,6 +31,32 @@ const STORAGE_KEYS = {
   authenticated: 'nora:isAuthenticated',
   setupComplete: 'nora:setupComplete',
   view: 'nora:view',
+}
+
+const AUTH0_ENABLED = Boolean(import.meta.env.VITE_AUTH0_DOMAIN && import.meta.env.VITE_AUTH0_CLIENT_ID)
+
+// Local email/password form is hidden by default (Auth0 is primary); ?local=1 reveals it.
+function isLocalAuthRequest() {
+  if (typeof window === 'undefined') return false
+  return new URLSearchParams(window.location.search).get('local') === '1'
+}
+
+function AuthLoading() {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        background: '#0A0B0F',
+        color: '#fff',
+        fontFamily: 'sans-serif',
+      }}
+    >
+      Signing you in…
+    </div>
+  )
 }
 
 function isAnalyticsCardsPreviewRequest() {
@@ -78,6 +105,12 @@ function writeStorage(key, value) {
 
 export default function App() {
   const { i18n } = useTranslation()
+  const {
+    isAuthenticated: auth0Authenticated,
+    isLoading: auth0Loading,
+    getAccessTokenSilently,
+    loginWithRedirect,
+  } = useAuth0()
 
   // Sync lang and RTL class whenever the language changes.
   // We use a class instead of dir="rtl" on <html> to avoid flipping the
@@ -95,6 +128,8 @@ export default function App() {
     previewAnalyticsCards || tokenStore.getAccessToken() !== null || setupComplete,
   )
   const [authView, setAuthView] = useState('login')
+  const [bootstrapping, setBootstrapping] = useState(false)
+  const [authError, setAuthError] = useState('')
   const [termsInitialSection, setTermsInitialSection] = useState('privacy-policy')
   const [view, setView] = useState(
     previewAnalyticsCards
@@ -114,6 +149,38 @@ export default function App() {
       })
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auth0 → NORA session exchange (hybrid). Once Universal Login returns and the
+  // Auth0 SDK has a session, swap the Auth0 token for the app's own JWT, then enter.
+  useEffect(() => {
+    if (!AUTH0_ENABLED || !auth0Authenticated) return
+    if (tokenStore.getAccessToken() !== null) return
+    let cancelled = false
+    setBootstrapping(true)
+    ;(async () => {
+      try {
+        const auth0Token = await getAccessTokenSilently()
+        await authApi.exchangeAuth0Token(auth0Token)
+        if (!cancelled) {
+          setAuthError('')
+          enterApp()
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setAuthError(
+            err?.code === 'EMAIL_NOT_VERIFIED'
+              ? 'Please verify your email, then sign in again.'
+              : err?.message ?? 'Sign-in failed. Please try again.',
+          )
+        }
+      } finally {
+        if (!cancelled) setBootstrapping(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [auth0Authenticated, getAccessTokenSilently]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Listen for auth:logout emitted by client.js on double-401
   useEffect(() => {
@@ -228,8 +295,26 @@ export default function App() {
   }
 
   if (!isAuthenticated) {
+    if (AUTH0_ENABLED && (auth0Loading || bootstrapping)) {
+      return <AuthLoading />
+    }
+
+    const localMode = isLocalAuthRequest() || !AUTH0_ENABLED
+    const auth0Login = AUTH0_ENABLED
+      ? (authorizationParams) =>
+          loginWithRedirect(authorizationParams ? { authorizationParams } : undefined)
+      : null
+
     if (authView === 'signup') {
-      return <Signup onSuccess={() => setAuthView('login')} onLogin={() => setAuthView('login')} />
+      return (
+        <Signup
+          onSuccess={() => setAuthView('login')}
+          onLogin={() => setAuthView('login')}
+          onAuth0Login={auth0Login}
+          localMode={localMode}
+          authError={authError}
+        />
+      )
     }
 
     if (authView === 'reset-password') {
@@ -241,6 +326,9 @@ export default function App() {
         onSuccess={enterApp}
         onSignup={() => setAuthView('signup')}
         onResetPassword={() => setAuthView('reset-password')}
+        onAuth0Login={auth0Login}
+        localMode={localMode}
+        authError={authError}
       />
     )
   }

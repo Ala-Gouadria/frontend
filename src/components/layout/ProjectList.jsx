@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
 import './ProjectList.css'
+import * as authApi from '../../api/auth.js'
 import xWorldLogo from '../../assets/logo/Xword-Logo.png'
 import zynovaLogo from '../../assets/logo/Zynova-Logo.png'
+
+const AUTH0_ENABLED = Boolean(import.meta.env.VITE_AUTH0_DOMAIN && import.meta.env.VITE_AUTH0_CLIENT_ID)
 
 const PROJECTS = [
   {
@@ -66,6 +70,7 @@ export default function ProjectList({ onNavigate }) {
   const [closing, setClosing] = useState(false)
   const [active, setActive] = useState(PROJECTS[0])
   const wrapperRef = useRef(null)
+  const { logout: auth0Logout, isAuthenticated: auth0Authenticated } = useAuth0()
 
   useEffect(() => {
     const handlePointerDown = (event) => {
@@ -135,12 +140,25 @@ export default function ProjectList({ onNavigate }) {
     onNavigate?.('notifications')
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     handleClose()
     if (typeof window !== 'undefined') {
       window.localStorage.removeItem('nora:isAuthenticated')
       window.localStorage.removeItem('nora:setupComplete')
       window.localStorage.removeItem('nora:view')
+    }
+    // Revoke the NORA session (also clears tokenStore).
+    try {
+      await authApi.logout()
+    } catch {
+      // ignore — proceed with client-side logout regardless
+    }
+    // If signed in via Auth0, clear the SSO session too (this redirects, replacing the reload).
+    if (AUTH0_ENABLED && auth0Authenticated) {
+      auth0Logout({ logoutParams: { returnTo: window.location.origin } })
+      return
+    }
+    if (typeof window !== 'undefined') {
       window.location.reload()
     }
   }
