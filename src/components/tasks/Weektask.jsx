@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { weekTaskApi } from '../../api/weekTaskApi'
-import { MiniLineChart, QualityBlocks } from '../visuals-parts'
+import {
+  WEEK_TASK_CHART_DATASETS,
+  WEEK_TASK_CREATED,
+  WEEK_TASK_HISTORY,
+  WEEK_TASK_STATS,
+} from '../../api/weekTaskMockData'
+import { QualityBlocks, TaskDashedRing, TaskHistoryLineChart, TaskProgressRing } from '../visuals-parts'
 import PillButton from '../pages-parts/PillButton'
 import './Weektask.css'
 
@@ -16,33 +22,6 @@ function filterCreated(tasks, filterValue) {
   return tasks
 }
 
-// FIX 1 & 2: Convert numeric data array to SVG points string with reduced height for more compact chart
-function dataToPoints(data = []) {
-  if (!data || data.length < 2) return ''
-  const width = 172
-  const height = 44  // reduced from 50 for shorter/compact chart
-  const min = Math.min(...data)
-  const max = Math.max(...data)
-  const step = width / (data.length - 1)
-
-  return data
-    .map((value, index) => {
-      const x = index * step
-      const y = max === min
-        ? height / 2
-        : height - ((value - min) / (max - min)) * height
-      return `${x.toFixed(1)},${y.toFixed(1)}`
-    })
-    .join(' ')
-}
-
-function dataToFillPoints(data = []) {
-  if (!data || data.length < 2) return ''
-  const points = dataToPoints(data)
-  const width = 172
-  return `0,58 ${points} ${width},58`
-}
-
 // Convert cells array from API to QualityBlocks groups format
 function cellsToBlocks(cells = []) {
   const groups = {}
@@ -54,20 +33,39 @@ function cellsToBlocks(cells = []) {
   return Object.entries(groups).map(([tone, count]) => ({ tone, count }))
 }
 
-function PendingCircle() {
-  return (
-    <svg viewBox="0 0 20 20" width="20" height="20" fill="none" aria-hidden="true">
-      <circle
-        cx="10"
-        cy="10"
-        r="7.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeDasharray="3 4"
-        strokeLinecap="round"
-      />
-    </svg>
-  )
+function createFallbackSummary() {
+  const acceptedCount = WEEK_TASK_CREATED.filter((task) => task.accepted).length
+  const declinedCount = WEEK_TASK_CREATED.length - acceptedCount
+  const acceptedPct = Math.round((acceptedCount / WEEK_TASK_CREATED.length) * 100)
+
+  return {
+    acceptedCount,
+    declinedCount,
+    acceptedPct,
+    declinedPct: 100 - acceptedPct,
+    cells: WEEK_TASK_CREATED.map((task) => ({
+      id: `fallback-cell-${task.id}`,
+      tone: task.accepted ? 'green' : 'red',
+    })),
+  }
+}
+
+function isEmptyStats(nextStats) {
+  return !nextStats || ((nextStats.total ?? 0) === 0 && (nextStats.completed ?? 0) === 0)
+}
+
+function isEmptyChart(nextChartState) {
+  return !Array.isArray(nextChartState?.points)
+    || nextChartState.points.length < 2
+    || nextChartState.points.every((point) => Number(point) === 0)
+}
+
+function normalizeHistoryTask(task, index) {
+  return {
+    status: task.status ?? (task.completedAt ? 'completed' : 'created'),
+    time: task.time ?? task.completedAgo ?? task.createdAgo ?? `${index + 1}m ago`,
+    ...task,
+  }
 }
 
 function CompletedCircle() {
@@ -108,10 +106,13 @@ export default function WeekTask({ onClose }) {
 
       if (cancelled) return
 
-      setStats(nextStats)
-      setAllHistory(nextHistory)
-      setAllCreated(nextCreated)
-      setCreatedSummary(nextSummary)
+      setStats(isEmptyStats(nextStats) ? {
+        ...WEEK_TASK_STATS,
+        completionRate: Math.round((WEEK_TASK_STATS.completed / WEEK_TASK_STATS.total) * 100),
+      } : nextStats)
+      setAllHistory(nextHistory.length ? nextHistory.map(normalizeHistoryTask) : WEEK_TASK_HISTORY)
+      setAllCreated(nextCreated.length ? nextCreated : WEEK_TASK_CREATED)
+      setCreatedSummary(nextSummary.cells?.length ? nextSummary : createFallbackSummary())
       setLoading(false)
     })()
 
@@ -125,7 +126,16 @@ export default function WeekTask({ onClose }) {
 
     ;(async () => {
       const nextChartState = await weekTaskApi.getChartData(chartRange, overviewMode)
-      if (!cancelled) setChartState(nextChartState)
+      if (!cancelled) {
+        setChartState(isEmptyChart(nextChartState)
+          ? {
+              points: WEEK_TASK_CHART_DATASETS[overviewMode][chartRange],
+              latest: WEEK_TASK_CHART_DATASETS[overviewMode][chartRange].at(-1),
+              average: 28,
+              tone: 'green',
+            }
+          : nextChartState)
+      }
     })()
 
     return () => {
@@ -143,22 +153,10 @@ export default function WeekTask({ onClose }) {
     [allCreated, createdFilter],
   )
 
-  const chartPoints = useMemo(
-    () => dataToPoints(chartState.points),
-    [chartState.points],
-  )
-
-  const chartFillPoints = useMemo(
-    () => dataToFillPoints(chartState.points),
-    [chartState.points],
-  )
-
   const qualityBlocks = useMemo(
     () => cellsToBlocks(createdSummary.cells),
     [createdSummary.cells],
   )
-
-  const progressDash = `${(stats.completionRate || 0) * 1.005} 100.5`
 
   if (loading || chartState.points.length === 0) {
     return (
@@ -176,26 +174,13 @@ export default function WeekTask({ onClose }) {
         <div className="wt-header">
           <div className="wt-header-left">
             <div className="wt-progress-ring" aria-hidden="true">
-              <svg viewBox="0 0 38 38">
-                <circle cx="19" cy="19" r="15.2" fill="none" className="wt-progress-ring__track" strokeWidth="3.8" />
-                <circle
-                  cx="19"
-                  cy="19"
-                  r="15.2"
-                  fill="none"
-                  className="wt-progress-ring__value"
-                  strokeWidth="3.8"
-                  strokeDasharray={progressDash}
-                  strokeLinecap="round"
-                  transform="rotate(-90 19 19)"
-                />
-              </svg>
+              <TaskProgressRing progress={stats.completionRate} size={26} strokeWidth={4} title="" />
             </div>
             <p className="wt-header-title">Track your task history here</p>
           </div>
           <div className="wt-header-right">
             <span className="wt-count-badge">
-              <span className="wt-count-dot" aria-hidden="true" />
+              <TaskDashedRing size={11} strokeWidth={1.5} className="wt-count-dot" title="" />
               {stats.completed}/{stats.total}
             </span>
             <button type="button" className="wt-close-btn" onClick={onClose} aria-label="Close">
@@ -238,11 +223,10 @@ export default function WeekTask({ onClose }) {
         </div>
 
         <div className="wt-chart-card">
-          <MiniLineChart
-            points={chartPoints}
-            fillPoints={chartFillPoints}
+          <TaskHistoryLineChart
+            data={chartState.points}
             tone="green"
-            className="wt-mini-line-chart"
+            className="wt-history-chart"
           />
           <span className="wt-chart-badge">{chartState.average}</span>
         </div>
@@ -271,7 +255,7 @@ export default function WeekTask({ onClose }) {
                 style={{ animationDelay: `${120 + index * 35}ms` }}
               >
                 <span className="wt-check">
-                  {task.status === 'completed' ? <CompletedCircle /> : <PendingCircle />}
+                  {task.status === 'completed' ? <CompletedCircle /> : <TaskDashedRing title="" />}
                 </span>
                 <div className="wt-task-info">
                   <span className="wt-task-title">{task.title}</span>
@@ -337,7 +321,7 @@ export default function WeekTask({ onClose }) {
                 className="wt-task-row wt-task-row--created"
                 style={{ animationDelay: `${220 + index * 35}ms` }}
               >
-                <span className="wt-check"><PendingCircle /></span>
+                <span className="wt-check"><TaskDashedRing title="" /></span>
                 <span className="wt-task-title">{task.title}</span>
               </div>
             ))}
@@ -346,12 +330,12 @@ export default function WeekTask({ onClose }) {
 
         <div className="wt-actions">
           <div className="wt-pill-btn-wrap wt-pill-btn-wrap--decline">
-            <PillButton width="100%" height="28px" compact onClick={() => setCreatedFilter('declined')}>
+            <PillButton width="100%" height="40px" compact onClick={() => setCreatedFilter('declined')}>
               DECLINE
             </PillButton>
           </div>
           <div className="wt-pill-btn-wrap wt-pill-btn-wrap--accept">
-            <PillButton width="100%" height="28px" compact onClick={() => setCreatedFilter('accepted')}>
+            <PillButton width="100%" height="40px" compact onClick={() => setCreatedFilter('accepted')}>
               ACCEPTED
             </PillButton>
           </div>

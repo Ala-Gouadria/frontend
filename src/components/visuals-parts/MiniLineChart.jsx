@@ -65,15 +65,25 @@ export function MiniLineChart({
     : ''
 
   return (
-    <svg className={classNames('mini-line-chart', `mini-line-chart--${tone}`, className)} viewBox="0 0 194 58" aria-hidden="true">
+    <svg
+      className={classNames('mini-line-chart', `mini-line-chart--${tone}`, className)}
+      viewBox="0 0 172 58"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="var(--mini-line-fill-top)" />
           <stop offset="100%" stopColor="var(--mini-line-fill-bottom)" />
         </linearGradient>
       </defs>
-      <path d={fillPath || fillPoints} className="mini-line-chart__fill" style={{ fill: `url(#${gradientId})` }} />
-      <path d={linePath} className="mini-line-chart__line" />
+      <path
+        d={fillPath || fillPoints}
+        className="mini-line-chart__fill"
+        style={{ fill: `url(#${gradientId})` }}
+        vectorEffect="non-scaling-stroke"
+      />
+      <path d={linePath} className="mini-line-chart__line" vectorEffect="non-scaling-stroke" />
       {parsedPoints.map((point) => (
         <circle
           key={`${point.x}-${point.y}-${point.index}`}

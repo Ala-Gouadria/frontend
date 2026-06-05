@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
@@ -9,11 +10,6 @@ import ActivityLogView from './activityLogView'
 import './activityLog.css'
 
 const LOG_FILTERS = ['All', 'Today', 'Yesterday', 'This Month', 'Successful', 'Failed']
-const SUMMARY = [
-  { label: 'Total Actions', value: 18, tone: 'blue' },
-  { label: 'Pending approval', value: 7, tone: 'blue' },
-  { label: 'Totals Fails', value: 5, tone: 'red' },
-]
 
 function SearchIcon() {
   return (
@@ -51,6 +47,7 @@ function EyeIcon() {
 }
 
 export default function ActivityLog({ onNavigate }) {
+  const { t } = useTranslation()
   const [logs, setLogs] = useState([])
   const [filter, setFilter] = useState('This Month')
   const [query, setQuery] = useState('')
@@ -108,6 +105,24 @@ export default function ActivityLog({ onNavigate }) {
     URL.revokeObjectURL(url)
   }
 
+  const filterLabel = (key) => {
+    const map = {
+      All: t('activityLog.filterAll'),
+      Today: t('activityLog.filterToday'),
+      Yesterday: t('activityLog.filterYesterday'),
+      'This Month': t('activityLog.filterThisMonth'),
+      Successful: t('activityLog.filterSuccessful'),
+      Failed: t('activityLog.filterFailed'),
+    }
+    return map[key] ?? key
+  }
+
+  const SUMMARY = [
+    { label: t('activityLog.totalActions'), value: 18, tone: 'blue' },
+    { label: t('activityLog.pendingApproval'), value: 7, tone: 'blue' },
+    { label: t('activityLog.totalFails'), value: 5, tone: 'red' },
+  ]
+
   return (
     <main className={`activity-log-page ${selectedLog ? 'activity-log-page--viewing' : ''}`}>
       <Photo />
@@ -116,15 +131,15 @@ export default function ActivityLog({ onNavigate }) {
 
       <section className="activity-log-content" aria-hidden={selectedLog ? 'true' : undefined}>
         <header className="activity-log-header">
-          <h1>ACTIVITY LOG</h1>
-          <p>Review everything Nora has created, published, executed, or changed across content, strategy, automation, and analytics.</p>
+          <h1>{t('activityLog.title')}</h1>
+          <p>{t('activityLog.subtitle')}</p>
         </header>
 
         <div className="activity-log-divider" />
 
         <div className="activity-log-topbar">
           <div className="activity-log-filter-group">
-            <strong>Logs</strong>
+            <strong>{t('activityLog.logs')}</strong>
             <div className="activity-log-tabs">
               {LOG_FILTERS.map((item) => (
                 <button
@@ -133,14 +148,14 @@ export default function ActivityLog({ onNavigate }) {
                   className={filter === item ? 'activity-log-tabs__button activity-log-tabs__button--active' : 'activity-log-tabs__button'}
                   onClick={() => setFilter(item)}
                 >
-                  {item}
+                  {filterLabel(item)}
                 </button>
               ))}
             </div>
           </div>
 
           <div className="activity-log-summary">
-            <strong>Summary Today</strong>
+            <strong>{t('activityLog.summaryToday')}</strong>
             <div className="activity-log-summary__pills">
               {SUMMARY.map((item) => (
                 <span key={item.label} className={`activity-log-summary__pill activity-log-summary__pill--${item.tone}`}>
@@ -159,24 +174,24 @@ export default function ActivityLog({ onNavigate }) {
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search log, campaign, posts, workflows..."
+              placeholder={t('activityLog.searchPlaceholder')}
             />
           </label>
 
           <button type="button" className="activity-log-filter-button">
-            <span>Apply Filters</span>
+            <span>{t('activityLog.applyFilters')}</span>
             <FilterIcon />
           </button>
 
           <select value={status} onChange={(event) => setStatus(event.target.value)} aria-label="Filter by status">
-            <option>All Status</option>
-            <option>Successful</option>
-            <option>Failed</option>
+            <option value="All Status">{t('activityLog.allStatus')}</option>
+            <option value="Successful">{t('activityLog.statusSuccessful')}</option>
+            <option value="Failed">{t('activityLog.statusFailed')}</option>
           </select>
 
           <button type="button" className="activity-log-export" onClick={exportCsv}>
             <ExportIcon />
-            <span>EXPORT AS CSV</span>
+            <span>{t('activityLog.exportCsv')}</span>
           </button>
         </div>
 
@@ -184,13 +199,13 @@ export default function ActivityLog({ onNavigate }) {
           <table className="activity-log-table">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Time</th>
-                <th>Department</th>
-                <th>Type</th>
-                <th>Impact</th>
-                <th>Status</th>
-                <th>View Detail</th>
+                <th>{t('activityLog.colTitle')}</th>
+                <th>{t('activityLog.colTime')}</th>
+                <th>{t('activityLog.colDepartment')}</th>
+                <th>{t('activityLog.colType')}</th>
+                <th>{t('activityLog.colImpact')}</th>
+                <th>{t('activityLog.colStatus')}</th>
+                <th>{t('activityLog.colViewDetail')}</th>
               </tr>
             </thead>
             <tbody>

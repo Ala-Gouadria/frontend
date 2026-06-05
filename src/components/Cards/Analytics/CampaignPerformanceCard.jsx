@@ -3,6 +3,7 @@ import {
   AiActionButton,
   AiInsight,
   AreaRevenueChart,
+  ColoredPanel,
   MiniLineChart,
 } from '../../visuals-parts'
 import { campaignPerformanceCardData } from '../../../api/analyticsMockData'
@@ -31,18 +32,15 @@ export function CampaignPerformanceCard({ data = campaignPerformanceCardData }) 
         <ActivityRings rings={data.campaignRings} />
       </section>
 
-      <section className="analytics-card__panel">
-        <div className="analytics-card__panel-title">{data.panelTitle}</div>
-        <div className="analytics-card__panel-body analytics-card__panel-grid">
-          {data.campaigns.map((campaign) => (
-            <div className="analytics-card__mini-stat" key={campaign.label}>
-              <span>{campaign.label}</span>
-              <strong>{campaign.value}</strong>
-              <MiniLineChart points={campaign.points} fillPoints={campaign.fillPoints} tone={toneFromValue(campaign.value)} />
-            </div>
-          ))}
-        </div>
-      </section>
+      <ColoredPanel title={data.panelTitle} tone="orange" bodyClassName="analytics-card__panel-grid">
+        {data.campaigns.map((campaign) => (
+          <div className="analytics-card__mini-stat" key={campaign.label}>
+            <span>{campaign.label}</span>
+            <strong>{campaign.value}</strong>
+            <MiniLineChart points={campaign.points} fillPoints={campaign.fillPoints} tone={toneFromValue(campaign.value)} />
+          </div>
+        ))}
+      </ColoredPanel>
 
       <section>
         <h3 className="analytics-card__section-title">{data.spendTitle}</h3>

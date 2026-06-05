@@ -6,44 +6,46 @@
   cursor: crosshair;
 }
 
+/* ── Inactive segment ─────────────────────────────────────────────────────── */
 .segmented-striped-bar__segment {
   min-width: 0;
   height: 15px;
   border-radius: 2px;
-  background:
-    linear-gradient(90deg, rgba(221, 235, 250, 0.72), rgba(201, 221, 245, 0.6));
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.56);
+  background: #dce8f8;
+  box-shadow: none;
   transition:
     transform 150ms ease,
     filter 150ms ease,
     box-shadow 150ms ease;
 }
 
+/* ── Active segment ───────────────────────────────────────────────────────── */
 .segmented-striped-bar__segment--active {
   background:
     repeating-linear-gradient(
-      72deg,
-      rgba(255, 255, 255, 0.06) 0,
-      rgba(255, 255, 255, 0.06) 2px,
-      rgba(255, 255, 255, 0.18) 2px,
-      rgba(255, 255, 255, 0.18) 4px
+      135deg,
+      rgba(255, 255, 255, 0.00) 0px,
+      rgba(255, 255, 255, 0.00) 4px,
+      rgba(255, 255, 255, 0.14) 4px,
+      rgba(255, 255, 255, 0.14) 8px
     ),
     linear-gradient(180deg, var(--segmented-top), var(--segmented-bottom));
   box-shadow:
-    0 4px 9px var(--segmented-glow),
-    inset 0 1px 2px rgba(255, 255, 255, 0.28);
-  animation: segmentedStripedIn 480ms ease both;
-  animation-delay: calc(var(--segment-index) * 28ms);
+    0 4px 10px var(--segmented-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
+  animation: segmentedStripedIn 420ms cubic-bezier(.22,1,.36,1) both;
+  animation-delay: calc(var(--segment-index) * 32ms);
 }
 
 .segmented-striped-bar:hover .segmented-striped-bar__segment--active {
-  filter: saturate(1.16) brightness(1.05);
-  transform: translateY(-1px) scaleY(1.12);
+  filter: brightness(1.06) saturate(1.12);
+  transform: translateY(-1px);
   box-shadow:
-    0 7px 13px var(--segmented-glow),
-    inset 0 1px 2px rgba(255, 255, 255, 0.34);
+    0 7px 16px var(--segmented-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.38);
 }
 
+/* ── Tooltip ──────────────────────────────────────────────────────────────── */
 .segmented-striped-bar::after {
   position: absolute;
   right: 0;
@@ -75,33 +77,39 @@
   transform: translateY(0) scale(1);
 }
 
+/* ── Tones ────────────────────────────────────────────────────────────────── */
 .segmented-striped-bar--blue {
-  --segmented-top: #46a1ff;
-  --segmented-bottom: #0875f6;
-  --segmented-glow: rgba(8, 117, 246, 0.18);
+  --segmented-top:    #5b9cf6;
+  --segmented-bottom: #2f74f0;
+  --segmented-glow:   rgba(47, 116, 240, 0.22);
 }
 
 .segmented-striped-bar--green {
-  --segmented-top: #79b51c;
+  --segmented-top:    #79b51c;
   --segmented-bottom: #3c860a;
-  --segmented-glow: rgba(60, 134, 10, 0.16);
+  --segmented-glow:   rgba(60, 134, 10, 0.16);
 }
 
 .segmented-striped-bar--orange {
-  --segmented-top: #ff9b55;
+  --segmented-top:    #ff9b55;
   --segmented-bottom: #ff7629;
-  --segmented-glow: rgba(255, 118, 41, 0.16);
+  --segmented-glow:   rgba(255, 118, 41, 0.16);
 }
 
 .segmented-striped-bar--red {
-  --segmented-top: #ff8c90;
+  --segmented-top:    #ff8c90;
   --segmented-bottom: #ff4d56;
-  --segmented-glow: rgba(255, 77, 86, 0.18);
+  --segmented-glow:   rgba(255, 77, 86, 0.18);
 }
 
+/* ── Enter animation ──────────────────────────────────────────────────────── */
 @keyframes segmentedStripedIn {
   from {
     opacity: 0;
-    transform: scaleX(0.6);
+    transform: scaleX(0.55);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
   }
 }

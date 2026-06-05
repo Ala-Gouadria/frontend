@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import * as tokenStore from '../api/tokenStore.js'
+import * as authApi from '../api/auth.js'
 import Login from '../pages/auth/Login'
 import RestPassword from '../pages/auth/restPassword'
 import Signup from '../pages/auth/Signup'
@@ -13,11 +16,13 @@ import PricingPage from '../pages/pricing/PricingPage'
 import Settings from '../pages/settings/Settings'
 import Integrations from '../pages/settings/Integrations'
 import Team from '../pages/settings/Team'
+import Terms from '../pages/settings/Terms'
 import Notifications from '../pages/notifications/Notifications'
 import Assets from '../pages/assets/Assets'
 import ActivityLog from '../pages/activityLog/activityLog'
 import AnalyticsCardsPreview from '../pages/analyticsCardsPreview/AnalyticsCardsPreview'
-import NoraChatPage from '../pages/chat/NoraChatPage'
+import NoraChatPage from '../pages/chatnora/norachat'
+import '../styles/responsive-overrides.css'
 
 /* global __APP_SESSION__ */
 
@@ -72,13 +77,25 @@ function writeStorage(key, value) {
 }
 
 export default function App() {
+  const { i18n } = useTranslation()
+
+  // Sync lang and RTL class whenever the language changes.
+  // We use a class instead of dir="rtl" on <html> to avoid flipping the
+  // physical margin-left offsets that position content beside the nav.
+  useEffect(() => {
+    const isArabic = i18n.language?.startsWith('ar')
+    document.documentElement.lang = i18n.language || 'en'
+    document.documentElement.classList.toggle('is-rtl', isArabic)
+  }, [i18n.language])
+
   const previewAnalyticsCards = isAnalyticsCardsPreviewRequest()
   const setupComplete = readStoredFlag(STORAGE_KEYS.setupComplete)
   const storedView = readStoredView()
   const [isAuthenticated, setIsAuthenticated] = useState(
-    previewAnalyticsCards || readStoredFlag(STORAGE_KEYS.authenticated) || setupComplete,
+    previewAnalyticsCards || tokenStore.getAccessToken() !== null || setupComplete,
   )
   const [authView, setAuthView] = useState('login')
+  const [termsInitialSection, setTermsInitialSection] = useState('privacy-policy')
   const [view, setView] = useState(
     previewAnalyticsCards
       ? 'analytics-cards-preview'
@@ -86,6 +103,27 @@ export default function App() {
         ? storedView || 'map'
         : 'setup',
   )
+
+  // On mount: if only the refresh token survived a hard reload, attempt silent refresh
+  useEffect(() => {
+    if (!isAuthenticated && tokenStore.hasRefresh() && tokenStore.getAccessToken() === null) {
+      authApi.refresh().then(() => {
+        setIsAuthenticated(true)
+      }).catch(() => {
+        tokenStore.clear()
+      })
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Listen for auth:logout emitted by client.js on double-401
+  useEffect(() => {
+    const handleForceLogout = () => {
+      setIsAuthenticated(false)
+      setAuthView('login')
+    }
+    window.addEventListener('auth:logout', handleForceLogout)
+    return () => window.removeEventListener('auth:logout', handleForceLogout)
+  }, [])
 
   const navigateTo = (nextView) => {
     setView(nextView)
@@ -141,6 +179,18 @@ export default function App() {
       return
     }
 
+    if (id === 'settings-terms') {
+      setTermsInitialSection('terms-conditions')
+      navigateTo('settings-terms')
+      return
+    }
+
+    if (id === 'settings-privacy') {
+      setTermsInitialSection('privacy-policy')
+      navigateTo('settings-terms')
+      return
+    }
+
     if (id === 'notifications') {
       navigateTo('notifications')
       return
@@ -167,7 +217,6 @@ export default function App() {
   }
 
   const enterApp = () => {
-    writeStorage(STORAGE_KEYS.authenticated, 'true')
     setIsAuthenticated(true)
     navigateTo(readStoredFlag(STORAGE_KEYS.setupComplete) ? readStoredView() || 'map' : 'setup')
   }
@@ -206,6 +255,10 @@ export default function App() {
 
   if (view === 'settings-team') {
     return <Team onNavigate={handleNavigation} />
+  }
+
+  if (view === 'settings-terms') {
+    return <Terms initialSection={termsInitialSection} onNavigate={handleNavigation} />
   }
 
   if (view === 'notifications') {

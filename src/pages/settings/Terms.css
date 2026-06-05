@@ -1,0 +1,398 @@
+﻿.terms-page {
+  width: var(--vw);
+  height: var(--vh);
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #eeeeef;
+  color: #121212;
+  font-family: "Urbanist", "Inter", "Segoe UI", system-ui, sans-serif;
+  padding-bottom: 150px;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  scrollbar-color: #8f8f8f transparent;
+}
+
+.terms-shell {
+  position: relative;
+  z-index: 5;
+  width: min(1216px, calc(var(--vw) - 704px));
+  margin: 68px 0 0;
+  margin-left: clamp(330px, 18.85vw, 362px);
+  animation: termsPageIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.terms-heading {
+  padding-left: 10px;
+}
+
+.terms-heading h1 {
+  margin: 0;
+  font-family: "Delight", "Urbanist", "Inter", "Segoe UI", sans-serif;
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: linear-gradient(105.26deg, #000000 18.5%, #747474 81.5%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.terms-heading p {
+  max-width: 1040px;
+  margin: 10px 0 0;
+  color: rgba(0, 0, 0, 0.5);
+  font-family: "Urbanist", "Inter", "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+.terms-rule {
+  height: 1px;
+  margin: 18px 0 22px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0));
+}
+
+.terms-layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: 242px minmax(0, 1fr);
+  align-items: start;
+  gap: 76px;
+}
+
+.terms-layout::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(242px + 38px);
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.18) 8%,
+    rgba(0, 0, 0, 0.18) 92%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.terms-toc {
+  position: sticky;
+  top: 30px;
+  padding-left: 0;
+  padding-right: 24px;
+  width: 242px;
+}
+
+.terms-toc p {
+  margin: 0 0 14px 12px;
+  color: rgba(0, 0, 0, 0.5);
+  font-family: "Urbanist", "Inter", "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+.terms-toc nav {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-left: 12px;
+}
+
+.terms-toc nav::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(47, 131, 255, 0.32);
+}
+
+.terms-toc__link {
+  min-height: 24px;
+  padding: 0 8px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-radius: 0 8px 8px 0;
+  color: #111111;
+  text-decoration: none;
+  font-family: "Urbanist", "Inter", "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 20px;
+  transition:
+    background 220ms ease,
+    box-shadow 220ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.terms-toc__link:hover {
+  background: #ddecf8;
+  transform: none;
+}
+
+.terms-toc__link--active {
+  position: relative;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(224, 238, 250, 0.96) 54%, rgba(255, 255, 255, 0) 100%);
+  color: #111111;
+  box-shadow: none;
+  font-weight: 700;
+}
+
+.terms-toc__link--active::before {
+  content: "";
+  position: absolute;
+  left: -17px;
+  width: 10px;
+  height: 10px;
+  margin: 0;
+  border-radius: 50%;
+  border: 1.4px solid #0b0b0b;
+  background: #eeeeef;
+  box-sizing: border-box;
+  animation: termsTocDotIn 260ms ease both;
+}
+
+.terms-toc__link--active:hover {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(224, 238, 250, 0.96) 54%, rgba(255, 255, 255, 0) 100%);
+}
+
+.terms-toc__link--root.terms-toc__link--active,
+.terms-toc__link--parent:is(:hover, .terms-toc__link--active) {
+  min-height: 28px;
+  padding-left: 24px;
+  background: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
+  color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 6px 14px rgba(24, 119, 242, 0.22);
+  font-weight: 700;
+}
+
+.terms-toc__link--root.terms-toc__link--active::before,
+.terms-toc__link--parent.terms-toc__link--active::before,
+.terms-toc__link--parent:hover::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  width: 9px;
+  height: 9px;
+  border-color: #ffffff;
+  background: transparent;
+}
+
+.terms-toc__link--root.terms-toc__link--active:hover,
+.terms-toc__link--parent:is(:hover, .terms-toc__link--active):hover {
+  background: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
+}
+
+.terms-toc__link--subactive {
+  width: 100%;
+  margin: 0;
+  background: rgba(0, 140, 255, 0.1);
+  border-radius: 10px;
+  color: #111111;
+  box-shadow: none;
+  font-weight: 500;
+  padding-left: 10px;
+}
+
+.terms-toc__link--parent {
+  min-height: 39px;
+  margin-top: 24px;
+  padding-left: 0;
+  padding-right: 7px;
+  border-radius: 0 8px 8px 0;
+  background: transparent;
+  color: #161616;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.terms-toc__link--parent + .terms-toc__link--parent,
+.terms-toc__link--subactive + .terms-toc__link--parent {
+  margin-top: 24px;
+}
+
+.terms-documents {
+  min-width: 0;
+  padding-bottom: 26px;
+}
+
+.terms-document {
+  max-width: 862px;
+  color: #000000;
+}
+
+.terms-document + .terms-document {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.terms-document__header {
+  margin-bottom: 25px;
+}
+
+.terms-document h2,
+.terms-document h3 {
+  margin: 0;
+  font-family: "Delight", "Urbanist", "Inter", "Segoe UI", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: linear-gradient(105.26deg, #000000 18.5%, #747474 81.5%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.terms-document h2 {
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.terms-document h3 {
+  font-size: 18px;
+  line-height: 1.15;
+}
+
+.terms-document p,
+.terms-document li {
+  color: #000000;
+  font-family: "Urbanist", "Inter", "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.terms-document p {
+  margin: 8px 0 0;
+}
+
+.terms-document ul {
+  margin: 8px 0 0;
+  padding-left: 24px;
+  list-style: none;
+}
+
+.terms-document li {
+  position: relative;
+}
+
+.terms-document li::before {
+  content: "·";
+  position: absolute;
+  left: -14px;
+  top: -2px;
+  font-size: 22px;
+  line-height: 20px;
+  color: #000000;
+}
+
+.terms-document li + li {
+  margin-top: 2px;
+}
+
+.terms-document__section {
+  scroll-margin-top: 32px;
+  margin-top: 31px;
+}
+
+@keyframes termsPageIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes termsTocDotIn {
+  from {
+    opacity: 0;
+    transform: translateX(-4px) scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@media (max-width: 1180px) {
+  .terms-shell {
+    width: calc(var(--vw) - 180px);
+    margin-left: 120px;
+  }
+
+  .terms-layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .terms-layout::before {
+    left: calc(220px + 16px);
+  }
+
+  .terms-toc {
+    width: auto;
+  }
+}
+
+@media (max-width: 860px) {
+  .terms-shell {
+    width: calc(var(--vw) - 32px);
+    margin: 104px auto 140px;
+  }
+
+  .terms-layout {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .terms-layout::before {
+    display: none;
+  }
+
+  .terms-toc {
+    position: relative;
+    top: auto;
+    padding-left: 0;
+    padding-right: 0;
+    width: auto;
+  }
+
+  .terms-toc nav {
+    max-height: 190px;
+    overflow-y: auto;
+    padding-left: 0;
+  }
+
+  .terms-document {
+    max-width: none;
+  }
+
+  .terms-document h2 {
+    font-size: 22px;
+  }
+
+  .terms-document h3 {
+    font-size: 17px;
+  }
+}

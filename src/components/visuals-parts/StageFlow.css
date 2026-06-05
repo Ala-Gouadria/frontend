@@ -1,16 +1,16 @@
 .stage-flow {
-  container-type: inline-size;
-  min-height: 56px;
-  padding: clamp(6px, 1.4cqw, 9px) clamp(8px, 1.8cqw, 12px);
+  width: 100%;
+  max-width: 564px;
+  min-height: 45px;
+  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: clamp(7px, 1.6cqw, 14px);
-  border-radius: 999px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.88) 100%);
+  gap: 10px;
+  border-radius: 30px;
+  background: #FFFFFF;
   box-shadow:
-    0 18px 30px rgba(15, 23, 42, 0.08),
+    0 18px 30px rgba(15, 23, 42, 0.06),
     0 0 0 1px rgba(255, 255, 255, 0.92),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
@@ -18,33 +18,34 @@
 .stage-flow__step {
   display: inline-flex;
   align-items: center;
-  gap: clamp(7px, 1.6cqw, 16px);
+  gap: 10px;
   min-width: 0;
   flex: 1;
 }
 
 .stage-flow__pill {
+  flex: 1;
   width: 100%;
-  min-height: clamp(25px, 5.2cqw, 38px);
-  padding: 0 clamp(9px, 2.2cqw, 28px);
+  min-width: 100px;
+  height: 29px;
+  padding: 4px 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(6px, 1.4cqw, 12px);
-  border-radius: 999px;
-  background:
-    linear-gradient(90deg, #cce932 0%, #a8d116 46%, #579504 100%);
+  gap: 6px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #D5E64C 0%, #5F8F00 100%);
   box-shadow:
-    0 10px 18px rgba(142, 181, 17, 0.26),
-    inset 0 2px 5px rgba(255, 255, 255, 0.36),
-    inset 0 -4px 8px rgba(73, 128, 0, 0.2);
+    0 8px 14px rgba(142, 181, 17, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
   color: #fff;
-  font-size: clamp(0.68rem, 2.85cqw, 1rem);
-  font-weight: 800;
-  line-height: 1;
+  font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 100%;
+  letter-spacing: 0;
   white-space: nowrap;
-  cursor: crosshair;
-  text-shadow: 0 1px 1px rgba(65, 103, 0, 0.18);
+  cursor: pointer;
   animation: stageFlowPillIn 520ms ease both;
   transition:
     transform 160ms ease,
@@ -52,44 +53,37 @@
     box-shadow 160ms ease;
 }
 
+.stage-flow__pill-label {
+  display: inline-flex;
+  align-items: center;
+  line-height: 100%;
+}
+
 .stage-flow__pill--active {
-  background:
-    linear-gradient(90deg, #ffbd7c 0%, #ff953f 45%, #ff6b28 100%);
+  background: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
   box-shadow:
-    0 10px 18px rgba(255, 119, 35, 0.28),
-    inset 0 2px 5px rgba(255, 255, 255, 0.4),
-    inset 0 -4px 8px rgba(206, 79, 13, 0.18);
+    0 8px 14px rgba(255, 119, 35, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .stage-flow__status-icon {
-  width: clamp(16px, 3.2cqw, 23px);
-  height: clamp(16px, 3.2cqw, 23px);
-  border: clamp(2px, 0.42cqw, 3px) solid rgba(255, 255, 255, 0.88);
-  border-radius: clamp(5px, 1cqw, 7px);
-  display: inline-grid;
-  place-items: center;
+  width: 14px;
+  height: 14px;
+  display: block;
   flex: 0 0 auto;
-  transform: rotate(45deg);
-}
-
-.stage-flow__status-icon span {
-  transform: rotate(-45deg);
-  font-size: clamp(0.52rem, 1.55cqw, 0.74rem);
-  font-weight: 800;
-  line-height: 1;
 }
 
 .stage-flow__pill:hover {
   transform: translateY(-1px);
-  filter: saturate(1.08) brightness(1.02);
+  filter: saturate(1.06) brightness(1.02);
 }
 
 .stage-flow__arrow {
   flex: 0 0 auto;
-  color: rgba(24, 24, 27, 0.82);
-  font-size: clamp(1.4rem, 4cqw, 2.1rem);
-  font-weight: 300;
-  line-height: 1;
+  width: 6px;
+  height: 10px;
+  display: block;
+  opacity: 0.82;
 }
 
 @keyframes stageFlowPillIn {

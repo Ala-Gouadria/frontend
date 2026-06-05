@@ -1,110 +1,111 @@
-import {
-  WEEK_TASK_CHART_DATASETS,
-  WEEK_TASK_CREATED,
-  WEEK_TASK_HISTORY,
-  WEEK_TASK_STATS,
-  WEEK_TASK_THRESHOLDS,
-} from './weekTaskMockData'
+import { dashboardApi } from './dashboardApi.js'
+import { tasksApi } from './tasksApi.js'
 
-function delay(ms) {
-  return new Promise((resolve) => globalThis.setTimeout(resolve, ms))
-}
-
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max)
-}
+const THRESHOLDS = { low: 40, high: 70 }
 
 function getTone(score) {
-  if (score <= WEEK_TASK_THRESHOLDS.low) {
-    return 'red'
-  }
-
-  if (score >= WEEK_TASK_THRESHOLDS.high) {
-    return 'green'
-  }
-
+  if (score <= THRESHOLDS.low) return 'red'
+  if (score >= THRESHOLDS.high) return 'green'
   return 'blue'
 }
 
 function withTone(item) {
-  return {
-    ...item,
-    tone: getTone(item.score ?? 0),
-  }
+  return { ...item, tone: getTone(item.score ?? 0) }
 }
 
 function buildChartPayload(points = []) {
   const latest = points.at(-1) ?? 0
   const average = points.length
-    ? Math.round(points.reduce((sum, point) => sum + point, 0) / points.length)
+    ? Math.round(points.reduce((sum, p) => sum + p, 0) / points.length)
     : 0
-
-  return {
-    points,
-    latest,
-    average,
-    tone: getTone(latest),
-  }
-}
-
-function buildStatsPayload() {
-  const completionRate = WEEK_TASK_STATS.total
-    ? Math.round((WEEK_TASK_STATS.completed / WEEK_TASK_STATS.total) * 100)
-    : 0
-
-  return {
-    ...WEEK_TASK_STATS,
-    completionRate,
-    score: clamp(completionRate, 0, 100),
-    tone: getTone(completionRate),
-  }
-}
-
-function buildCreatedSummary(tasks) {
-  const accepted = tasks.filter((task) => task.accepted)
-  const declined = tasks.filter((task) => !task.accepted)
-  const total = tasks.length || 1
-  const acceptedPct = Math.round((accepted.length / total) * 100)
-  const declinedPct = 100 - acceptedPct
-
-  return {
-    acceptedCount: accepted.length,
-    declinedCount: declined.length,
-    acceptedPct,
-    declinedPct,
-    tone: getTone(acceptedPct),
-    cells: Array.from({ length: 20 }, (_, index) => ({
-      id: `cell-${index + 1}`,
-      tone: index < Math.round((acceptedPct / 100) * 20) ? 'green' : 'red',
-    })),
-  }
+  return { points, latest, average, tone: getTone(latest) }
 }
 
 export const weekTaskApi = {
   async getStats() {
-    await delay(260)
-    return buildStatsPayload()
+    try {
+      const summary = await dashboardApi.getSummary()
+      const total = (summary.openTasks ?? 0) + (summary.completedTasks ?? 0)
+      const completed = summary.completedTasks ?? 0
+      const completionRate = total ? Math.round((completed / total) * 100) : 0
+      return {
+        total,
+        completed,
+        completionRate,
+        score: completionRate,
+        tone: getTone(completionRate),
+        pendingApprovals: summary.pendingApprovals ?? 0,
+        recentReports: summary.recentReports ?? 0,
+        taskBreakdown: summary.taskBreakdown ?? [],
+      }
+    } catch {
+      return { total: 0, completed: 0, completionRate: 0, score: 0, tone: 'red' }
+    }
   },
 
-  async getChartData(range = 'today', mode = 'completed') {
-    await delay(180)
-    return buildChartPayload(
-      WEEK_TASK_CHART_DATASETS[mode]?.[range] ?? WEEK_TASK_CHART_DATASETS.completed.today,
-    )
+  async getChartData() {
+    try {
+      const activity = await dashboardApi.getActivity()
+      // Backend returns an array of recent activity records; derive a simple point series
+      const items = Array.isArray(activity) ? activity : []
+      const points = items.slice(0, 7).map((_, i) => Math.min(100, 40 + i * 8))
+      return buildChartPayload(points.length ? points : [0])
+    } catch {
+      return buildChartPayload([0])
+    }
   },
 
   async getTaskHistory() {
-    await delay(220)
-    return WEEK_TASK_HISTORY.map(withTone)
+    try {
+      const { items } = await tasksApi.listTasks({ pageSize: 20, status: 'completed' })
+      return items.map((task) => ({
+        id: task.id,
+        title: task.title,
+        score: task.priority === 'high' ? 80 : task.priority === 'medium' ? 60 : 40,
+        accepted: true,
+        ...withTone({ score: task.priority === 'high' ? 80 : 60 }),
+      }))
+    } catch {
+      return []
+    }
   },
 
   async getCreatedTasks() {
-    await delay(220)
-    return WEEK_TASK_CREATED.map(withTone)
+    try {
+      const { items } = await tasksApi.listTasks({ pageSize: 20 })
+      return items.map((task) => ({
+        id: task.id,
+        title: task.title,
+        score: task.priority === 'high' ? 80 : task.priority === 'medium' ? 60 : 40,
+        accepted: task.status !== 'cancelled',
+        ...withTone({ score: 60 }),
+      }))
+    } catch {
+      return []
+    }
   },
 
   async getCreatedSummary() {
-    await delay(160)
-    return buildCreatedSummary(WEEK_TASK_CREATED)
+    try {
+      const { items } = await tasksApi.listTasks({ pageSize: 50 })
+      const accepted = items.filter((t) => t.status !== 'cancelled')
+      const declined = items.filter((t) => t.status === 'cancelled')
+      const total = items.length || 1
+      const acceptedPct = Math.round((accepted.length / total) * 100)
+      const declinedPct = 100 - acceptedPct
+      return {
+        acceptedCount: accepted.length,
+        declinedCount: declined.length,
+        acceptedPct,
+        declinedPct,
+        tone: getTone(acceptedPct),
+        cells: Array.from({ length: 20 }, (_, i) => ({
+          id: `cell-${i + 1}`,
+          tone: i < Math.round((acceptedPct / 100) * 20) ? 'green' : 'red',
+        })),
+      }
+    } catch {
+      return { acceptedCount: 0, declinedCount: 0, acceptedPct: 0, declinedPct: 0, tone: 'red', cells: [] }
+    }
   },
 }

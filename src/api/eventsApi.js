@@ -1,3 +1,4 @@
+// TODO(backend): no upstream endpoint — this module stays mock until an events service is built
 const EVENT_TYPES = [
   'Website and Traffic',
   'Automation and Execution',

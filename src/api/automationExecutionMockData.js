@@ -83,8 +83,8 @@ export const taskExecutionCardData = {
   tasksTitle: 'Active tasks',
   tasksMeta: 'Progress',
   tasks: [
-    { label: 'Generating post visuals', progress: '72%', activeBlocks: 4, totalBlocks: 5 },
-    { label: 'Publishing Instagram batch', progress: '48%', activeBlocks: 4, totalBlocks: 5 },
+    { label: 'Generating post visuals',    progress: '72%', activeBlocks: 4, totalBlocks: 5 },
+    { label: 'Publishing Instagram batch', progress: '48%', activeBlocks: 2, totalBlocks: 5 },
   ],
   insight: 'Visual generation is completing on schedule, but publishing jobs are waiting on downstream queue availability. Release queue pressure before expanding batch size.',
   ctaLabel: 'Ask or assign Anything',

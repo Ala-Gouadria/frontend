@@ -64,9 +64,9 @@ export function AreaRevenueChart({
       {title ? <div className="area-revenue-chart__title">{title}</div> : null}
       <svg className="area-revenue-chart__svg" viewBox="0 0 420 140" aria-hidden="true">
         <defs>
-          <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="var(--area-revenue-top)" />
-            <stop offset="48%" stopColor="var(--area-revenue-mid)" />
+            <stop offset="50%" stopColor="var(--area-revenue-mid)" />
             <stop offset="100%" stopColor="var(--area-revenue-bottom)" />
           </linearGradient>
           <filter id={glowId} x="-16%" y="-34%" width="132%" height="168%">

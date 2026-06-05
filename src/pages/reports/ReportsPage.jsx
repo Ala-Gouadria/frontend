@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { reportsApi } from '../../api/reports.js'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
@@ -58,6 +60,8 @@ import {
   taskExecutionCardData,
   workflowAutomationCardData,
 } from '../../api/automationExecutionMockData'
+import downloadIconUrl from '../../assets/icons/Reports-Icon/download-icon.svg'
+import tableIconUrl from '../../assets/icons/Reports-Icon/table-icon.svg'
 import './ReportsPage.css'
 
 const CATEGORY_FILTERS = ['All', 'Social Media', 'Analytics', 'Strategy', 'Sales', 'Website', 'Automation']
@@ -120,24 +124,11 @@ function metricToDotColumns(metric) {
 }
 
 function DownloadIcon() {
-  return (
-    <svg viewBox="0 0 18 18" aria-hidden="true" className="reports-page__button-icon">
-      <path d="M9 3.2v7.1" />
-      <path d="m6.4 7.9 2.6 2.6 2.6-2.6" />
-      <rect x="4" y="11.2" width="10" height="3.8" rx="1.5" />
-    </svg>
-  )
+  return <img src={downloadIconUrl} alt="" aria-hidden="true" className="reports-page__button-icon" />
 }
 
 function GridIcon() {
-  return (
-    <svg viewBox="0 0 18 18" aria-hidden="true" className="reports-page__button-icon">
-      <rect x="3" y="3" width="5" height="5" rx="1.2" />
-      <rect x="10" y="3" width="5" height="5" rx="1.2" />
-      <rect x="3" y="10" width="5" height="5" rx="1.2" />
-      <rect x="10" y="10" width="5" height="5" rx="1.2" />
-    </svg>
-  )
+  return <img src={tableIconUrl} alt="" aria-hidden="true" className="reports-page__button-icon" />
 }
 
 function FilterRail({ label, items, active, onChange, align = 'left', trailingLabel }) {
@@ -252,6 +243,7 @@ function RiskRows({ rows }) {
 }
 
 function AnalyticsReport() {
+  const { t } = useTranslation()
   const topMetrics = [
     ...analyticsReportingCardData.metrics.slice(0, 2),
     ...performanceSummaryCardData.results,
@@ -264,10 +256,10 @@ function AnalyticsReport() {
   ]
 
   return (
-    <Section groupKey="Analytics" title="Analytics & Reporting" subtitle="Performance tracking and insights">
+    <Section groupKey="Analytics" title={t('reports.sectionAnalyticsTitle')} subtitle={t('reports.sectionAnalyticsSubtitle')}>
       <div className="reports-page__analytics-top">
         <div>
-          <h3>Revenue</h3>
+          <h3>{t('reports.revenue')}</h3>
           <AreaRevenueChart {...analyticsReportingCardData.revenueChart} />
         </div>
         <div>
@@ -296,6 +288,7 @@ function AnalyticsReport() {
 }
 
 function StrategyReport() {
+  const { t } = useTranslation()
   const stackSegments = growthStrategyCardData.legend.map((item, index) => ({
     label: `${item.label} ${item.value}`,
     value: index === 0 ? 25 : index === 1 ? 35 : 40,
@@ -303,9 +296,9 @@ function StrategyReport() {
   }))
 
   return (
-    <Section groupKey="Strategy" title="Strategy & Intelligence" subtitle="Decision making and growth planning">
+    <Section groupKey="Strategy" title={t('reports.sectionStrategyTitle')} subtitle={t('reports.sectionStrategySubtitle')}>
       <div className="reports-page__sub-block">
-        <span>Active Strategy</span>
+        <span>{t('reports.activeStrategy')}</span>
         <ProgressBars
           value={parsePercent(strategyIntelligenceCardData.activePercent)}
           label={strategyIntelligenceCardData.activeValue}
@@ -313,7 +306,7 @@ function StrategyReport() {
         />
       </div>
       <div className="reports-page__sub-block">
-        <span>Expected Impact</span>
+        <span>{t('reports.expectedImpact')}</span>
         <StripedBars
           value={parsePercent(strategyIntelligenceCardData.confidenceWidth)}
           label={strategyIntelligenceCardData.confidenceLabel}
@@ -327,7 +320,7 @@ function StrategyReport() {
         />
       </div>
       <div className="reports-page__sub-block">
-        <span>Growth Strategy</span>
+        <span>{t('reports.growthStrategy')}</span>
         <Legend items={growthStrategyCardData.legend} />
         <StackedBars segments={stackSegments} />
       </div>
@@ -344,9 +337,10 @@ function StrategyReport() {
 }
 
 function SalesReport() {
+  const { t } = useTranslation()
   return (
-    <Section groupKey="Sales" title="Sales and Leads" subtitle="Lead flow and revenue conversion">
-      <span className="reports-page__block-label">Issue Area</span>
+    <Section groupKey="Sales" title={t('reports.sectionSalesTitle')} subtitle={t('reports.sectionSalesSubtitle')}>
+      <span className="reports-page__block-label">{t('reports.issueArea')}</span>
       <StageFlow stages={salesAndLeadsCardData.stages} activeIndex={2} />
       <Legend items={salesAndLeadsCardData.legend} />
       <QualityBlocks blocks={salesAndLeadsCardData.blocks} />
@@ -370,12 +364,13 @@ function SalesReport() {
 }
 
 function SocialReport() {
+  const { t } = useTranslation()
   return (
-    <Section groupKey="Social Media" title="Social Media Manager" subtitle="Content, publishing, and engagement">
+    <Section groupKey="Social Media" title={t('reports.sectionSocialTitle')} subtitle={t('reports.sectionSocialSubtitle')}>
       <div className="reports-page__rings-row">
         <div>
-          <span>Active campaigns</span>
-          <strong>5 running</strong>
+          <span>{t('reports.activeCampaigns')}</span>
+          <strong>{t('reports.fiveRunning')}</strong>
         </div>
         <ActivityRings />
       </div>
@@ -399,9 +394,10 @@ function SocialReport() {
 }
 
 function WebsiteReport() {
+  const { t } = useTranslation()
   return (
-    <Section groupKey="Website" title="Website & Traffic" subtitle="Traffic, behavior, and conversion">
-      <span className="reports-page__block-label">Issue Area</span>
+    <Section groupKey="Website" title={t('reports.sectionWebsiteTitle')} subtitle={t('reports.sectionWebsiteSubtitle')}>
+      <span className="reports-page__block-label">{t('reports.issueArea')}</span>
       <StageFlow stages={websiteTrafficStatusCardData.stages} activeIndex={2} />
       <Legend items={websiteTrafficStatusCardData.legend} />
       <QualityBlocks blocks={websiteTrafficStatusCardData.blocks} />
@@ -431,12 +427,13 @@ function WebsiteReport() {
 }
 
 function AutomationReport() {
+  const { t } = useTranslation()
   return (
-    <Section groupKey="Automation" title="Automation & Execution" subtitle="Workflow execution and system health">
+    <Section groupKey="Automation" title={t('reports.sectionAutomationTitle')} subtitle={t('reports.sectionAutomationSubtitle')}>
       <div className="reports-page__automation-top">
         <AutomationArcGauge {...automationExecutionCardData.gauge} />
         <div>
-          <span>System State</span>
+          <span>{t('reports.systemState')}</span>
           <strong>{automationExecutionCardData.stateValue}</strong>
           <ActivityRings rings={[
             { id: 'workflow-1', progress: 0.78 },
@@ -447,7 +444,7 @@ function AutomationReport() {
         </div>
       </div>
       <div className="reports-page__sub-block">
-        <span>Execution Lane</span>
+        <span>{t('reports.executionLane')}</span>
         <Legend items={automationExecutionCardData.lanes.map((lane) => ({ label: lane.label, value: lane.value, tone: lane.tone }))} />
         <StackedBars segments={[
           { label: 'Audience Sync +25%', value: 25, tone: 'blue' },
@@ -495,13 +492,14 @@ function getVisibleKeys(category, compareEnabled) {
 }
 
 function CompareHeaderCard({ title, selectedCount, dateLabel }) {
+  const { t } = useTranslation()
   return (
     <div className="reports-page__compare-card">
       <div className="reports-page__compare-card-head">
         <strong>{title}</strong>
-        <span>Total {selectedCount} Selected</span>
+        <span>{t('reports.totalSelected', { count: selectedCount })}</span>
       </div>
-      <span className="reports-page__compare-label">Duration</span>
+      <span className="reports-page__compare-label">{t('reports.durationLabel')}</span>
       <div className="reports-page__compare-pills">
         {DURATION_FILTERS.map((item) => (
           <button key={`${title}-${item}`} type="button" className={`reports-page__mini-pill ${item === 'Custom' ? 'reports-page__mini-pill--active' : ''}`}>
@@ -511,7 +509,7 @@ function CompareHeaderCard({ title, selectedCount, dateLabel }) {
         <span className="reports-page__mini-pill reports-page__mini-pill--active">{dateLabel}</span>
       </div>
       <button type="button" className="reports-page__export-button reports-page__export-button--wide">
-        <span>Export As CSV</span>
+        <span>{t('reports.exportCsv')}</span>
         <DownloadIcon />
       </button>
     </div>
@@ -525,13 +523,104 @@ function RenderReports({ keys }) {
   })
 }
 
+function AIReportsPanel() {
+  const { t } = useTranslation()
+  const [reports, setReports] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [generating, setGenerating] = useState(null) // 'daily' | 'weekly' | null
+  const [error, setError] = useState('')
+
+  const loadReports = useCallback(() => {
+    setLoading(true)
+    return reportsApi.list({ pageSize: 10 }).then(({ items }) => {
+      setReports(items)
+    }).catch(() => {}).finally(() => setLoading(false))
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+
+    reportsApi.list({ pageSize: 10 }).then(({ items }) => {
+      if (!cancelled) {
+        setReports(items)
+      }
+    }).catch(() => {}).finally(() => {
+      if (!cancelled) {
+        setLoading(false)
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const handleGenerate = async (type) => {
+    setError('')
+    setGenerating(type)
+    try {
+      await (type === 'daily' ? reportsApi.generateDaily() : reportsApi.generateWeekly())
+      await loadReports()
+    } catch (err) {
+      setError(err.message ?? 'Generation failed.')
+    } finally {
+      setGenerating(null)
+    }
+  }
+
+  return (
+    <section className="reports-page__ai-panel">
+      <div className="reports-page__ai-header">
+        <h2>{t('reports.aiReports')}</h2>
+        <div className="reports-page__ai-actions">
+          <button
+            type="button"
+            className="reports-page__action-button reports-page__action-button--blue"
+            onClick={() => handleGenerate('daily')}
+            disabled={generating !== null}
+          >
+            {generating === 'daily' ? t('reports.generating') : t('reports.generateDaily')}
+          </button>
+          <button
+            type="button"
+            className="reports-page__action-button reports-page__action-button--dark"
+            onClick={() => handleGenerate('weekly')}
+            disabled={generating !== null}
+          >
+            {generating === 'weekly' ? t('reports.generating') : t('reports.generateWeekly')}
+          </button>
+        </div>
+      </div>
+      {error ? <p className="reports-page__ai-error">{error}</p> : null}
+      {loading ? (
+        <p className="reports-page__ai-empty">{t('reports.loading')}</p>
+      ) : reports.length === 0 ? (
+        <p className="reports-page__ai-empty">{t('reports.noReports')}</p>
+      ) : (
+        <ul className="reports-page__ai-list">
+          {reports.map((report) => (
+            <li key={report.id} className="reports-page__ai-item">
+              <span className={`reports-page__ai-badge reports-page__ai-badge--${report.type ?? 'daily'}`}>
+                {report.type ?? 'daily'}
+              </span>
+              <span className="reports-page__ai-date">{report.periodDate ?? report.createdAt?.slice(0, 10)}</span>
+              <span className="reports-page__ai-title">{report.title ?? 'Report'}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}
+
 export default function ReportsPage({ onNavigate }) {
+  const { t } = useTranslation()
   const [category, setCategory] = useState('All')
   const [duration, setDuration] = useState('Custom')
   const [compareEnabled, setCompareEnabled] = useState(false)
   const durationLabel = useMemo(() => (duration === 'Custom' ? 'Jan 1 - Jan 31' : duration), [duration])
   const visibleKeys = useMemo(() => getVisibleKeys(category, compareEnabled), [category, compareEnabled])
-  const selectedLabel = category === 'All' ? 'All category' : category
+  const selectedLabel = category === 'All' ? t('reports.allCategory') : category
 
   return (
     <div className="reports-page">
@@ -542,15 +631,15 @@ export default function ReportsPage({ onNavigate }) {
       <main className="reports-page__viewport">
         <div className="reports-page__content">
           <header className="reports-page__header">
-            <h1>Reports</h1>
-            <p>Review business performance by department, compare time periods side by side, and export structured report data.</p>
+            <h1>{t('reports.title')}</h1>
+            <p>{t('reports.subtitle')}</p>
           </header>
 
           <section className="reports-page__toolbar">
             <div className="reports-page__toolbar-row">
-              <FilterRail label="Category" items={CATEGORY_FILTERS} active={category} onChange={setCategory} />
+              <FilterRail label={t('reports.category')} items={CATEGORY_FILTERS} active={category} onChange={setCategory} />
               <FilterRail
-                label="Duration"
+                label={t('reports.duration')}
                 items={DURATION_FILTERS}
                 active={duration}
                 onChange={setDuration}
@@ -559,8 +648,8 @@ export default function ReportsPage({ onNavigate }) {
               />
             </div>
             <div className="reports-page__toolbar-meta">
-              <p>Review business performance by department, compare time periods side by side, and export structured report data.</p>
-              <span>{selectedLabel} Selected</span>
+              <p>{t('reports.subtitle')}</p>
+              <span>{t('reports.selected', { label: selectedLabel })}</span>
             </div>
             <div className="reports-page__actions">
               <button
@@ -568,11 +657,11 @@ export default function ReportsPage({ onNavigate }) {
                 className={`reports-page__action-button ${compareEnabled ? 'reports-page__action-button--dark' : 'reports-page__action-button--blue'}`}
                 onClick={() => setCompareEnabled((current) => !current)}
               >
-                <span>{compareEnabled ? 'Disable Compare' : 'Enable Compare'}</span>
+                <span>{compareEnabled ? t('reports.disableCompare') : t('reports.enableCompare')}</span>
                 <GridIcon />
               </button>
               <button type="button" className="reports-page__export-button">
-                <span>Export As CSV</span>
+                <span>{t('reports.exportCsv')}</span>
                 <DownloadIcon />
               </button>
             </div>
@@ -581,12 +670,21 @@ export default function ReportsPage({ onNavigate }) {
           {compareEnabled ? (
             <section className="reports-page__compare-layout">
               <div className="reports-page__compare-category">
-                <FilterRail label="Category" items={CATEGORY_FILTERS} active={category} onChange={setCategory} />
+                <FilterRail label={t('reports.category')} items={CATEGORY_FILTERS} active={category} onChange={setCategory} />
+              </div>
+              <div className="reports-page__compare-headers">
+                {COMPARE_COLUMNS.map((period) => (
+                  <CompareHeaderCard
+                    key={period.title}
+                    title={period.title}
+                    selectedCount={visibleKeys.length}
+                    dateLabel={period.dateLabel}
+                  />
+                ))}
               </div>
               <div className="reports-page__compare-columns">
                 {COMPARE_COLUMNS.map((period) => (
                   <div key={period.title} className="reports-page__compare-column">
-                    <CompareHeaderCard title={period.title} selectedCount={visibleKeys.length} dateLabel={period.dateLabel} />
                     <RenderReports keys={visibleKeys} />
                   </div>
                 ))}

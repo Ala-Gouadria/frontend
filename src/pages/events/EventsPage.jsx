@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
@@ -43,16 +44,6 @@ function DownloadIcon() {
 
 function normalizeTone(value) {
   return String(value ?? '').toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')
-}
-
-function getSummary(events) {
-  return [
-    ['Total Events', events.length],
-    ['Processed', events.filter((event) => event.status === 'Processed').length],
-    ['Processing', events.filter((event) => event.status === 'Processing').length],
-    ['Critical', events.filter((event) => event.severity === 'Critical').length],
-    ['Blocked', events.filter((event) => event.status === 'Blocked').length],
-  ]
 }
 
 function SelectBox({ label, value, options, onChange }) {
@@ -118,6 +109,7 @@ function exportEventsAsCsv(events) {
 }
 
 export default function EventsPage({ onNavigate }) {
+  const { t } = useTranslation()
   const [events, setEvents] = useState([])
   const [filterOptions, setFilterOptions] = useState(EMPTY_FILTERS)
   const [filters, setFilters] = useState(DEFAULT_FILTER_STATE)
@@ -147,7 +139,14 @@ export default function EventsPage({ onNavigate }) {
     events.filter((event) => eventMatchesFilters(event, filters))
   ), [events, filters])
 
-  const summary = useMemo(() => getSummary(events), [events])
+  const summary = useMemo(() => [
+    { key: 'totalEvents', value: events.length },
+    { key: 'processed', value: events.filter((e) => e.status === 'Processed').length },
+    { key: 'processing', value: events.filter((e) => e.status === 'Processing').length },
+    { key: 'critical', value: events.filter((e) => e.severity === 'Critical').length },
+    { key: 'blocked', value: events.filter((e) => e.status === 'Blocked').length },
+  ], [events])
+
   const selected = useMemo(() => (
     visibleEvents.find((event) => event.id === selectedId)
       ?? events.find((event) => event.id === selectedId)
@@ -173,21 +172,21 @@ export default function EventsPage({ onNavigate }) {
       <main className="events-page__viewport">
         <div className="events-page__content">
           <header className="events-page__header">
-            <h1>Events</h1>
-            <p>A real-time view of what Nora detects, how important it is, what status it is in, and which agent is responsible.</p>
+            <h1>{t('events.title')}</h1>
+            <p>{t('events.subtitle')}</p>
           </header>
 
           <section className="events-page__summary">
             <div className="events-page__summary-pills">
-              {summary.map(([label, value]) => (
-                <div key={label} className="events-page__summary-pill">
-                  <span>{label}</span>
+              {summary.map(({ key, value }) => (
+                <div key={key} className="events-page__summary-pill">
+                  <span>{t(`events.${key}`)}</span>
                   <strong>{value}</strong>
                 </div>
               ))}
             </div>
             <button type="button" className="events-page__export" onClick={() => exportEventsAsCsv(visibleEvents)} disabled={!visibleEvents.length}>
-              <span>Export As CSV</span>
+              <span>{t('events.exportCsv')}</span>
               <DownloadIcon />
             </button>
           </section>
@@ -199,35 +198,35 @@ export default function EventsPage({ onNavigate }) {
                   <SearchIcon />
                   <input
                     type="search"
-                    placeholder="Search events, agents, or systems..."
+                    placeholder={t('events.searchPlaceholder')}
                     value={filters.query}
                     onChange={(event) => updateFilter('query', event.target.value)}
                   />
                 </label>
-                <button type="button" className="events-page__reset" onClick={resetFilters}>Reset Filter</button>
+                <button type="button" className="events-page__reset" onClick={resetFilters}>{t('events.resetFilter')}</button>
               </div>
 
               <div className="events-page__filters">
-                <SelectBox label="Select event type" value={filters.type} options={filterOptions.types} onChange={(value) => updateFilter('type', value)} />
-                <SelectBox label="Select Severity Type" value={filters.severity} options={filterOptions.severities} onChange={(value) => updateFilter('severity', value)} />
-                <SelectBox label="Select Status" value={filters.status} options={filterOptions.statuses} onChange={(value) => updateFilter('status', value)} />
-                <SelectBox label="Select related agent" value={filters.agent} options={filterOptions.agents} onChange={(value) => updateFilter('agent', value)} />
+                <SelectBox label={t('events.filterType')} value={filters.type} options={filterOptions.types} onChange={(value) => updateFilter('type', value)} />
+                <SelectBox label={t('events.filterSeverity')} value={filters.severity} options={filterOptions.severities} onChange={(value) => updateFilter('severity', value)} />
+                <SelectBox label={t('events.filterStatus')} value={filters.status} options={filterOptions.statuses} onChange={(value) => updateFilter('status', value)} />
+                <SelectBox label={t('events.filterAgent')} value={filters.agent} options={filterOptions.agents} onChange={(value) => updateFilter('agent', value)} />
               </div>
 
               <div className="events-page__table">
                 <div className="events-page__table-head">
-                  <span>Title</span>
-                  <span>Type</span>
-                  <span>Severity</span>
-                  <span>Status</span>
-                  <span>Agent</span>
-                  <span>Time</span>
+                  <span>{t('events.colTitle')}</span>
+                  <span>{t('events.colType')}</span>
+                  <span>{t('events.colSeverity')}</span>
+                  <span>{t('events.colStatus')}</span>
+                  <span>{t('events.colAgent')}</span>
+                  <span>{t('events.colTime')}</span>
                 </div>
                 {loading ? (
-                  <div className="events-page__empty">Loading events...</div>
+                  <div className="events-page__empty">{t('events.loading')}</div>
                 ) : null}
                 {!loading && !visibleEvents.length ? (
-                  <div className="events-page__empty">No events match the selected filters.</div>
+                  <div className="events-page__empty">{t('events.noMatch')}</div>
                 ) : null}
                 {visibleEvents.map((event) => (
                   <button
@@ -255,7 +254,7 @@ export default function EventsPage({ onNavigate }) {
               {selected ? (
                 <>
                   <div className="events-page__detail-head">
-                    <span>Selected Event</span>
+                    <span>{t('events.selectedEvent')}</span>
                     <Badge>{selected.severity}</Badge>
                   </div>
                   <h2>{selected.title}</h2>
@@ -266,20 +265,20 @@ export default function EventsPage({ onNavigate }) {
                   </div>
 
                   <div className="events-page__info-block">
-                    <span>What Nora Detected</span>
+                    <span>{t('events.whatDetected')}</span>
                     <p>{selected.detected}</p>
                   </div>
                   <div className="events-page__info-block">
-                    <span>Reasoning Summary</span>
+                    <span>{t('events.reasoningSummary')}</span>
                     <p>{selected.reasoning}</p>
                   </div>
                   <div className="events-page__info-block">
-                    <span>Business Impact</span>
+                    <span>{t('events.businessImpact')}</span>
                     <p>{selected.impact}</p>
                   </div>
 
                   <div className="events-page__trail">
-                    <span>Event Trail</span>
+                    <span>{t('events.eventTrail')}</span>
                     {selected.trail.map((item) => (
                       <div key={`${selected.id}-${item.label}`} className={`events-page__trail-item ${item.state === 'current' ? 'events-page__trail-item--active' : ''}`}>
                         <i />
@@ -290,7 +289,7 @@ export default function EventsPage({ onNavigate }) {
                   </div>
                 </>
               ) : (
-                <div className="events-page__empty events-page__empty--detail">Select an event to view Nora's reasoning.</div>
+                <div className="events-page__empty events-page__empty--detail">{t('events.selectToView')}</div>
               )}
             </aside>
           </section>

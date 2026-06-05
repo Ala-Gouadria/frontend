@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
@@ -21,6 +22,7 @@ function NotificationIcon() {
 }
 
 export default function Notifications({ onNavigate }) {
+  const { t } = useTranslation()
   const [notifications, setNotifications] = useState([])
   const [filter, setFilter] = useState('All')
   const [pendingId, setPendingId] = useState(null)
@@ -63,6 +65,12 @@ export default function Notifications({ onNavigate }) {
     setPendingId(null)
   }
 
+  const filterLabel = (key) => {
+    if (key === 'All') return t('notifications.filterAll')
+    if (key === 'Read') return t('notifications.filterRead')
+    return t('notifications.filterUnread')
+  }
+
   return (
     <main className="notifications-page">
       <Photo />
@@ -71,8 +79,8 @@ export default function Notifications({ onNavigate }) {
 
       <section className="notifications-content">
         <header className="notifications-header">
-          <h1>Notifications</h1>
-          <p>Check and manage all your notifications here</p>
+          <h1>{t('notifications.title')}</h1>
+          <p>{t('notifications.subtitle')}</p>
         </header>
 
         <div className="notifications-divider" />
@@ -88,12 +96,12 @@ export default function Notifications({ onNavigate }) {
                 role="tab"
                 aria-selected={filter === item}
               >
-                {item}
+                {filterLabel(item)}
               </button>
             ))}
           </div>
 
-          <p className="notifications-count">{unreadCount} new Notifications</p>
+          <p className="notifications-count">{t('notifications.newCount', { count: unreadCount })}</p>
         </div>
 
         <div className="notifications-list">
@@ -118,7 +126,7 @@ export default function Notifications({ onNavigate }) {
                 onClick={() => toggleRead(notification)}
                 disabled={pendingId === notification.id}
               >
-                {notification.read ? 'Mark As Unread' : 'Mark As Read'}
+                {notification.read ? t('notifications.markAsUnread') : t('notifications.markAsRead')}
               </button>
             </article>
           ))}

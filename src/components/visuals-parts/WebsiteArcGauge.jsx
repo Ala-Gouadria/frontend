@@ -4,8 +4,10 @@ function classNames(...values) {
   return values.filter(Boolean).join(' ')
 }
 
-function clamp(value) {
-  return Math.max(0, Math.min(value, 1))
+function clampProgress(value, fallback = 0) {
+  const number = Number(value)
+  const safeValue = Number.isFinite(number) ? number : fallback
+  return Math.max(0, Math.min(safeValue, 1))
 }
 
 function arcPoint(cx, cy, radius, progress) {
@@ -24,7 +26,7 @@ export function WebsiteArcGauge({
   compact = false,
   className = '',
 }) {
-  const safeProgress = clamp(progress)
+  const safeProgress = clampProgress(progress)
   const cx = compact ? 100 : 180
   const cy = compact ? 94 : 156
   const radius = compact ? 82 : 154

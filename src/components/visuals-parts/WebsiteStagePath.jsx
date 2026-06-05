@@ -10,7 +10,7 @@ export function WebsiteStagePath({ stages = ['Visit', 'Engage', 'Convert'], clas
       {stages.map((stage, index) => (
         <div key={stage} className="website-stage-path__step">
           <span className={classNames('website-stage-path__pill', index === stages.length - 1 && 'website-stage-path__pill--final')}>
-            {index === stages.length - 1 ? <span className="website-stage-path__icon">◊</span> : null}
+            {index === stages.length - 1 ? <span className="website-stage-path__icon">◇</span> : null}
             {stage}
           </span>
           {index < stages.length - 1 ? <span className="website-stage-path__arrow">&gt;</span> : null}

@@ -1,6 +1,6 @@
-.integrate-page {
-  width: 100vw;
-  min-height: 100vh;
+﻿.integrate-page {
+  width: var(--vw);
+  min-height: var(--vh);
   position: relative;
   overflow: hidden;
   background:
@@ -36,7 +36,7 @@
 .integrate-content {
   position: relative;
   z-index: 5;
-  width: min(1226px, calc(100vw - 280px));
+  width: min(1226px, calc(var(--vw) - 280px));
   margin: 67px auto 0;
   animation: integratePageIn 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -91,6 +91,8 @@
   width: 100%;
   margin: 20px 0 34px;
   background: linear-gradient(90deg, rgba(23, 26, 34, 0.35), rgba(23, 26, 34, 0.18), rgba(23, 26, 34, 0));
+  transform-origin: left;
+  animation: drawDivider 800ms cubic-bezier(0.22, 1, 0.36, 1) 300ms both;
 }
 
 .integrate-grid {
@@ -113,9 +115,24 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transform: translateY(18px);
+  transform: translateY(24px) scale(0.96);
   opacity: 0;
   animation: integrateCardIn 660ms cubic-bezier(0.22, 1, 0.36, 1) var(--integrate-delay) forwards;
+  transition:
+    transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 0.4s ease,
+    border-color 0.4s ease,
+    border-width 0.2s ease,
+    padding 0.2s ease;
+}
+
+.integrate-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(59, 131, 246, 0.85);
+  box-shadow:
+    0 26px 48px rgba(47, 121, 255, 0.12),
+    0 8px 16px rgba(47, 121, 255, 0.04),
+    0 1px 0 rgba(255, 255, 255, 0.95) inset;
 }
 
 .integrate-card--synced {
@@ -125,6 +142,20 @@
   box-shadow:
     0 20px 42px rgba(47, 121, 255, 0.12),
     0 1px 0 rgba(255, 255, 255, 0.9) inset;
+}
+
+.integrate-card--synced:hover {
+  border-color: #2563eb;
+  box-shadow:
+    0 28px 56px rgba(47, 121, 255, 0.18),
+    0 8px 16px rgba(47, 121, 255, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.95) inset;
+}
+
+.integrate-card--connecting {
+  border-color: rgba(59, 131, 246, 0.6);
+  box-shadow: 0 0 0 2px rgba(59, 131, 246, 0.2) inset;
+  animation: cardPulse 1.5s ease-in-out infinite;
 }
 
 .integrate-card__body {
@@ -146,6 +177,13 @@
     #ffffff;
   border: 1px solid rgba(102, 159, 255, 0.48);
   box-shadow: 0 16px 28px rgba(47, 121, 255, 0.08);
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.integrate-card:hover .integrate-card__icon-shell {
+  transform: scale(1.05) translateY(-2px);
+  border-color: rgba(59, 131, 246, 0.6);
+  box-shadow: 0 20px 32px rgba(47, 121, 255, 0.15);
 }
 
 .integrate-card__icon {
@@ -153,6 +191,12 @@
   height: 50px;
   object-fit: contain;
   filter: drop-shadow(0 8px 12px rgba(47, 121, 255, 0.13));
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), filter 0.4s ease;
+}
+
+.integrate-card:hover .integrate-card__icon {
+  animation: iconFloat 2s ease-in-out infinite alternate;
+  filter: drop-shadow(0 12px 18px rgba(47, 121, 255, 0.22));
 }
 
 .integrate-card__copy {
@@ -193,12 +237,20 @@
   letter-spacing: -0.04em;
   cursor: pointer;
   box-shadow: 0 8px 18px rgba(47, 121, 255, 0.06);
-  transition: transform 170ms ease, box-shadow 170ms ease, background 170ms ease;
+  transition:
+    transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
 }
 
 .integrate-card__action:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(47, 121, 255, 0.13);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(47, 121, 255, 0.18);
+  background-color: #2f79ff;
+  border-color: #2f79ff;
+  color: #ffffff;
 }
 
 .integrate-card__action svg {
@@ -208,6 +260,12 @@
   color: currentColor;
   stroke: currentColor;
   stroke-width: 1.4;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: center;
+}
+
+.integrate-card__action:hover svg {
+  transform: rotate(90deg) scale(1.1);
 }
 
 .integrate-card__action--synced {
@@ -217,6 +275,46 @@
   box-shadow:
     0 16px 28px rgba(47, 121, 255, 0.36),
     0 1px 0 rgba(255, 255, 255, 0.34) inset;
+  transition:
+    transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.integrate-card__action--synced:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 20px 36px rgba(47, 121, 255, 0.45),
+    0 1px 0 rgba(255, 255, 255, 0.45) inset;
+  background: linear-gradient(180deg, #6baeff 0%, #3f85ff 100%);
+}
+
+.integrate-card__action--synced svg {
+  animation: slowSpin 16s linear infinite;
+}
+
+.integrate-card__action--synced:hover svg {
+  animation: fastSpin 1s cubic-bezier(0.25, 1, 0.2, 1) infinite;
+}
+
+.integrate-card__action--connecting {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(47, 121, 255, 0.4);
+  color: rgba(47, 121, 255, 0.85);
+  cursor: wait;
+  box-shadow: none;
+}
+
+.integrate-card__action--connecting:hover {
+  transform: none;
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(47, 121, 255, 0.4);
+  color: rgba(47, 121, 255, 0.85);
+}
+
+.integrate-card__action--connecting svg {
+  animation: fastSpin 0.8s linear infinite !important;
 }
 
 .integrate-dock {
@@ -334,9 +432,13 @@
 }
 
 @keyframes integrateCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -351,9 +453,41 @@
   }
 }
 
+@keyframes drawDivider {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes cardPulse {
+  0% { opacity: 0.95; }
+  50% { opacity: 1; border-color: rgba(59, 131, 246, 0.8); }
+  100% { opacity: 0.95; }
+}
+
+@keyframes iconFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-3px); }
+}
+
+@keyframes slowSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fastSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 @media (max-width: 1180px) {
   .integrate-content {
-    width: min(900px, calc(100vw - 180px));
+    width: min(900px, calc(var(--vw) - 180px));
   }
 
   .integrate-grid {
@@ -367,7 +501,7 @@
   }
 
   .integrate-content {
-    width: calc(100vw - 32px);
+    width: calc(var(--vw) - 32px);
     margin: 104px auto 120px;
   }
 
@@ -381,7 +515,7 @@
   }
 
   .integrate-dock {
-    width: calc(100vw - 22px);
+    width: calc(var(--vw) - 22px);
     flex-direction: column;
     bottom: 12px;
   }

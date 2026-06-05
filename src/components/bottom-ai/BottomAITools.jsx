@@ -6,24 +6,35 @@ import { useControls, useTransformEffect } from 'react-zoom-pan-pinch'
 import cursorIcon from '../../assets/icons/Nora-AI-Icon/cursor-icon.svg'
 import eyeIcon from '../../assets/icons/Nora-AI-Icon/eye-icon.svg'
 import handIcon from '../../assets/icons/Nora-AI-Icon/four-finger-icon.svg'
+import startIcon from '../../assets/icons/Nora-AI-Icon/Start-icon.svg'
 import stopIcon from '../../assets/icons/Nora-AI-Icon/Stop-icon.svg'
 import noraLogo from '../../assets/logo/Ask-Nora-Logo.png'
-
+import noraComponentsLogo from '../../assets/logo/Nora_Componennts_Logo.svg'
 function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
+    const [isAsking, setIsAsking] = useState(false)      // ← must be here
   const [isTaskRunning, setIsTaskRunning] = useState(false)
-
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
   return (
     <>
       <button
         type="button"
-        className="bottom-ai-tools__pill bottom-ai-tools__pill--ask"
-        onClick={() => onAskNora?.('ask-nora')}
+        className={`bottom-ai-tools__pill bottom-ai-tools__pill--ask ${isAsking ? 'bottom-ai-tools__pill--ask--active' : ''}`}
+        onClick={() => {
+          setIsAsking(r => !r)
+          onAskNora?.('ask-nora')
+        }}
       >
-        <img src={noraLogo} alt="" aria-hidden="true" className="bottom-ai-tools__logo-icon" />
+        <img
+          src={isAsking ? noraComponentsLogo : noraLogo}
+          alt=""
+          aria-hidden="true"
+          className="bottom-ai-tools__logo-icon"
+        />
         <span className="bottom-ai-tools__label">Ask Nora about your business</span>
       </button>
 
       <div className="bottom-ai-tools__status-group">
+        {/* Task Overview — original spinning ring, unchanged */}
         <button
           type="button"
           className="bottom-ai-tools__pill bottom-ai-tools__pill--task"
@@ -32,15 +43,44 @@ function BottomAIActionCluster({ onAskNora, onTaskOpen }) {
             onTaskOpen?.()
           }}
         >
-          <span className={`bottom-ai-tools__task-ring ${isTaskRunning ? 'bottom-ai-tools__task-ring--spinning' : ''}`} />
+         {isTaskRunning && (
+  <span className="bottom-ai-tools__task-ring-wrap">
+    <span className="bottom-ai-tools__task-ring" />
+  </span>
+)}
           <span className="bottom-ai-tools__label">Task Overview</span>
         </button>
 
-        <button type="button" className="bottom-ai-tools__pill bottom-ai-tools__pill--analyzing">
-          <span className="bottom-ai-tools__analyzing-shimmer" />
-          <span className="bottom-ai-tools__stop-wrap">
-            <img src={stopIcon} alt="" aria-hidden="true" className="bottom-ai-tools__stop-icon" />
+        {/* Analyzing — start/stop icon swap + green download fill */}
+        <button
+          type="button"
+          className={`bottom-ai-tools__pill bottom-ai-tools__pill--analyzing ${isAnalyzing ? 'bottom-ai-tools__pill--analyzing--running' : ''}`}
+          onClick={() => setIsAnalyzing(r => !r)}
+          aria-pressed={isAnalyzing}
+          aria-label={isAnalyzing ? 'Stop analyzing' : 'Start analyzing'}
+        >
+          {/* Green fill sweeps in from left like a download bar */}
+          <span className={`bottom-ai-tools__analyzing-fill ${isAnalyzing ? 'bottom-ai-tools__analyzing-fill--active' : ''}`} />
+
+          {/* Shimmer on top of the green fill when idle (original behaviour) */}
+          {!isAnalyzing && <span className="bottom-ai-tools__analyzing-shimmer" />}
+
+          {/* Start / Stop icon swap */}
+          <span className="bottom-ai-tools__analyzing-icon-wrap">
+            <img
+              src={startIcon}
+              alt=""
+              aria-hidden="true"
+              className={`bottom-ai-tools__analyzing-icon ${isAnalyzing ? 'bottom-ai-tools__analyzing-icon--hidden' : ''}`}
+            />
+            <img
+              src={stopIcon}
+              alt=""
+              aria-hidden="true"
+              className={`bottom-ai-tools__analyzing-icon ${isAnalyzing ? '' : 'bottom-ai-tools__analyzing-icon--hidden'}`}
+            />
           </span>
+
           <span className="bottom-ai-tools__label">Analyzing competitors m...</span>
         </button>
       </div>

@@ -2,29 +2,23 @@ import {
   AiActionButton,
   AiInsight,
   AutomationArcGauge,
-  SegmentedStripedBar,
+  QualityBlocks,
 } from '../../visuals-parts'
 import { automationExecutionCardData } from '../../../api/automationExecutionMockData.js'
 import './Automation & ExecutionCardShared.css'
 import './AutomationExecutionCard.css'
 
+const TOTAL_SEGMENTS = 30
+
 function getPercent(value) {
   const percent = Number.parseFloat(String(value).replace('%', ''))
-
   return Number.isFinite(percent) ? percent : 0
 }
 
 function getTone(value) {
   const percent = getPercent(value)
-
-  if (percent >= 70) {
-    return 'green'
-  }
-
-  if (percent >= 50) {
-    return 'blue'
-  }
-
+  if (percent >= 70) return 'green'
+  if (percent >= 50) return 'blue'
   return 'orange'
 }
 
@@ -32,6 +26,15 @@ const LANE_TONES = {
   'High Intent': 'green',
   'Campaign Launch': 'blue',
   'Audience Sync': 'orange',
+}
+
+function laneBlocks(value, tone) {
+  const active = Math.round(TOTAL_SEGMENTS * getPercent(value) / 100)
+  const inactive = TOTAL_SEGMENTS - active
+  return [
+    { tone, count: active },
+    ...(inactive > 0 ? [{ tone: `${tone}-muted`, count: inactive }] : []),
+  ]
 }
 
 export function AutomationExecutionCard({ data = automationExecutionCardData }) {
@@ -54,11 +57,11 @@ export function AutomationExecutionCard({ data = automationExecutionCardData }) 
       </section>
 
       <AutomationArcGauge
-          progress={data.gauge.progress}
-          label={data.gauge.label}
-          detail={`${data.stateValue} • ${data.gauge.sublabel}`}
-          className="automation-execution-card__gauge"
-        />
+        progress={data.gauge.progress}
+        label={data.gauge.label}
+        detail={`${data.stateValue} • ${data.gauge.sublabel}`}
+        className="automation-execution-card__gauge"
+      />
 
       <section className="automation-execution-card__lanes">
         <h3>{data.laneTitle}</h3>
@@ -69,16 +72,16 @@ export function AutomationExecutionCard({ data = automationExecutionCardData }) 
             <div
               key={lane.label}
               className={`automation-execution-card__lane automation-execution-card__lane--${tone}`}
+              style={{ '--lane-fill': `${getPercent(lane.value)}%` }}
             >
               <div className="automation-execution-card__lane-head">
                 <span>{lane.label}</span>
                 <strong>{lane.value}</strong>
               </div>
-              <SegmentedStripedBar
-                value={getPercent(lane.value)}
-                segments={24}
-                tone={tone}
-                label={`${lane.label}: ${lane.value} • ${lane.active}/${lane.total}`}
+              <QualityBlocks
+                blocks={laneBlocks(lane.value, tone)}
+                className="automation-execution-card__lane-blocks"
+                aria-label={`${lane.label}: ${lane.value}`}
               />
             </div>
           )

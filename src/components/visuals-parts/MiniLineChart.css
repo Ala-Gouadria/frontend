@@ -1,58 +1,41 @@
 .mini-line-chart {
   --mini-line-color: #5a8a00;
-  --mini-line-fill-top: rgba(120, 180, 10, 0.52);
-  --mini-line-fill-bottom: rgba(190, 230, 80, 0.04);
-  --mini-line-glow: rgba(100, 150, 8, 0.28);
+  --mini-line-fill-top: rgba(120, 180, 10, 0.42);
+  --mini-line-fill-bottom: rgba(190, 230, 80, 0.02);
+  --mini-line-glow: rgba(100, 150, 8, 0.18);
   display: block;
   width: 100%;
-  min-height: 52px;
-  height: 58px;
-  aspect-ratio: 194 / 58;
+  min-height: 60px;
+  height: 80px;
   overflow: visible;
 }
 
-.mini-line-chart__fill {
-  opacity: 1;
-}
-
-.mini-line-chart__line {
-  fill: none;
-  stroke: var(--mini-line-color);
-  stroke-width: 5.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 320;
-  stroke-dashoffset: 320;
-  animation: miniLineDraw 1s ease forwards;
-  filter: drop-shadow(0 4px 8px var(--mini-line-glow));
-}
-
 .mini-line-chart--red {
-  --mini-line-color: #ff8888;
-  --mini-line-fill-top: rgba(255, 136, 136, 0.18);
-  --mini-line-fill-bottom: rgba(255, 214, 214, 0.1);
-  --mini-line-glow: rgba(255, 96, 96, 0.26);
+  --mini-line-color: #ff7174;
+  --mini-line-fill-top: rgba(255, 113, 116, 0.34);
+  --mini-line-fill-bottom: rgba(255, 214, 214, 0.02);
+  --mini-line-glow: rgba(255, 96, 96, 0.16);
 }
 
 .mini-line-chart--blue {
   --mini-line-color: #2f80ed;
-  --mini-line-fill-top: rgba(47, 128, 237, 0.16);
-  --mini-line-fill-bottom: rgba(196, 220, 255, 0.08);
-  --mini-line-glow: rgba(47, 128, 237, 0.22);
+  --mini-line-fill-top: rgba(47, 128, 237, 0.28);
+  --mini-line-fill-bottom: rgba(196, 220, 255, 0.02);
+  --mini-line-glow: rgba(47, 128, 237, 0.16);
 }
 
 .mini-line-chart--purple {
   --mini-line-color: #b05ae4;
-  --mini-line-fill-top: rgba(176, 90, 228, 0.14);
-  --mini-line-fill-bottom: rgba(225, 196, 245, 0.08);
-  --mini-line-glow: rgba(176, 90, 228, 0.22);
+  --mini-line-fill-top: rgba(176, 90, 228, 0.26);
+  --mini-line-fill-bottom: rgba(225, 196, 245, 0.02);
+  --mini-line-glow: rgba(176, 90, 228, 0.16);
 }
 
 .mini-line-chart--pink {
   --mini-line-color: #e44177;
-  --mini-line-fill-top: rgba(228, 65, 119, 0.16);
-  --mini-line-fill-bottom: rgba(255, 218, 232, 0.08);
-  --mini-line-glow: rgba(228, 65, 119, 0.22);
+  --mini-line-fill-top: rgba(228, 65, 119, 0.28);
+  --mini-line-fill-bottom: rgba(255, 218, 232, 0.02);
+  --mini-line-glow: rgba(228, 65, 119, 0.16);
 }
 
 .mini-line-chart__fill {
@@ -62,13 +45,13 @@
 .mini-line-chart__line {
   fill: none;
   stroke: var(--mini-line-color);
-  stroke-width: 4.4;
+  stroke-width: 2.2;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 320;
   stroke-dashoffset: 320;
   animation: miniLineDraw 1s ease forwards;
-  filter: drop-shadow(0 7px 13px var(--mini-line-glow));
+  filter: drop-shadow(0 2px 4px var(--mini-line-glow));
 }
 
 .mini-line-chart__hit {

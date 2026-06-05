@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
@@ -132,6 +133,7 @@ function CaptionCard({ item, index }) {
 }
 
 export default function Assets({ onNavigate }) {
+  const { t } = useTranslation()
   const [assets, setAssets] = useState({ images: [], posts: [], captions: [] })
   const [category, setCategory] = useState('Images')
   const [duration, setDuration] = useState('Custom')
@@ -172,22 +174,22 @@ export default function Assets({ onNavigate }) {
 
       <section className="assets-content">
         <header className="assets-header">
-          <h1>Assets</h1>
-          <p>Manage your assets here</p>
+          <h1>{t('assets.title')}</h1>
+          <p>{t('assets.subtitle')}</p>
         </header>
 
         <div className="assets-divider" />
 
         <div className="assets-toolbar">
-          <SegmentedControl label="Category" items={CATEGORIES} value={category} onChange={setCategory} />
-          <SegmentedControl label="Duration" items={DURATIONS} value={duration} onChange={setDuration} />
+          <SegmentedControl label={t('assets.category')} items={CATEGORIES} value={category} onChange={setCategory} />
+          <SegmentedControl label={t('assets.duration')} items={DURATIONS} value={duration} onChange={setDuration} />
         </div>
 
         {sections.map((section) => {
           if (section === 'images') {
             return (
               <section className="assets-section" key={section}>
-                <h2>Images</h2>
+                <h2>{t('assets.images')}</h2>
                 <div className="assets-image-grid">
                   {assets.images.map((item, index) => <ImageCard key={item.id} item={item} index={index} />)}
                 </div>
@@ -198,7 +200,7 @@ export default function Assets({ onNavigate }) {
           if (section === 'posts') {
             return (
               <section className="assets-section" key={section}>
-                <h2>Posts</h2>
+                <h2>{t('assets.posts')}</h2>
                 <div className="assets-post-grid">
                   {assets.posts.map((item, index) => <PostCard key={item.id} item={item} index={index} />)}
                 </div>
@@ -208,7 +210,7 @@ export default function Assets({ onNavigate }) {
 
           return (
             <section className="assets-section" key={section}>
-              <h2>Captions</h2>
+              <h2>{t('assets.captions')}</h2>
               <div className="assets-caption-grid">
                 {assets.captions.map((item, index) => <CaptionCard key={item.id} item={item} index={index} />)}
               </div>

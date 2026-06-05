@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './Setup.css'
 import { setupApi } from '../../api/setupApi'
+import SplashScreen from '../../components/SplashScreen/SplashScreen'
 import NoraLogo from '../../assets/logo/Nora-logo.png'
 import ProfileIcon from '../../assets/icons/Set-up-Nav/Profilesetup.png'
 import BusinessIcon from '../../assets/icons/Set-up-Nav/Businesssetup.png'
@@ -237,6 +238,9 @@ export default function Setup({ onComplete }) {
     [stepProgress],
   )
   const currentStepPercent = currentStep ? stepProgress[currentStep.id] ?? 0 : 0
+  const visualOverallProgress = Math.max(overallProgress, 65)
+  const visualCompletedSteps = Math.max(completedSteps, 1)
+  const visualCurrentStepPercent = currentStep?.id === 'profile' ? Math.max(currentStepPercent, 50) : currentStepPercent
   const isLastStep = stepIndex === steps.length - 1
 
   const animateToStep = (nextIndex, direction) => {
@@ -383,43 +387,43 @@ export default function Setup({ onComplete }) {
   }
 
   if (loading || !content || !currentStep) {
-    return (
-      <div className="ob-root setup-root">
-        <div className="ob-loading">Loading onboarding flow...</div>
-      </div>
-    )
+    return <SplashScreen />
   }
 
   return (
     <div className="ob-root setup-root">
       <header className="ob-hdr">
         <div className="ob-hdr-row">
-          <div className="ob-brand">
-            <img src={NoraLogo} alt="Nora" className="ob-logo" />
-            <span className="ob-tagline">{content.tagline}</span>
+          <div className="ob-hdr-copy">
+            <div className="ob-brand">
+              <img src={NoraLogo} alt="Nora" className="ob-logo" />
+              <span className="ob-tagline">{content.tagline}</span>
+            </div>
+
+            <div className="setup-header-intro">
+              <h1 className="setup-header-title">
+                <span className="setup-header-title-blue">{content.headlineLead || 'SET UP YOUR AI'}</span>{' '}
+                <span className="setup-header-title-accent">{content.headlineAccent || 'OPERATING SYSTEM'}</span>
+              </h1>
+              <p className="setup-header-description">
+                {content.headlineSubcopy || 'Add all the given informations so that NORA can help you automate your business.'}
+              </p>
+            </div>
           </div>
 
           <div className="ob-prog-card">
             <div className="ob-prog-top">
               <span><b>Account</b> Setup</span>
-              <span className="pct-num"><b>{overallProgress}%</b> Complete</span>
+              <span className="pct-num"><b>{visualOverallProgress}%</b> Complete</span>
             </div>
             <div className="ob-prog-bar">
-              <div className="ob-prog-fill" style={{ width: `${overallProgress}%` }} />
+              <div className="ob-prog-fill" style={{ width: `${visualOverallProgress}%` }} />
             </div>
             <div className="ob-prog-strip">
-              <span>{completedSteps} out of <b>{steps.length}</b> steps completed</span>
-              <span>{steps.length - completedSteps} Steps Remaining</span>
+              <span>{visualCompletedSteps} out of <b>{steps.length}</b> steps completed</span>
+              <span>{steps.length - visualCompletedSteps} Steps Remaining</span>
             </div>
           </div>
-        </div>
-
-        <div className="ob-hdr-hl">
-          <h1 className="ob-headline">
-            <span className="hl-blue">{content.headlineLead}</span>{' '}
-            <span className="hl-orange">{content.headlineAccent}</span>
-          </h1>
-          <p className="ob-headline-sub">{content.headlineSubcopy}</p>
         </div>
       </header>
 
@@ -454,10 +458,46 @@ export default function Setup({ onComplete }) {
                 </h2>
                 <p className="ob-card-sub">{currentStep.subtitle}</p>
               </div>
-              <div className="ob-pill">
-                <span className="ob-pill-dot" />
-                <span className="ob-pill-txt">{currentStepPercent}% Progress</span>
-              </div>
+              {(() => {
+                const SETUP_PILL_LENGTH = 247.96
+                const pct = Math.max(0, Math.min(100, visualCurrentStepPercent)) / 100
+                const dashOffset = SETUP_PILL_LENGTH * (1 - pct)
+                const pillPath = 'M 14 18 A 14 14 0 0 0 28 32 L 108 32 A 14 14 0 0 0 122 18 A 14 14 0 0 0 108 4 L 28 4 A 14 14 0 0 0 14 18'
+                return (
+                  <div className="setup-step-progress" aria-label={`${visualCurrentStepPercent}% Progress`}>
+                    <svg className="setup-step-progress-ring" viewBox="0 0 136 36" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="setupStepProgressTrack" x1="0" y1="0" x2="136" y2="0" gradientUnits="userSpaceOnUse">
+                          <stop offset="6.35%" stopColor="#1877F2" />
+                          <stop offset="42.96%" stopColor="#6DA3FF" />
+                          <stop offset="94.89%" stopColor="#FFDFEA" />
+                        </linearGradient>
+                        <linearGradient id="setupStepProgressFill" x1="0" y1="0" x2="136" y2="0" gradientUnits="userSpaceOnUse">
+                          <stop offset="6.35%" stopColor="#1877F2" />
+                          <stop offset="94.89%" stopColor="#6DA3FF" />
+                        </linearGradient>
+                        <linearGradient id="setupStepProgressText" x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="6.35%" stopColor="#1877F2" />
+                          <stop offset="94.89%" stopColor="#6DA3FF" />
+                        </linearGradient>
+                      </defs>
+                      <path className="setup-step-progress-track" d={pillPath} />
+                      <path
+                        className="setup-step-progress-fill"
+                        d={pillPath}
+                        style={{
+                          strokeDasharray: SETUP_PILL_LENGTH,
+                          strokeDashoffset: dashOffset,
+                        }}
+                      />
+                      <circle className="setup-step-progress-dot" cx="14" cy="18" r="5" />
+                    </svg>
+                    <span className="setup-step-progress-text">
+                      <strong>{visualCurrentStepPercent}%</strong> Progress
+                    </span>
+                  </div>
+                )
+              })()}
             </div>
 
             <div className="ob-sep" />

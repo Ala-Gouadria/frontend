@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -14,9 +14,9 @@ textarea {
   font-family: inherit;
 }
 
-/* ═══════════════════════════════════════════════
-   BASE — OnboardingFlow (Knowledge-Base page)
-═══════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   BASE â€” OnboardingFlow (Knowledge-Base page)
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .ob-root {
   --ob-blue: #2f80ed;
   --ob-blue-soft: #8eb9ff;
@@ -24,12 +24,14 @@ textarea {
   --ob-deep: #1c1c24;
   --ob-muted: #8d8d93;
   --ob-line: #c8ddff;
-  height: 100vh;
+  height: var(--vh);
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
   padding: 70px 0 120px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Urbanist", "Segoe UI", system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.03em;
   color: var(--ob-deep);
   background:
     radial-gradient(circle at 100% 0%, rgba(139, 193, 255, 0.46), transparent 24%),
@@ -62,7 +64,7 @@ textarea {
 
 .ob-hdr,
 .ob-body {
-  width: min(1138px, calc(100vw - 300px));
+  width: min(1138px, calc(var(--vw) - 300px));
   margin: 0 auto;
   position: relative;
   z-index: 1;
@@ -102,35 +104,50 @@ textarea {
 }
 
 .ob-tagline {
-  color: #2f80ff;
-  font-size: 13px;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
   line-height: 1;
+  letter-spacing: 0.03em;
+  background: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .ob-knowledge-title {
-  margin: 2px 0 0;
+  margin: 4px 0 0;
+  font-family: "Delight", "Poppins", system-ui, sans-serif;
+  font-weight: 700;
   font-size: 26px;
   line-height: 1;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: transparent;
-  background: linear-gradient(90deg, #227af0 0%, #69a0f8 42%, #bd91d8 100%);
+  background: linear-gradient(97.11deg, #1877F2 6.36%, #FFBDD4 87.24%);
   -webkit-background-clip: text;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .ob-knowledge-title span {
-  color: #227af0;
-  background: none;
-  -webkit-text-fill-color: #227af0;
+  /* keep first word using the same gradient */
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .ob-knowledge-sub {
-  margin: 2px 0 0;
-  color: #202026;
+  margin: 6px 0 0;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
+  font-weight: 400;
   font-size: 14px;
   line-height: 1;
+  letter-spacing: 0.03em;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .ob-prog-card {
@@ -220,7 +237,7 @@ textarea {
 }
 
 .ob-loading {
-  width: min(520px, calc(100vw - 80px));
+  width: min(520px, calc(var(--vw) - 80px));
   margin: 180px auto 0;
   position: relative;
   z-index: 1;
@@ -250,20 +267,28 @@ textarea {
 }
 
 .ob-sb-head {
-  margin: 0 0 5px;
-  font-size: 20px;
+  margin: 0 0 6px;
+  font-family: "Delight", "Poppins", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 18px;
   line-height: 1;
-  font-weight: 800;
-  color: #1e1e24;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.03em;
+  background: linear-gradient(105.26deg, #000000 18.5%, #747474 81.5%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .ob-sb-sub {
-  margin: 0 0 21px;
+  margin: 0 0 22px;
   max-width: 340px;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
+  font-weight: 400;
   font-size: 14px;
-  line-height: 1.35;
-  color: #8b8b8f;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .ob-sidebar nav {
@@ -355,25 +380,37 @@ textarea {
 }
 
 .ob-card-title {
-  margin: 0 0 4px;
-  font-size: 25px;
+  margin: 0 0 6px;
+  font-family: "Delight", "Poppins", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 18px;
   line-height: 1;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: #111116;
+  letter-spacing: 0.03em;
+  background: linear-gradient(105.26deg, #000000 18.5%, #747474 81.5%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .ob-card-title span {
-  color: #6d6d6f;
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
   font-weight: inherit;
 }
 
 .ob-card-sub {
-  max-width: 430px;
+  max-width: 460px;
   margin: 0;
-  font-size: 15px;
-  line-height: 1.15;
-  color: #85858b;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .ob-pill {
@@ -425,10 +462,12 @@ textarea {
 .f-full { grid-column: 1 / -1; }
 
 .f-label {
+  font-family: "Urbanist", "Segoe UI", sans-serif;
   font-size: 14px;
-  line-height: 1;
-  color: #111116;
   font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .f-optional {
@@ -609,29 +648,42 @@ textarea {
 }
 
 .ob-why {
+  width: 100%;
+  max-width: 713px;
   min-height: 90px;
-  margin-top: 25px;
-  padding: 18px 14px;
-  border-radius: 8px;
-  background:
-    radial-gradient(circle at 100% 0%, rgba(255, 230, 246, 0.9), transparent 32%),
-    linear-gradient(95deg, rgba(204, 226, 255, 0.95), rgba(255,255,255,0.76) 74%);
-  box-shadow: 0 12px 26px rgba(91, 135, 203, 0.12);
+  margin-top: 28px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 10px;
+  background: linear-gradient(
+    97.07deg,
+    rgba(24, 119, 242, 0.2) 6.35%,
+    rgba(109, 163, 255, 0.2) 42.96%,
+    rgba(255, 223, 234, 0.2) 94.89%
+  );
 }
 
 .ob-why-t {
-  margin: 0 0 8px;
-  font-size: 13px;
+  margin: 0;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
   line-height: 1;
+  letter-spacing: 0.04em;
   color: #15151c;
-  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .ob-why-b {
   margin: 0;
-  font-size: 13px;
-  line-height: 1.28;
-  color: #15151c;
+  font-family: "Urbanist", "Segoe UI", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .ob-foot {
@@ -729,7 +781,7 @@ textarea {
 @media (max-width: 1320px) {
   .ob-hdr,
   .ob-body {
-    width: min(1060px, calc(100vw - 170px));
+    width: min(1060px, calc(var(--vw) - 170px));
   }
   .ob-brand { min-width: 420px; }
 }
@@ -737,7 +789,7 @@ textarea {
 @media (max-width: 980px) {
   .ob-hdr,
   .ob-body {
-    width: calc(100vw - 48px);
+    width: calc(var(--vw) - 48px);
   }
   .ob-brand { min-width: 0; }
   .ob-hdr-row { gap: 20px; }

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
@@ -76,18 +77,23 @@ function CheckIcon() {
 }
 
 function BillingToggle({ billing, onChange }) {
+  const { t } = useTranslation()
+  const options = [
+    { key: 'Monthly', label: t('pricing.monthly') },
+    { key: 'Yearly', label: t('pricing.yearly') },
+  ]
   return (
     <div className="pricing-page__billing" role="tablist" aria-label="Billing period">
-      {['Monthly', 'Yearly'].map((item) => (
+      {options.map((item) => (
         <button
-          key={item}
+          key={item.key}
           type="button"
-          className={`pricing-page__billing-option ${billing === item ? 'pricing-page__billing-option--active' : ''}`}
-          onClick={() => onChange(item)}
+          className={`pricing-page__billing-option ${billing === item.key ? 'pricing-page__billing-option--active' : ''}`}
+          onClick={() => onChange(item.key)}
           role="tab"
-          aria-selected={billing === item}
+          aria-selected={billing === item.key}
         >
-          {item}
+          {item.label}
         </button>
       ))}
     </div>
@@ -95,15 +101,16 @@ function BillingToggle({ billing, onChange }) {
 }
 
 function PlanCard({ plan, billing }) {
+  const { t } = useTranslation()
   const price = billing === 'Yearly' ? plan.yearlyPrice : plan.monthlyPrice
-  const suffix = billing === 'Yearly' && price !== 'Custom' ? '/year' : billing === 'Monthly' ? '/month' : ''
+  const suffix = billing === 'Yearly' && price !== 'Custom' ? t('pricing.perYear') : billing === 'Monthly' ? t('pricing.perMonth') : ''
 
   return (
     <article className={`pricing-page__card ${plan.recommended ? 'pricing-page__card--recommended' : ''}`}>
       <div className="pricing-page__price-panel">
         <div className="pricing-page__card-head">
           <h2>{plan.name}</h2>
-          {plan.recommended ? <span className="pricing-page__recommended">Recommended</span> : null}
+          {plan.recommended ? <span className="pricing-page__recommended">{t('pricing.recommended')}</span> : null}
         </div>
         <div className="pricing-page__price">
           {price !== 'Custom' ? <span className="pricing-page__old-price">{plan.oldPrice}</span> : null}
@@ -122,13 +129,14 @@ function PlanCard({ plan, billing }) {
       </ul>
 
       <PillButton width="100%" height="58px" compact className="pricing-page__choose-button">
-        CHOOSE PLAN
+        {t('pricing.choosePlan')}
       </PillButton>
     </article>
   )
 }
 
 export default function PricingPage({ onNavigate }) {
+  const { t } = useTranslation()
   const [billing, setBilling] = useState('Monthly')
   const planCards = useMemo(() => PLANS.map((plan) => (
     <PlanCard key={plan.id} plan={plan} billing={billing} />
@@ -143,8 +151,8 @@ export default function PricingPage({ onNavigate }) {
       <main className="pricing-page__viewport">
         <div className="pricing-page__content">
           <header className="pricing-page__header">
-            <h1>Pricing</h1>
-            <p>Check which plan suits you the best</p>
+            <h1>{t('pricing.title')}</h1>
+            <p>{t('pricing.subtitle')}</p>
           </header>
 
           <section className="pricing-page__plans-section">

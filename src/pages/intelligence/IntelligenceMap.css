@@ -104,11 +104,9 @@
 }
 
 .intelligence-map-grid {
-  background-color: #f8f8f7;
-  background-image:
-    radial-gradient(circle, rgba(148, 163, 184, 0.46) 1.1px, transparent 1.2px),
-    linear-gradient(180deg, rgba(255,255,255,0.78) 0%, rgba(245,247,250,0.96) 100%);
-  background-size: 24px 24px, 100% 100%;
+  /* Transparent so the DotGrid canvas behind it shows through the gaps
+     between cards. The root page gradient provides the base colour. */
+  background: transparent;
 }
 
 .intelligence-map-ambient {
@@ -185,4 +183,40 @@
 
 .intelligence-map-connector--collapsed .intelligence-map-connector__icon {
   animation: connectorIconPop 1300ms ease-in-out infinite;
+}
+
+/* ── Card shell containment ─────────────────────────────────────────────────
+   Tells the browser each card is a self-contained paint region.
+   Prevents a single card's repaint from invalidating the whole canvas. */
+.intelligence-map-card-shell {
+  contain: layout style paint;
+}
+
+/* ── Zoomed-out optimisation mode (scale < 0.45) ────────────────────────────
+   Triggered by .intelligence-map-grid--zoomed-out via direct DOM classList
+   toggle — zero React re-renders.
+
+   Goals:
+     1. Hide card interiors  → skip painting complex charts/tables at tiny scale
+     2. Disable SVG filters  → feGaussianBlur on 252 paths was the GPU killer
+     3. Stop CSS animations  → no infinite loops while every card is on screen
+*/
+
+/* 1. Hide card content (keep shell size so layout stays correct) */
+.intelligence-map-grid--zoomed-out .intelligence-map-card-shell > * {
+  visibility: hidden;
+}
+
+/* 2. Disable expensive SVG feGaussianBlur filter passes.
+      CSS `filter` property overrides the SVG `filter` presentation attribute. */
+.intelligence-map-grid--zoomed-out svg path {
+  filter: none !important;
+}
+
+/* 3. Kill animation loops that run on every card simultaneously */
+.intelligence-map-grid--zoomed-out .intelligence-map-card-shell--visible,
+.intelligence-map-grid--zoomed-out .intelligence-map-connector--collapsed,
+.intelligence-map-grid--zoomed-out .intelligence-map-connector--collapsed .intelligence-map-connector__icon,
+.intelligence-map-grid--zoomed-out .intelligence-map-ambient {
+  animation: none;
 }

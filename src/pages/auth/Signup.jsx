@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './Signup.css'
 import noraLoginLogo from '../../assets/logo/Nora-Login-Logo.png'
 import loginBackground from '../../assets/background/Login-background.jpg'
+import * as authApi from '../../api/auth.js'
 import PillButton from '../../components/pages-parts/PillButton'
 
-function PasswordInput({ value, onChange, placeholder = 'Enter your password', autoComplete }) {
+function PasswordInput({ value, onChange, placeholder, autoComplete }) {
   const [visible, setVisible] = useState(false)
 
   return (
@@ -33,53 +35,75 @@ function PasswordInput({ value, onChange, placeholder = 'Enter your password', a
 }
 
 function SocialButton({ provider }) {
+  const { t } = useTranslation()
   return (
     <button type="button" className="auth-social-btn">
       <span className={`auth-social-mark auth-social-mark--${provider.toLowerCase()}`}>
         {provider === 'Google' ? 'G' : 'A'}
       </span>
-      <span>Continue with {provider}</span>
+      <span>{t('login.continueWith', { provider })}</span>
     </button>
   )
 }
 
 export default function Signup({ onSuccess, onLogin }) {
+  const { t } = useTranslation()
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
+    companyName: '',
     email: '',
     password: '',
     confirmPassword: '',
   })
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const updateField = (field) => (event) => {
     setForm((current) => ({ ...current, [field]: event.target.value }))
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     if (form.password.length < 8) {
-      setError('Password must be at least 8 characters.')
+      setError(t('signup.errorMinLength'))
       return
     }
 
     if (form.password !== form.confirmPassword) {
-      setError('Passwords do not match.')
+      setError(t('signup.errorMismatch'))
       return
     }
 
     setError('')
-    onSuccess?.()
+    setLoading(true)
+    try {
+      await authApi.register({
+        email: form.email.trim(),
+        password: form.password,
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        companyName: form.companyName.trim(),
+      })
+      onSuccess?.()
+    } catch (err) {
+      if (err.code === 'CONFLICT') {
+        setError(t('signup.errorConflict'))
+      } else {
+        setError(err.message ?? t('signup.errorFailed'))
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <main className="auth-page" style={{ backgroundImage: `url(${loginBackground})` }}>
       <form className="auth-panel auth-panel--signup" onSubmit={handleSubmit}>
         <img src={noraLoginLogo} alt="Nora" className="auth-logo" />
-        <h1>Create your account</h1>
-        <p className="auth-subtitle">Welcome! Please fill in the details to get started.</p>
+        <h1>{t('signup.title')}</h1>
+        <p className="auth-subtitle">{t('signup.subtitle')}</p>
 
         <div className="auth-social-row">
           <SocialButton provider="Google" />
@@ -88,46 +112,51 @@ export default function Signup({ onSuccess, onLogin }) {
 
         <div className="auth-divider">
           <span />
-          <strong>Or</strong>
+          <strong>{t('signup.or')}</strong>
           <span />
         </div>
 
         <div className="auth-name-grid">
           <label className="auth-field">
-            <span>First Name</span>
+            <span>{t('signup.firstName')}</span>
             <input value={form.firstName} onChange={updateField('firstName')} placeholder="eg. John" autoComplete="given-name" />
           </label>
 
           <label className="auth-field">
-            <span>Last name</span>
+            <span>{t('signup.lastName')}</span>
             <input value={form.lastName} onChange={updateField('lastName')} placeholder="eg. Frans" autoComplete="family-name" />
           </label>
         </div>
 
         <label className="auth-field">
-          <span>Email</span>
+          <span>{t('signup.companyName')}</span>
+          <input value={form.companyName} onChange={updateField('companyName')} placeholder="eg. Acme Inc." autoComplete="organization" />
+        </label>
+
+        <label className="auth-field">
+          <span>{t('signup.email')}</span>
           <input value={form.email} onChange={updateField('email')} type="email" placeholder="eg. johnfrans@gmail.com" autoComplete="email" />
         </label>
 
         <label className="auth-field">
-          <span>Create a Password</span>
+          <span>{t('signup.createPassword')}</span>
           <PasswordInput value={form.password} onChange={updateField('password')} autoComplete="new-password" />
         </label>
 
         <label className="auth-field">
-          <span>Confirm Password</span>
+          <span>{t('signup.confirmPassword')}</span>
           <PasswordInput value={form.confirmPassword} onChange={updateField('confirmPassword')} autoComplete="new-password" />
         </label>
 
-        <p className="auth-helper">Must be at least 8 characters.</p>
+        <p className="auth-helper">{t('signup.passwordHint')}</p>
         {error ? <p className="auth-error">{error}</p> : null}
 
-        <PillButton type="submit" width="100%" height="48px" variant="primary">
-          SIGN UP
+        <PillButton type="submit" width="100%" height="48px" variant="primary" disabled={loading}>
+          {loading ? t('signup.creating') : t('signup.submit')}
         </PillButton>
 
         <p className="auth-footer-copy">
-          Already have an account? <button type="button" onClick={onLogin}>Log in</button>
+          {t('signup.alreadyHaveAccount')} <button type="button" onClick={onLogin}>{t('signup.logIn')}</button>
         </p>
       </form>
     </main>

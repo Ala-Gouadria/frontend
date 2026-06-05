@@ -3,6 +3,7 @@ import {
   AiInsight,
   DottedDataBars,
   MiniLineChart,
+  StatusPill,
   SegmentedStripedBar,
   StripedBars,
 } from '../../visuals-parts'
@@ -15,7 +16,7 @@ export function CardHeader({ title, subtitle, status }) {
         <h2 className="website-card__title">{title}</h2>
         <p className="website-card__subtitle">{subtitle}</p>
       </div>
-      <span className="website-card__status">{status}</span>
+      <StatusPill className="website-card__status">{status}</StatusPill>
     </header>
   )
 }

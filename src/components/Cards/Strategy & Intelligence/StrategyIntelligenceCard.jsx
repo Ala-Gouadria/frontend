@@ -1,6 +1,6 @@
 import './StrategyIntelligenceCardShared.css'
 import './StrategyIntelligenceCard.css'
-import { StripedBars, DottedDataBars, AiInsight, AiActionButton } from '../../visuals-parts'
+import { StripedBars, ProgressBars, DottedDataBars, ColoredPanel, AiInsight, AiActionButton } from '../../visuals-parts'
 
 export function StrategyIntelligenceCard({
   status = 'Active',
@@ -34,7 +34,7 @@ export function StrategyIntelligenceCard({
           <span className="si-card__green-bold">{strategy}</span>
           <span className="si-card__green-bold">{strategyProgress}%</span>
         </div>
-        <StripedBars value={strategyProgress} tone="green" />
+        <ProgressBars value={strategyProgress} tone="green" />
       </div>
 
       <div className="si-card__section">
@@ -57,24 +57,21 @@ export function StrategyIntelligenceCard({
         <StripedBars value={90} tone="green" />
       </div>
 
-      <div className="analytics-card__panel">
-        <div className="analytics-card__panel-title">Reasons</div>
-        <div className="analytics-card__panel-body">
-          <div className="analytics-card__panel-grid analytics-card__panel-grid--three">
-            {reasons.map((r) => (
-              <div key={r.label} className="analytics-card__mini-stat">
-                <span>{r.label}</span>
-                <strong>{r.value}</strong>
-              </div>
-            ))}
-          </div>
-          <div className="analytics-card__panel-grid analytics-card__panel-grid--three">
-            {reasons.map((r) => (
-              <DottedDataBars key={r.label} columns={r.columns} tone="green" />
-            ))}
-          </div>
+      <ColoredPanel title="Reasons" tone="orange">
+        <div className="analytics-card__panel-grid analytics-card__panel-grid--three">
+          {reasons.map((r) => (
+            <div key={r.label} className="analytics-card__mini-stat">
+              <span>{r.label}</span>
+              <strong>{r.value}</strong>
+            </div>
+          ))}
         </div>
-      </div>
+        <div className="analytics-card__panel-grid analytics-card__panel-grid--three">
+          {reasons.map((r) => (
+            <DottedDataBars key={r.label} columns={r.columns} tone="green" />
+          ))}
+        </div>
+      </ColoredPanel>
 
       <AiInsight>{aiText}</AiInsight>
       <AiActionButton />

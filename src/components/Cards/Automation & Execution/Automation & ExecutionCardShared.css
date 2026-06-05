@@ -51,25 +51,7 @@
   color: rgba(24, 24, 27, 0.34);
 }
 
-.automation-card .analytics-card__status {
-  min-width: 51px;
-  min-height: 26px;
-  padding: 0 11px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background:
-    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.78), transparent 35%),
-    linear-gradient(180deg, #d8ed4c 0%, #81b604 100%);
-  box-shadow:
-    0 7px 13px rgba(84, 133, 0, 0.32),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 700;
-  animation: automationStatusGlow 1.8s ease-in-out infinite alternate;
-}
+/* Active badge intentionally inherits the shared .analytics-card__status style */
 
 .automation-card__topline {
   display: flex;
@@ -185,19 +167,5 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes automationStatusGlow {
-  from {
-    box-shadow:
-      0 7px 13px rgba(84, 133, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  }
-  to {
-    box-shadow:
-      0 10px 20px rgba(132, 184, 7, 0.38),
-      0 0 0 6px rgba(208, 235, 52, 0.14),
-      inset 0 1px 0 rgba(255, 255, 255, 0.58);
   }
 }

@@ -9,16 +9,13 @@ import './TaskExecutionCard.css'
 
 function getPercent(value) {
   const percent = Number.parseFloat(String(value).replace('%', ''))
-
   return Number.isFinite(percent) ? percent : 0
 }
 
 export function TaskExecutionCard({ data = taskExecutionCardData }) {
-  const insight =
-    'Strong signals from Traffic, Returning Users combined with conversion drop suggest retargeting will recover lost conversions.'
-
   return (
     <article className="analytics-card automation-card task-execution-card">
+
       <header className="analytics-card__header">
         <div>
           <h2 className="analytics-card__title">{data.title}</h2>
@@ -27,11 +24,12 @@ export function TaskExecutionCard({ data = taskExecutionCardData }) {
         <span className="analytics-card__status">{data.status}</span>
       </header>
 
+      {/* ── Stats rows ── */}
       <section className="task-execution-card__stats">
         {data.stats.map((item) => (
           <div
             key={item.label}
-            className={`task-execution-card__stat ${item.tone === 'red' ? 'task-execution-card__stat--red' : ''}`}
+            className={`task-execution-card__stat${item.tone === 'red' ? ' task-execution-card__stat--red' : ''}`}
             data-tooltip={`${item.label}: ${item.value}`}
           >
             <span>{item.label}</span>
@@ -40,11 +38,13 @@ export function TaskExecutionCard({ data = taskExecutionCardData }) {
         ))}
       </section>
 
+      {/* ── Active tasks ── */}
       <section className="task-execution-card__panel">
         <div className="task-execution-card__panel-title">
           <span>{data.tasksTitle}</span>
           <span>{data.tasksMeta}</span>
         </div>
+
         <div className="task-execution-card__tasks">
           {data.tasks.map((task) => (
             <div key={task.label} className="task-execution-card__task">
@@ -54,7 +54,8 @@ export function TaskExecutionCard({ data = taskExecutionCardData }) {
               </div>
               <SegmentedStripedBar
                 value={getPercent(task.progress)}
-                segments={5}
+                segments={task.totalBlocks ?? 5}
+                activeSegments={task.activeBlocks}
                 tone="blue"
                 label={`${task.label}: ${task.progress}`}
               />
@@ -64,9 +65,10 @@ export function TaskExecutionCard({ data = taskExecutionCardData }) {
       </section>
 
       <footer className="analytics-card__footer">
-        <AiInsight>{insight}</AiInsight>
+        <AiInsight>{data.insight}</AiInsight>
         <AiActionButton>{data.ctaLabel}</AiActionButton>
       </footer>
+
     </article>
   )
 }

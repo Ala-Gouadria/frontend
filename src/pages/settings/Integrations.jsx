@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
@@ -50,6 +51,7 @@ function BackIcon() {
 }
 
 export default function Integrations({ onNavigate }) {
+  const { t } = useTranslation()
   const [integrations, setIntegrations] = useState([])
   const [pendingId, setPendingId] = useState(null)
 
@@ -86,12 +88,12 @@ export default function Integrations({ onNavigate }) {
       <section className="settings-workspace__content settings-workspace__content--wide">
         <button type="button" className="workspace-back-button" onClick={() => onNavigate?.('settings')}>
           <BackIcon />
-          <span>Back to Settings</span>
+          <span>{t('integrations.backToSettings')}</span>
         </button>
 
         <header className="workspace-heading workspace-heading--integrations">
-          <h1>Integration</h1>
-          <p>Manage your Integrations</p>
+          <h1>{t('integrations.title')}</h1>
+          <p>{t('integrations.subtitle')}</p>
         </header>
 
         <div className="integration-grid">
@@ -109,7 +111,7 @@ export default function Integrations({ onNavigate }) {
                 disabled={pendingId === integration.id}
                 aria-pressed={integration.connected}
               >
-                <span>{integration.connected ? 'Connected' : 'Connect'}</span>
+                <span>{integration.connected ? t('integrations.connected') : t('integrations.connect')}</span>
                 <PlusIcon />
               </button>
             </article>

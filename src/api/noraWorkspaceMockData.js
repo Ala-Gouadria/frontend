@@ -1,5 +1,37 @@
 const now = Date.now()
 
+function createSeedConversation({
+  id,
+  title,
+  serviceId,
+  minutesAgo,
+  prompt,
+  reply,
+}) {
+  return {
+    id,
+    title,
+    serviceId,
+    updatedAt: new Date(now - 1000 * 60 * minutesAgo).toISOString(),
+    messages: [
+      {
+        id: `${id}-user`,
+        role: 'user',
+        text: prompt,
+        createdAt: new Date(now - 1000 * 60 * (minutesAgo + 6)).toISOString(),
+        attachments: [],
+      },
+      {
+        id: `${id}-assistant`,
+        role: 'assistant',
+        text: reply,
+        createdAt: new Date(now - 1000 * 60 * minutesAgo).toISOString(),
+        attachments: [],
+      },
+    ],
+  }
+}
+
 export const NORA_SERVICES = [
   {
     id: 'general',
@@ -90,7 +122,7 @@ export const NORA_SERVICES = [
 export const NORA_SEED_CONVERSATIONS = [
   {
     id: 'conv-social-1',
-    title: 'Instagram Growth Plan',
+    title: 'Cadence of Light',
     serviceId: 'social',
     updatedAt: new Date(now - 1000 * 60 * 12).toISOString(),
     messages: [
@@ -181,7 +213,7 @@ export const NORA_SEED_CONVERSATIONS = [
   },
   {
     id: 'conv-analytics-1',
-    title: 'Weekly Performance Review',
+    title: 'Sonic Waves Interplay',
     serviceId: 'analytics',
     updatedAt: new Date(now - 1000 * 60 * 55).toISOString(),
     messages: [
@@ -209,7 +241,7 @@ export const NORA_SEED_CONVERSATIONS = [
   },
   {
     id: 'conv-strategy-1',
-    title: 'Competitor Positioning Notes',
+    title: 'Harmony in Dissonance',
     serviceId: 'strategy',
     updatedAt: new Date(now - 1000 * 60 * 130).toISOString(),
     messages: [
@@ -234,7 +266,7 @@ export const NORA_SEED_CONVERSATIONS = [
   },
   {
     id: 'conv-automation-1',
-    title: 'Lead Follow-up Workflow',
+    title: 'Synthesized Dreams Unfold',
     serviceId: 'automation',
     updatedAt: new Date(now - 1000 * 60 * 240).toISOString(),
     messages: [
@@ -259,4 +291,44 @@ export const NORA_SEED_CONVERSATIONS = [
       },
     ],
   },
+  createSeedConversation({
+    id: 'conv-social-2',
+    title: 'Chorus of Vibrations',
+    serviceId: 'social',
+    minutesAgo: 310,
+    prompt: 'Give me a stronger content rhythm for this month.',
+    reply: 'Lead with a repeating content cadence: teach, prove, convert, and repeat it weekly.',
+  }),
+  createSeedConversation({
+    id: 'conv-sales-1',
+    title: 'Melodic Echoes Dance',
+    serviceId: 'sales',
+    minutesAgo: 390,
+    prompt: 'How can I make warm leads convert faster?',
+    reply: 'Tighten the follow-up window, shorten the decision path, and add one proof asset to every reply.',
+  }),
+  createSeedConversation({
+    id: 'conv-strategy-2',
+    title: 'Lyrical Journey Awaits',
+    serviceId: 'strategy',
+    minutesAgo: 470,
+    prompt: 'What positioning angle should we test next?',
+    reply: 'Test a simpler promise focused on speed-to-result and make the before/after contrast more explicit.',
+  }),
+  createSeedConversation({
+    id: 'conv-analytics-2',
+    title: 'Rhythmic Harmony Pulse',
+    serviceId: 'analytics',
+    minutesAgo: 540,
+    prompt: 'What deserves attention in this funnel first?',
+    reply: 'Start with landing page conversion and lead response speed before optimizing traffic quality.',
+  }),
+  createSeedConversation({
+    id: 'conv-website-1',
+    title: 'Resonating Heartbeats Connect',
+    serviceId: 'website',
+    minutesAgo: 620,
+    prompt: 'How should the homepage hero be improved?',
+    reply: 'Make the headline outcome-specific, reduce supporting copy, and move the CTA closer to the proof.',
+  }),
 ]

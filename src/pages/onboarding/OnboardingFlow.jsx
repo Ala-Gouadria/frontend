@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './OnboardingFlow.css'
 
 import { BottomAIStatusTools } from '../../components/bottom-ai/BottomAITools'
@@ -16,6 +17,7 @@ import GoalIcon from '../../assets/icons/Set-up-Nav/BusinessGoal.png'
 import OptimIcon from '../../assets/icons/Set-up-Nav/OptimizationInputs.png'
 import { onboardingFlowApi } from '../../api/onboardingFlowApi'
 import PillButton from '../../components/pages-parts/PillButton'
+import SplashScreen from '../../components/SplashScreen/SplashScreen'
 
 const STEP_ICONS = {
   profile: ProfileIcon,
@@ -29,11 +31,12 @@ const STEP_ICONS = {
 }
 
 function UploadField({ field, value = [], onUpload, onRemove }) {
+  const { t } = useTranslation()
   const inputRef = useRef(null)
 
   return (
     <div className={`f-wrap${field.width === 'half' ? ' f-half' : ' f-full'}`}>
-      {field.label ? <label className="f-label">{field.label}</label> : null}
+      {field.label ? <label className="f-label">{t(`onboarding.fields.${field.id}`, { defaultValue: field.label })}</label> : null}
       <div className="f-upload">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c4cce8" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -41,7 +44,7 @@ function UploadField({ field, value = [], onUpload, onRemove }) {
           <line x1="12" y1="3" x2="12" y2="15" />
         </svg>
         <button type="button" className="f-upload-btn" onClick={() => inputRef.current?.click()}>
-          Drop or Browse
+          {t('onboarding.dropOrBrowse')}
         </button>
         <span className="f-upload-h">{field.helper}</span>
 
@@ -76,13 +79,15 @@ function UploadField({ field, value = [], onUpload, onRemove }) {
 }
 
 function FieldRenderer({ field, stepValues, onChange, onToggleChip, onUpload, onRemoveUpload }) {
+  const { t } = useTranslation()
   const value = stepValues[field.id]
   const wrapClassName = `f-wrap${field.width === 'half' ? ' f-half' : ' f-full'}`
+  const fieldLabel = t(`onboarding.fields.${field.id}`, { defaultValue: field.label })
 
   if (field.type === 'select') {
     return (
       <div className={wrapClassName}>
-        {field.label ? <label className="f-label">{field.label}</label> : null}
+        {field.label ? <label className="f-label">{fieldLabel}</label> : null}
         <div className="f-sel-wrap">
           <select className="f-select" value={value ?? ''} onChange={(event) => onChange(field.id, event.target.value)}>
             <option value="">{field.placeholder}</option>
@@ -103,8 +108,8 @@ function FieldRenderer({ field, stepValues, onChange, onToggleChip, onUpload, on
       <div className={wrapClassName}>
         {field.label ? (
           <label className="f-label">
-            {field.label}
-            {field.optional ? <span className="f-optional"> (optional)</span> : null}
+            {fieldLabel}
+            {field.optional ? <span className="f-optional"> {t('onboarding.optional')}</span> : null}
           </label>
         ) : null}
         <textarea
@@ -134,7 +139,7 @@ function FieldRenderer({ field, stepValues, onChange, onToggleChip, onUpload, on
 
     return (
       <div className={wrapClassName}>
-        <label className="f-label">{field.label}</label>
+        <label className="f-label">{fieldLabel}</label>
         <div className="chips-row">
           {field.options.map((option) => {
             const active = selected.includes(option)
@@ -163,7 +168,7 @@ function FieldRenderer({ field, stepValues, onChange, onToggleChip, onUpload, on
   if (field.type === 'color') {
     return (
       <div className={wrapClassName}>
-        <label className="f-label">{field.label}</label>
+        <label className="f-label">{fieldLabel}</label>
         <div className="color-row">
           <div className="color-swatch" style={{ background: value || field.placeholder || '#2F80ED' }} />
           <input
@@ -179,7 +184,7 @@ function FieldRenderer({ field, stepValues, onChange, onToggleChip, onUpload, on
 
   return (
     <div className={wrapClassName}>
-      {field.label ? <label className="f-label">{field.label}</label> : null}
+      {field.label ? <label className="f-label">{fieldLabel}</label> : null}
       <input
         className="f-input"
         type={field.type === 'url' ? 'url' : 'text'}
@@ -192,15 +197,17 @@ function FieldRenderer({ field, stepValues, onChange, onToggleChip, onUpload, on
 }
 
 function WhyMatters({ text }) {
+  const { t } = useTranslation()
   return (
     <div className="ob-why">
-      <p className="ob-why-t">WHY THIS MATTERS</p>
+      <p className="ob-why-t">{t('onboarding.whyMatters')}</p>
       <p className="ob-why-b">{text}</p>
     </div>
   )
 }
 
 export default function OnboardingFlow({ activeNavId = 'database', onNavigate }) {
+  const { t } = useTranslation()
   const [content, setContent] = useState(null)
   const [steps, setSteps] = useState([])
   const [values, setValues] = useState({})
@@ -386,14 +393,7 @@ export default function OnboardingFlow({ activeNavId = 'database', onNavigate })
   }
 
   if (loading || !content || !currentStep) {
-    return (
-      <div className="ob-root">
-        <Photo />
-        <MainNav activeId={activeNavId} onSelect={onNavigate} />
-        <ProjectList onNavigate={onNavigate} />
-        <div className="ob-loading">Loading onboarding flow...</div>
-      </div>
-    )
+    return <SplashScreen />
   }
 
   return (
@@ -407,42 +407,42 @@ export default function OnboardingFlow({ activeNavId = 'database', onNavigate })
           <div className="ob-brand">
             <div className="ob-brand-line">
               <img src={NoraBusinessLogo} alt="Nora" className="ob-logo" />
-              <span className="ob-tagline">Nora learns from your business knowledge-base</span>
+              <span className="ob-tagline">{t('onboarding.tagline')}</span>
             </div>
             <h1 className="ob-knowledge-title">
-              <span>Business</span> Knowledge-Base
+              <span>{t('onboarding.knowledgeBase').split(' ')[0]}</span> {t('onboarding.knowledgeBase').split(' ').slice(1).join(' ')}
             </h1>
-            <p className="ob-knowledge-sub">View and customize information here for best output</p>
+            <p className="ob-knowledge-sub">{t('onboarding.knowledgeSub')}</p>
           </div>
 
           <div className="ob-prog-card">
             <div className="ob-prog-top">
-              <span><b>{currentStep.label}</b> Done</span>
-              <span className="pct-num"><b>{overallProgress}%</b> Complete</span>
+              <span><b>{t(`onboarding.steps.${currentStep.id}.label`, { defaultValue: currentStep.label })}</b> {t('onboarding.done')}</span>
+              <span className="pct-num"><b>{overallProgress}%</b> {t('onboarding.complete')}</span>
             </div>
             <div className="ob-prog-bar">
               <div className="ob-prog-fill" style={{ width: `${overallProgress}%` }} />
             </div>
             <div className="ob-prog-strip">
-              <span>{completedSteps} out of <b>{steps.length}</b> steps completed</span>
-              <span>{steps.length - completedSteps} Steps Remaining</span>
+              <span>{t('onboarding.stepsCompleted', { total: steps.length, count: completedSteps })}</span>
+              <span>{t('onboarding.stepsRemaining', { count: steps.length - completedSteps })}</span>
             </div>
           </div>
         </div>
 
         <div className="ob-hdr-hl">
           <h1 className="ob-headline">
-            <span className="hl-blue">Business</span>{' '}
-            <span className="hl-orange">Knowledge-Base</span>
+            <span className="hl-blue">{t('onboarding.knowledgeBase').split(' ')[0]}</span>{' '}
+            <span className="hl-orange">{t('onboarding.knowledgeBase').split(' ').slice(1).join(' ')}</span>
           </h1>
-          <p className="ob-headline-sub">View and customize information here for best output.</p>
+          <p className="ob-headline-sub">{t('onboarding.knowledgeSub')}</p>
         </div>
       </header>
 
       <div className="ob-body">
         <aside className="ob-sidebar">
-          <p className="ob-sb-head">{content.sidebarTitle}</p>
-          <p className="ob-sb-sub">{content.sidebarSubcopy}</p>
+          <p className="ob-sb-head">{t('onboarding.sidebarTitle', { defaultValue: content.sidebarTitle })}</p>
+          <p className="ob-sb-sub">{t('onboarding.sidebarSubcopy', { defaultValue: content.sidebarSubcopy })}</p>
           <nav>
             {steps.map((step, index) => (
               <button
@@ -454,7 +454,7 @@ export default function OnboardingFlow({ activeNavId = 'database', onNavigate })
                 }}
               >
                 <img src={STEP_ICONS[step.iconKey]} alt="" className="ob-nav-icon" />
-                <span className="ob-nav-label">{step.label}</span>
+                <span className="ob-nav-label">{t(`onboarding.steps.${step.id}.label`, { defaultValue: step.label })}</span>
                 <span className="ob-nav-pct">{stepProgress[step.id] ?? 0}%</span>
               </button>
             ))}
@@ -466,13 +466,14 @@ export default function OnboardingFlow({ activeNavId = 'database', onNavigate })
             <div className="ob-card-head">
               <div>
                 <h2 className="ob-card-title">
-                  {currentStep.titleLead} <span>{currentStep.titleTail}</span>
+                  {t(`onboarding.steps.${currentStep.id}.titleLead`, { defaultValue: currentStep.titleLead })}{' '}
+                  <span>{t(`onboarding.steps.${currentStep.id}.titleTail`, { defaultValue: currentStep.titleTail })}</span>
                 </h2>
-                <p className="ob-card-sub">{currentStep.subtitle}</p>
+                <p className="ob-card-sub">{t(`onboarding.steps.${currentStep.id}.subtitle`, { defaultValue: currentStep.subtitle })}</p>
               </div>
               <div className="ob-pill">
                 <span className="ob-pill-dot" />
-                <span className="ob-pill-txt">{currentStepPercent}% Progress</span>
+                <span className="ob-pill-txt">{currentStepPercent}{t('onboarding.progress')}</span>
               </div>
             </div>
 
@@ -498,7 +499,7 @@ export default function OnboardingFlow({ activeNavId = 'database', onNavigate })
               </div>
             </div>
 
-            <WhyMatters text={currentStep.whyMatters} />
+            <WhyMatters text={t(`onboarding.steps.${currentStep.id}.whyMatters`, { defaultValue: currentStep.whyMatters })} />
 
             <div className="ob-foot">
               <button
@@ -512,19 +513,19 @@ export default function OnboardingFlow({ activeNavId = 'database', onNavigate })
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <polyline points="15 18 9 12 15 6" />
                 </svg>
-                Cancel
+                {t('onboarding.cancel')}
               </button>
               <div className="ob-foot-r">
                 <button type="button" className="ob-btn-skip" onClick={() => { void handleSkip() }} disabled={isLastStep || saving}>
-                  Skip for now
+                  {t('onboarding.skipForNow')}
                 </button>
-<PillButton
-  onClick={() => { void handleNext() }}
-  disabled={saving}
-  width="200px"
-height="52px"
->
-                  {saving ? 'SAVING…' : isLastStep ? 'FINISH' : 'SAVE'}
+                <PillButton
+                  onClick={() => { void handleNext() }}
+                  disabled={saving}
+                  width="137px"
+                  height="38px"
+                >
+                  {saving ? t('onboarding.saving') : isLastStep ? t('onboarding.finish') : t('onboarding.save')}
                 </PillButton>
               </div>
             </div>

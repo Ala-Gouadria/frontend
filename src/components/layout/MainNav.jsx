@@ -17,9 +17,9 @@ const NAV_ITEMS = [
   { id: 'album', icon: AlbumIcon, label: 'Album' },
 ]
 
-const BTN = 44
-const GAP = 8
-const PAD = 8
+const BTN = 46
+const GAP = 12
+const PAD = 10
 
 const ringY = (idx) => PAD + idx * (BTN + GAP)
 
@@ -36,20 +36,41 @@ export default function MainNav({ activeId, onSelect }) {
     onSelect?.(NAV_ITEMS[idx].id, idx)
   }
 
+  const headItem = NAV_ITEMS[0]
+  const isHeadActive = active === 0
+
   return (
     <div className="mnav-shell">
       <nav className="mnav" aria-label="Main navigation">
+        <button
+          type="button"
+          className={`mnav-head${isHeadActive ? ' mnav-head--on' : ''}`}
+          onClick={() => handleSelect(0)}
+          aria-label={headItem.label}
+          aria-pressed={isHeadActive}
+          title={headItem.label}
+        >
+          <img
+            src={headItem.icon}
+            alt=""
+            aria-hidden="true"
+            className={`mnav-icon${isHeadActive ? ' mnav-icon--on' : ''}`}
+            draggable={false}
+          />
+        </button>
+
         <div className="mnav-pill">
           <div
             className="mnav-ring"
             style={{
-              opacity: active >= 0 ? 1 : 0,
-              transform: `translateX(-50%) translateY(${ringY(Math.max(active, 0))}px)`,
+              opacity: active >= 1 ? 1 : 0,
+              transform: `translateX(-50%) translateY(${ringY(Math.max(active - 1, 0))}px)`,
             }}
           />
 
           <ul className="mnav-list">
-            {NAV_ITEMS.map(({ id, icon, label }, idx) => {
+            {NAV_ITEMS.slice(1).map(({ id, icon, label }, i) => {
+              const idx = i + 1
               const isActive = active === idx
 
               return (

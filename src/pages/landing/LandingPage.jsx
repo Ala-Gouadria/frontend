@@ -272,7 +272,7 @@ export default function LandingPage({ onEnter }) {
       `}</style>
 
       <div className="lp-grid" style={{
-        width:'100vw', height:'100vh',
+        width:'var(--vw)', height:'var(--vh)',
         position:'relative', overflow:'hidden',
         display:'flex', flexDirection:'column',
         alignItems:'center', justifyContent:'center',

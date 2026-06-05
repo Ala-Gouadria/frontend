@@ -6,10 +6,21 @@ import imageIcon from '../../assets/icons/Nora-AI-Icon/image-add-icon.svg'
 import attachmentIcon from '../../assets/icons/Nora-AI-Icon/attachment-icon.svg'
 import micIcon from '../../assets/icons/Nora-AI-Icon/mic-icon.svg'
 import sentIcon from '../../assets/icons/Nora-AI-Icon/sent-icon.svg'
+import fileIcon from '../../assets/icons/Nora-AI-Icon/file-icon.svg'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
-import ProjectList from '../layout/ProjectList'
 const WELCOME_HEADLINE = 'An AI system that manages, automates, and grows your business.'
 const WELCOME_TEXT = 'Welcome back. I can help you grow, automate, and organize your business.'
+const FIGMA_HISTORY_TITLES = [
+  'Cadence of Light',
+  'Sonic Waves Interplay',
+  'Harmony in Dissonance',
+  'Synthesized Dreams Unfold',
+  'Chorus of Vibrations',
+  'Melodic Echoes Dance',
+  'Lyrical Journey Awaits',
+  'Rhythmic Harmony Pulse',
+  'Resonating Heartbeats Connect',
+]
 
 function formatClock(value) {
   return new Intl.DateTimeFormat('en', {
@@ -140,7 +151,18 @@ function HistorySidebar({
   showAll,
   onToggleShowAll,
 }) {
-  const visibleItems = showAll ? conversations : conversations.slice(0, 7)
+  const visibleItems = showAll ? conversations : conversations.slice(0, FIGMA_HISTORY_TITLES.length)
+  const displayItems = FIGMA_HISTORY_TITLES.map((title, index) => {
+    const conversation = visibleItems[index]
+    return {
+      id: conversation?.id ?? `figma-history-${index}`,
+      title: conversation?.title ?? title,
+      preview: conversation?.preview ?? '',
+      updatedAt: conversation?.updatedAt ?? new Date().toISOString(),
+      displayTitle: title,
+      isPlaceholder: !conversation,
+    }
+  })
 
   return (
     <aside className="nora-history-sidebar">
@@ -157,15 +179,19 @@ function HistorySidebar({
       <div className="nora-recents-title">Recents</div>
 
       <div className="nora-history-list">
-        {visibleItems.map((conversation) => (
+        {displayItems.map((conversation) => (
           <button
             key={conversation.id}
             type="button"
-            onClick={() => onSelect(conversation.id)}
+            onClick={() => {
+              if (!conversation.isPlaceholder) {
+                onSelect(conversation.id)
+              }
+            }}
             className={`nora-history-item ${activeConversationId === conversation.id ? 'active' : ''}`}
           >
             <div className="nora-history-item__content">
-              <span className="nora-history-item-text">{conversation.title}</span>
+              <span className="nora-history-item-text">{conversation.displayTitle}</span>
               <span className="nora-history-item-preview">{conversation.preview}</span>
             </div>
             <span className="nora-history-item-time">{formatHistoryTime(conversation.updatedAt)}</span>
@@ -173,12 +199,53 @@ function HistorySidebar({
         ))}
       </div>
 
-      {conversations.length > 7 ? (
-        <button type="button" className="nora-view-all-btn" onClick={onToggleShowAll}>
-          {showAll ? 'Show less' : 'View all'}
+      <button type="button" className="nora-view-all-btn" onClick={onToggleShowAll}>
+        {showAll ? 'Show less' : 'View all'}
+      </button>
+    </aside>
+  )
+}
+
+function ConversationTitle({
+  title,
+  canEdit,
+  isEditing,
+  draftTitle,
+  onDraftTitleChange,
+  onEdit,
+  onCancel,
+  onSave,
+}) {
+  if (canEdit && isEditing) {
+    return (
+      <form className="nora-title-edit-form" onSubmit={onSave}>
+        <input
+          value={draftTitle}
+          onChange={(event) => onDraftTitleChange(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Escape') {
+              event.preventDefault()
+              onCancel()
+            }
+          }}
+          className="nora-title-edit-input"
+          aria-label="Conversation title"
+          autoFocus
+        />
+        <button type="submit" className="nora-title-save-btn">Save</button>
+      </form>
+    )
+  }
+
+  return (
+    <div className="nora-header-title">
+      <span>{title}</span>
+      {canEdit ? (
+        <button type="button" className="nora-title-edit-btn" aria-label="Edit conversation title" onClick={onEdit}>
+          <EditIcon />
         </button>
       ) : null}
-    </aside>
+    </div>
   )
 }
 
@@ -259,9 +326,9 @@ function Composer({
           <div className="nora-files-list">
             {pendingAttachments.map((attachment) => (
               <div key={attachment.id} className="nora-file-chip">
-                <span className={`nora-file-chip__type nora-file-chip__type--${attachment.type}`} />
-                <span>{attachment.name}</span>
-                <button type="button" className="nora-file-remove" onClick={() => onRemoveAttachment(attachment.id)}>
+                <img src={fileIcon} alt="" aria-hidden="true" className="nora-file-chip__icon" />
+                <span className="nora-file-chip__name">{attachment.name}</span>
+                <button type="button" className="nora-file-remove" onClick={() => onRemoveAttachment(attachment.id)} aria-label="Remove attachment">
                   x
                 </button>
               </div>
@@ -352,7 +419,11 @@ function Composer({
   )
 }
 
-export default function NoraWorkspace({ open, onClose, onNavigate, pairedWithTask = false, fullMode = false }) {
+export default function NoraWorkspace({
+  open,
+  onClose,
+  pairedWithTask = false,
+}) {
   const [services, setServices] = useState([])
   const [conversationList, setConversationList] = useState([])
   const [activeConversationId, setActiveConversationId] = useState(null)
@@ -367,11 +438,14 @@ export default function NoraWorkspace({ open, onClose, onNavigate, pairedWithTas
   const [showAllHistory, setShowAllHistory] = useState(false)
   const [isRecording, setIsRecording] = useState(false)
   const [recordingSeconds, setRecordingSeconds] = useState(0)
+  const [isEditingTitle, setIsEditingTitle] = useState(false)
+  const [titleDraft, setTitleDraft] = useState('')
 
   const mediaRecorderRef = useRef(null)
   const mediaStreamRef = useRef(null)
   const recordingTimerRef = useRef(null)
   const conversationEndRef = useRef(null)
+  const previousMessageCountRef = useRef(0)
 
   const activeService = useMemo(
     () => services.find((service) => service.id === selectedServiceId) ?? services[0] ?? null,
@@ -380,6 +454,10 @@ export default function NoraWorkspace({ open, onClose, onNavigate, pairedWithTas
 
   const currentMessages = useMemo(() => activeConversation?.messages ?? [], [activeConversation])
   const showConversation = currentMessages.length > 0
+  const displayConversationTitle =
+    activeConversation?.serviceId === 'social' || activeConversation?.title === 'Instagram'
+      ? 'Instagram Growth Plan'
+      : activeConversation?.title ?? 'New Chat'
 
   const stopRecordingTimer = () => {
     if (recordingTimerRef.current) {
@@ -408,10 +486,13 @@ export default function NoraWorkspace({ open, onClose, onNavigate, pairedWithTas
 
     try {
       const conversation = await noraWorkspaceApi.getConversation(conversationId)
+      previousMessageCountRef.current = 0
       setActiveConversationId(conversation.id)
       setActiveConversation(conversation)
       setSelectedServiceId(conversation.serviceId)
       setPendingAttachments([])
+      setIsEditingTitle(false)
+      setTitleDraft(conversation.title)
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'Unable to load this conversation right now.')
     } finally {
@@ -442,15 +523,17 @@ export default function NoraWorkspace({ open, onClose, onNavigate, pairedWithTas
         setServices(nextServices)
         setConversationList(nextConversations)
 
-        if ((pairedWithTask || fullMode) && nextConversations.length > 0) {
+        if (pairedWithTask && nextConversations.length > 0) {
           const conversation = await noraWorkspaceApi.getConversation(nextConversations[0].id)
           if (!active) {
             return
           }
 
           setActiveConversationId(conversation.id)
+          previousMessageCountRef.current = 0
           setActiveConversation(conversation)
           setSelectedServiceId(conversation.serviceId)
+          setTitleDraft(conversation.title)
         } else {
           setActiveConversationId(null)
           setActiveConversation(null)
@@ -472,15 +555,21 @@ export default function NoraWorkspace({ open, onClose, onNavigate, pairedWithTas
     return () => {
       active = false
     }
-  }, [open, pairedWithTask, fullMode])
+  }, [open, pairedWithTask])
 
   useEffect(() => {
     if (!open) {
       return
     }
 
-    conversationEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
-  }, [currentMessages, isSending, open])
+    const previousCount = previousMessageCountRef.current
+    const nextCount = currentMessages.length
+    previousMessageCountRef.current = nextCount
+
+    if (previousCount > 0 && nextCount > previousCount) {
+      conversationEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    }
+  }, [currentMessages.length, open])
 
   useEffect(() => {
     return () => {
@@ -490,11 +579,62 @@ export default function NoraWorkspace({ open, onClose, onNavigate, pairedWithTas
   }, [])
 
   const handleNewChat = () => {
+    previousMessageCountRef.current = 0
     setActiveConversationId(null)
     setActiveConversation(null)
     setDraft('')
     setPendingAttachments([])
     setNotice('')
+    setIsEditingTitle(false)
+    setTitleDraft('')
+  }
+
+  const handleStartRename = () => {
+    if (!activeConversation) {
+      return
+    }
+
+    setTitleDraft(activeConversation.title ?? 'New Chat')
+    setIsEditingTitle(true)
+  }
+
+  const handleCancelRename = () => {
+    setTitleDraft(activeConversation?.title ?? '')
+    setIsEditingTitle(false)
+  }
+
+  const handleSaveRename = async (event) => {
+    event.preventDefault()
+
+    const nextTitle = titleDraft.trim()
+    if (!activeConversation || !nextTitle) {
+      handleCancelRename()
+      return
+    }
+
+    const previousConversation = activeConversation
+
+    setActiveConversation({ ...activeConversation, title: nextTitle })
+    setConversationList((current) =>
+      current.map((conversation) =>
+        conversation.id === activeConversation.id ? { ...conversation, title: nextTitle } : conversation,
+      ),
+    )
+    setIsEditingTitle(false)
+    setNotice('')
+
+    try {
+      const renamedConversation = await noraWorkspaceApi.renameConversation(activeConversation.id, nextTitle)
+      setActiveConversation((current) => current ? { ...current, title: renamedConversation.title } : current)
+    } catch (error) {
+      setActiveConversation(previousConversation)
+      setConversationList((current) =>
+        current.map((conversation) =>
+          conversation.id === previousConversation.id ? { ...conversation, title: previousConversation.title } : conversation,
+        ),
+      )
+      setNotice(error instanceof Error ? error.message : 'Unable to rename this chat.')
+    }
   }
 
   const handleUpload = async (kind, files) => {
@@ -655,8 +795,23 @@ export default function NoraWorkspace({ open, onClose, onNavigate, pairedWithTas
         attachments: attachmentsToSend,
       })
 
-      setActiveConversation(result.conversation)
-      setSelectedServiceId(result.conversation.serviceId)
+      const confirmedMessages = result.conversation.messages?.length
+        ? result.conversation.messages
+        : [
+            ...optimisticConversation.messages.filter((message) => !message.isLoading),
+            ...(result.assistantMessage ? [result.assistantMessage] : []),
+          ]
+      const confirmedConversation = {
+        ...optimisticConversation,
+        ...result.conversation,
+        title: result.conversation.title ?? optimisticConversation.title,
+        serviceId: result.conversation.serviceId ?? optimisticConversation.serviceId,
+        updatedAt: result.conversation.updatedAt ?? new Date().toISOString(),
+        messages: confirmedMessages,
+      }
+
+      setActiveConversation(confirmedConversation)
+      setSelectedServiceId(confirmedConversation.serviceId)
       setConversationList(await noraWorkspaceApi.listConversations())
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'Unable to send the message right now.')
@@ -671,7 +826,7 @@ export default function NoraWorkspace({ open, onClose, onNavigate, pairedWithTas
 
   return (
     <div
-      className={`nora-panel ${pairedWithTask ? 'nora-panel--paired' : 'nora-panel--single'} ${fullMode ? 'nora-panel--full' : ''} ${showConversation ? 'nora-panel--conversation' : 'nora-panel--welcome'}`}
+      className={`nora-panel ${pairedWithTask ? 'nora-panel--paired' : 'nora-panel--single'} ${showConversation ? 'nora-panel--conversation' : 'nora-panel--welcome'}`}
     >
       <HistorySidebar
         conversations={conversationList}
@@ -688,36 +843,28 @@ export default function NoraWorkspace({ open, onClose, onNavigate, pairedWithTas
         <div className="nora-bg-dot-grid" />
         <div className="nora-glow-top-right" />
         <div className="nora-glow-bottom-left" />
-
-        {showConversation && !pairedWithTask && !fullMode ? (
-  <div className="nora-project-list-wrapper">
-    <ProjectList onNavigate={onClose} />
-  </div>
-) : null}
-        {fullMode ? (
-          <div className="nora-full-project-list">
-            <ProjectList onNavigate={onNavigate} />
-          </div>
-        ) : (
-          <button
-            onClick={onClose}
-            className={`nora-close-btn ${showConversation ? 'nora-close-btn--expand' : ''}`}
-            type="button"
-            aria-label="Close Nora workspace"
-          >
-            <CloseIcon expanded={showConversation} />
-          </button>
-        )}
+        <button
+          onClick={onClose}
+          className={`nora-close-btn ${showConversation ? 'nora-close-btn--expand' : ''}`}
+          type="button"
+          aria-label="Close Nora workspace"
+        >
+          <CloseIcon expanded={showConversation} />
+        </button>
 
         <header className="nora-header">
-          <div className="nora-header-title">
-            <span>{activeConversation?.title ?? 'New Chat'}</span>
-            {showConversation ? (
-              <button type="button" className="nora-title-edit-btn" aria-label="Edit conversation title">
-                <EditIcon />
-              </button>
-            ) : null}
-          </div>
+          <ConversationTitle
+            title={displayConversationTitle}
+            canEdit={Boolean(activeConversationId)}
+            isEditing={isEditingTitle}
+            draftTitle={titleDraft}
+            onDraftTitleChange={setTitleDraft}
+            onEdit={handleStartRename}
+            onCancel={handleCancelRename}
+            onSave={(event) => {
+              void handleSaveRename(event)
+            }}
+          />
         </header>
 
         {!showConversation ? (

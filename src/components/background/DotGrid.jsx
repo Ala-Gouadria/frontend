@@ -83,7 +83,16 @@ const DotGrid = ({
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return;
 
-    const { width, height } = wrap.getBoundingClientRect();
+    // getBoundingClientRect returns post-zoom dimensions when an ancestor
+    // applies CSS `zoom`. Divide by --app-scale so the canvas is sized
+    // in pre-zoom CSS pixels and renders at the correct visual size.
+    const appScale =
+      parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue('--app-scale')
+      ) || 1;
+    const rect = wrap.getBoundingClientRect();
+    const width = rect.width / appScale;
+    const height = rect.height / appScale;
     const dpr = window.devicePixelRatio || 1;
 
     canvas.width = width * dpr;

@@ -1,4 +1,4 @@
-.memory-page {
+﻿.memory-page {
   position: fixed;
   inset: 0;
   overflow: hidden;
@@ -17,7 +17,7 @@
 }
 
 .memory-page__content {
-  width: min(1324px, calc(100vw - 260px));
+  width: min(1324px, calc(var(--vw) - 260px));
   margin: 0 auto;
   animation: memoryPageIn 480ms cubic-bezier(.22,1,.36,1) both;
 }
@@ -398,7 +398,7 @@
   }
 
   .memory-page__content {
-    width: min(980px, calc(100vw - 160px));
+    width: min(980px, calc(var(--vw) - 160px));
   }
 }
 

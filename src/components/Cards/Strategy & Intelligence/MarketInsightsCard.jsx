@@ -1,6 +1,6 @@
 import './StrategyIntelligenceCardShared.css'
 import './MarketInsightsCard.css'
-import { MiniLineChart, AiInsight, AiActionButton } from '../../visuals-parts'
+import { MiniLineChart, ColoredPanel, AiInsight, AiActionButton } from '../../visuals-parts'
 
 const defaultTrends = [
   {
@@ -67,12 +67,9 @@ export function MarketInsightsCard({
         ))}
       </div>
 
-      <div className="analytics-card__panel">
-        <div className="analytics-card__panel-title">Reasons</div>
-        <div className="analytics-card__panel-body">
-          <p className="mi-card__reason-text">{reasonText}</p>
-        </div>
-      </div>
+      <ColoredPanel title="Reasons" tone="orange">
+        <p className="mi-card__reason-text">{reasonText}</p>
+      </ColoredPanel>
 
       <AiInsight>{aiText}</AiInsight>
       <AiActionButton />

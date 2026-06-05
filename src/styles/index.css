@@ -1,5 +1,74 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700;800&display=swap");
 @import "tailwindcss";
+
+/* ── Urbanist (self-hosted variable font) ─────────────────────────── */
+@font-face {
+  font-family: "Urbanist";
+  src: url("../assets/font/Urbanist/Urbanist-VariableFont_wght.ttf") format("truetype-variations"),
+       url("../assets/font/Urbanist/Urbanist-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Urbanist";
+  src: url("../assets/font/Urbanist/Urbanist-Italic-VariableFont_wght.ttf") format("truetype-variations"),
+       url("../assets/font/Urbanist/Urbanist-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── Delight (self-hosted) ───────────────────────────────────────── */
+@font-face {
+  font-family: "Delight";
+  src: url("../assets/font/delight-font-family/delight-light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Delight";
+  src: url("../assets/font/delight-font-family/delight-regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Delight";
+  src: url("../assets/font/delight-font-family/delight-medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Delight";
+  src: url("../assets/font/delight-font-family/delight-semibold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Delight";
+  src: url("../assets/font/delight-font-family/delight-bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Delight";
+  src: url("../assets/font/delight-font-family/delight-extrabold.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Delight";
+  src: url("../assets/font/delight-font-family/delight-black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   font-family: "Poppins", Manrope, "Segoe UI", sans-serif;
@@ -9,6 +78,19 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* ── Global UI scale ───────────────────────────────────────────────
+     Single source of truth for how "zoomed-out" the whole app renders.
+     Change --app-scale to dial the default UI density:
+       1     = native (100%)
+       0.9   = 10% zoom-out
+       0.8   = 20% zoom-out (current default)
+     --vw and --vh are scaled viewport units. Anywhere the app would
+     have written `100vw` / `100vh`, use `var(--vw)` / `var(--vh)`
+     instead so layouts still cover the visible viewport after zoom. */
+  --app-scale: 0.8;
+  --vw: calc(100vw / var(--app-scale));
+  --vh: calc(100vh / var(--app-scale));
 }
 
 *,
@@ -25,17 +107,38 @@ body {
   overflow: hidden;
 }
 
+/* Scale the entire app via --app-scale. html's layout box is inflated
+   to 1/scale so its rendered (zoomed) size still fills the viewport. */
+html {
+  zoom: var(--app-scale);
+  width: var(--vw);
+  min-height: var(--vh);
+}
+
 body {
   background: #f4f6f8;
 }
 
 #root {
   width: 100%;
-  min-height: 100vh;
+  min-height: var(--vh);
 }
 
 button,
 input,
 textarea {
   font: inherit;
+}
+
+/* Arabic font — layout stays LTR, only words are translated */
+html.is-rtl {
+  font-family: "Tajawal", "Segoe UI", sans-serif;
+}
+
+/* Urbanist across all 32 analytics/marketing cards (any element whose
+   class contains "-card" — covers analytics-card, website-card, gs-card,
+   smc-card, lead-*-card, etc. — and all of their descendants). */
+[class*="-card"],
+[class*="-card"] * {
+  font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
 }

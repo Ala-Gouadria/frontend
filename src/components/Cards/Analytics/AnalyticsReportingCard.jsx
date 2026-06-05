@@ -6,6 +6,7 @@ import {
   MetricItem,
   MiniBarChart,
   MiniLineChart,
+  QualityBlocks,
 } from '../../visuals-parts'
 import { analyticsReportingCardData } from '../../../api/analyticsMockData'
 import './AnalyticsReportingCard.css'
@@ -74,15 +75,13 @@ export function AnalyticsReportingCard({ data = analyticsReportingCardData }) {
           <span>{data.progress.label}</span>
           <strong>{data.progress.value}</strong>
         </div>
-        <div className="analytics-card__segmented-progress">
-          {Array.from({ length: data.progress.segments }).map((_, index) => (
-            <span
-              key={`segment-${index}`}
-              className={`analytics-card__segment ${index < activeSegments ? 'analytics-card__segment--active' : ''}`}
-              title={`${data.progress.label}: segment ${index + 1} of ${data.progress.segments}`}
-            />
-          ))}
-        </div>
+        <QualityBlocks
+          className="analytics-reporting-card__progress-blocks"
+          blocks={[
+            { tone: 'red', count: activeSegments },
+            { tone: 'red-muted', count: data.progress.segments - activeSegments },
+          ]}
+        />
       </section>
 
       <footer className="analytics-card__footer">

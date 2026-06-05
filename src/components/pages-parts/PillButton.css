@@ -17,7 +17,7 @@
 .pill-wrap::before {
   position: absolute;
   inset: -7px -9px;
-  border-radius: 999px;
+  border-radius: var(--pill-radius, 14px);
   background: var(--pill-glow, rgba(135, 190, 54, 0.42));
   filter: blur(13px);
   opacity: 0.64;
@@ -43,7 +43,7 @@
   width: var(--pill-width, 520px);
   height: var(--pill-height, 92px);
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--pill-radius, 14px);
   padding: 0 28px 0 48px;
   display: inline-flex;
   align-items: center;
@@ -69,7 +69,7 @@
   border-radius: inherit;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.1) 31%, rgba(255, 255, 255, 0) 56%),
-    radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.2), transparent 34%);
+    radial-gradient(circle at 86% 18%, rgba(255, 255, 255, 0.28), transparent 36%);
   content: "";
   pointer-events: none;
 }
@@ -90,14 +90,14 @@
 
 .pill-btn--decline {
   background:
-    radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.18), transparent 34%),
-    linear-gradient(96deg, #d98285 0%, var(--pill-red-a) 30%, var(--pill-red-b) 100%);
+    radial-gradient(circle at 88% 16%, rgba(255, 255, 255, 0.32), transparent 32%),
+    linear-gradient(97.07deg, #E89292 6.35%, #B03838 94.89%);
 }
 
 .pill-btn--accepted {
   background:
-    radial-gradient(circle at 13% 22%, rgba(255, 255, 255, 0.24), transparent 34%),
-    linear-gradient(96deg, var(--pill-green-a) 0%, var(--pill-green-b) 43%, var(--pill-green-c) 100%);
+    radial-gradient(circle at 88% 16%, rgba(255, 255, 255, 0.32), transparent 32%),
+    linear-gradient(97.07deg, #C3D940 6.35%, #379662 94.89%);
 }
 .pill-btn--primary {
   background:

@@ -3,3 +3,12 @@
 .analytics-reporting-card .area-revenue-chart__svg {
   max-height: 180px;
 }
+
+.analytics-reporting-card__progress-blocks {
+  margin-top: 8px;
+  gap: 3px;
+}
+
+.analytics-reporting-card__progress-blocks .quality-blocks__block {
+  height: 28px;
+}

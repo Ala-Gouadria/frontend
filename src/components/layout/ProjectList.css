@@ -1,4 +1,4 @@
-.project-list {
+﻿.project-list {
   position: fixed;
   top: 24px;
   right: 24px;
@@ -91,16 +91,16 @@
 
 .project-dropdown {
   position: absolute;
-  top: calc(100% + 12px);
-  right: 5px;
-  width: 240px;
-  border-radius: 0 0 15px 15px;
-  padding: 3px 4px 13px;
-  background: rgba(255, 255, 255, 0.98);
-  border: 1px solid rgba(215, 215, 216, 0.95);
+  top: calc(100% + 10px);
+  right: 0;
+  width: 238px;
+  border-radius: 18px;
+  padding: 8px 9px 10px;
+  background: #ffffff;
+  border: 1px solid rgba(212, 214, 220, 0.96);
   box-shadow:
-    0 24px 44px rgba(15, 23, 42, 0.13),
-    0 0 0 1px rgba(255, 255, 255, 0.88) inset;
+    0 16px 34px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
   transform-origin: top right;
   animation: projectDropdownIn 220ms cubic-bezier(0.34, 1.35, 0.64, 1) forwards;
   overflow: hidden;
@@ -113,14 +113,14 @@
 .project-dropdown__surface {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 10px;
   background: transparent;
 }
 
 .project-dropdown__stack {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .project-card {
@@ -128,12 +128,12 @@
   align-items: center;
   gap: 12px;
   width: 100%;
-  height: 43px;
-  padding: 6px 10px;
+  min-height: 44px;
+  padding: 7px 10px;
   border: 1px solid rgba(213, 215, 219, 0.96);
-  border-radius: 10px;
-  background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.96) inset;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96);
   cursor: pointer;
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
 }
@@ -144,8 +144,11 @@
 }
 
 .project-card--active {
-  background: linear-gradient(180deg, #fbfcff 0%, #f5f7ff 100%);
-  border-color: rgba(172, 199, 255, 0.96);
+  background: #fbfcff;
+  border-color: rgba(160, 192, 255, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 0 0 1px rgba(159, 191, 255, 0.28);
 }
 
 .project-card__avatar {
@@ -158,16 +161,15 @@
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0;
-  color: #171717;
+  color: #181818;
 }
 
 .project-balance {
-  margin-top: 8px;
-  padding: 11px 12px 12px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
+  padding: 10px 12px 12px;
+  border-radius: 12px;
+  background: #ffffff;
   border: 1px solid rgba(213, 215, 219, 0.96);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.96) inset;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96);
 }
 
 .project-balance__header {
@@ -175,43 +177,63 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
 .project-balance__label {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 14px;
   font-weight: 700;
-  color: #121212;
+  color: #171717;
 }
 
 .project-balance__ring {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 3px solid #e1e1e1;
-  border-right-color: #2dca74;
-  border-bottom-color: #2dca74;
-  box-sizing: border-box;
-  transform: rotate(42deg);
+  background: conic-gradient(
+    from -90deg,
+    #28c768 0deg,
+    #28c768 var(--project-balance-progress, 180deg),
+    #dde2e7 var(--project-balance-progress, 180deg),
+    #dde2e7 360deg
+  );
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.project-balance__ring::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: #ffffff;
 }
 
 .project-balance__upgrade {
-  min-width: 88px;
-  height: 30px;
-  padding: 0 14px;
-  border-radius: 9px;
-  border: 1.6px solid rgba(47, 121, 255, 0.74);
-  background: linear-gradient(135deg, #2f79ff 0%, #78a8ff 58%, #f08ad5 100%);
+  width: 89px;
+  height: 26px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(176, 171, 255, 0.92);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 34%),
+    linear-gradient(90deg, #69a8ff 0%, #4f8fff 58%, #be9cff 100%);
   color: #ffffff;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 400;
+  line-height: 1;
   letter-spacing: 0;
+  text-shadow: 0 1px 1px rgba(76, 91, 188, 0.24);
   box-shadow:
-    0 8px 18px rgba(47, 121, 255, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    0 3px 8px rgba(92, 126, 255, 0.28),
+    0 0 10px rgba(183, 156, 255, 0.24),
+    0 0 0 1px rgba(210, 198, 255, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58),
+    inset -8px 0 16px rgba(201, 163, 255, 0.18),
+    inset 0 -1px 0 rgba(85, 91, 214, 0.18);
   cursor: pointer;
   transition: transform 160ms ease, box-shadow 160ms ease;
 }
@@ -219,14 +241,18 @@
 .project-balance__upgrade:hover {
   transform: translateY(-1px);
   box-shadow:
-    0 10px 22px rgba(47, 121, 255, 0.34),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    0 4px 10px rgba(92, 126, 255, 0.34),
+    0 0 12px rgba(183, 156, 255, 0.3),
+    0 0 0 1px rgba(210, 198, 255, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    inset -8px 0 16px rgba(201, 163, 255, 0.22),
+    inset 0 -1px 0 rgba(85, 91, 214, 0.2);
 }
 
 .project-balance__rows {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .project-balance__row {
@@ -239,20 +265,20 @@
 .project-balance__muted {
   font-size: 13px;
   font-weight: 400;
-  color: #b0b0b0;
+  color: #c0c0c0;
 }
 
 .project-balance__value {
   font-size: 13px;
   font-weight: 400;
-  color: #111111;
+  color: #1b1b1b;
 }
 
 .project-dropdown__links {
-  padding: 13px 8px 0;
+  padding: 0 10px 2px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 9px;
 }
 
 .project-dropdown__link {
@@ -261,14 +287,16 @@
   text-align: left;
   font-size: 13px;
   font-weight: 400;
+  line-height: 1.35;
   letter-spacing: 0;
-  color: #111111;
+  color: #171717;
   cursor: pointer;
   padding: 0;
 }
 
 .project-dropdown__link--danger {
-  color: #ff2d20;
+  margin-top: 2px;
+  color: #ff3b30;
 }
 
 .project-brand {
@@ -363,6 +391,6 @@
   }
 
   .project-dropdown {
-    width: min(286px, calc(100vw - 24px));
+    width: min(238px, calc(var(--vw) - 24px));
   }
 }

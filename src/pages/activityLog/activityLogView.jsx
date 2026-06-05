@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import brandLogo from '../../assets/logo/Nora_Componennts_Logo.png'
 import './activityLogView.css'
 
@@ -76,11 +77,13 @@ function PreviewPost({ asset, index }) {
 }
 
 export default function ActivityLogView({ log, onBack }) {
+  const { t } = useTranslation()
+
   return (
     <aside className="activity-log-view" aria-label="Activity log detail">
       <button type="button" className="activity-log-view__back" onClick={onBack}>
         <BackIcon />
-        <span>Back to Log</span>
+        <span>{t('activityLogView.back')}</span>
       </button>
 
       <header className="activity-log-view__header">
@@ -91,13 +94,13 @@ export default function ActivityLogView({ log, onBack }) {
       <div className="activity-log-view__divider" />
 
       <div className="activity-log-view__metrics">
-        <MetricCard label="Event Type" value={log.eventType} />
-        <MetricCard label="Impact" value={log.impactDetail} />
-        <MetricCard label="Status" value={log.status} tone={log.status.toLowerCase()} />
+        <MetricCard label={t('activityLogView.eventType')} value={log.eventType} />
+        <MetricCard label={t('activityLogView.impact')} value={log.impactDetail} />
+        <MetricCard label={t('activityLogView.status')} value={log.status} tone={log.status.toLowerCase()} />
       </div>
 
       <section className="activity-log-view__summary">
-        <h3>Summary</h3>
+        <h3>{t('activityLogView.summary')}</h3>
         <p>{log.summary}</p>
       </section>
 
