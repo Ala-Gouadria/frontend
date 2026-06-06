@@ -1,16 +1,17 @@
 .semi-circle-gauge {
-  --gauge-halo: rgba(170, 210, 50, 0.62);
-  --gauge-track: rgba(213, 230, 76, 0.10);
+  /* Halo color per design spec: #CDE04742 → rgba(205, 224, 71, 0.26) */
+  --gauge-halo: rgba(205, 224, 71, 0.26);
+  --gauge-track: rgba(213, 230, 76, 0.18);
   --gauge-progress: #6B9F00;
   --gauge-progress-start: #D5E64C;
   --gauge-progress-mid: #8ab800;
   --gauge-progress-end: #5F8F00;
 
   --gauge-cap-ring: #ffffff;
-  --gauge-cap: #6B9F00;
+  --gauge-cap: rgba(155, 196, 38, 0.85);
 
-  --gauge-text: #5F8F00;
-  --gauge-text-muted: rgba(27, 28, 32, 0.45);
+  --gauge-text: #0a0a0a;
+  --gauge-text-muted: rgba(27, 28, 32, 0.42);
 
   position: relative;
   display: grid;
@@ -69,14 +70,14 @@
 
 .semi-circle-gauge__cap-ring {
   fill: white;
-  filter: drop-shadow(0 6px 16px rgba(95, 143, 0, 0.35));
+  filter: drop-shadow(0 4px 10px rgba(95, 143, 0, 0.22));
   animation: semiGaugeCap 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-box: fill-box;
   transform-origin: center;
 }
 
 .semi-circle-gauge__cap {
-  fill: #6B9F00;
+  fill: var(--gauge-cap);
   animation: semiGaugeCap 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-box: fill-box;
   transform-origin: center;
@@ -84,8 +85,8 @@
 
 .semi-circle-gauge__value {
   font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
-  font-size: 56px;
-  font-weight: 800;
+  font-size: 28px;
+  font-weight: 700;
   fill: var(--gauge-text);
   letter-spacing: 0.01em;
   dominant-baseline: middle;
@@ -93,13 +94,13 @@
 }
 
 .semi-circle-gauge__current {
-  fill: #5F8F00;
-  font-weight: 800;
+  fill: #0a0a0a;
+  font-weight: 700;
 }
 
 .semi-circle-gauge__target {
   fill: rgba(27, 28, 32, 0.42);
-  font-size: 50px;
+  font-size: 26px;
   font-weight: 500;
 }
 

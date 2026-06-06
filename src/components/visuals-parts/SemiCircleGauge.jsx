@@ -38,7 +38,7 @@ function getTickLine(progress) {
   const tangent = { x: -ARC.rx * Math.sin(angle), y: -ARC.ry * Math.cos(angle) }
   const length = Math.hypot(tangent.x, tangent.y) || 1
   const normal = { x: -tangent.y / length, y: tangent.x / length }
-const tickLength = 28
+  const tickLength = 16
   return {
     x1: point.x - normal.x * tickLength / 2,
     y1: point.y - normal.y * tickLength / 2,
@@ -149,14 +149,14 @@ export function SemiCircleGauge({
 
         <g mask={'url(#' + maskId + ')'}>
 
-          {/* Wide pale outer halo — soft yellow-green bleed extending well beyond arc */}
+          {/* Wide pale outer halo — uses spec color #CDE04742 (rgba(205,224,71,0.26)) */}
           <path
             d={pathData}
             fill="none"
             stroke="var(--gauge-halo)"
-            strokeWidth="110"
+            strokeWidth="70"
             strokeLinecap="butt"
-            style={{ filter: 'blur(34px)', opacity: 1 }}
+            style={{ filter: 'blur(22px)', opacity: 1 }}
           />
 
           {/* Faint background track — just visible behind unfilled portion */}
@@ -164,7 +164,7 @@ export function SemiCircleGauge({
             d={pathData}
             fill="none"
             stroke="var(--gauge-track)"
-            strokeWidth="40"
+            strokeWidth="22"
             strokeLinecap="butt"
           />
 
@@ -173,19 +173,19 @@ export function SemiCircleGauge({
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="80"
+            strokeWidth="44"
             strokeLinecap="butt"
             pathLength="100"
             strokeDasharray={safeProgress * 100 + ' 100'}
-            style={{ filter: 'blur(20px)', opacity: 0.55 }}
+            style={{ filter: 'blur(14px)', opacity: 0.5 }}
           />
 
-          {/* Green progress fill — crisp thick band with horizontal gradient */}
+          {/* Green progress fill — thinner refined band with horizontal gradient */}
           <path
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="40"
+            strokeWidth="22"
             strokeLinecap="butt"
             pathLength="100"
             strokeDasharray={safeProgress * 100 + ' 100'}
@@ -201,8 +201,8 @@ export function SemiCircleGauge({
                   key={tp}
                   x1={tick.x1} y1={tick.y1}
                   x2={tick.x2} y2={tick.y2}
-                  stroke="rgba(255,255,255,0.35)"
-                  strokeWidth="1.5"
+                  stroke="rgba(255,255,255,0.42)"
+                  strokeWidth="1.2"
                   strokeLinecap="butt"
                 />
               )
@@ -211,12 +211,12 @@ export function SemiCircleGauge({
 
         </g>
 
-        {/* Knob — outside mask, always fully visible. Thick white ring + saturated green inner */}
-        <circle cx={capPosition.x} cy={capPosition.y} r="37" className="semi-circle-gauge__cap-ring" />
-        <circle cx={capPosition.x} cy={capPosition.y} r="23" className="semi-circle-gauge__cap" />
+        {/* Knob — outside mask, always fully visible. Soft white ring + translucent green inner */}
+        <circle cx={capPosition.x} cy={capPosition.y} r="18" className="semi-circle-gauge__cap-ring" />
+        <circle cx={capPosition.x} cy={capPosition.y} r="12" className="semi-circle-gauge__cap" />
 
         {/* Value label */}
-        <text x="255" y="148" textAnchor="middle" className="semi-circle-gauge__value">
+        <text x="255" y="180" textAnchor="middle" className="semi-circle-gauge__value">
           <tspan className="semi-circle-gauge__current">{currentLabel}</tspan>
           {targetLabel ? <tspan className="semi-circle-gauge__target">/{targetLabel}</tspan> : null}
         </text>
