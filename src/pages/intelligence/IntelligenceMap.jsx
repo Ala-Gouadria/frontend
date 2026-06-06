@@ -747,6 +747,25 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
 
+  // Counteract browser-menu zoom-out (Brave/Chrome ⋮ → Zoom 25%, which keyboard
+  // shortcuts can't block). Chromium multiplies devicePixelRatio by the browser
+  // zoom factor, so we capture DPR at mount as the 100% baseline. On resize,
+  // if the ratio drops below 1 (zoom-out), apply inverse `zoom` to the map
+  // container so the rendered scale stays constant regardless of browser zoom.
+  useEffect(() => {
+    const baseDPR = window.devicePixelRatio || 1
+    const el = zoomContainerRef.current
+    if (!el) return
+
+    const correct = () => {
+      const ratio = (window.devicePixelRatio || 1) / baseDPR
+      el.style.zoom = ratio < 0.999 ? String(1 / ratio) : ''
+    }
+    correct()
+    window.addEventListener('resize', correct)
+    return () => window.removeEventListener('resize', correct)
+  }, [])
+
   // Cleanup stale listeners if component unmounts mid-drag
   useEffect(() => () => {
     window.removeEventListener('pointermove', stableMove.current)
