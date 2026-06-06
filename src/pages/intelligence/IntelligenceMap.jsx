@@ -680,7 +680,9 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   // so the world point under the cursor stays pinned during wheel zoom.
   const transformRef = useRef(null)
   const zoomContainerRef = useRef(null)
-  const MIN_SCALE = 0.18
+  // Floor sits just above the 0.45 "zoomed-out fallback" threshold so all 32 cards
+  // never render simultaneously — that mode exhausts the compositor texture budget.
+  const MIN_SCALE = 0.5
   const MAX_SCALE = 1.8
 
   const handleWheelZoom = useCallback((event) => {
@@ -729,6 +731,21 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
     el.addEventListener('wheel', handleWheelZoom, { passive: false })
     return () => el.removeEventListener('wheel', handleWheelZoom)
   }, [handleWheelZoom])
+
+  // Block browser-level zoom shortcuts (Ctrl/Cmd + -, =, +, 0) while the map
+  // is mounted. The map manages its own zoom via TransformWrapper, and browser
+  // zoom-out re-rasterises the whole page including all 32 cards — expensive
+  // and visually broken since CSS `zoom: var(--app-scale)` already fixes layout.
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (!(e.ctrlKey || e.metaKey)) return
+      if (e.key === '-' || e.key === '=' || e.key === '+' || e.key === '0') {
+        e.preventDefault()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown, { passive: false })
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
 
   // Cleanup stale listeners if component unmounts mid-drag
   useEffect(() => () => {
