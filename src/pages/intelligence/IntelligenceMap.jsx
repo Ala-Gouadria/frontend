@@ -671,6 +671,65 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
     }
   }, [])
 
+  // ── Cursor-pivoted wheel zoom (replaces library's built-in wheel) ───────────
+  // The library reads event.clientX/Y as if they were in the same coordinate
+  // system as its internal positionX/Y, but html has CSS `zoom: var(--app-scale)`
+  // so clientX/Y are in visual-viewport pixels while positionX/Y / scale operate
+  // in layout (pre-zoom-inflated) pixels. The mismatch is exactly 1/appScale,
+  // which is why the zoom pivot drifts off-cursor. We do our own pivot math here
+  // so the world point under the cursor stays pinned during wheel zoom.
+  const transformRef = useRef(null)
+  const zoomContainerRef = useRef(null)
+  const MIN_SCALE = 0.18
+  const MAX_SCALE = 1.8
+
+  const handleWheelZoom = useCallback((event) => {
+    const ctx = transformRef.current
+    const container = zoomContainerRef.current
+    if (!ctx || !container) return
+
+    // Only react to non-pinch wheel; ctrl+wheel is the browser pinch-zoom proxy
+    // and should also pivot on cursor, so we accept it too.
+    event.preventDefault()
+
+    const { scale, positionX, positionY } = ctx.state
+    const rect = container.getBoundingClientRect()
+    const appScale = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue('--app-scale')
+    ) || 1
+
+    // event.clientX/Y and rect.left/top are both in visual-viewport pixels.
+    // Divide by appScale to land in the layout coordinate system that the
+    // library's positionX/Y and scale operate in.
+    const cursorX = (event.clientX - rect.left) / appScale
+    const cursorY = (event.clientY - rect.top) / appScale
+
+    // The world (canvas) coordinate currently under the cursor.
+    const worldX = (cursorX - positionX) / scale
+    const worldY = (cursorY - positionY) / scale
+
+    // Exponential step gives the same zoom feel across mouse wheels (deltaY≈100
+    // per notch) and trackpads (deltaY ranging from ~1 to ~50 per frame). Tweak
+    // 0.0015 to make zoom faster/slower.
+    const factor = Math.exp(-event.deltaY * 0.0015)
+    const nextScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale * factor))
+    if (nextScale === scale) return
+
+    // Solve for new position so that worldX/Y projects back to the same
+    // cursor pixel under the new scale: cursor = position + world * scale
+    const nextPositionX = cursorX - worldX * nextScale
+    const nextPositionY = cursorY - worldY * nextScale
+
+    ctx.setTransform(nextPositionX, nextPositionY, nextScale, 0)
+  }, [])
+
+  useEffect(() => {
+    const el = zoomContainerRef.current
+    if (!el) return
+    el.addEventListener('wheel', handleWheelZoom, { passive: false })
+    return () => el.removeEventListener('wheel', handleWheelZoom)
+  }, [handleWheelZoom])
+
   // Cleanup stale listeners if component unmounts mid-drag
   useEffect(() => () => {
     window.removeEventListener('pointermove', stableMove.current)
@@ -709,11 +768,14 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
 
   return (
     <>
-      <div style={{
-        width: 'var(--vw)', height: 'var(--vh)', overflow: 'hidden', position: 'relative',
-        background: 'linear-gradient(180deg, #ffffff 0%, #f4f6f8 100%)',
-        cursor: draggingId ? 'grabbing' : toolMode === 'hand' ? 'grab' : 'default',
-      }}>
+      <div
+        ref={zoomContainerRef}
+        style={{
+          width: 'var(--vw)', height: 'var(--vh)', overflow: 'hidden', position: 'relative',
+          background: 'linear-gradient(180deg, #ffffff 0%, #f4f6f8 100%)',
+          cursor: draggingId ? 'grabbing' : toolMode === 'hand' ? 'grab' : 'default',
+        }}
+      >
         {/* DotGrid: viewport-sized (position:absolute in root div = ~1 300 dots max).
              Canvas background is transparent so dots show through the map gaps.
              Listens to window mousemove directly so pointer-events:none is fine. */}
@@ -730,13 +792,16 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
           <ProjectList onNavigate={onNavigate} />
 
           <TransformWrapper
+            ref={transformRef}
             initialScale={INITIAL_SCALE}
             initialPositionX={initialPositionX}
             initialPositionY={initialPositionY}
-            minScale={0.18} maxScale={1.8}
+            minScale={MIN_SCALE} maxScale={MAX_SCALE}
             limitToBounds={false}
             smooth
-            wheel={{ step: 0.012 }}
+            // Library wheel disabled — see handleWheelZoom above for the
+            // cursor-pivoted replacement that accounts for CSS `zoom`.
+            wheel={{ disabled: true }}
             panning={{ disabled: Boolean(draggingId) || toolMode === 'cursor', velocityDisabled: true }}
             doubleClick={{ disabled: true }}
             onTransformed={handleTransformed}
