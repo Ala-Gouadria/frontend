@@ -539,13 +539,22 @@ const MapCanvas = memo(function MapCanvas({
   )
 })
 
+// Focus cards for the voice-demo dashboard hand-off: Analyst (analytics),
+// Strategy (strategy), Social Media (social). When IntelligenceMap is opened
+// with autoReveal, the scene starts active and these three groups expanded.
+const FOCUS_NODE_IDS = ['analytics', 'strategy', 'social']
+
 // ─── Root component ──────────────────────────────────────────────────────────
-export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
-  const [isActive,        setIsActive]        = useState(false)
+export default function IntelligenceMap({ activeNavId = 'stars', onNavigate, autoReveal = false }) {
+  const [isActive,        setIsActive]        = useState(autoReveal)
   const [isTaskOpen,      setIsTaskOpen]       = useState(false)
   const [mounted,         setMounted]          = useState(false)
   const [sceneVisible,    setSceneVisible]     = useState(false)
-  const [collapsedNodes,  setCollapsedNodes]   = useState(() => createInitialCollapsedNodes())
+  const [collapsedNodes,  setCollapsedNodes]   = useState(() =>
+    autoReveal
+      ? new Set(MAIN_CARD_NODE_IDS.filter((id) => !FOCUS_NODE_IDS.includes(id)))
+      : createInitialCollapsedNodes(),
+  )
   const [isWorkspaceOpen, setIsWorkspaceOpen]  = useState(false)
   const [toolMode,        setToolMode]         = useState('hand')
 
