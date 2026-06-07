@@ -123,64 +123,55 @@ export function SemiCircleGauge({
         </defs>
 
         <g mask={'url(#' + maskId + ')'}>
-          {/* Wide, soft outer wash — low opacity so the interior returns to background */}
-          <path
-            d={pathData}
-            fill="none"
-            stroke="var(--gauge-halo-wide)"
-            strokeWidth="150"
-            strokeLinecap="round"
-            style={{ filter: 'blur(36px)' }}
-          />
-          {/* Aura band — the pale halo that hugs both edges of the track */}
-          <path
-            d={pathData}
-            fill="none"
-            stroke="var(--gauge-halo)"
-            strokeWidth="84"
-            strokeLinecap="round"
-            style={{ filter: 'blur(20px)' }}
-          />
-
-          {/* Soft track band — pale, full arc (incl. the unfilled ghost past the knob) */}
+          {/* Soft track — full arc, pale ghost behind the progress */}
           <path
             d={pathData}
             fill="none"
             stroke="var(--gauge-track)"
-            strokeWidth="54"
+            strokeWidth="40"
             strokeLinecap="round"
-            style={{ filter: 'blur(9px)' }}
+            style={{ filter: 'blur(6px)' }}
           />
-          {/* Crisp thin track line */}
+          {/* Crisp track line */}
           <path
             d={pathData}
             fill="none"
             stroke="var(--gauge-track)"
-            strokeWidth="34"
+            strokeWidth="36"
             strokeLinecap="butt"
           />
 
-          {/* Progress glow tied to fill */}
+          {/* Progress soft glow — subtle spread behind the band */}
           <path
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="60"
+            strokeWidth="52"
             strokeLinecap="round"
             pathLength="100"
             strokeDasharray={dash}
-            style={{ filter: 'blur(16px)', opacity: 0.5 }}
+            style={{ filter: 'blur(12px)', opacity: 0.4 }}
           />
           {/* Progress fill — main band */}
           <path
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="34"
+            strokeWidth="36"
             strokeLinecap="butt"
             pathLength="100"
             strokeDasharray={dash}
             className="semi-circle-gauge__progress"
+          />
+          {/* Inner highlight — thin bright line along the inside edge */}
+          <path
+            d={pathData}
+            fill="none"
+            stroke="rgba(255,255,255,0.35)"
+            strokeWidth="1.4"
+            strokeLinecap="butt"
+            pathLength="100"
+            strokeDasharray={dash}
           />
 
           {/* Perpendicular tick dividers across the filled band */}
@@ -194,8 +185,8 @@ export function SemiCircleGauge({
                   y1={tick.y1}
                   x2={tick.x2}
                   y2={tick.y2}
-                  stroke="rgba(255,255,255,0.62)"
-                  strokeWidth="1.6"
+                  stroke="rgba(255,255,255,0.56)"
+                  strokeWidth="1.8"
                   strokeLinecap="butt"
                 />
               )
