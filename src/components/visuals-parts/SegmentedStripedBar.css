@@ -21,20 +21,45 @@
 
 /* ── Active segment ───────────────────────────────────────────────────────── */
 .segmented-striped-bar__segment--active {
-  background:
-    repeating-linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.00) 0px,
-      rgba(255, 255, 255, 0.00) 4px,
-      rgba(255, 255, 255, 0.14) 4px,
-      rgba(255, 255, 255, 0.14) 8px
-    ),
-    linear-gradient(180deg, var(--segmented-top), var(--segmented-bottom));
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--segmented-top), var(--segmented-bottom));
   box-shadow:
     0 4px 10px var(--segmented-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.32);
   animation: segmentedStripedIn 420ms cubic-bezier(.22,1,.36,1) both;
   animation-delay: calc(var(--segment-index) * 32ms);
+}
+
+.segmented-striped-bar__segment--active::before {
+  content: '';
+  position: absolute;
+  inset: 0 -20px;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.18) 0px,
+    rgba(255, 255, 255, 0.18) 5px,
+    rgba(0, 0, 0, 0.06)       5px,
+    rgba(0, 0, 0, 0.06)       10px
+  );
+  will-change: transform;
+  animation: segmentedStripesMove 1.8s linear infinite;
+  animation-delay: calc(var(--segment-index) * -120ms);
+}
+
+.segmented-striped-bar__segment--active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.32) 0%,
+    rgba(255, 255, 255, 0.06) 45%,
+    transparent 65%,
+    rgba(0, 0, 0, 0.06) 100%
+  );
+  pointer-events: none;
 }
 
 .segmented-striped-bar:hover .segmented-striped-bar__segment--active {
@@ -112,4 +137,10 @@
     opacity: 1;
     transform: scaleX(1);
   }
+}
+
+/* ── Continuous stripe movement ──────────────────────────────────────────── */
+@keyframes segmentedStripesMove {
+  from { transform: translateX(0); }
+  to   { transform: translateX(20px); }
 }

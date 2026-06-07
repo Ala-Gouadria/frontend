@@ -43,7 +43,8 @@ const INNER_R = R + 20
 // Compute a real bounding box from the geometry so the arc, ticks and cap
 // always fit inside the viewBox (the old version relied on overflow:visible,
 // which blew the arc past the frame and clipped the ticks).
-const LABEL_Y = CY + 56
+const ARC_BOTTOM_Y = CY + R * Math.sin(START_RAD)
+const LABEL_Y = ARC_BOTTOM_Y + 38
 
 const VIEW_BOX = (() => {
   const PAD = 14
