@@ -185,6 +185,33 @@
   animation: connectorIconPop 1300ms ease-in-out infinite;
 }
 
+/* ── Dynamic cable drag states ──────────────────────────────────────────────
+   During drag: cables glow brighter and follow instantly (no transition).
+   On drop: cables spring back to orthogonal routing with an elastic ease. */
+
+.edge-dragging path {
+  stroke-opacity: 1;
+  filter: none !important;
+}
+
+.edge-dragging path:nth-child(1) {
+  stroke: rgba(47, 121, 255, 0.18) !important;
+  stroke-width: 18 !important;
+}
+
+.edge-dragging path:nth-child(3) {
+  stroke: rgba(80, 160, 255, 0.7) !important;
+}
+
+.edge-dragging path:nth-child(4),
+.edge-dragging path:nth-child(5) {
+  stroke: rgba(180, 220, 255, 0.25) !important;
+}
+
+.edge-settling path {
+  transition: d 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* ── Card shell containment ─────────────────────────────────────────────────
    Tells the browser each card is a self-contained paint region.
    Prevents a single card's repaint from invalidating the whole canvas. */

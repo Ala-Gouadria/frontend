@@ -265,6 +265,24 @@ function buildRoundedCablePath(points, radius = 24) {
   return path
 }
 
+function buildElasticDragPath(start, end, axis) {
+  const dx = end.x - start.x
+  const dy = end.y - start.y
+  const dist = Math.hypot(dx, dy)
+  const tension = Math.min(dist * 0.4, 320)
+
+  let cp1, cp2
+  if (axis === 'vertical') {
+    cp1 = { x: start.x, y: start.y + tension }
+    cp2 = { x: end.x,   y: end.y   - tension }
+  } else {
+    const dirX = dx >= 0 ? 1 : -1
+    cp1 = { x: start.x + tension * dirX, y: start.y }
+    cp2 = { x: end.x   - tension * dirX, y: end.y }
+  }
+  return `M ${start.x} ${start.y} C ${cp1.x} ${cp1.y} ${cp2.x} ${cp2.y} ${end.x} ${end.y}`
+}
+
 function createCardStyle(node, position, isVisible, isDragging) {
   const delay = isVisible ? node.revealDelay : 0
   return {
@@ -544,27 +562,29 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   // Imperatively update SVG edge paths AND connector buttons/sockets for the
   // dragged card. Runs inside pointermove — zero React re-renders, everything
   // follows the card in real time.
+  const dragEdgeGroupsRef = useRef([])
+
   const updateEdgesForDrag = useCallback((dragId, positions) => {
-    // ── 1. Update SVG edge paths ────────────────────────────────────────────
     const svg = svgRef.current
     if (svg) {
       const affected = EDGE_DEFS.filter(e => e.from === dragId || e.to === dragId)
+      const groups = []
       for (const edge of affected) {
         const group = svg.querySelector(`[data-edge-group="${edge.id}"]`)
         if (!group) continue
+        groups.push(group)
         const start = getPortPoint(edge.from, edge.fromPort, positions)
         const end   = getPortPoint(edge.to,   edge.toPort,   positions)
-        const pts   = buildOrthogonalPoints(start, end, edge.axis, edge.bendRatio)
-        const d     = buildRoundedCablePath(pts)
+        const d     = buildElasticDragPath(start, end, edge.axis)
         group.querySelectorAll('path').forEach(p => p.setAttribute('d', d))
+        if (!group.classList.contains('edge-dragging')) group.classList.add('edge-dragging')
       }
+      dragEdgeGroupsRef.current = groups
     }
 
-    // ── 2. Update connector buttons + socket dots ───────────────────────────
     const node = CARD_NODES[dragId]
     if (node) {
       const pos = positions[dragId]
-      // querySelectorAll is scoped to the page; safe because IDs are unique per map
       document.querySelectorAll(`[data-port-node="${dragId}"]`).forEach(el => {
         const portName = el.dataset.portName
         const port     = node.ports[portName]
@@ -621,7 +641,26 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
 
   onUpBody.current = () => {
     if (!dragRef.current) return
-    // Single React state update on drop — edges and styles re-render once
+    const dropId = dragRef.current.id
+    for (const g of dragEdgeGroupsRef.current) g.classList.remove('edge-dragging')
+    dragEdgeGroupsRef.current = []
+
+    const svg = svgRef.current
+    if (svg) {
+      const affected = EDGE_DEFS.filter(e => e.from === dropId || e.to === dropId)
+      for (const edge of affected) {
+        const group = svg.querySelector(`[data-edge-group="${edge.id}"]`)
+        if (!group) continue
+        const start = getPortPoint(edge.from, edge.fromPort, positionsRef.current)
+        const end   = getPortPoint(edge.to,   edge.toPort,   positionsRef.current)
+        const pts   = buildOrthogonalPoints(start, end, edge.axis, edge.bendRatio)
+        const d     = buildRoundedCablePath(pts)
+        group.classList.add('edge-settling')
+        group.querySelectorAll('path').forEach(p => p.setAttribute('d', d))
+        setTimeout(() => group.classList.remove('edge-settling'), 400)
+      }
+    }
+
     setPositions({ ...positionsRef.current })
     setDraggingId(null)
     dragRef.current = null
