@@ -292,6 +292,11 @@ export default function App() {
 
     if (id === 'stars-map') {
       navigateTo('map')
+      return
+    }
+
+    if (id === 'dashboard') {
+      navigateTo('dashboard')
     }
   }
 
@@ -411,6 +416,10 @@ export default function App() {
 
   if (view === 'voice') {
     return <NoraVoice activeNavId="stars" onNavigate={handleNavigation} />
+  }
+
+  if (view === 'dashboard') {
+    return <IntelligenceMap activeNavId="stars" onNavigate={handleNavigation} autoReveal />
   }
 
   return <IntelligenceMap activeNavId="stars" onNavigate={handleNavigation} />

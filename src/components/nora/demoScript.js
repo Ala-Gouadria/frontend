@@ -14,6 +14,15 @@ export const DEMO_TURNS = [
     // Pre-generated audio served statically from /public.
     audio: '/demo-audio/intro.mp3',
   },
+  {
+    id: 'dashboard',
+    match: ['dashboard', 'take me to', 'open the dashboard', 'show me the dashboard'],
+    text:
+      'Of course. Opening your dashboard now — here are the Analyst, Strategy, and Social Media agents working together.',
+    audio: '/demo-audio/dashboard.mp3',
+    // After Nora finishes speaking, navigate the app to this view.
+    navigateTo: 'dashboard',
+  },
 ]
 
 /** Return the matching demo turn for `userText`, or null for the live path. */

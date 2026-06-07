@@ -370,7 +370,8 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
   // Speak `text` aloud with Nora's voice, pulse the orb off the real audio, and
   // reveal agent cards progressively as she names each one (synced to playback).
   // `cachedAudioUrl` (optional) skips live TTS and plays a pre-generated file.
-  async function playNoraVoice(text, cachedAudioUrl) {
+  // `onEnded` (optional) fires when playback finishes (used to navigate after).
+  async function playNoraVoice(text, cachedAudioUrl, onEnded) {
     stopNoraVoice()
     setMode('speaking')
 
@@ -457,6 +458,7 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
     el.addEventListener('ended', () => {
       stopNoraVoice()
       setMode('idle')
+      onEnded?.()
     })
     // Metadata is usually available once play() has started; schedule now, and
     // also on loadedmetadata in case duration wasn't ready yet.
@@ -470,6 +472,7 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
     if (!played) {
       setRevealedAgents((prev) => new Set([...prev, ...detectAgents(text)]))
       setMode('idle')
+      onEnded?.()
     }
   }
 
@@ -485,7 +488,10 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
     const demoTurn = matchDemoTurn(text)
     if (demoTurn) {
       try {
-        await playNoraVoice(demoTurn.text, demoTurn.audio)
+        // If the turn navigates somewhere (e.g. the dashboard), do it once Nora
+        // finishes speaking the acknowledgement.
+        const onEnded = demoTurn.navigateTo ? () => onNavigate?.(demoTurn.navigateTo) : undefined
+        await playNoraVoice(demoTurn.text, demoTurn.audio, onEnded)
       } finally {
         setIsSending(false)
       }
