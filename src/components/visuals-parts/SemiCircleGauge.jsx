@@ -38,7 +38,7 @@ function getTickLine(progress) {
   const tangent = { x: -ARC.rx * Math.sin(angle), y: -ARC.ry * Math.cos(angle) }
   const length = Math.hypot(tangent.x, tangent.y) || 1
   const normal = { x: -tangent.y / length, y: tangent.x / length }
-  const tickLength = 20
+  const tickLength = 14
   return {
     x1: point.x - (normal.x * tickLength) / 2,
     y1: point.y - (normal.y * tickLength) / 2,
@@ -123,58 +123,59 @@ export function SemiCircleGauge({
         </defs>
 
         <g mask={'url(#' + maskId + ')'}>
-          {/* Soft track — full arc, pale ghost behind the progress */}
+          {/* Soft blurred track — wider pale band visible on unfilled side */}
           <path
             d={pathData}
             fill="none"
             stroke="var(--gauge-track)"
-            strokeWidth="40"
+            strokeWidth="50"
             strokeLinecap="round"
-            style={{ filter: 'blur(6px)' }}
+            style={{ filter: 'blur(8px)' }}
           />
-          {/* Crisp track line */}
+          {/* Crisp track */}
           <path
             d={pathData}
             fill="none"
             stroke="var(--gauge-track)"
-            strokeWidth="36"
+            strokeWidth="38"
             strokeLinecap="butt"
           />
 
-          {/* Progress soft glow — subtle spread behind the band */}
+          {/* Progress soft glow */}
           <path
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="52"
+            strokeWidth="50"
             strokeLinecap="round"
             pathLength="100"
             strokeDasharray={dash}
-            style={{ filter: 'blur(12px)', opacity: 0.4 }}
+            style={{ filter: 'blur(10px)', opacity: 0.35 }}
           />
           {/* Progress fill — main band */}
           <path
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="36"
+            strokeWidth="38"
             strokeLinecap="butt"
             pathLength="100"
             strokeDasharray={dash}
             className="semi-circle-gauge__progress"
           />
-          {/* Inner highlight — thin bright line along the inside edge */}
+          {/* Inner-edge highlight — soft lighter band on the inside of the arc */}
           <path
             d={pathData}
             fill="none"
-            stroke="rgba(255,255,255,0.35)"
-            strokeWidth="1.4"
+            stroke="rgba(255,255,255,0.18)"
+            strokeWidth="16"
             strokeLinecap="butt"
             pathLength="100"
             strokeDasharray={dash}
+            style={{ filter: 'blur(4px)' }}
           />
 
-          {/* Perpendicular tick dividers across the filled band */}
+          {/* Tick dividers */}
           <g>
             {progressTicks.map((tp) => {
               const tick = getTickLine(tp)
@@ -185,8 +186,8 @@ export function SemiCircleGauge({
                   y1={tick.y1}
                   x2={tick.x2}
                   y2={tick.y2}
-                  stroke="rgba(255,255,255,0.56)"
-                  strokeWidth="1.8"
+                  stroke="rgba(255,255,255,0.48)"
+                  strokeWidth="1.5"
                   strokeLinecap="butt"
                 />
               )
@@ -198,13 +199,13 @@ export function SemiCircleGauge({
         <circle
           cx={capPosition.x}
           cy={capPosition.y}
-          r="30"
+          r="26"
           className="semi-circle-gauge__cap-ring"
         />
         <circle
           cx={capPosition.x}
           cy={capPosition.y}
-          r="20"
+          r="17"
           fill={'url(#' + knobGradId + ')'}
           className="semi-circle-gauge__cap"
         />

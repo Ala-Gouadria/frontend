@@ -9,10 +9,10 @@
   --gauge-progress-3: #94B420;
   --gauge-progress-4: #7EA214;
 
-  /* knob radial fill */
-  --gauge-knob-0: #D8E0A0;
-  --gauge-knob-1: #B8C45A;
-  --gauge-knob-2: #92A430;
+  /* knob radial fill — muted, less saturated than the band */
+  --gauge-knob-0: #DDE2AE;
+  --gauge-knob-1: #C0C862;
+  --gauge-knob-2: #A0AA3A;
 
   --gauge-cap-ring: #ffffff;
 
