@@ -56,7 +56,9 @@ export function MiniLineChart({
   tone = 'green',
   className = '',
 }) {
-  const gradientId = `mini-line-gradient-${safeId(useId())}`
+  const uid = safeId(useId())
+  const gradientId = `mini-line-gradient-${uid}`
+  const strokeGradientId = `mini-line-stroke-${uid}`
   const parsedPoints = parsePoints(points)
   const linePath = buildSmoothPath(parsedPoints)
   const baseline = 58
@@ -73,8 +75,12 @@ export function MiniLineChart({
     >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--mini-line-fill-top)" />
-          <stop offset="100%" stopColor="var(--mini-line-fill-bottom)" />
+          <stop offset="8.39%" stopColor="var(--mini-line-fill-top)" />
+          <stop offset="70.23%" stopColor="var(--mini-line-fill-bottom)" />
+        </linearGradient>
+        <linearGradient id={strokeGradientId} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="var(--mini-line-stroke-start)" />
+          <stop offset="100%" stopColor="var(--mini-line-stroke-end)" />
         </linearGradient>
       </defs>
       <path
@@ -83,7 +89,7 @@ export function MiniLineChart({
         style={{ fill: `url(#${gradientId})` }}
         vectorEffect="non-scaling-stroke"
       />
-      <path d={linePath} className="mini-line-chart__line" vectorEffect="non-scaling-stroke" />
+      <path d={linePath} className="mini-line-chart__line" style={{ stroke: `url(#${strokeGradientId})` }} vectorEffect="non-scaling-stroke" />
       {parsedPoints.map((point) => (
         <circle
           key={`${point.x}-${point.y}-${point.index}`}
