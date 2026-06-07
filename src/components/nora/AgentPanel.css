@@ -1,0 +1,324 @@
+.agent-panel {
+  display: flex;
+  flex-direction: column;
+  width: clamp(320px, 30vw, 460px);
+  flex-shrink: 0;
+  height: 100%;
+  padding: 24px 18px 18px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, rgba(20, 22, 48, 0.55) 0%, rgba(12, 14, 32, 0.7) 100%);
+  border-left: 1px solid rgba(124, 131, 245, 0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+  animation: agent-panel-in 460ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes agent-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.agent-panel__header {
+  margin-bottom: 18px;
+  flex-shrink: 0;
+}
+
+.agent-panel__eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(124, 131, 245, 0.9);
+  margin-bottom: 4px;
+}
+
+.agent-panel__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f3f4ff;
+}
+
+.agent-panel__scroll {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 131, 245, 0.4) transparent;
+}
+
+.agent-panel__scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.agent-panel__scroll::-webkit-scrollbar-thumb {
+  background: rgba(124, 131, 245, 0.4);
+  border-radius: 3px;
+}
+
+.agent-panel__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: agent-section-in 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--agent-index, 0) * 140ms);
+}
+
+@keyframes agent-section-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* The header is a clickable compact card (button reset). When collapsed it is
+   the whole card; when open it becomes the card's title bar. */
+.agent-panel__section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(124, 131, 245, 0.22);
+  background: rgba(124, 131, 245, 0.08);
+  transition: background 160ms ease, border-color 160ms ease, transform 120ms ease;
+}
+.agent-panel__section-head:hover {
+  background: rgba(124, 131, 245, 0.16);
+  border-color: rgba(124, 131, 245, 0.4);
+}
+.agent-panel__section-head:active {
+  transform: scale(0.99);
+}
+/* When open, square off the bottom so it visually connects to the cards below. */
+.agent-panel__section.is-open .agent-panel__section-head {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background: rgba(124, 131, 245, 0.18);
+}
+
+.agent-panel__chevron {
+  flex-shrink: 0;
+  color: rgba(214, 217, 245, 0.7);
+  transition: transform 200ms ease;
+}
+.agent-panel__chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.agent-panel__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #7c83f5;
+  box-shadow: 0 0 12px currentColor;
+}
+
+.agent-panel__section-titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.agent-panel__section-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #eef0ff;
+}
+
+.agent-panel__section-tagline {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: rgba(214, 217, 245, 0.66);
+  max-height: 40px;
+  opacity: 0.85;
+  overflow: hidden;
+  transition: max-height 240ms ease, opacity 200ms ease, margin 200ms ease;
+}
+/* Compact headers hide the tagline so they stay small; it eases in when open. */
+.agent-panel__section.is-collapsed .agent-panel__section-tagline {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.agent-panel__provider {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(124, 131, 245, 0.35);
+  border: 1px solid rgba(124, 131, 245, 0.5);
+}
+
+/* Provider accent — each section carries a CSS var the theming reads from, so
+   the dot, badge, border and glow all share one colour per provider. */
+.agent-panel__section[data-provider='anthropic'] { --accent: 217, 119, 87; }   /* warm */
+.agent-panel__section[data-provider='openai']    { --accent: 16, 163, 127; }   /* teal */
+.agent-panel__section[data-provider='gemini']    { --accent: 66, 133, 244; }   /* blue */
+
+.agent-panel__provider {
+  background: rgba(var(--accent, 124, 131, 245), 0.28);
+  border-color: rgba(var(--accent, 124, 131, 245), 0.5);
+  color: rgb(var(--accent, 124, 131, 245));
+}
+.agent-panel__dot {
+  background: rgb(var(--accent, 124, 131, 245));
+  box-shadow: 0 0 10px rgba(var(--accent, 124, 131, 245), 0.9);
+}
+
+/* The open section glows in its provider's colour. */
+.agent-panel__section.is-open .agent-panel__section-head {
+  border-color: rgba(var(--accent, 124, 131, 245), 0.6);
+  background: rgba(var(--accent, 124, 131, 245), 0.16);
+  box-shadow: 0 0 24px rgba(var(--accent, 124, 131, 245), 0.22);
+}
+.agent-panel__section.is-open .agent-panel__cards {
+  border-color: rgba(var(--accent, 124, 131, 245), 0.45);
+}
+
+/* ── Smooth expand/collapse via animated grid rows (0fr → 1fr) ── */
+.agent-panel__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.agent-panel__section.is-open .agent-panel__body {
+  grid-template-rows: 1fr;
+}
+.agent-panel__body > .agent-panel__cards {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.agent-panel__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(var(--accent, 124, 131, 245), 0.3);
+  border-top: none;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  background: rgba(12, 14, 32, 0.45);
+}
+/* Fade the card contents in only while open. */
+.agent-panel__section.is-collapsed .agent-panel__cards {
+  opacity: 0;
+}
+.agent-panel__section.is-open .agent-panel__cards {
+  opacity: 1;
+  transition: opacity 260ms ease 80ms;
+}
+
+@keyframes agent-cards-expand {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.agent-panel__card {
+  transform-origin: top center;
+  animation: agent-card-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc((var(--agent-index, 0) * 140ms) + (var(--card-index, 0) * 90ms) + 120ms);
+}
+
+@keyframes agent-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agent-panel,
+  .agent-panel__section,
+  .agent-panel__card {
+    animation: none;
+  }
+}
+
+/* ── Live feel: the active agent's dot pulses gently while open ── */
+.agent-panel__section.is-open .agent-panel__dot {
+  animation: agent-dot-pulse 1.8s ease-in-out infinite;
+}
+@keyframes agent-dot-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(var(--accent, 124, 131, 245), 0.7); transform: scale(1); }
+  50%      { box-shadow: 0 0 16px rgba(var(--accent, 124, 131, 245), 1); transform: scale(1.25); }
+}
+
+/* A thin animated "activity" bar under the open header — reads as the agent
+   working. Purely decorative, provider-tinted. */
+.agent-panel__section.is-open .agent-panel__section-head::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 6px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--accent, 124, 131, 245), 0.9),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: agent-activity 1.6s linear infinite;
+}
+.agent-panel__section-head { position: relative; }
+@keyframes agent-activity {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* ── Responsive: collapse to a slimmer panel on narrow viewports ── */
+@media (max-width: 1100px) {
+  .agent-panel { width: clamp(260px, 40vw, 380px); }
+}
+@media (max-width: 820px) {
+  .agent-panel { width: min(86vw, 360px); }
+  .nora-voice-agents { backdrop-filter: blur(10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agent-panel__section.is-open .agent-panel__dot,
+  .agent-panel__section.is-open .agent-panel__section-head::after {
+    animation: none;
+  }
+  .agent-panel__body { transition: none; }
+}

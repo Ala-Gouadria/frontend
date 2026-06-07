@@ -7,6 +7,7 @@ import Login from '../pages/auth/Login'
 import RestPassword from '../pages/auth/restPassword'
 import Signup from '../pages/auth/Signup'
 import IntelligenceMap from '../pages/intelligence/IntelligenceMap'
+import NoraVoice from '../components/nora/NoraVoice'
 import Integrate from '../pages/integrate/Integrate'
 import OnboardingFlow from '../pages/onboarding/OnboardingFlow'
 import Setup from '../pages/onboarding/Setup'
@@ -136,7 +137,7 @@ export default function App() {
     previewAnalyticsCards
       ? 'analytics-cards-preview'
       : setupComplete
-        ? storedView || 'map'
+        ? storedView || 'voice'
         : 'setup',
   )
 
@@ -285,19 +286,24 @@ export default function App() {
     }
 
     if (id === 'stars') {
+      navigateTo('voice')
+      return
+    }
+
+    if (id === 'stars-map') {
       navigateTo('map')
     }
   }
 
   const enterApp = () => {
     setIsAuthenticated(true)
-    navigateTo(readStoredFlag(STORAGE_KEYS.setupComplete) ? readStoredView() || 'map' : 'setup')
+    navigateTo(readStoredFlag(STORAGE_KEYS.setupComplete) ? readStoredView() || 'voice' : 'setup')
   }
 
   const completeSetup = () => {
     writeStorage(STORAGE_KEYS.authenticated, 'true')
     writeStorage(STORAGE_KEYS.setupComplete, 'true')
-    navigateTo('map')
+    navigateTo('voice')
   }
 
   if (!isAuthenticated) {
@@ -401,6 +407,10 @@ export default function App() {
 
   if (view === 'setup') {
     return <Setup onComplete={completeSetup} />
+  }
+
+  if (view === 'voice') {
+    return <NoraVoice activeNavId="stars" onNavigate={handleNavigation} />
   }
 
   return <IntelligenceMap activeNavId="stars" onNavigate={handleNavigation} />

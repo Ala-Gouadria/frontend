@@ -158,7 +158,33 @@ export const noraWorkspaceApi = {
     return this.uploadAttachment(file, 'audio', options)
   },
 
-  async sendMessage({ conversationId, serviceId = 'general', text = '', attachments = [] }) {
+  async sendMessage({ conversationId, serviceId = 'general', text = '', attachments = [], chatOnly = false }) {
+    // Pure chat proxy. Reads the assistant text across the response shapes the
+    // backend may use (aiMessage.content is the current contract).
+    const viaChat = async () => {
+      const result = await chatApi.sendMessage(conversationId, { message: text, attachments })
+      const assistantMessage = {
+        id: createId('msg'),
+        role: 'assistant',
+        text:
+          result?.aiMessage?.content ??
+          result?.assistantMessage?.content ??
+          result?.message?.content ??
+          result?.content ??
+          result?.answer ??
+          '',
+        createdAt: new Date().toISOString(),
+        attachments: [],
+      }
+      return { conversation: { id: conversationId, serviceId }, assistantMessage }
+    }
+
+    // Conversational callers (e.g. the voice orb) want Nora's spoken chat reply,
+    // not the agentic planner's intent echo — go straight to chat.
+    if (chatOnly) {
+      return viaChat()
+    }
+
     // Try orchestrations first (agentic path)
     try {
       const orchResult = await orchestrationsApi.create({ message: text, context: { serviceId } })
@@ -186,15 +212,7 @@ export const noraWorkspaceApi = {
       }
     } catch {
       // Fall back to pure chat proxy
-      const result = await chatApi.sendMessage(conversationId, { message: text, attachments })
-      const assistantMessage = {
-        id: createId('msg'),
-        role: 'assistant',
-        text: result?.assistantMessage?.content ?? result?.message?.content ?? result?.content ?? result?.answer ?? '',
-        createdAt: new Date().toISOString(),
-        attachments: [],
-      }
-      return { conversation: { id: conversationId, serviceId }, assistantMessage }
+      return viaChat()
     }
   },
 }
