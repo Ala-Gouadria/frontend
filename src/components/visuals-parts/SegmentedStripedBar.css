@@ -23,7 +23,8 @@
 .segmented-striped-bar__segment--active {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, var(--segmented-top), var(--segmented-bottom));
+  background:
+    linear-gradient(180deg, var(--segmented-top), var(--segmented-bottom));
   box-shadow:
     0 4px 10px var(--segmented-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.32);
@@ -34,7 +35,7 @@
 .segmented-striped-bar__segment--active::before {
   content: '';
   position: absolute;
-  inset: 0 -20px;
+  inset: 0 -15px;
   background: repeating-linear-gradient(
     -45deg,
     rgba(255, 255, 255, 0.18) 0px,
@@ -43,7 +44,7 @@
     rgba(0, 0, 0, 0.06)       10px
   );
   will-change: transform;
-  animation: segmentedStripesMove 1.8s linear infinite;
+  animation: segmentedStripesMove 1.6s linear infinite;
   animation-delay: calc(var(--segment-index) * -120ms);
 }
 
@@ -104,21 +105,21 @@
 
 /* ── Tones ────────────────────────────────────────────────────────────────── */
 .segmented-striped-bar--blue {
-  --segmented-top:    #5b9cf6;
-  --segmented-bottom: #2f74f0;
-  --segmented-glow:   rgba(47, 116, 240, 0.22);
+  --segmented-top:    #6DA3FF;
+  --segmented-bottom: #1877F2;
+  --segmented-glow:   rgba(24, 119, 242, 0.22);
 }
 
 .segmented-striped-bar--green {
-  --segmented-top:    #79b51c;
-  --segmented-bottom: #3c860a;
-  --segmented-glow:   rgba(60, 134, 10, 0.16);
+  --segmented-top:    #D5E64C;
+  --segmented-bottom: #5F8F00;
+  --segmented-glow:   rgba(95, 143, 0, 0.16);
 }
 
 .segmented-striped-bar--orange {
-  --segmented-top:    #ff9b55;
-  --segmented-bottom: #ff7629;
-  --segmented-glow:   rgba(255, 118, 41, 0.16);
+  --segmented-top:    #FFAA5A;
+  --segmented-bottom: #FF6A00;
+  --segmented-glow:   rgba(255, 106, 0, 0.16);
 }
 
 .segmented-striped-bar--red {
@@ -142,5 +143,5 @@
 /* ── Continuous stripe movement ──────────────────────────────────────────── */
 @keyframes segmentedStripesMove {
   from { transform: translateX(0); }
-  to   { transform: translateX(20px); }
+  to   { transform: translateX(14.14px); }
 }
