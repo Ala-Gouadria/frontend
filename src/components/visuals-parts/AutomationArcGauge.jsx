@@ -16,11 +16,11 @@ function parseLabelParts(label) {
   return { percent: null, rest: label }
 }
 
-const CX = 180
-const CY = 220
-const R = 210
-const START_RAD = (205 * Math.PI) / 180
-const END_RAD = (335 * Math.PI) / 180
+const CX = 240
+const CY = 240
+const R = 200
+const START_RAD = (200 * Math.PI) / 180
+const END_RAD = (340 * Math.PI) / 180
 const SWEEP = END_RAD - START_RAD
 
 function arcPoint(progress, radius = R) {
@@ -43,8 +43,10 @@ const INNER_R = R + 20
 // Compute a real bounding box from the geometry so the arc, ticks and cap
 // always fit inside the viewBox (the old version relied on overflow:visible,
 // which blew the arc past the frame and clipped the ticks).
+const LABEL_Y = CY + 56
+
 const VIEW_BOX = (() => {
-  const PAD = 10
+  const PAD = 14
   const xs = []
   const ys = []
   for (let i = 0; i <= 64; i++) {
@@ -57,7 +59,7 @@ const VIEW_BOX = (() => {
   const minX = Math.min(...xs) - STROKE / 2 - PAD
   const maxX = Math.max(...xs) + STROKE / 2 + PAD
   const minY = Math.min(...ys) - PAD
-  const maxY = Math.max(...ys) + STROKE / 2 + PAD + 4
+  const maxY = Math.max(Math.max(...ys) + STROKE / 2 + PAD + 4, LABEL_Y + 24)
   return `${minX.toFixed(1)} ${minY.toFixed(1)} ${(maxX - minX).toFixed(1)} ${(maxY - minY).toFixed(1)}`
 })()
 
@@ -128,12 +130,12 @@ export function AutomationArcGauge({ progress = 0.7, label = '70% In Progress', 
           strokeDasharray={`${safeProgress * 100} 100`}
         />
         <circle cx={cap.x} cy={cap.y} r="11" className="automation-arc-gauge__cap" />
-      </svg>
 
-      <strong className="automation-arc-gauge__label">
-        {percent && <span className="automation-arc-gauge__label-percent">{percent}</span>}
-        {rest && <span className="automation-arc-gauge__label-rest"> {rest}</span>}
-      </strong>
+        <text x={CX} y={LABEL_Y} textAnchor="middle" className="automation-arc-gauge__label-svg">
+          {percent && <tspan className="automation-arc-gauge__label-percent">{percent}</tspan>}
+          {rest && <tspan className="automation-arc-gauge__label-rest"> {rest}</tspan>}
+        </text>
+      </svg>
     </div>
   )
 }
