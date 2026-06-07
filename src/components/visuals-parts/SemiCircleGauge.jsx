@@ -13,11 +13,11 @@ function clamp(value, min, max, fallback = min) {
 
 const ARC = {
   cx: 255,
-  cy: 262,
+  cy: 230,
   rx: 242,
-  ry: 242,
-  startAngle: 155 * (Math.PI / 180),
-  endAngle: 25 * (Math.PI / 180),
+  ry: 168,
+  startAngle: 160 * (Math.PI / 180),
+  endAngle: 20 * (Math.PI / 180),
 }
 
 function getArcAngle(progress) {
@@ -84,7 +84,7 @@ export function SemiCircleGauge({
   return (
     <div className={classNames('semi-circle-gauge', `semi-circle-gauge--${tone}`, className)}>
       {title ? <div className="semi-circle-gauge__title">{title}</div> : null}
-      <svg className="semi-circle-gauge__svg" viewBox="0 0 510 296" aria-hidden="true">
+      <svg className="semi-circle-gauge__svg" viewBox="0 0 510 260" aria-hidden="true">
         <defs>
           {/* Horizontal fade — band dissolves to nothing at both ends */}
           <linearGradient id={fadeId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="510" y2="0">
@@ -117,8 +117,8 @@ export function SemiCircleGauge({
           </radialGradient>
 
           {/* Mask spans viewBox + overflow so glow bleed is caught and faded */}
-          <mask id={maskId} maskUnits="userSpaceOnUse" x="-80" y="-80" width="670" height="420">
-            <rect x="-80" y="-80" width="670" height="420" fill={'url(#' + fadeId + ')'} />
+          <mask id={maskId} maskUnits="userSpaceOnUse" x="-80" y="-80" width="670" height="400">
+            <rect x="-80" y="-80" width="670" height="400" fill={'url(#' + fadeId + ')'} />
           </mask>
         </defs>
 
@@ -219,7 +219,7 @@ export function SemiCircleGauge({
         />
 
         {/* Value label */}
-        <text x="255" y="238" textAnchor="middle" className="semi-circle-gauge__value">
+        <text x="255" y="210" textAnchor="middle" className="semi-circle-gauge__value">
           <tspan className="semi-circle-gauge__current">{currentLabel}</tspan>
           {targetLabel ? <tspan className="semi-circle-gauge__target">/{targetLabel}</tspan> : null}
         </text>

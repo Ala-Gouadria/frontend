@@ -98,9 +98,9 @@
 
 .semi-circle-gauge__value {
   font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
-  font-size: 42px;
+  font-size: 38px;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
   dominant-baseline: middle;
   pointer-events: none;
 }
@@ -112,7 +112,7 @@
 
 .semi-circle-gauge__target {
   fill: var(--gauge-text-muted);
-  font-size: 36px;
+  font-size: 33px;
   font-weight: 400;
   font-style: italic;
 }
