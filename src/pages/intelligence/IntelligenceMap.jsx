@@ -680,7 +680,9 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   // so the world point under the cursor stays pinned during wheel zoom.
   const transformRef = useRef(null)
   const zoomContainerRef = useRef(null)
-  const MIN_SCALE = 0.18
+  // Floor sits just above the 0.45 "zoomed-out fallback" threshold so all 32 cards
+  // never render simultaneously — that mode exhausts the compositor texture budget.
+  const MIN_SCALE = 0.5
   const MAX_SCALE = 1.8
 
   const handleWheelZoom = useCallback((event) => {
@@ -729,6 +731,40 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
     el.addEventListener('wheel', handleWheelZoom, { passive: false })
     return () => el.removeEventListener('wheel', handleWheelZoom)
   }, [handleWheelZoom])
+
+  // Block browser-level zoom shortcuts (Ctrl/Cmd + -, =, +, 0) while the map
+  // is mounted. The map manages its own zoom via TransformWrapper, and browser
+  // zoom-out re-rasterises the whole page including all 32 cards — expensive
+  // and visually broken since CSS `zoom: var(--app-scale)` already fixes layout.
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (!(e.ctrlKey || e.metaKey)) return
+      if (e.key === '-' || e.key === '=' || e.key === '+' || e.key === '0') {
+        e.preventDefault()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown, { passive: false })
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
+  // Counteract browser-menu zoom-out (Brave/Chrome ⋮ → Zoom 25%, which keyboard
+  // shortcuts can't block). Chromium multiplies devicePixelRatio by the browser
+  // zoom factor, so we capture DPR at mount as the 100% baseline. On resize,
+  // if the ratio drops below 1 (zoom-out), apply inverse `zoom` to the map
+  // container so the rendered scale stays constant regardless of browser zoom.
+  useEffect(() => {
+    const baseDPR = window.devicePixelRatio || 1
+    const el = zoomContainerRef.current
+    if (!el) return
+
+    const correct = () => {
+      const ratio = (window.devicePixelRatio || 1) / baseDPR
+      el.style.zoom = ratio < 0.999 ? String(1 / ratio) : ''
+    }
+    correct()
+    window.addEventListener('resize', correct)
+    return () => window.removeEventListener('resize', correct)
+  }, [])
 
   // Cleanup stale listeners if component unmounts mid-drag
   useEffect(() => () => {
