@@ -1,8 +1,10 @@
 .mini-line-chart {
-  --mini-line-color: #5a8a00;
-  --mini-line-fill-top: rgba(120, 180, 10, 0.42);
-  --mini-line-fill-bottom: rgba(190, 230, 80, 0.02);
-  --mini-line-glow: rgba(100, 150, 8, 0.18);
+  --mini-line-color: #5F8F00;
+  --mini-line-stroke-start: #ABC831;
+  --mini-line-stroke-end: #5F8F00;
+  --mini-line-fill-top: rgba(188, 212, 0, 0.5);
+  --mini-line-fill-bottom: rgba(9, 169, 81, 0);
+  --mini-line-glow: rgba(95, 143, 0, 0.14);
   display: block;
   width: 100%;
   min-height: 60px;
@@ -11,14 +13,18 @@
 }
 
 .mini-line-chart--red {
-  --mini-line-color: #ff7174;
-  --mini-line-fill-top: rgba(255, 113, 116, 0.34);
-  --mini-line-fill-bottom: rgba(255, 214, 214, 0.02);
-  --mini-line-glow: rgba(255, 96, 96, 0.16);
+  --mini-line-color: #FF9A9A;
+  --mini-line-stroke-start: #FFA5A5;
+  --mini-line-stroke-end: #FF8B8B;
+  --mini-line-fill-top: rgba(255, 145, 145, 0.5);
+  --mini-line-fill-bottom: rgba(255, 255, 255, 0);
+  --mini-line-glow: rgba(255, 139, 139, 0.14);
 }
 
 .mini-line-chart--blue {
   --mini-line-color: #2f80ed;
+  --mini-line-stroke-start: #6DA3FF;
+  --mini-line-stroke-end: #2f80ed;
   --mini-line-fill-top: rgba(47, 128, 237, 0.28);
   --mini-line-fill-bottom: rgba(196, 220, 255, 0.02);
   --mini-line-glow: rgba(47, 128, 237, 0.16);
@@ -26,6 +32,8 @@
 
 .mini-line-chart--purple {
   --mini-line-color: #b05ae4;
+  --mini-line-stroke-start: #c88af0;
+  --mini-line-stroke-end: #b05ae4;
   --mini-line-fill-top: rgba(176, 90, 228, 0.26);
   --mini-line-fill-bottom: rgba(225, 196, 245, 0.02);
   --mini-line-glow: rgba(176, 90, 228, 0.16);
@@ -33,6 +41,8 @@
 
 .mini-line-chart--pink {
   --mini-line-color: #e44177;
+  --mini-line-stroke-start: #f07098;
+  --mini-line-stroke-end: #e44177;
   --mini-line-fill-top: rgba(228, 65, 119, 0.28);
   --mini-line-fill-bottom: rgba(255, 218, 232, 0.02);
   --mini-line-glow: rgba(228, 65, 119, 0.16);
@@ -51,7 +61,7 @@
   stroke-dasharray: 320;
   stroke-dashoffset: 320;
   animation: miniLineDraw 1s ease forwards;
-  filter: drop-shadow(0 2px 4px var(--mini-line-glow));
+  shape-rendering: geometricPrecision;
 }
 
 .mini-line-chart__hit {
@@ -69,7 +79,6 @@
   stroke: #fff;
   stroke-width: 2;
   transform: scale(1.18);
-  filter: drop-shadow(0 4px 7px var(--mini-line-glow));
 }
 
 @keyframes miniLineDraw {

@@ -1,25 +1,23 @@
 .semi-circle-gauge {
-  /* ---- Green (default) — tuned to match the reference design ---- */
-  --gauge-halo:       rgba(190, 214, 64, 0.13);   /* aura hugging the band  */
-  --gauge-halo-wide:  rgba(206, 226, 100, 0.07);  /* wide soft outer wash   */
-  --gauge-track:      rgba(190, 214, 90, 0.42);   /* pale unfilled track    */
+  /* ---- Green (default) ---- */
+  --gauge-track:      rgba(190, 210, 80, 0.22);
 
-  /* progress band gradient: pale lime -> vivid lime -> deep lime */
-  --gauge-progress-0: #CFE07A;
-  --gauge-progress-1: #BAD146;
-  --gauge-progress-2: #A6C82C;
-  --gauge-progress-3: #97BE22;
-  --gauge-progress-4: #84AC18;
+  /* progress band gradient: pale lime → vivid → deep green */
+  --gauge-progress-0: #D4DE7C;
+  --gauge-progress-1: #C0D24A;
+  --gauge-progress-2: #A8C230;
+  --gauge-progress-3: #94B420;
+  --gauge-progress-4: #7EA214;
 
-  /* knob radial fill (light -> mid -> edge) */
-  --gauge-knob-0: #E6EFB8;
-  --gauge-knob-1: #C2D466;
-  --gauge-knob-2: #9DB836;
+  /* knob radial fill — muted, less saturated than the band */
+  --gauge-knob-0: #DDE2AE;
+  --gauge-knob-1: #C0C862;
+  --gauge-knob-2: #A0AA3A;
 
   --gauge-cap-ring: #ffffff;
 
-  --gauge-text:       #0a0a0a;
-  --gauge-text-muted: rgba(27, 28, 32, 0.42);
+  --gauge-text:       #1a1a1a;
+  --gauge-text-muted: rgba(27, 28, 32, 0.38);
 
   position: relative;
   display: grid;
@@ -34,9 +32,7 @@
 }
 
 .semi-circle-gauge--blue {
-  --gauge-halo:       rgba(96, 165, 250, 0.16);
-  --gauge-halo-wide:  rgba(147, 197, 253, 0.09);
-  --gauge-track:      rgba(147, 197, 253, 0.42);
+  --gauge-track:      rgba(147, 197, 253, 0.22);
   --gauge-progress-0: #BFDBFE;
   --gauge-progress-1: #93C5FD;
   --gauge-progress-2: #60A5FA;
@@ -48,9 +44,7 @@
 }
 
 .semi-circle-gauge--orange {
-  --gauge-halo:       rgba(249, 115, 22, 0.16);
-  --gauge-halo-wide:  rgba(253, 186, 116, 0.09);
-  --gauge-track:      rgba(253, 186, 116, 0.42);
+  --gauge-track:      rgba(253, 186, 116, 0.22);
   --gauge-progress-0: #FED7AA;
   --gauge-progress-1: #FDBA74;
   --gauge-progress-2: #FB923C;
@@ -84,7 +78,7 @@
 
 .semi-circle-gauge__cap-ring {
   fill: var(--gauge-cap-ring);
-  filter: drop-shadow(0 4px 12px rgba(95, 143, 0, 0.22));
+  filter: drop-shadow(0 3px 10px rgba(120, 140, 20, 0.18));
   animation: semiGaugeCap 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-box: fill-box;
   transform-origin: center;
@@ -98,22 +92,23 @@
 
 .semi-circle-gauge__value {
   font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
-  font-size: 36px;
+  font-size: 38px;
   font-weight: 700;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.005em;
   dominant-baseline: middle;
   pointer-events: none;
 }
 
 .semi-circle-gauge__current {
   fill: var(--gauge-text);
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .semi-circle-gauge__target {
   fill: var(--gauge-text-muted);
-  font-size: 32px;
-  font-weight: 500;
+  font-size: 33px;
+  font-weight: 400;
+  font-style: italic;
 }
 
 @keyframes semiGaugeIn {

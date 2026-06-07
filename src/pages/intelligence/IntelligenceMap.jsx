@@ -265,6 +265,26 @@ function buildRoundedCablePath(points, radius = 24) {
   return path
 }
 
+function buildElasticDragPath(start, end, axis, velocityX = 0, velocityY = 0) {
+  const dx = end.x - start.x
+  const dy = end.y - start.y
+  const dist = Math.hypot(dx, dy)
+  const tension = Math.min(dist * 0.4, 320)
+  const speed = Math.hypot(velocityX, velocityY)
+  const bulge = Math.min(speed * 0.35, 120)
+
+  let cp1, cp2
+  if (axis === 'vertical') {
+    cp1 = { x: start.x + velocityX * 0.15, y: start.y + tension }
+    cp2 = { x: end.x   + velocityX * 0.25,  y: end.y   - tension + bulge * Math.sign(dy) }
+  } else {
+    const dirX = dx >= 0 ? 1 : -1
+    cp1 = { x: start.x + tension * dirX, y: start.y + velocityY * 0.15 }
+    cp2 = { x: end.x   - tension * dirX + bulge * dirX, y: end.y + velocityY * 0.25 }
+  }
+  return `M ${start.x} ${start.y} C ${cp1.x} ${cp1.y} ${cp2.x} ${cp2.y} ${end.x} ${end.y}`
+}
+
 function createCardStyle(node, position, isVisible, isDragging) {
   const delay = isVisible ? node.revealDelay : 0
   return {
@@ -275,11 +295,11 @@ function createCardStyle(node, position, isVisible, isDragging) {
     opacity: isVisible ? 1 : 0,
     transform: `translate(${isVisible ? 0 : node.enterX}px, ${isVisible ? 0 : node.enterY}px) scale(${isVisible ? 1 : 0.94})`,
     transformOrigin: position.left > CANVAS.centerX ? 'left center' : 'right center',
-    transition: [
+    transition: isDragging ? 'box-shadow 120ms ease' : [
       `opacity ${isVisible ? 720 : 260}ms cubic-bezier(.16,1,.3,1) ${delay}ms`,
       `transform ${isVisible ? 1180 : 420}ms cubic-bezier(.16,1,.3,1) ${delay}ms`,
       `filter ${isVisible ? 1180 : 420}ms cubic-bezier(.16,1,.3,1) ${delay}ms`,
-      isDragging ? 'box-shadow 180ms ease' : 'box-shadow 260ms ease',
+      'box-shadow 260ms ease',
     ].join(', '),
     // 'blur(0px)' still creates a compositor layer — use 'none' to avoid it
     filter:        isVisible ? 'none' : 'blur(8px) brightness(1.08)',
@@ -544,27 +564,29 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   // Imperatively update SVG edge paths AND connector buttons/sockets for the
   // dragged card. Runs inside pointermove — zero React re-renders, everything
   // follows the card in real time.
-  const updateEdgesForDrag = useCallback((dragId, positions) => {
-    // ── 1. Update SVG edge paths ────────────────────────────────────────────
+  const dragEdgeGroupsRef = useRef([])
+
+  const updateEdgesForDrag = useCallback((dragId, positions, vx = 0, vy = 0) => {
     const svg = svgRef.current
     if (svg) {
       const affected = EDGE_DEFS.filter(e => e.from === dragId || e.to === dragId)
+      const groups = []
       for (const edge of affected) {
         const group = svg.querySelector(`[data-edge-group="${edge.id}"]`)
         if (!group) continue
+        groups.push(group)
         const start = getPortPoint(edge.from, edge.fromPort, positions)
         const end   = getPortPoint(edge.to,   edge.toPort,   positions)
-        const pts   = buildOrthogonalPoints(start, end, edge.axis, edge.bendRatio)
-        const d     = buildRoundedCablePath(pts)
+        const d     = buildElasticDragPath(start, end, edge.axis, vx, vy)
         group.querySelectorAll('path').forEach(p => p.setAttribute('d', d))
+        if (!group.classList.contains('edge-dragging')) group.classList.add('edge-dragging')
       }
+      dragEdgeGroupsRef.current = groups
     }
 
-    // ── 2. Update connector buttons + socket dots ───────────────────────────
     const node = CARD_NODES[dragId]
     if (node) {
       const pos = positions[dragId]
-      // querySelectorAll is scoped to the page; safe because IDs are unique per map
       document.querySelectorAll(`[data-port-node="${dragId}"]`).forEach(el => {
         const portName = el.dataset.portName
         const port     = node.ports[portName]
@@ -599,29 +621,55 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   const stableMove = useRef((e) => onMoveBody.current?.(e))
   const stableUp   = useRef(() => onUpBody.current?.())
 
-  // Rewrite the handler bodies each render so they see fresh refs
   onMoveBody.current = (event) => {
     if (!dragRef.current) return
     const drag   = dragRef.current
-    const deltaX = (event.clientX - drag.startClientX) / scaleRef.current
-    const deltaY = (event.clientY - drag.startClientY) / scaleRef.current
+    const scale  = scaleRef.current
+    const deltaX = (event.clientX - drag.startClientX) / scale
+    const deltaY = (event.clientY - drag.startClientY) / scale
     const newLeft = drag.startLeft + deltaX
     const newTop  = drag.startTop  + deltaY
 
-    // Move the card DOM node directly — no setState, no re-render
+    const now = performance.now()
+    const dt  = Math.max(now - (drag.lastTime || now), 1)
+    drag.velocityX = ((event.clientX - (drag.lastClientX ?? event.clientX)) / scale) / dt * 16
+    drag.velocityY = ((event.clientY - (drag.lastClientY ?? event.clientY)) / scale) / dt * 16
+    drag.lastClientX = event.clientX
+    drag.lastClientY = event.clientY
+    drag.lastTime    = now
+
     const el = cardEls.current[drag.id]
     if (el) { el.style.left = `${newLeft}px`; el.style.top = `${newTop}px` }
 
-    // Keep ref in sync for edge computation and final commit on pointerup
     positionsRef.current = { ...positionsRef.current, [drag.id]: { left: newLeft, top: newTop } }
-
-    // Update connected SVG edge paths directly in the DOM — still no re-render
-    updateEdgesForDrag(drag.id, positionsRef.current)
+    updateEdgesForDrag(drag.id, positionsRef.current, drag.velocityX, drag.velocityY)
   }
 
   onUpBody.current = () => {
     if (!dragRef.current) return
-    // Single React state update on drop — edges and styles re-render once
+    const dropId = dragRef.current.id
+    for (const g of dragEdgeGroupsRef.current) g.classList.remove('edge-dragging')
+    dragEdgeGroupsRef.current = []
+
+    const el = cardEls.current[dropId]
+    if (el) el.style.transition = ''
+
+    const svg = svgRef.current
+    if (svg) {
+      const affected = EDGE_DEFS.filter(e => e.from === dropId || e.to === dropId)
+      for (const edge of affected) {
+        const group = svg.querySelector(`[data-edge-group="${edge.id}"]`)
+        if (!group) continue
+        const start = getPortPoint(edge.from, edge.fromPort, positionsRef.current)
+        const end   = getPortPoint(edge.to,   edge.toPort,   positionsRef.current)
+        const pts   = buildOrthogonalPoints(start, end, edge.axis, edge.bendRatio)
+        const d     = buildRoundedCablePath(pts)
+        group.classList.add('edge-settling')
+        group.querySelectorAll('path').forEach(p => p.setAttribute('d', d))
+        setTimeout(() => group.classList.remove('edge-settling'), 400)
+      }
+    }
+
     setPositions({ ...positionsRef.current })
     setDraggingId(null)
     dragRef.current = null
@@ -640,6 +688,16 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
       startClientY: event.clientY,
       startLeft:    pos.left,
       startTop:     pos.top,
+      lastClientX:  event.clientX,
+      lastClientY:  event.clientY,
+      lastTime:     performance.now(),
+      velocityX:    0,
+      velocityY:    0,
+    }
+    const el = cardEls.current[id]
+    if (el) {
+      el.style.transition = 'box-shadow 120ms ease'
+      el.setPointerCapture(event.pointerId)
     }
     setDraggingId(id)
     window.addEventListener('pointermove', stableMove.current)

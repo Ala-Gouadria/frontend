@@ -13,11 +13,11 @@ function clamp(value, min, max, fallback = min) {
 
 const ARC = {
   cx: 255,
-  cy: 262,
+  cy: 230,
   rx: 242,
-  ry: 242,
-  startAngle: 155 * (Math.PI / 180),
-  endAngle: 25 * (Math.PI / 180),
+  ry: 168,
+  startAngle: 160 * (Math.PI / 180),
+  endAngle: 20 * (Math.PI / 180),
 }
 
 function getArcAngle(progress) {
@@ -38,7 +38,7 @@ function getTickLine(progress) {
   const tangent = { x: -ARC.rx * Math.sin(angle), y: -ARC.ry * Math.cos(angle) }
   const length = Math.hypot(tangent.x, tangent.y) || 1
   const normal = { x: -tangent.y / length, y: tangent.x / length }
-  const tickLength = 20
+  const tickLength = 14
   return {
     x1: point.x - (normal.x * tickLength) / 2,
     y1: point.y - (normal.y * tickLength) / 2,
@@ -84,7 +84,7 @@ export function SemiCircleGauge({
   return (
     <div className={classNames('semi-circle-gauge', `semi-circle-gauge--${tone}`, className)}>
       {title ? <div className="semi-circle-gauge__title">{title}</div> : null}
-      <svg className="semi-circle-gauge__svg" viewBox="0 0 510 256" aria-hidden="true">
+      <svg className="semi-circle-gauge__svg" viewBox="0 0 510 260" aria-hidden="true">
         <defs>
           {/* Horizontal fade — band dissolves to nothing at both ends */}
           <linearGradient id={fadeId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="510" y2="0">
@@ -117,73 +117,65 @@ export function SemiCircleGauge({
           </radialGradient>
 
           {/* Mask spans viewBox + overflow so glow bleed is caught and faded */}
-          <mask id={maskId} maskUnits="userSpaceOnUse" x="-80" y="-80" width="670" height="420">
-            <rect x="-80" y="-80" width="670" height="420" fill={'url(#' + fadeId + ')'} />
+          <mask id={maskId} maskUnits="userSpaceOnUse" x="-80" y="-80" width="670" height="400">
+            <rect x="-80" y="-80" width="670" height="400" fill={'url(#' + fadeId + ')'} />
           </mask>
         </defs>
 
         <g mask={'url(#' + maskId + ')'}>
-          {/* Wide, soft outer wash — low opacity so the interior returns to background */}
-          <path
-            d={pathData}
-            fill="none"
-            stroke="var(--gauge-halo-wide)"
-            strokeWidth="150"
-            strokeLinecap="round"
-            style={{ filter: 'blur(36px)' }}
-          />
-          {/* Aura band — the pale halo that hugs both edges of the track */}
-          <path
-            d={pathData}
-            fill="none"
-            stroke="var(--gauge-halo)"
-            strokeWidth="84"
-            strokeLinecap="round"
-            style={{ filter: 'blur(20px)' }}
-          />
-
-          {/* Soft track band — pale, full arc (incl. the unfilled ghost past the knob) */}
+          {/* Soft blurred track — wider pale band visible on unfilled side */}
           <path
             d={pathData}
             fill="none"
             stroke="var(--gauge-track)"
-            strokeWidth="54"
+            strokeWidth="50"
             strokeLinecap="round"
-            style={{ filter: 'blur(9px)' }}
+            style={{ filter: 'blur(8px)' }}
           />
-          {/* Crisp thin track line */}
+          {/* Crisp track */}
           <path
             d={pathData}
             fill="none"
             stroke="var(--gauge-track)"
-            strokeWidth="34"
+            strokeWidth="38"
             strokeLinecap="butt"
           />
 
-          {/* Progress glow tied to fill */}
+          {/* Progress soft glow */}
           <path
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="60"
+            strokeWidth="50"
             strokeLinecap="round"
             pathLength="100"
             strokeDasharray={dash}
-            style={{ filter: 'blur(16px)', opacity: 0.5 }}
+            style={{ filter: 'blur(10px)', opacity: 0.35 }}
           />
           {/* Progress fill — main band */}
           <path
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="34"
+            strokeWidth="38"
             strokeLinecap="butt"
             pathLength="100"
             strokeDasharray={dash}
             className="semi-circle-gauge__progress"
           />
+          {/* Inner-edge highlight — soft lighter band on the inside of the arc */}
+          <path
+            d={pathData}
+            fill="none"
+            stroke="rgba(255,255,255,0.18)"
+            strokeWidth="16"
+            strokeLinecap="butt"
+            pathLength="100"
+            strokeDasharray={dash}
+            style={{ filter: 'blur(4px)' }}
+          />
 
-          {/* Perpendicular tick dividers across the filled band */}
+          {/* Tick dividers */}
           <g>
             {progressTicks.map((tp) => {
               const tick = getTickLine(tp)
@@ -194,8 +186,8 @@ export function SemiCircleGauge({
                   y1={tick.y1}
                   x2={tick.x2}
                   y2={tick.y2}
-                  stroke="rgba(255,255,255,0.62)"
-                  strokeWidth="1.6"
+                  stroke="rgba(255,255,255,0.48)"
+                  strokeWidth="1.5"
                   strokeLinecap="butt"
                 />
               )
@@ -207,19 +199,19 @@ export function SemiCircleGauge({
         <circle
           cx={capPosition.x}
           cy={capPosition.y}
-          r="30"
+          r="26"
           className="semi-circle-gauge__cap-ring"
         />
         <circle
           cx={capPosition.x}
           cy={capPosition.y}
-          r="20"
+          r="17"
           fill={'url(#' + knobGradId + ')'}
           className="semi-circle-gauge__cap"
         />
 
         {/* Value label */}
-        <text x="255" y="200" textAnchor="middle" className="semi-circle-gauge__value">
+        <text x="255" y="210" textAnchor="middle" className="semi-circle-gauge__value">
           <tspan className="semi-circle-gauge__current">{currentLabel}</tspan>
           {targetLabel ? <tspan className="semi-circle-gauge__target">/{targetLabel}</tspan> : null}
         </text>

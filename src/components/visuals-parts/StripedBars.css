@@ -1,43 +1,21 @@
 .striped-bars {
   display: grid;
   gap: 6px;
-  --striped-fill-base: linear-gradient(
-    to right,
-    #d8f06a 0%,
-    #b6dc3a 35%,
-    #8cba1d 70%,
-    #6ea60e 100%
-  );
-  --striped-glow: rgba(127, 162, 13, 0.22);
-  --striped-track: linear-gradient(
-    90deg,
-    rgba(213, 230, 76, 0.3) 0%,
-    rgba(95, 143, 0, 0.3) 100%
-  );
+  --striped-fill-base: linear-gradient(90deg, #D5E64C 0%, #5F8F00 100%);
+  --striped-glow: rgba(95, 143, 0, 0.22);
+  --striped-track: linear-gradient(90deg, rgba(213, 230, 76, 0.3) 0%, rgba(95, 143, 0, 0.3) 100%);
 }
 
 .striped-bars--orange {
-  --striped-fill-base: linear-gradient(
-    to right,
-    #ffd5a8 0%,
-    #ffb97a 25%,
-    #f07a20 60%,
-    #c05008 100%
-  );
-  --striped-glow: rgba(255, 127, 35, 0.22);
-  --striped-track: #FFC30033;
+  --striped-fill-base: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
+  --striped-glow: rgba(255, 106, 0, 0.22);
+  --striped-track: rgba(255, 170, 90, 0.25);
 }
 
 .striped-bars--blue {
-  --striped-fill-base: linear-gradient(
-    to right,
-    #a8d0ff 0%,
-    #6aaaf5 25%,
-    #2f80ed 60%,
-    #0d4faa 100%
-  );
-  --striped-glow: rgba(47, 128, 237, 0.22);
-  --striped-track: rgba(47, 128, 237, 0.18);
+  --striped-fill-base: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
+  --striped-glow: rgba(24, 119, 242, 0.22);
+  --striped-track: rgba(24, 119, 242, 0.18);
 }
 
 .striped-bars__head {
@@ -85,7 +63,7 @@
 .striped-bars__fill::before {
   content: '';
   position: absolute;
-  inset: 0 -20px;
+  inset: 0 -17px;
   background: repeating-linear-gradient(
     -45deg,
     rgba(255, 255, 255, 0.16) 0px,
@@ -94,7 +72,7 @@
     rgba(40, 80, 0, 0.08)     12px
   );
   will-change: transform;
-  animation: stripedBarsMove 1.8s linear infinite;
+  animation: stripedBarsMove 1.6s linear infinite;
 }
 
 .striped-bars__fill::after {
@@ -118,5 +96,5 @@
 
 @keyframes stripedBarsMove {
   from { transform: translateX(0); }
-  to   { transform: translateX(20px); }
+  to   { transform: translateX(16.97px); }
 }

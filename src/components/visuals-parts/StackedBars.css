@@ -1,17 +1,14 @@
 .stacked-bars {
   display: flex;
-  gap: 3px;
-  min-height: 42px;
-  border-radius: 4px;
-  background: #ffffff;
-  box-shadow: inset 0 0 0 1px rgba(24, 24, 27, 0.05);
+  gap: 4px;
+  height: 42px;
+  background: transparent;
 }
 
 .stacked-bars__segment {
   position: relative;
   min-width: 0;
-  overflow: visible;
-  border-radius: 0;
+  border-radius: 0px;
   width: 0%;
   opacity: 0;
   transition:
@@ -19,19 +16,40 @@
     opacity 400ms ease;
 }
 
-.stacked-bars__segment::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: repeating-linear-gradient(
-    72deg,
-    rgba(255, 255, 255, 0.06) 0,
-    rgba(255, 255, 255, 0.06) 2px,
-    rgba(255, 255, 255, 0.18) 2px,
-    rgba(255, 255, 255, 0.18) 4px
-  );
-  pointer-events: none;
+.stacked-bars__segment--blue {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.18) 0px,
+      rgba(255, 255, 255, 0.18) 3px,
+      rgba(0, 0, 0, 0.04)       3px,
+      rgba(0, 0, 0, 0.04)       6px
+    ),
+    linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
+}
+
+.stacked-bars__segment--green {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.18) 0px,
+      rgba(255, 255, 255, 0.18) 3px,
+      rgba(0, 0, 0, 0.04)       3px,
+      rgba(0, 0, 0, 0.04)       6px
+    ),
+    linear-gradient(90deg, #D5E64C 0%, #5F8F00 100%);
+}
+
+.stacked-bars__segment--orange {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.18) 0px,
+      rgba(255, 255, 255, 0.18) 3px,
+      rgba(0, 0, 0, 0.04)       3px,
+      rgba(0, 0, 0, 0.04)       6px
+    ),
+    linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
 }
 
 .stacked-bars__segment::before {
@@ -61,19 +79,4 @@
 .stacked-bars__segment:hover::before {
   opacity: 1;
   transform: translateX(-50%) translateY(0) scale(1);
-}
-
-.stacked-bars__segment--blue {
-  background: linear-gradient(180deg, #6aabf7 0%, #3580ee 50%, #1a5fd4 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38);
-}
-
-.stacked-bars__segment--green {
-  background: linear-gradient(180deg, #cce84a 0%, #8aba0e 45%, #5a8a04 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38);
-}
-
-.stacked-bars__segment--orange {
-  background: linear-gradient(180deg, #ffb86a 0%, #f87820 45%, #d45808 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38);
 }
