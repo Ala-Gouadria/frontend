@@ -67,6 +67,14 @@ const DotGrid = ({
     lastY: 0
   });
 
+  // The rAF loop only does real work (clear + redraw) when something can change:
+  // `dirty` is flagged on pointer move / click / (re)build so hover colours
+  // update; `animating` stays true while any dot is displaced by an inertia
+  // tween. When both are false the loop costs ~nothing, so reading cards with a
+  // still mouse no longer competes with the dots for frame time.
+  const dirtyRef = useRef(true);
+  const animatingRef = useRef(false);
+
   const baseRgb = useMemo(() => hexToRgb(baseColor), [baseColor]);
   const activeRgb = useMemo(() => hexToRgb(activeColor), [activeColor]);
 
@@ -83,16 +91,18 @@ const DotGrid = ({
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return;
 
-    // getBoundingClientRect returns post-zoom dimensions when an ancestor
-    // applies CSS `zoom`. Divide by --app-scale so the canvas is sized
-    // in pre-zoom CSS pixels and renders at the correct visual size.
     const appScale =
       parseFloat(
         getComputedStyle(document.documentElement).getPropertyValue('--app-scale')
       ) || 1;
+    // getBoundingClientRect / window.innerWidth are both in post-zoom visual
+    // CSS pixels. Cap to the real visible viewport so that even if an ancestor
+    // is ever inflated (CSS `zoom`, transforms, etc.) we never build a dot field
+    // larger than the screen — dots are a background, off-screen ones are pure
+    // wasted work. Divide by --app-scale to undo html's `zoom` for the canvas.
     const rect = wrap.getBoundingClientRect();
-    const width = rect.width / appScale;
-    const height = rect.height / appScale;
+    const width = Math.min(rect.width, window.innerWidth) / appScale;
+    const height = Math.min(rect.height, window.innerHeight) / appScale;
     const dpr = window.devicePixelRatio || 1;
 
     canvas.width = width * dpr;
@@ -124,6 +134,7 @@ const DotGrid = ({
       }
     }
     dotsRef.current = dots;
+    dirtyRef.current = true; // force one redraw after a (re)build
   }, [dotSize, gap]);
 
   useEffect(() => {
@@ -132,45 +143,73 @@ const DotGrid = ({
     let rafId;
     const proxSq = proximity * proximity;
 
+    const radius = dotSize / 2;
+
     const draw = () => {
+      rafId = requestAnimationFrame(draw);
+
       const canvas = canvasRef.current;
       if (!canvas) return;
+
+      // Idle: nothing moved and no dot is displaced — skip the whole redraw.
+      // The last drawn frame stays on the canvas, so colours/positions persist.
+      if (!dirtyRef.current && !animatingRef.current) return;
+
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const { x: px, y: py } = pointerRef.current;
 
+      // Resting, base-coloured dots (the vast majority) are batched into one
+      // Path2D and filled in a single call instead of thousands of save/fill/
+      // restore cycles. Only dots near the pointer (custom colour) are drawn
+      // individually. `moveTo` before each arc keeps them as separate subpaths.
+      const basePath = new Path2D();
+      let active = null;
+      let animating = false;
+
       for (const dot of dotsRef.current) {
         const ox = dot.cx + dot.xOffset;
         const oy = dot.cy + dot.yOffset;
+        if (dot.xOffset !== 0 || dot.yOffset !== 0) animating = true;
+
         const dx = dot.cx - px;
         const dy = dot.cy - py;
         const dsq = dx * dx + dy * dy;
 
-        let style = baseColor;
         if (dsq <= proxSq) {
           const dist = Math.sqrt(dsq);
           const t = 1 - dist / proximity;
           const r = Math.round(baseRgb.r + (activeRgb.r - baseRgb.r) * t);
           const g = Math.round(baseRgb.g + (activeRgb.g - baseRgb.g) * t);
           const b = Math.round(baseRgb.b + (activeRgb.b - baseRgb.b) * t);
-          style = `rgb(${r},${g},${b})`;
+          (active ||= []).push({ ox, oy, style: `rgb(${r},${g},${b})` });
+        } else {
+          basePath.moveTo(ox + radius, oy);
+          basePath.arc(ox, oy, radius, 0, Math.PI * 2);
         }
-
-        ctx.save();
-        ctx.translate(ox, oy);
-        ctx.fillStyle = style;
-        ctx.fill(circlePath);
-        ctx.restore();
       }
 
-      rafId = requestAnimationFrame(draw);
+      ctx.fillStyle = baseColor;
+      ctx.fill(basePath);
+
+      if (active) {
+        for (const a of active) {
+          ctx.fillStyle = a.style;
+          ctx.beginPath();
+          ctx.arc(a.ox, a.oy, radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      animatingRef.current = animating;
+      dirtyRef.current = false;
     };
 
     draw();
     return () => cancelAnimationFrame(rafId);
-  }, [proximity, baseColor, activeRgb, baseRgb, circlePath]);
+  }, [proximity, baseColor, activeRgb, baseRgb, circlePath, dotSize]);
 
   useEffect(() => {
     buildGrid();
@@ -178,12 +217,13 @@ const DotGrid = ({
     if ('ResizeObserver' in window) {
       ro = new ResizeObserver(buildGrid);
       wrapperRef.current && ro.observe(wrapperRef.current);
-    } else {
-      window.addEventListener('resize', buildGrid);
     }
+    // Also rebuild on viewport changes (e.g. browser zoom), since the grid is
+    // now capped to window.innerWidth/innerHeight, not just the wrapper box.
+    window.addEventListener('resize', buildGrid);
     return () => {
       if (ro) ro.disconnect();
-      else window.removeEventListener('resize', buildGrid);
+      window.removeEventListener('resize', buildGrid);
     };
   }, [buildGrid]);
 
@@ -213,11 +253,13 @@ const DotGrid = ({
       const localPoint = getCanvasLocalPoint(canvasRef.current, e.clientX, e.clientY);
       pr.x = localPoint.x;
       pr.y = localPoint.y;
+      dirtyRef.current = true; // pointer moved → hover colours may change
 
       for (const dot of dotsRef.current) {
         const dist = Math.hypot(dot.cx - pr.x, dot.cy - pr.y);
         if (speed > speedTrigger && dist < proximity && !dot._inertiaApplied) {
           dot._inertiaApplied = true;
+          animatingRef.current = true; // keep the loop drawing until it settles
           gsap.killTweensOf(dot);
           const pushX = dot.cx - pr.x + vx * 0.005;
           const pushY = dot.cy - pr.y + vy * 0.005;
@@ -248,6 +290,7 @@ const DotGrid = ({
         const dist = Math.hypot(dot.cx - cx, dot.cy - cy);
         if (dist < shockRadius && !dot._inertiaApplied) {
           dot._inertiaApplied = true;
+          animatingRef.current = true; // keep the loop drawing until it settles
           gsap.killTweensOf(dot);
           const falloff = Math.max(0, 1 - dist / shockRadius);
           const pushX = (dot.cx - cx) * shockStrength * falloff;

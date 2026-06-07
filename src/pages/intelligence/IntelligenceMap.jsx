@@ -805,24 +805,14 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
 
-  // Counteract browser-menu zoom-out (Brave/Chrome ⋮ → Zoom 25%, which keyboard
-  // shortcuts can't block). Chromium multiplies devicePixelRatio by the browser
-  // zoom factor, so we capture DPR at mount as the 100% baseline. On resize,
-  // if the ratio drops below 1 (zoom-out), apply inverse `zoom` to the map
-  // container so the rendered scale stays constant regardless of browser zoom.
-  useEffect(() => {
-    const baseDPR = window.devicePixelRatio || 1
-    const el = zoomContainerRef.current
-    if (!el) return
-
-    const correct = () => {
-      const ratio = (window.devicePixelRatio || 1) / baseDPR
-      el.style.zoom = ratio < 0.999 ? String(1 / ratio) : ''
-    }
-    correct()
-    window.addEventListener('resize', correct)
-    return () => window.removeEventListener('resize', correct)
-  }, [])
+  // NOTE: We intentionally do NOT compensate browser-menu zoom-out here.
+  // The container is sized in `vw`/`vh` units (--vw/--vh), which already track
+  // the visible viewport at any browser zoom — it always covers exactly the
+  // screen, no more. The previous `zoom: 1/ratio` hack double-counted that
+  // (vw grows AND we re-zoomed), inflating the container to ~2x the viewport on
+  // zoom-out. That overflow is what rendered/animated DotGrid dots off-screen
+  // ("invisible barrier") and tanked performance. Browser zoom on this page now
+  // behaves like every other page in the app.
 
   // Cleanup stale listeners if component unmounts mid-drag
   useEffect(() => () => {
@@ -870,7 +860,8 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
           cursor: draggingId ? 'grabbing' : toolMode === 'hand' ? 'grab' : 'default',
         }}
       >
-        {/* DotGrid: viewport-sized (position:absolute in root div = ~1 300 dots max).
+        {/* DotGrid: hard-capped to the visible viewport so it never builds dots
+             off-screen, and its render loop idles when nothing is animating.
              Canvas background is transparent so dots show through the map gaps.
              Listens to window mousemove directly so pointer-events:none is fine. */}
         <DotGrid
