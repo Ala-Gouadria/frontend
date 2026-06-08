@@ -334,23 +334,47 @@ const GraphLines = memo(function GraphLines({ sceneVisible, visibleEdges, positi
     const start  = getPortPoint(edge.from, edge.fromPort, positions)
     const end    = getPortPoint(edge.to,   edge.toPort,   positions)
     const points = buildOrthogonalPoints(start, end, edge.axis, edge.bendRatio)
+    const beamStartsAtFrom = edge.beamDirection !== 'toAvatar'
     return {
       ...edge,
       path: buildRoundedCablePath(points),
+      beamStart: beamStartsAtFrom ? start : end,
+      beamEnd:   beamStartsAtFrom ? end   : start,
     }
   }), [positions])
 
   return (
     <svg ref={svgRef} style={{ position:'absolute', inset:0, width:'100%', height:'100%', overflow:'visible', pointerEvents:'none', zIndex:1 }}>
 
-      {edgeData.map(({ id, path, width, drawDelay }) => {
-        const isVisible = sceneVisible && visibleEdges.has(id)
-        const delay     = isVisible ? drawDelay : 0
+      {edgeData.map(({ id, path, beamStart, beamEnd, width, beamDuration, drawDelay }) => {
+        const isVisible       = sceneVisible && visibleEdges.has(id)
+        const delay           = isVisible ? drawDelay : 0
+        const fwdId           = `bf-${id}`
+        const forwardDuration = Math.max(Math.round(beamDuration * 0.96), 1900)
 
         return (
           <g key={id} data-edge-group={id}>
+            <defs>
+              <linearGradient id={fwdId} gradientUnits="userSpaceOnUse"
+                x1={beamStart.x - 180} y1={beamStart.y} x2={beamStart.x + 180} y2={beamStart.y}>
+                <stop offset="0%"   stopColor="rgba(47,121,255,0)" />
+                <stop offset="18%"  stopColor="rgba(47,121,255,0.04)" />
+                <stop offset="52%"  stopColor="rgba(86,188,255,0.88)" />
+                <stop offset="82%"  stopColor="rgba(216,244,255,0.96)" />
+                <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+                <animate attributeName="x1" values={`${beamStart.x-180};${beamEnd.x-180}`} dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
+                <animate attributeName="y1" values={`${beamStart.y};${beamEnd.y}`}         dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
+                <animate attributeName="x2" values={`${beamStart.x+180};${beamEnd.x+180}`} dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
+                <animate attributeName="y2" values={`${beamStart.y};${beamEnd.y}`}         dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
+              </linearGradient>
+            </defs>
+
+            {/* flat cable */}
             <path d={path} fill="none" stroke="rgba(47,121,255,0.38)" strokeWidth={width} strokeLinecap="round"
               style={{ strokeDasharray:dashLength, strokeDashoffset:isVisible?0:dashLength, opacity:isVisible?1:0, transition:[`stroke-dashoffset ${isVisible?1460:760}ms cubic-bezier(.22,1,.36,1) ${delay}ms`,`opacity ${isVisible?760:260}ms ease ${delay}ms`].join(',') }}/>
+            {/* traveling beam */}
+            <path d={path} fill="none" stroke={`url(#${fwdId})`} strokeWidth={Math.max(width-0.4,4.2)} strokeLinecap="round"
+              style={{ opacity:isVisible?1:0, transition:`opacity ${isVisible?760:200}ms ease ${delay}ms` }}/>
           </g>
         )
       })}
