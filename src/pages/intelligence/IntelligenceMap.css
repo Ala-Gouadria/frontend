@@ -43,23 +43,6 @@
   }
 }
 
-@keyframes cableBreathe {
-  0%, 100% { 
-    opacity: 0.92; 
-  }
-  50% { 
-    opacity: 0.8; 
-  }
-}
-
-@keyframes cableGlowPulse {
-  0%, 100% { 
-    opacity: 0.82; 
-  }
-  50% { 
-    opacity: 1; 
-  }
-}
 
 @keyframes connectorHalo {
   0% {
@@ -190,22 +173,7 @@
    On drop: cables spring back to orthogonal routing with an elastic ease. */
 
 .edge-dragging path {
-  stroke-opacity: 1;
-  filter: none !important;
-}
-
-.edge-dragging path:nth-child(1) {
-  stroke: rgba(47, 121, 255, 0.18) !important;
-  stroke-width: 18 !important;
-}
-
-.edge-dragging path:nth-child(3) {
-  stroke: rgba(80, 160, 255, 0.7) !important;
-}
-
-.edge-dragging path:nth-child(4),
-.edge-dragging path:nth-child(5) {
-  stroke: rgba(180, 220, 255, 0.25) !important;
+  stroke: rgba(47, 121, 255, 0.50) !important;
 }
 
 .edge-settling path {

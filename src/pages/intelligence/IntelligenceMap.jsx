@@ -334,83 +334,23 @@ const GraphLines = memo(function GraphLines({ sceneVisible, visibleEdges, positi
     const start  = getPortPoint(edge.from, edge.fromPort, positions)
     const end    = getPortPoint(edge.to,   edge.toPort,   positions)
     const points = buildOrthogonalPoints(start, end, edge.axis, edge.bendRatio)
-    const beamStartsAtFrom = edge.beamDirection !== 'toAvatar'
     return {
       ...edge,
-      path:      buildRoundedCablePath(points),
-      beamStart: beamStartsAtFrom ? start : end,
-      beamEnd:   beamStartsAtFrom ? end   : start,
+      path: buildRoundedCablePath(points),
     }
   }), [positions])
 
   return (
     <svg ref={svgRef} style={{ position:'absolute', inset:0, width:'100%', height:'100%', overflow:'visible', pointerEvents:'none', zIndex:1 }}>
-      <defs>
-        <filter id="cable-glow"    x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9"   result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="beam-glow"     x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="beam-soft-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="11" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
 
-      {edgeData.map(({ id, path, beamStart, beamEnd, width, beamDuration, drawDelay, beamDirection }) => {
-        const isVisible       = sceneVisible && visibleEdges.has(id)
-        const delay           = isVisible ? drawDelay : 0
-        const fwdId           = `bf-${id}`
-        const wakeId          = `bw-${id}`
-        const forwardDuration = Math.max(Math.round(beamDuration * 0.96), 1900)
-        const wakeDuration    = Math.max(Math.round(beamDuration * 1.3),  2600)
+      {edgeData.map(({ id, path, width, drawDelay }) => {
+        const isVisible = sceneVisible && visibleEdges.has(id)
+        const delay     = isVisible ? drawDelay : 0
 
         return (
-          // data-edge-group lets the imperative drag updater query this group's paths
           <g key={id} data-edge-group={id}>
-            <defs>
-              <linearGradient id={fwdId} gradientUnits="userSpaceOnUse"
-                x1={beamStart.x - 180} y1={beamStart.y} x2={beamStart.x + 180} y2={beamStart.y}>
-                <stop offset="0%"   stopColor="rgba(47,121,255,0)" />
-                <stop offset="18%"  stopColor="rgba(47,121,255,0.04)" />
-                <stop offset="52%"  stopColor="rgba(86,188,255,0.88)" />
-                <stop offset="82%"  stopColor="rgba(216,244,255,0.96)" />
-                <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-                <animate attributeName="x1" values={`${beamStart.x-180};${beamEnd.x-180}`} dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
-                <animate attributeName="y1" values={`${beamStart.y};${beamEnd.y}`}         dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
-                <animate attributeName="x2" values={`${beamStart.x+180};${beamEnd.x+180}`} dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
-                <animate attributeName="y2" values={`${beamStart.y};${beamEnd.y}`}         dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
-              </linearGradient>
-              <linearGradient id={wakeId} gradientUnits="userSpaceOnUse"
-                x1={beamStart.x - 260} y1={beamStart.y} x2={beamStart.x + 120} y2={beamStart.y}>
-                <stop offset="0%"   stopColor="rgba(47,121,255,0)" />
-                <stop offset="30%"  stopColor="rgba(47,121,255,0.02)" />
-                <stop offset="66%"  stopColor="rgba(101,201,255,0.24)" />
-                <stop offset="100%" stopColor="rgba(194,236,255,0.82)" />
-                <animate attributeName="x1" values={`${beamStart.x-260};${beamEnd.x-260}`} dur={`${wakeDuration}ms`} begin={`${delay+140}ms`} repeatCount="indefinite"/>
-                <animate attributeName="y1" values={`${beamStart.y};${beamEnd.y}`}         dur={`${wakeDuration}ms`} begin={`${delay+140}ms`} repeatCount="indefinite"/>
-                <animate attributeName="x2" values={`${beamStart.x+120};${beamEnd.x+120}`} dur={`${wakeDuration}ms`} begin={`${delay+140}ms`} repeatCount="indefinite"/>
-                <animate attributeName="y2" values={`${beamStart.y};${beamEnd.y}`}         dur={`${wakeDuration}ms`} begin={`${delay+140}ms`} repeatCount="indefinite"/>
-              </linearGradient>
-            </defs>
-
-            {/* glow halo */}
-            <path d={path} fill="none" stroke="rgba(47,121,255,0.10)" strokeWidth={width+10} strokeLinecap="round"
-              filter="url(#cable-glow)"
-              style={{ opacity: isVisible ? 0.88 : 0, animation: isVisible ? `cableGlowPulse ${Math.max(beamDuration*2.8,6800)}ms ease-in-out ${delay}ms infinite` : 'none', transition:`opacity ${isVisible?760:260}ms ease ${delay}ms` }}/>
-            {/* mid stroke */}
-            <path d={path} fill="none" stroke="rgba(47,121,255,0.22)" strokeWidth={width+4} strokeLinecap="round"
-              style={{ strokeDasharray:dashLength, strokeDashoffset:isVisible?0:dashLength, opacity:isVisible?0.92:0, animation:isVisible?`cableBreathe ${Math.max(beamDuration*3.1,7600)}ms ease-in-out ${delay}ms infinite`:'none', transition:[`stroke-dashoffset ${isVisible?1460:760}ms cubic-bezier(.22,1,.36,1) ${delay}ms`,`opacity ${isVisible?760:260}ms ease ${delay}ms`].join(',') }}/>
-            {/* core stroke */}
-            <path d={path} fill="none" stroke="rgba(47,121,255,0.46)" strokeWidth={width} strokeLinecap="round"
-              style={{ strokeDasharray:dashLength, strokeDashoffset:isVisible?0:dashLength, opacity:isVisible?0.94:0, transition:[`stroke-dashoffset ${isVisible?1460:760}ms cubic-bezier(.22,1,.36,1) ${delay}ms`,`opacity ${isVisible?760:260}ms ease ${delay}ms`].join(',') }}/>
-            {/* inner highlight */}
-            <path d={path} fill="none" stroke="rgba(224,242,255,0.12)" strokeWidth={Math.max(width-4.2,1.6)} strokeLinecap="round"
-              style={{ opacity:isVisible?0.66:0, transition:`opacity ${isVisible?760:220}ms ease ${delay}ms` }}/>
-            <path d={path} fill="none" stroke="rgba(202,236,255,0.18)" strokeWidth={Math.max(width-2.2,2.8)} strokeLinecap="round"
-              style={{ opacity:isVisible?0.72:0, transition:`opacity ${isVisible?760:200}ms ease ${delay}ms` }}/>
-            {/* beam wake */}
-            <path d={path} fill="none" stroke={`url(#${wakeId})`} strokeWidth={Math.max(width+1.2,4.8)} strokeLinecap="round"
-              filter="url(#beam-soft-glow)"
-              style={{ opacity:isVisible?0.68:0, transition:`opacity ${isVisible?760:200}ms ease ${delay}ms` }}/>
-            {/* beam forward */}
-            <path d={path} fill="none" stroke={`url(#${fwdId})`} strokeWidth={Math.max(width-0.4,4.2)} strokeLinecap="round"
-              filter="url(#beam-glow)"
-              style={{ opacity:isVisible?1:0, transition:`opacity ${isVisible?760:200}ms ease ${delay}ms` }}/>
+            <path d={path} fill="none" stroke="rgba(47,121,255,0.38)" strokeWidth={width} strokeLinecap="round"
+              style={{ strokeDasharray:dashLength, strokeDashoffset:isVisible?0:dashLength, opacity:isVisible?1:0, transition:[`stroke-dashoffset ${isVisible?1460:760}ms cubic-bezier(.22,1,.36,1) ${delay}ms`,`opacity ${isVisible?760:260}ms ease ${delay}ms`].join(',') }}/>
           </g>
         )
       })}
