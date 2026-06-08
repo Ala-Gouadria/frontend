@@ -5,6 +5,7 @@ import { detectAgents, DEMO_AGENTS } from './agentPanelConfig'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
 import { voiceApi } from '../../api/voiceApi'
 import { matchDemoTurn } from './demoScript'
+import noraWordmark from '../../assets/splash_screen/logo.svg'
 import './NoraVoice.css'
 
 const DEMO_AGENT_KEYS = DEMO_AGENTS.map((a) => a.key)
@@ -633,7 +634,9 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
               opacity: prefersReducedMotion ? undefined : 0,
             }}
           >
-            {CONFIG.showWordmark && <span className="wordmark">nora</span>}
+            {CONFIG.showWordmark && (
+              <img className="wordmark" src={noraWordmark} alt="nora" draggable="false" />
+            )}
           </div>
         </div>
 
