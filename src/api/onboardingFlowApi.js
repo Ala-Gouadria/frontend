@@ -112,6 +112,18 @@ function buildUploadRecord(file, fieldId) {
 }
 
 export const onboardingFlowApi = {
+  // Server-side source of truth for whether this user has finished onboarding.
+  // Used to decide the post-login landing (so a returning user with a completed
+  // profile skips Setup even if their browser localStorage was cleared).
+  async isOnboardingComplete() {
+    try {
+      const status = await get('/api/v1/company/onboarding/status')
+      return Boolean(status?.onboardingCompleted ?? status?.completed)
+    } catch {
+      return false
+    }
+  },
+
   async getFlow() {
     // Start from blank values, then hydrate with whatever the user has already
     // saved so returning users see their real data (not blanks, not mock).
