@@ -113,18 +113,60 @@ function buildUploadRecord(file, fieldId) {
 
 export const onboardingFlowApi = {
   async getFlow() {
-    let onboardingStatus = null
+    // Start from blank values, then hydrate with whatever the user has already
+    // saved so returning users see their real data (not blanks, not mock).
+    const values = cloneValues(ONBOARDING_INITIAL_VALUES)
+
+    let profile = null
     try {
-      onboardingStatus = await get('/api/v1/company/onboarding/status')
+      profile = await get('/api/v1/company/profile')
     } catch {
-      // Backend may not have started onboarding yet — that's fine
+      // No profile yet (new user) — keep the blank values.
     }
 
-    const values = cloneValues(ONBOARDING_INITIAL_VALUES)
+    if (profile) {
+      // Map the saved backend profile back onto the form fields (reverse of
+      // buildBackendPayload). Only set fields that actually have a value.
+      const set = (stepId, fieldId, val) => {
+        if (val !== undefined && val !== null && val !== '') {
+          values[stepId] = { ...values[stepId], [fieldId]: val }
+        }
+      }
+      // company name was stored as "First Last" — split back out
+      if (profile.companyName) {
+        const [first, ...rest] = String(profile.companyName).split(' ')
+        set('profile', 'firstName', first)
+        set('profile', 'lastName', rest.join(' '))
+      }
+      set('profile', 'industry', profile.industry)
+      set('business', 'websiteUrl', profile.website)
+      const icp = profile.icp ?? {}
+      set('audience', 'ageRange', icp.ageRange)
+      set('audience', 'primaryLocation', icp.primaryLocation)
+      set('audience', 'painPoints', icp.painPoints)
+      set('audience', 'audienceInterests', icp.interests)
+      const tone = profile.tone ?? {}
+      set('brand', 'primaryColor', tone.primaryColor)
+      set('brand', 'secondaryColor', tone.secondaryColor)
+      set('brand', 'brandTone', tone.brandTone)
+      set('brand', 'brandStory', tone.brandStory)
+      const prefs = profile.preferences ?? {}
+      set('content', 'contentTypes', prefs.contentPillars)
+      set('content', 'postFrequency', prefs.postingFrequency)
+      set('content', 'visualStyle', prefs.visualStyle)
+      set('content', 'ctaStyle', prefs.ctaStyle)
+      set('goals', 'mainGoal', prefs.mainGoal)
+      set('goals', 'monthlyTarget', prefs.monthlyTarget)
+      set('goals', 'conversionGoal', prefs.conversionGoal)
+      set('goals', 'successSignal', prefs.successSignal)
+      set('optimization', 'priorityMetric', prefs.priorityMetric)
+      set('optimization', 'brandAdmire', prefs.brandAdmire)
+    }
+
     const progress = buildProgress(ONBOARDING_FLOW_STEPS, values)
 
-    // If backend says onboarding is complete, reflect that
-    if (onboardingStatus?.completed) {
+    // If backend says onboarding is complete, reflect full progress.
+    if (profile?.onboardingCompleted) {
       return {
         content: { ...ONBOARDING_FLOW_CONTENT },
         steps: ONBOARDING_FLOW_STEPS.map((s) => ({ ...s, fields: s.fields.map((f) => ({ ...f })) })),
