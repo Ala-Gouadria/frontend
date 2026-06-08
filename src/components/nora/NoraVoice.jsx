@@ -4,7 +4,7 @@ import AgentPanel from './AgentPanel'
 import { detectAgents, DEMO_AGENTS } from './agentPanelConfig'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
 import { voiceApi } from '../../api/voiceApi'
-import { matchDemoTurn } from './demoScript'
+import { matchDemoTurn, DEMO_MODE_ENABLED } from './demoScript'
 import './NoraVoice.css'
 
 const DEMO_AGENT_KEYS = DEMO_AGENTS.map((a) => a.key)
@@ -483,9 +483,10 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
     setIsSending(true)
     setNotice('')
 
-    // Demo fast-path: if the question matches a pre-captured turn, play the
-    // cached reply + pre-generated audio instantly (no live chat/TTS latency).
-    const demoTurn = matchDemoTurn(text)
+    // Demo fast-path: if VITE_VOICE_MODE=demo (default) and the question matches
+    // a pre-captured turn, play the cached reply + pre-generated audio instantly.
+    // Set VITE_VOICE_MODE=live to always use the real OpenAI TTS + chat pipeline.
+    const demoTurn = DEMO_MODE_ENABLED ? matchDemoTurn(text) : null
     if (demoTurn) {
       try {
         // If the turn navigates somewhere (e.g. the dashboard), do it once Nora

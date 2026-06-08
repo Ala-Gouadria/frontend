@@ -2,6 +2,10 @@
 // these (voice or text), the orb plays the cached reply + pre-generated audio
 // instantly instead of waiting on the live chat + TTS round-trip. Anything that
 // doesn't match falls through to the live path.
+//
+// Set VITE_VOICE_MODE=live in .env to bypass this entirely and always use the
+// live OpenAI TTS + chat API. Set to "demo" (or leave unset) to keep the fast path.
+export const DEMO_MODE_ENABLED = import.meta.env.VITE_VOICE_MODE !== 'live'
 
 export const DEMO_TURNS = [
   {
