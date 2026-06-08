@@ -341,27 +341,34 @@ const GraphLines = memo(function GraphLines({ sceneVisible, visibleEdges, positi
       path: buildRoundedCablePath(points),
       beamStart: beamStartsAtFrom ? start : end,
       beamEnd:   beamStartsAtFrom ? end   : start,
+      gradStart: start,
+      gradEnd:   end,
     }
   }), [positions])
 
   return (
     <svg ref={svgRef} style={{ position:'absolute', inset:0, width:'100%', height:'100%', overflow:'visible', pointerEvents:'none', zIndex:1 }}>
 
-      {edgeData.map(({ id, path, beamStart, beamEnd, width, beamDuration, drawDelay }) => {
+      {edgeData.map(({ id, path, beamStart, beamEnd, gradStart, gradEnd, beamDuration, drawDelay }) => {
         const isVisible       = sceneVisible && visibleEdges.has(id)
         const delay           = isVisible ? drawDelay : 0
+        const cableGradId     = `cg-${id}`
         const fwdId           = `bf-${id}`
         const forwardDuration = Math.max(Math.round(beamDuration * 0.96), 1900)
 
         return (
           <g key={id} data-edge-group={id}>
             <defs>
+              <linearGradient id={cableGradId} gradientUnits="userSpaceOnUse"
+                x1={gradStart.x} y1={gradStart.y} x2={gradEnd.x} y2={gradEnd.y}>
+                <stop offset="3.59%"  stopColor="#1877F2" />
+                <stop offset="94.78%" stopColor="#6DA3FF" />
+              </linearGradient>
               <linearGradient id={fwdId} gradientUnits="userSpaceOnUse"
                 x1={beamStart.x - 180} y1={beamStart.y} x2={beamStart.x + 180} y2={beamStart.y}>
-                <stop offset="0%"   stopColor="rgba(47,121,255,0)" />
-                <stop offset="18%"  stopColor="rgba(47,121,255,0.04)" />
-                <stop offset="52%"  stopColor="rgba(86,188,255,0.88)" />
-                <stop offset="82%"  stopColor="rgba(216,244,255,0.96)" />
+                <stop offset="0%"   stopColor="rgba(255,255,255,0)" />
+                <stop offset="30%"  stopColor="rgba(255,255,255,0.15)" />
+                <stop offset="60%"  stopColor="rgba(255,255,255,0.6)" />
                 <stop offset="100%" stopColor="rgba(255,255,255,0)" />
                 <animate attributeName="x1" values={`${beamStart.x-180};${beamEnd.x-180}`} dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
                 <animate attributeName="y1" values={`${beamStart.y};${beamEnd.y}`}         dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
@@ -370,11 +377,11 @@ const GraphLines = memo(function GraphLines({ sceneVisible, visibleEdges, positi
               </linearGradient>
             </defs>
 
-            {/* flat cable */}
-            <path d={path} fill="none" stroke="rgba(47,121,255,0.38)" strokeWidth={width} strokeLinecap="round"
+            {/* cable */}
+            <path d={path} fill="none" stroke={`url(#${cableGradId})`} strokeWidth={6} strokeLinecap="round"
               style={{ strokeDasharray:dashLength, strokeDashoffset:isVisible?0:dashLength, opacity:isVisible?1:0, transition:[`stroke-dashoffset ${isVisible?1460:760}ms cubic-bezier(.22,1,.36,1) ${delay}ms`,`opacity ${isVisible?760:260}ms ease ${delay}ms`].join(',') }}/>
             {/* traveling beam */}
-            <path d={path} fill="none" stroke={`url(#${fwdId})`} strokeWidth={Math.max(width-0.4,4.2)} strokeLinecap="round"
+            <path d={path} fill="none" stroke={`url(#${fwdId})`} strokeWidth={5} strokeLinecap="round"
               style={{ opacity:isVisible?1:0, transition:`opacity ${isVisible?760:200}ms ease ${delay}ms` }}/>
           </g>
         )
@@ -416,27 +423,32 @@ const ConnectorsLayer = memo(function ConnectorsLayer({
     <>
       {passiveSockets.map(({ nodeId, portName }) => {
         const point = getPortPoint(nodeId, portName, positions)
+        const isH = portName === 'left' || portName === 'right'
+        const w = isH ? 10 : 20
+        const h = isH ? 20 : 10
+        const tx = portName === 'left' ? '-100%' : portName === 'right' ? '0' : '-50%'
+        const ty = portName === 'top' ? '-100%' : portName === 'bottom' ? '0' : '-50%'
         return (
           <div key={`${nodeId}-${portName}-socket`} className="intelligence-map-socket"
             data-port-node={nodeId} data-port-name={portName}
-            style={{ position:'absolute', left:point.x, top:point.y, width:nodeId==='avatar'?18:14, height:nodeId==='avatar'?18:14, transform:'translate(-50%,-50%)', opacity:sceneVisible?1:0, pointerEvents:'none', zIndex:8 }}>
-            <div className="intelligence-map-socket__core" />
-          </div>
+            style={{ position:'absolute', left:point.x, top:point.y, width:w, height:h, transform:`translate(${tx},${ty})`, opacity:sceneVisible?1:0, pointerEvents:'none', zIndex:8 }} />
         )
       })}
 
       {connectorButtons.map(({ nodeId, portName }) => {
         const point      = getPortPoint(nodeId, portName, positions)
         const isCollapsed = collapsedNodes.has(nodeId)
+        const tx = portName === 'left' ? '-100%' : portName === 'right' ? '0' : '-50%'
+        const ty = portName === 'top' ? '-100%' : portName === 'bottom' ? '0' : '-50%'
         return (
           <button key={`${nodeId}-${portName}-toggle`} type="button"
             className={isCollapsed ? 'intelligence-map-connector intelligence-map-connector--collapsed' : 'intelligence-map-connector intelligence-map-connector--expanded'}
             data-port-node={nodeId} data-port-name={portName}
             onPointerDown={e => e.stopPropagation()}
             onClick={e => { e.stopPropagation(); onToggleCollapse(nodeId) }}
-            style={{ position:'absolute', left:point.x, top:point.y, transform:'translate(-50%,-50%)', opacity:sceneVisible?1:0, zIndex:9 }}
+            style={{ position:'absolute', left:point.x, top:point.y, transform:`translate(${tx},${ty})`, opacity:sceneVisible?1:0, zIndex:9 }}
             aria-label={isCollapsed ? 'Expand connected cards' : 'Collapse connected cards'}>
-            <span className="intelligence-map-connector__icon">{isCollapsed ? '+' : '-'}</span>
+            <span className="intelligence-map-connector__icon" />
           </button>
         )
       })}
