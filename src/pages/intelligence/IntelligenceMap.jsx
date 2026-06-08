@@ -214,12 +214,20 @@ function getAvatarPort(portName) {
   return avatarPorts[portName]
 }
 
-function getPortPoint(nodeId, portName, positions) {
+function getPortPoint(nodeId, portName, positions, cardElsRef) {
   if (nodeId === 'avatar') return getAvatarPort(portName)
   const node     = CARD_NODES[nodeId]
-  const port     = node.ports[portName]
   const position = positions[nodeId]
-  return { x: position.left + port.x, y: position.top + port.y }
+  const el       = cardElsRef?.current?.[nodeId]
+  const w        = el ? el.clientWidth  : node.width
+  const h        = el ? el.clientHeight : node.height
+  const ports = {
+    left:   { x: 0,     y: h / 2 },
+    right:  { x: w,     y: h / 2 },
+    top:    { x: w / 2, y: 0 },
+    bottom: { x: w / 2, y: h },
+  }
+  return { x: position.left + ports[portName].x, y: position.top + ports[portName].y }
 }
 
 function buildVisibleNodeSet(collapsedNodes) {
@@ -327,13 +335,13 @@ function buildUsedPortsMap(visibleEdges) {
 
 // ─── FIX #4+5 — GraphLines: memo + useMemo for all 252 SVG paths ────────────
 // svgRef is forwarded so the drag handler can query path elements directly.
-const GraphLines = memo(function GraphLines({ sceneVisible, visibleEdges, positions, svgRef }) {
+const GraphLines = memo(function GraphLines({ sceneVisible, visibleEdges, positions, svgRef, cardEls }) {
   const dashLength = 6200
 
   // Recompute paths only when positions actually change (drag-end or collapse)
   const edgeData = useMemo(() => EDGE_DEFS.map(edge => {
-    const start  = getPortPoint(edge.from, edge.fromPort, positions)
-    const end    = getPortPoint(edge.to,   edge.toPort,   positions)
+    const start  = getPortPoint(edge.from, edge.fromPort, positions, cardEls)
+    const end    = getPortPoint(edge.to,   edge.toPort,   positions, cardEls)
     const points = buildOrthogonalPoints(start, end, edge.axis, edge.bendRatio)
     const beamStartsAtFrom = edge.beamDirection !== 'toAvatar'
     return {
@@ -392,7 +400,7 @@ const GraphLines = memo(function GraphLines({ sceneVisible, visibleEdges, positi
 
 // ─── FIX #4 — ConnectorsLayer: memo + internal useMemo ───────────────────────
 const ConnectorsLayer = memo(function ConnectorsLayer({
-  sceneVisible, visibleNodeIds, visibleEdges, positions, collapsedNodes, onToggleCollapse,
+  sceneVisible, visibleNodeIds, visibleEdges, positions, collapsedNodes, onToggleCollapse, cardEls,
 }) {
   const visibleEdgeList = useMemo(
     () => EDGE_DEFS.filter(e => visibleEdges.has(e.id)),
@@ -422,7 +430,7 @@ const ConnectorsLayer = memo(function ConnectorsLayer({
   return (
     <>
       {passiveSockets.map(({ nodeId, portName }) => {
-        const point = getPortPoint(nodeId, portName, positions)
+        const point = getPortPoint(nodeId, portName, positions, cardEls)
         const isH = portName === 'left' || portName === 'right'
         const w = isH ? 10 : 20
         const h = isH ? 20 : 10
@@ -691,6 +699,7 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate, aut
   }, [])
 
   const handleToggleCollapse = useCallback((nodeId) => {
+    hasMeasured.current = false
     setCollapsedNodes(cur => {
       const next = new Set(cur)
       next.has(nodeId) ? next.delete(nodeId) : next.add(nodeId)
@@ -818,6 +827,39 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate, aut
     }
     return () => { clearTimeout(mountTimer); clearTimeout(showTimer); clearTimeout(sceneTimer); clearTimeout(hideTimer) }
   }, [isActive])
+
+  // Measure actual card heights after render and update port positions so
+  // cables and connectors align with the real card edges, not the static
+  // height estimates from createNode.
+  const hasMeasured = useRef(false)
+  useEffect(() => {
+    if (!mounted || !sceneVisible || hasMeasured.current) return
+    const timer = setTimeout(() => {
+      let changed = false
+      for (const [id, el] of Object.entries(cardEls.current)) {
+        if (!el) continue
+        const h = el.clientHeight
+        const w = el.clientWidth
+        const node = CARD_NODES[id]
+        if (Math.abs(node.ports.left.y - h / 2) > 2) {
+          node.ports.left.y   = h / 2
+          node.ports.right.y  = h / 2
+          node.ports.bottom.y = h
+          node.ports.right.x  = w
+          node.ports.top.x    = w / 2
+          node.ports.bottom.x = w / 2
+          node.width  = w
+          node.height = h
+          changed = true
+        }
+      }
+      if (changed) {
+        setPositions(prev => ({ ...prev }))
+      }
+      hasMeasured.current = true
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [mounted, sceneVisible, collapsedNodes])
 
   const visibleNodeIds = useMemo(() => buildVisibleNodeSet(collapsedNodes), [collapsedNodes])
   const visibleEdges   = useMemo(() => {
