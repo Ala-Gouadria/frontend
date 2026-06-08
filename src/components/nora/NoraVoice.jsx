@@ -23,14 +23,15 @@ function firstKeywordIndex(lowerText, agentKey) {
 
 // Baked-in look/feel constants (were the prototype's live "Tweaks" defaults).
 const CONFIG = {
-  ringColor: '#7c83f5',
+  // Nora-blue ripples + glow to match the chat UI (#2f80ff / #569eff).
+  ringColor: '#2f80ff',
   sensitivity: 1.3,
   rippleSpeed: 1,
   calmness: 0.86,
   glow: 1,
   wobble: 1,
   showWordmark: true,
-  bgTone: '#e9eefc',
+  bgTone: '#eaf2ff',
 }
 
 // ---- small helpers ---------------------------------------------------------
@@ -345,6 +346,29 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
     setMode('idle')
     setNotice('')
   }
+
+  // Manual reveal toggle — pops the agent cards in/out on the side without
+  // running the voice/chat flow (handy for demo + checking the panel design).
+  function toggleAgentCards() {
+    setRevealedAgents((prev) =>
+      prev.size > 0 ? new Set() : new Set(DEMO_AGENT_KEYS),
+    )
+  }
+
+  // Navigating away mid-speech: stop Nora talking (cut the TTS + mic), reset the
+  // orb to idle, then route. Lets the user click the nav / dashboard while Nora
+  // is speaking instead of being locked out until she finishes.
+  function handleNavInterrupt(destination) {
+    stopNoraVoice()
+    stopAudio()
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop() } catch { /* already stopped */ }
+    }
+    setIsListening(false)
+    setIsSending(false)
+    setMode('idle')
+    onNavigate?.(destination)
+  }
   function toggleSpeak() {
     if (mode === 'speaking') {
       setMode('idle')
@@ -586,7 +610,7 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
       <div className="stage" style={{ '--tone': CONFIG.bgTone }}>
         {revealed && (
           <div className="nora-voice-nav">
-            <MainNav activeId={activeNavId} onSelect={onNavigate} />
+            <MainNav activeId={activeNavId} onSelect={handleNavInterrupt} />
           </div>
         )}
 
@@ -730,14 +754,22 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
         )}
 
         {revealed && (
-          <button
-            type="button"
-            className="nora-voice-dashboard nv-enter nv-enter--right"
-            style={{ '--d': '0ms' }}
-            onClick={() => onNavigate?.('stars-map')}
-          >
-            Open dashboard
-          </button>
+          <div className="nora-voice-topright nv-enter nv-enter--right" style={{ '--d': '0ms' }}>
+            <button
+              type="button"
+              className="nora-voice-dashboard"
+              onClick={toggleAgentCards}
+            >
+              {revealedAgents.size > 0 ? 'Hide capabilities' : 'Show capabilities'}
+            </button>
+            <button
+              type="button"
+              className="nora-voice-dashboard"
+              onClick={() => handleNavInterrupt('stars-map')}
+            >
+              Open dashboard
+            </button>
+          </div>
         )}
 
         {revealedAgents.size > 0 && (

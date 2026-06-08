@@ -22,27 +22,29 @@ function ChevronIcon({ open }) {
 }
 
 function AgentSection({ agent, index, open, onToggle }) {
-  const provider = agent.provider.toLowerCase()
+  // Accent styling keys off the capability (analyst/strategy/social), never a
+  // third-party provider name.
+  const accent = agent.key
   return (
     <section
       className={`agent-panel__section ${open ? 'is-open' : 'is-collapsed'}`}
       style={{ '--agent-index': index }}
-      data-provider={provider}
+      data-provider={accent}
     >
       <button
         type="button"
         className="agent-panel__section-head"
         onClick={onToggle}
         aria-expanded={open}
-        data-provider={provider}
+        data-provider={accent}
       >
-        <span className="agent-panel__dot" data-provider={provider} />
+        <span className="agent-panel__dot" data-provider={accent} />
         <div className="agent-panel__section-titles">
           <h3 className="agent-panel__section-title">{agent.label}</h3>
           <p className="agent-panel__section-tagline">{agent.tagline}</p>
         </div>
-        <span className="agent-panel__provider" data-provider={provider}>
-          {agent.provider}
+        <span className="agent-panel__provider" data-provider={accent}>
+          {agent.module}
         </span>
         <ChevronIcon open={open} />
       </button>
@@ -61,7 +63,7 @@ function AgentSection({ agent, index, open, onToggle }) {
 }
 
 /**
- * Right-side panel that reveals the agents Nora is orchestrating. Each agent
+ * Right-side panel that reveals Nora's capabilities as she talks. Each capability
  * appears as a compact header as it is mentioned; the most-recently-revealed
  * agent auto-expands and the previous one collapses (so the open card tracks
  * what Nora is currently talking about). The user can click any header to
@@ -96,10 +98,10 @@ export default function AgentPanel({ revealed }) {
   }
 
   return (
-    <aside className="agent-panel" aria-label="Agents Nora is orchestrating">
+    <aside className="agent-panel" aria-label="Nora&rsquo;s capabilities">
       <div className="agent-panel__header">
-        <span className="agent-panel__eyebrow">Orchestrating</span>
-        <h2 className="agent-panel__title">Nora&rsquo;s agents</h2>
+        <span className="agent-panel__eyebrow">AI Operating System</span>
+        <h2 className="agent-panel__title">Nora&rsquo;s capabilities</h2>
       </div>
 
       <div className="agent-panel__scroll">
