@@ -7,12 +7,24 @@
 }
 
 .mnav {
-  width: 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   background: transparent;
+  position: relative;
+}
+
+.mnav::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .mnav-head {
@@ -25,7 +37,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  border: 2px solid #ececea;
+  border: 3px solid #ececea;
   border-radius: 50%;
   background-color: #ffffff;
   cursor: pointer;
@@ -35,20 +47,20 @@
 
 .mnav-head--on {
   border-color: #ffffff;
+  border-width: 4px;
   background-color: #ffffff;
   background-image: none;
   box-shadow:
-    0 4px 14px rgba(20, 30, 60, 0.08),
-    0 0 0 4px rgba(184, 156, 255, 0.08);
+    0 4px 14px rgba(20, 30, 60, 0.08);
 }
 
 .mnav-head--on::before {
   content: "";
   position: absolute;
-  inset: -3px;
-  padding: 2px;
+  inset: -7px;
+  padding: 3px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #8aa6ff 0%, #b89cff 55%, #f3b1d6 100%);
+  background: linear-gradient(135deg, #1877F2 0%, #6DA3FF 50%, #C4B5FD 100%);
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -132,19 +144,20 @@
 }
 
 .mnav-icon {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
   pointer-events: none;
-  opacity: 0.52;
-  filter: grayscale(1) brightness(0.64) contrast(0.9);
-  transform: translateZ(0); /* ← forces GPU layer, sharpens rendering */
+  opacity: 0.6;
+  filter: grayscale(1) brightness(0.5) contrast(1.1);
+  transform: translateZ(0);
   will-change: transform;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .mnav-icon--on {
   opacity: 1;
-  filter: grayscale(1) brightness(0.34) contrast(1);
+  filter: grayscale(0.8) brightness(0.28) contrast(1.2);
 }
 
 @media (max-width: 768px) {
