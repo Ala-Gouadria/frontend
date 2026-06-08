@@ -780,6 +780,10 @@ function NoraChatWorkspace({ open, onClose, onNavigate, pairedWithTask = false, 
         serviceId: service.id,
         text: messageText,
         attachments: attachmentsToSend,
+        // Use the chat brain (which injects the company profile / memory) rather
+        // than the agent-orchestration path, whose synthesizer can't see the
+        // profile and apologizes when a tool returns nothing.
+        chatOnly: true,
       })
 
       const confirmedMessages = result.conversation.messages?.length
