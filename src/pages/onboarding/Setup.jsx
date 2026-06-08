@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './Setup.css'
-import { setupApi } from '../../api/setupApi'
+// Use the real onboarding API so the first-screen intake persists to the
+// backend (company profile) and syncs into Nora's memory, instead of the mock.
+import { onboardingFlowApi as setupApi } from '../../api/onboardingFlowApi'
 import SplashScreen from '../../components/SplashScreen/SplashScreen'
 import NoraLogo from '../../assets/logo/Nora-logo.png'
 import ProfileIcon from '../../assets/icons/Set-up-Nav/Profilesetup.png'
