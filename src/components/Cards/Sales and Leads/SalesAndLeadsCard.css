@@ -33,14 +33,14 @@
 }
 
 .sales-and-leads-card__sparkline {
-  width: 160px;
-  min-width: 120px;
+  width: 140px;
+  min-width: 100px;
   flex-shrink: 0;
-  height: 64px;
+  height: 44px;
 }
 
 .sales-and-leads-card__sparkline svg {
-  height: 64px !important;
+  height: 44px !important;
   width: 100%;
 }
 
@@ -67,7 +67,15 @@
 /* ── Lead Quality ── */
 .sales-and-leads-card__quality {
   display: grid;
-  gap: 12px;
+  gap: 8px;
+}
+
+.sales-and-leads-card__quality-heading {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #171719;
+  line-height: 1.2;
 }
 
 .sales-and-leads-card__quality-legend {
@@ -81,8 +89,8 @@
 .sales-and-leads-card__legend-item {
   display: flex;
   align-items: center;
-  gap: 9px;
-  font-size: clamp(0.78rem, 2.8vw, 1.1rem);
+  gap: 6px;
+  font-size: 0.78rem;
   font-weight: 600;
   color: rgba(24, 24, 27, 0.72);
   white-space: nowrap;
@@ -94,11 +102,11 @@
 }
 
 .sales-and-leads-card__legend-swatch {
-  width: 24px;
-  height: 24px;
-  border-radius: 5px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
   flex-shrink: 0;
-  box-shadow: 0 8px 14px rgba(147, 179, 17, 0.14);
+  box-shadow: 0 4px 8px rgba(147, 179, 17, 0.1);
 }
 
 .sales-and-leads-card__legend-swatch--green {

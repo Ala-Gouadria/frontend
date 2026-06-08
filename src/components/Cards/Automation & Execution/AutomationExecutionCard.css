@@ -1,6 +1,6 @@
 .automation-execution-card {
-  min-height: 520px;
-  gap: 12px;
+  min-height: 0;
+  gap: 8px;
   overflow: hidden;
 }
 
@@ -9,41 +9,37 @@
 }
 
 .automation-execution-card__gauge {
-  width: auto;
-  justify-self: stretch;
-  margin: -4px -10px 4px;
+  width: 82%;
+  justify-self: center;
+  margin: -6px 0 -2px;
   overflow: visible;
 }
 
 .automation-execution-card__gauge .automation-arc-gauge__progress {
-  stroke-width: 14;
-  filter:
-    blur(1.6px)
-    drop-shadow(0 0 12px rgba(193, 224, 54, 0.3));
+  stroke-width: 10;
+  filter: drop-shadow(0 0 6px rgba(193, 224, 54, 0.25));
 }
 
 .automation-execution-card__gauge .automation-arc-gauge__track {
-  stroke-width: 14;
-  opacity: 0.6;
-  filter: blur(0.8px);
+  stroke-width: 10;
+  opacity: 0.5;
 }
 
 .automation-execution-card__gauge .automation-arc-gauge__tick {
   stroke: #b7d966;
-  stroke-width: 2;
-  opacity: 0.7;
+  stroke-width: 1.5;
+  opacity: 0.6;
 }
 
 .automation-execution-card__gauge .automation-arc-gauge__cap {
   fill: #b2d433;
   stroke-width: 0;
-  filter: blur(0.4px);
 }
 
 .automation-execution-card__lanes {
   display: grid;
-  gap: 8px;
-  margin-top: 0;
+  gap: 6px;
+  margin-top: -4px;
 }
 
 .automation-execution-card__lanes h3 {
@@ -78,11 +74,11 @@
 /* ── QualityBlocks lane overrides ── */
 
 .automation-execution-card__lane-blocks {
-  gap: 5px;               /* wider gap between blocks */
+  gap: 3px;
 }
 
 .automation-execution-card__lane-blocks .quality-blocks__block {
-  height: 48px;           /* taller blocks */
+  height: 36px;
   border-radius: 0 !important;  /* hard 90° corners — overrides QualityBlocks.css */
   flex: 1 1 0;
   min-width: 0;

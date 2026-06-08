@@ -94,6 +94,7 @@ export function SalesAndLeadsCard({ data = defaultData, className = '' }) {
       {/* ── Lead Quality ── */}
       <div className="sales-and-leads-card__quality">
         <p className="analytics-card__section-title">{d.leadQuality.label}</p>
+        <h4 className="sales-and-leads-card__quality-heading">{d.leadQuality.label}</h4>
 
         {/* Legend */}
         <div className="sales-and-leads-card__quality-legend">
