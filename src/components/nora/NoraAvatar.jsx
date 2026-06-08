@@ -91,7 +91,7 @@ export default function NoraAvatar({
             height: size,
             borderRadius: '50%',
             overflow: 'hidden',
-            background: 'linear-gradient(135deg, #2563EB 0%, #3B82F6 35%, #C4B5FD 75%, #FFFFFF 100%)',
+            background: 'linear-gradient(97.07deg, #1877F2 6.35%, #6DA3FF 42.96%, #FFDFEA 94.89%)',
             boxShadow: `
               inset 6px 6px 15px rgba(255,255,255,0.4),
               inset -8px -8px 20px rgba(255,255,255,0.8),
@@ -100,55 +100,6 @@ export default function NoraAvatar({
             zIndex: 1,
           }}
         >
-          <div
-            className="nora-color-1"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: '50%',
-              background: 'radial-gradient(ellipse at center, rgba(99,102,241,0.55) 0%, rgba(59,130,246,0.3) 45%, transparent 70%)',
-              pointerEvents: 'none',
-              zIndex: 2,
-            }}
-          />
-
-          <div
-            className="nora-color-2"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: '50%',
-              background: 'radial-gradient(ellipse at center, rgba(196,181,253,0.65) 0%, rgba(167,139,250,0.35) 40%, transparent 65%)',
-              pointerEvents: 'none',
-              zIndex: 3,
-            }}
-          />
-
-          <div
-            style={{
-              position: 'absolute',
-              top: '8%',
-              left: '12%',
-              width: '35%',
-              height: '30%',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(255,255,255,0.7) 0%, transparent 80%)',
-              filter: 'blur(6px)',
-              transform: 'rotate(-20deg)',
-              zIndex: 4,
-              pointerEvents: 'none',
-            }}
-          />
-
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at 30% 50%, rgba(37,99,235,0.4) 0%, transparent 60%)',
-              pointerEvents: 'none',
-              zIndex: 2,
-            }}
-          />
 
           <div
             style={{
