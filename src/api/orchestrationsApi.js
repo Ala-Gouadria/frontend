@@ -2,7 +2,9 @@ import { get, post } from './client.js'
 
 export const orchestrationsApi = {
   async create({ message, context = {} }) {
-    return post('/api/v1/orchestrations', { message, context })
+    // Backend contract is `intent` (see createOrchestrationSchema). Send `intent`
+    // and mirror to `message` so either backend build accepts the body.
+    return post('/api/v1/orchestrations', { intent: message, message, context })
   },
 
   async get(workflowId) {
