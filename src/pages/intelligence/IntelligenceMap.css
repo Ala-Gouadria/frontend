@@ -21,6 +21,16 @@
 
 .intelligence-map-grid {
   background: transparent;
+  transform-origin: 0 0;
+}
+
+/* Force high-quality rasterization inside the zoom wrapper */
+.react-transform-wrapper {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.react-transform-component {
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .intelligence-map-ambient {
@@ -124,10 +134,13 @@
 /* ── Card shell containment ─────────────────────────────────────────────── */
 .intelligence-map-card-shell {
   contain: layout style;
+  -webkit-font-smoothing: subpixel-antialiased;
 }
 
 .intelligence-map-card-shell .analytics-card {
   width: 100%;
+  border: 1px solid rgba(24, 24, 27, 0.05);
+  box-shadow: 0 4px 16px rgba(24, 24, 27, 0.06);
 }
 
 /* ── Zoomed-out optimisation mode (scale < 0.45) ────────────────────────── */
