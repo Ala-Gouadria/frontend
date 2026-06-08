@@ -60,7 +60,7 @@ import './IntelligenceMap.css'
 // ─── Canvas constants ───────────────────────────────────────────────────────
 const CANVAS = { width: 7800, height: 4300, centerX: 3900, centerY: 2150 }
 const AVATAR  = { x: CANVAS.centerX, y: CANVAS.centerY, radius: 66 }
-const CARD_WIDTH  = 418
+const CARD_WIDTH  = 480
 const CARD_HEIGHT = 500
 
 // ─── Node factory ───────────────────────────────────────────────────────────
@@ -112,7 +112,7 @@ const CARD_NODES = {
   opportunityDetection: createNode(OpportunityDetectionCard,  5120, 1490, { revealDelay: 1100, enterY:  16 }),
   riskDetection:        createNode(RiskDetectionCard,         5900, 1320, { revealDelay: 1270, enterY:  18 }),
 
-  social:               createNode(SocialMediaManagerCard,    4580, 2040, { width: 419, height: 496, revealDelay: 520 }),
+  social:               createNode(SocialMediaManagerCard,    4580, 2040, { height: 496, revealDelay: 520 }),
   socialStrategy:       createNode(SocialMediaStrategyCard,   5200, 2040, { revealDelay: 690 }),
   performance:          createNode(PerformanceTrackingCard,   5840, 2040, { revealDelay: 860 }),
   image:                createNode(ImageGenerationCard,       6500, 1490, { revealDelay: 1030, enterY: -18 }),
@@ -291,6 +291,7 @@ function createCardStyle(node, position, isVisible, isDragging) {
     position: 'absolute',
     left: position.left,
     top:  position.top,
+    width: node.width,
     zIndex: isDragging ? 20 : position.left > CANVAS.centerX ? 5 : 4,
     opacity: isVisible ? 1 : 0,
     transform: `translate(${isVisible ? 0 : node.enterX}px, ${isVisible ? 0 : node.enterY}px) scale(${isVisible ? 1 : 0.94})`,
@@ -337,79 +338,50 @@ const GraphLines = memo(function GraphLines({ sceneVisible, visibleEdges, positi
     const beamStartsAtFrom = edge.beamDirection !== 'toAvatar'
     return {
       ...edge,
-      path:      buildRoundedCablePath(points),
+      path: buildRoundedCablePath(points),
       beamStart: beamStartsAtFrom ? start : end,
       beamEnd:   beamStartsAtFrom ? end   : start,
+      gradStart: start,
+      gradEnd:   end,
     }
   }), [positions])
 
   return (
     <svg ref={svgRef} style={{ position:'absolute', inset:0, width:'100%', height:'100%', overflow:'visible', pointerEvents:'none', zIndex:1 }}>
-      <defs>
-        <filter id="cable-glow"    x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9"   result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="beam-glow"     x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="beam-soft-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="11" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
 
-      {edgeData.map(({ id, path, beamStart, beamEnd, width, beamDuration, drawDelay, beamDirection }) => {
+      {edgeData.map(({ id, path, beamStart, beamEnd, gradStart, gradEnd, beamDuration, drawDelay }) => {
         const isVisible       = sceneVisible && visibleEdges.has(id)
         const delay           = isVisible ? drawDelay : 0
+        const cableGradId     = `cg-${id}`
         const fwdId           = `bf-${id}`
-        const wakeId          = `bw-${id}`
         const forwardDuration = Math.max(Math.round(beamDuration * 0.96), 1900)
-        const wakeDuration    = Math.max(Math.round(beamDuration * 1.3),  2600)
 
         return (
-          // data-edge-group lets the imperative drag updater query this group's paths
           <g key={id} data-edge-group={id}>
             <defs>
+              <linearGradient id={cableGradId} gradientUnits="userSpaceOnUse"
+                x1={gradStart.x} y1={gradStart.y} x2={gradEnd.x} y2={gradEnd.y}>
+                <stop offset="3.59%"  stopColor="#1877F2" />
+                <stop offset="94.78%" stopColor="#6DA3FF" />
+              </linearGradient>
               <linearGradient id={fwdId} gradientUnits="userSpaceOnUse"
                 x1={beamStart.x - 180} y1={beamStart.y} x2={beamStart.x + 180} y2={beamStart.y}>
-                <stop offset="0%"   stopColor="rgba(47,121,255,0)" />
-                <stop offset="18%"  stopColor="rgba(47,121,255,0.04)" />
-                <stop offset="52%"  stopColor="rgba(86,188,255,0.88)" />
-                <stop offset="82%"  stopColor="rgba(216,244,255,0.96)" />
+                <stop offset="0%"   stopColor="rgba(255,255,255,0)" />
+                <stop offset="30%"  stopColor="rgba(255,255,255,0.15)" />
+                <stop offset="60%"  stopColor="rgba(255,255,255,0.6)" />
                 <stop offset="100%" stopColor="rgba(255,255,255,0)" />
                 <animate attributeName="x1" values={`${beamStart.x-180};${beamEnd.x-180}`} dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
                 <animate attributeName="y1" values={`${beamStart.y};${beamEnd.y}`}         dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
                 <animate attributeName="x2" values={`${beamStart.x+180};${beamEnd.x+180}`} dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
                 <animate attributeName="y2" values={`${beamStart.y};${beamEnd.y}`}         dur={`${forwardDuration}ms`} begin={`${delay}ms`} repeatCount="indefinite"/>
               </linearGradient>
-              <linearGradient id={wakeId} gradientUnits="userSpaceOnUse"
-                x1={beamStart.x - 260} y1={beamStart.y} x2={beamStart.x + 120} y2={beamStart.y}>
-                <stop offset="0%"   stopColor="rgba(47,121,255,0)" />
-                <stop offset="30%"  stopColor="rgba(47,121,255,0.02)" />
-                <stop offset="66%"  stopColor="rgba(101,201,255,0.24)" />
-                <stop offset="100%" stopColor="rgba(194,236,255,0.82)" />
-                <animate attributeName="x1" values={`${beamStart.x-260};${beamEnd.x-260}`} dur={`${wakeDuration}ms`} begin={`${delay+140}ms`} repeatCount="indefinite"/>
-                <animate attributeName="y1" values={`${beamStart.y};${beamEnd.y}`}         dur={`${wakeDuration}ms`} begin={`${delay+140}ms`} repeatCount="indefinite"/>
-                <animate attributeName="x2" values={`${beamStart.x+120};${beamEnd.x+120}`} dur={`${wakeDuration}ms`} begin={`${delay+140}ms`} repeatCount="indefinite"/>
-                <animate attributeName="y2" values={`${beamStart.y};${beamEnd.y}`}         dur={`${wakeDuration}ms`} begin={`${delay+140}ms`} repeatCount="indefinite"/>
-              </linearGradient>
             </defs>
 
-            {/* glow halo */}
-            <path d={path} fill="none" stroke="rgba(47,121,255,0.10)" strokeWidth={width+10} strokeLinecap="round"
-              filter="url(#cable-glow)"
-              style={{ opacity: isVisible ? 0.88 : 0, animation: isVisible ? `cableGlowPulse ${Math.max(beamDuration*2.8,6800)}ms ease-in-out ${delay}ms infinite` : 'none', transition:`opacity ${isVisible?760:260}ms ease ${delay}ms` }}/>
-            {/* mid stroke */}
-            <path d={path} fill="none" stroke="rgba(47,121,255,0.22)" strokeWidth={width+4} strokeLinecap="round"
-              style={{ strokeDasharray:dashLength, strokeDashoffset:isVisible?0:dashLength, opacity:isVisible?0.92:0, animation:isVisible?`cableBreathe ${Math.max(beamDuration*3.1,7600)}ms ease-in-out ${delay}ms infinite`:'none', transition:[`stroke-dashoffset ${isVisible?1460:760}ms cubic-bezier(.22,1,.36,1) ${delay}ms`,`opacity ${isVisible?760:260}ms ease ${delay}ms`].join(',') }}/>
-            {/* core stroke */}
-            <path d={path} fill="none" stroke="rgba(47,121,255,0.46)" strokeWidth={width} strokeLinecap="round"
-              style={{ strokeDasharray:dashLength, strokeDashoffset:isVisible?0:dashLength, opacity:isVisible?0.94:0, transition:[`stroke-dashoffset ${isVisible?1460:760}ms cubic-bezier(.22,1,.36,1) ${delay}ms`,`opacity ${isVisible?760:260}ms ease ${delay}ms`].join(',') }}/>
-            {/* inner highlight */}
-            <path d={path} fill="none" stroke="rgba(224,242,255,0.12)" strokeWidth={Math.max(width-4.2,1.6)} strokeLinecap="round"
-              style={{ opacity:isVisible?0.66:0, transition:`opacity ${isVisible?760:220}ms ease ${delay}ms` }}/>
-            <path d={path} fill="none" stroke="rgba(202,236,255,0.18)" strokeWidth={Math.max(width-2.2,2.8)} strokeLinecap="round"
-              style={{ opacity:isVisible?0.72:0, transition:`opacity ${isVisible?760:200}ms ease ${delay}ms` }}/>
-            {/* beam wake */}
-            <path d={path} fill="none" stroke={`url(#${wakeId})`} strokeWidth={Math.max(width+1.2,4.8)} strokeLinecap="round"
-              filter="url(#beam-soft-glow)"
-              style={{ opacity:isVisible?0.68:0, transition:`opacity ${isVisible?760:200}ms ease ${delay}ms` }}/>
-            {/* beam forward */}
-            <path d={path} fill="none" stroke={`url(#${fwdId})`} strokeWidth={Math.max(width-0.4,4.2)} strokeLinecap="round"
-              filter="url(#beam-glow)"
+            {/* cable */}
+            <path d={path} fill="none" stroke={`url(#${cableGradId})`} strokeWidth={6} strokeLinecap="round"
+              style={{ strokeDasharray:dashLength, strokeDashoffset:isVisible?0:dashLength, opacity:isVisible?1:0, transition:[`stroke-dashoffset ${isVisible?1460:760}ms cubic-bezier(.22,1,.36,1) ${delay}ms`,`opacity ${isVisible?760:260}ms ease ${delay}ms`].join(',') }}/>
+            {/* traveling beam */}
+            <path d={path} fill="none" stroke={`url(#${fwdId})`} strokeWidth={5} strokeLinecap="round"
               style={{ opacity:isVisible?1:0, transition:`opacity ${isVisible?760:200}ms ease ${delay}ms` }}/>
           </g>
         )
@@ -451,27 +423,32 @@ const ConnectorsLayer = memo(function ConnectorsLayer({
     <>
       {passiveSockets.map(({ nodeId, portName }) => {
         const point = getPortPoint(nodeId, portName, positions)
+        const isH = portName === 'left' || portName === 'right'
+        const w = isH ? 10 : 20
+        const h = isH ? 20 : 10
+        const tx = portName === 'left' ? '-100%' : portName === 'right' ? '0' : '-50%'
+        const ty = portName === 'top' ? '-100%' : portName === 'bottom' ? '0' : '-50%'
         return (
           <div key={`${nodeId}-${portName}-socket`} className="intelligence-map-socket"
             data-port-node={nodeId} data-port-name={portName}
-            style={{ position:'absolute', left:point.x, top:point.y, width:nodeId==='avatar'?18:14, height:nodeId==='avatar'?18:14, transform:'translate(-50%,-50%)', opacity:sceneVisible?1:0, pointerEvents:'none', zIndex:8 }}>
-            <div className="intelligence-map-socket__core" />
-          </div>
+            style={{ position:'absolute', left:point.x, top:point.y, width:w, height:h, transform:`translate(${tx},${ty})`, opacity:sceneVisible?1:0, pointerEvents:'none', zIndex:8 }} />
         )
       })}
 
       {connectorButtons.map(({ nodeId, portName }) => {
         const point      = getPortPoint(nodeId, portName, positions)
         const isCollapsed = collapsedNodes.has(nodeId)
+        const tx = portName === 'left' ? '-100%' : portName === 'right' ? '0' : '-50%'
+        const ty = portName === 'top' ? '-100%' : portName === 'bottom' ? '0' : '-50%'
         return (
           <button key={`${nodeId}-${portName}-toggle`} type="button"
             className={isCollapsed ? 'intelligence-map-connector intelligence-map-connector--collapsed' : 'intelligence-map-connector intelligence-map-connector--expanded'}
             data-port-node={nodeId} data-port-name={portName}
             onPointerDown={e => e.stopPropagation()}
             onClick={e => { e.stopPropagation(); onToggleCollapse(nodeId) }}
-            style={{ position:'absolute', left:point.x, top:point.y, transform:'translate(-50%,-50%)', opacity:sceneVisible?1:0, zIndex:9 }}
+            style={{ position:'absolute', left:point.x, top:point.y, transform:`translate(${tx},${ty})`, opacity:sceneVisible?1:0, zIndex:9 }}
             aria-label={isCollapsed ? 'Expand connected cards' : 'Collapse connected cards'}>
-            <span className="intelligence-map-connector__icon">{isCollapsed ? '+' : '-'}</span>
+            <span className="intelligence-map-connector__icon" />
           </button>
         )
       })}
