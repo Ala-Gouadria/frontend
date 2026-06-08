@@ -18,7 +18,9 @@ export const chatApi = {
   },
 
   async sendMessage(sessionId, { message, attachments = [] }) {
-    return post(`/api/v1/chat/sessions/${sessionId}/messages`, { message, attachments })
+    // Backend contract is `content` (see sendMessageSchema). Send `content` and
+    // mirror it to `message` so either backend build accepts the body.
+    return post(`/api/v1/chat/sessions/${sessionId}/messages`, { content: message, message, attachments })
   },
 
   async deleteSession(sessionId) {
