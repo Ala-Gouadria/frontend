@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth0 } from '@auth0/auth0-react'
 import * as tokenStore from '../api/tokenStore.js'
 import * as authApi from '../api/auth.js'
+import { onboardingFlowApi } from '../api/onboardingFlowApi'
 import Login from '../pages/auth/Login'
 import RestPassword from '../pages/auth/restPassword'
 import Signup from '../pages/auth/Signup'
@@ -170,7 +171,7 @@ export default function App() {
         await authApi.exchangeAuth0Token(idToken)
         if (!cancelled) {
           setAuthError('')
-          enterApp()
+          await enterApp()
         }
       } catch (err) {
         if (!cancelled) {
@@ -300,9 +301,22 @@ export default function App() {
     }
   }
 
-  const enterApp = () => {
+  const enterApp = async () => {
     setIsAuthenticated(true)
-    navigateTo(readStoredFlag(STORAGE_KEYS.setupComplete) ? readStoredView() || 'voice' : 'setup')
+    // Decide the landing view from the SERVER's onboarding status, not just the
+    // local flag — so a returning user whose profile is already complete skips
+    // Setup even if this browser's localStorage was cleared. Fall back to the
+    // local flag if the status check fails.
+    let complete = readStoredFlag(STORAGE_KEYS.setupComplete)
+    try {
+      if (await onboardingFlowApi.isOnboardingComplete()) {
+        complete = true
+        writeStorage(STORAGE_KEYS.setupComplete, 'true')
+      }
+    } catch {
+      // keep the local flag value
+    }
+    navigateTo(complete ? readStoredView() || 'voice' : 'setup')
   }
 
   const completeSetup = () => {
