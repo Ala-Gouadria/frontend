@@ -12,15 +12,15 @@
   width: var(--vw, 100vw);
   height: var(--vh, 100vh);
   overflow: hidden;
-  font-family: 'Quicksand', system-ui, sans-serif;
+  font-family: 'Poppins', 'Urbanist', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
-  /* deep-space palette */
-  --space-0: #05060d; /* edges / void */
-  --space-1: #0a0d1c; /* mid field */
-  --space-2: #11152b; /* faint glow behind orb */
-  --ink-strong: #eef1ff;
-  --ink-soft: #9aa3c8;
-  --accent: #8b93ff;
+  /* Light glassmorphism palette — matches the chat UI (white/pale-blue, #2f80ff). */
+  --space-0: #eaf2ff; /* outer field */
+  --space-1: #f3f8ff; /* mid field */
+  --space-2: #ffffff; /* lift behind orb */
+  --ink-strong: #111111;
+  --ink-soft: #6b7280;
+  --accent: #2f80ff;
   /* Orb scales fluidly with the viewport: ~56% of the smaller dimension,
      clamped so it's never tiny on phones nor oversized on huge monitors.
      The glow and wordmark are derived from this single source of truth. */
@@ -42,10 +42,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* near-black, with a faint deep-indigo lift directly behind the orb so it
-     reads as a glowing object in space rather than a flat dark panel */
+  /* light glass field — matches the chat: white core, pale-blue edges, with a
+     soft blue glow lifting the area behind the orb. */
   background:
-    radial-gradient(circle at 50% 42%, var(--space-2) 0%, var(--space-1) 38%, var(--space-0) 78%);
+    radial-gradient(circle at 50% 42%, rgba(86, 158, 255, 0.16), transparent 46%),
+    linear-gradient(160deg, var(--space-2) 0%, var(--space-1) 52%, var(--space-0) 100%);
 }
 
 /* star / dust texture — two sparse dotted layers, slowly drifting so the field
@@ -55,10 +56,9 @@
   position: absolute;
   inset: -10%;
   background-image:
-    radial-gradient(rgba(255, 255, 255, 0.5) 0.7px, transparent 1px),
-    radial-gradient(rgba(180, 190, 255, 0.35) 0.6px, transparent 1px);
-  background-size: 120px 120px, 70px 70px;
-  background-position: 0 0, 34px 18px;
+    radial-gradient(circle, rgba(86, 158, 255, 0.18) 0.9px, transparent 1.25px);
+  background-size: 13px 13px;
+  background-position: 0 0;
   opacity: 0.5;
   pointer-events: none;
   will-change: transform, opacity;
@@ -83,12 +83,12 @@
     opacity: 0.58;
   }
 }
-/* subtle vignette to deepen the edges into the void */
+/* soft light vignette — pale-blue edges, matching the chat's airy frame */
 .nora-voice .stage::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 44%, transparent 46%, rgba(0, 0, 0, 0.55) 100%);
+  background: radial-gradient(circle at 50% 44%, transparent 58%, rgba(86, 158, 255, 0.1) 100%);
   pointer-events: none;
 }
 
@@ -130,13 +130,13 @@
   background:
     radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 40%),
     radial-gradient(circle at 50% 118%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 46%),
-    linear-gradient(162deg, #a6a4f8 0%, #7d7bf3 38%, #5f6fef 70%, #5566ee 100%);
+    linear-gradient(162deg, #8fc0ff 0%, #569eff 38%, #2f80ff 70%, #1f6fff 100%);
   box-shadow:
-    inset 0 -34px 70px rgba(255, 255, 255, 0.4),
-    inset 0 26px 52px rgba(255, 255, 255, 0.5),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.25),
-    0 0 120px rgba(110, 120, 255, 0.55),
-    0 40px 100px rgba(60, 70, 200, 0.5);
+    inset 0 -34px 70px rgba(255, 255, 255, 0.45),
+    inset 0 26px 52px rgba(255, 255, 255, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4),
+    0 0 110px rgba(86, 158, 255, 0.5),
+    0 40px 100px rgba(47, 128, 255, 0.32);
   overflow: hidden;
   will-change: transform;
 }
@@ -176,12 +176,12 @@
 
 .nora-voice .wordmark {
   color: #fff;
-  font-family: 'Quicksand', system-ui, sans-serif;
+  font-family: 'Poppins', 'Urbanist', system-ui, sans-serif;
   font-weight: 500;
   /* scales with the orb (≈20% of its diameter) */
   font-size: calc(var(--orb) * 0.2);
   letter-spacing: 1.5px;
-  text-shadow: 0 2px 18px rgba(40, 50, 160, 0.5);
+  text-shadow: 0 2px 16px rgba(31, 111, 255, 0.4);
   transform: translateY(-2px);
   user-select: none;
 }
@@ -220,21 +220,23 @@
   gap: 8px;
   padding: 8px 8px 8px 22px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(150, 160, 255, 0.22);
-  backdrop-filter: blur(14px);
+  background:
+    radial-gradient(circle at 7% 83%, rgba(90, 160, 255, 0.12), transparent 42%),
+    linear-gradient(112deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.9) 58%, rgba(246, 251, 255, 0.82) 100%);
+  border: 1px solid rgba(86, 158, 255, 0.28);
+  backdrop-filter: blur(24px) saturate(1.16);
   box-shadow:
-    0 18px 50px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 18px 50px rgba(47, 128, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .nora-voice .prompt-bar:focus-within {
-  border-color: rgba(150, 160, 255, 0.6);
-  /* soft orb-colored glow on focus — ties the input to Nora */
+  border-color: var(--accent);
+  /* soft blue glow on focus — ties the input to Nora */
   box-shadow:
-    0 18px 50px rgba(0, 0, 0, 0.5),
-    0 0 0 3px rgba(120, 130, 255, 0.18),
-    0 0 34px rgba(110, 120, 255, 0.35);
+    0 18px 50px rgba(47, 128, 255, 0.16),
+    0 0 0 3px rgba(47, 128, 255, 0.16),
+    0 0 34px rgba(86, 158, 255, 0.28);
 }
 
 .nora-voice .prompt-input {
@@ -250,7 +252,7 @@
   color: var(--ink-strong);
 }
 .nora-voice .prompt-input::placeholder {
-  color: rgba(154, 163, 200, 0.7);
+  color: rgba(107, 114, 128, 0.7);
 }
 
 .nora-voice .prompt-mic,
@@ -262,8 +264,8 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  border: 1px solid rgba(150, 160, 255, 0.22);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(86, 158, 255, 0.28);
+  background: rgba(255, 255, 255, 0.7);
   color: var(--ink-soft);
   cursor: pointer;
   transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
@@ -272,19 +274,19 @@
 .nora-voice .prompt-send:hover {
   transform: translateY(-1px);
   color: var(--ink-strong);
-  background: rgba(255, 255, 255, 0.1);
+  background: #ffffff;
 }
 .nora-voice .prompt-send {
   color: #fff;
-  background: linear-gradient(160deg, #7d7bf3, #5566ee);
+  background: linear-gradient(160deg, #569eff, #2f80ff);
   border-color: transparent;
-  box-shadow: 0 8px 22px rgba(86, 98, 238, 0.45);
+  box-shadow: 0 8px 22px rgba(47, 128, 255, 0.4);
 }
 .nora-voice .prompt-mic.active {
   color: #fff;
-  background: linear-gradient(160deg, #7d7bf3, #5566ee);
+  background: linear-gradient(160deg, #569eff, #2f80ff);
   border-color: transparent;
-  box-shadow: 0 8px 22px rgba(86, 98, 238, 0.45);
+  box-shadow: 0 8px 22px rgba(47, 128, 255, 0.4);
 }
 
 /* Secondary controls (Hear Nora + Stop). */
@@ -302,8 +304,8 @@
   font-size: 14px;
   font-weight: 600;
   color: var(--ink-soft);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(150, 160, 255, 0.22);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(86, 158, 255, 0.28);
   backdrop-filter: blur(10px);
   padding: 11px 18px;
   border-radius: 999px;
@@ -313,16 +315,16 @@
 .nora-voice .ctl:hover {
   transform: translateY(-1px);
   color: var(--ink-strong);
-  background: rgba(255, 255, 255, 0.09);
+  background: #ffffff;
 }
 .nora-voice .ctl:active {
   transform: translateY(0);
 }
 .nora-voice .ctl.active {
   color: #fff;
-  background: linear-gradient(160deg, #7d7bf3, #5566ee);
+  background: linear-gradient(160deg, #569eff, #2f80ff);
   border-color: transparent;
-  box-shadow: 0 10px 26px rgba(86, 98, 238, 0.4);
+  box-shadow: 0 10px 26px rgba(47, 128, 255, 0.36);
 }
 .nora-voice .ctl.ghost {
   padding: 11px;
@@ -344,6 +346,9 @@
    containing block for the fixed child, which mislocates it to the top and
    breaks its click area. Fade it in with opacity only (no transform). */
 .nora-voice-nav {
+  position: relative;
+  /* Above the agent panel (z-40) so the left nav stays clickable while Nora speaks. */
+  z-index: 70;
   animation: nv-fade-in 0.5s ease both;
 }
 @keyframes nv-fade-in {
@@ -355,28 +360,37 @@
   }
 }
 
-/* Discreet entry point to the card-map dashboard (kept reachable). */
-.nora-voice .nora-voice-dashboard {
+/* Top-right control cluster — capability toggle + dashboard entry. Above the
+   agent panel (z-40) so both stay clickable while Nora speaks / cards show. */
+.nora-voice .nora-voice-topright {
   position: absolute;
   top: 24px;
   right: 24px;
-  z-index: 6;
+  z-index: 70;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Discreet pill buttons (capability toggle, card-map dashboard). */
+.nora-voice .nora-voice-dashboard {
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
-  color: var(--ink-soft);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(150, 160, 255, 0.22);
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(86, 158, 255, 0.32);
   backdrop-filter: blur(10px);
   padding: 10px 16px;
   border-radius: 999px;
   cursor: pointer;
+  box-shadow: 0 8px 22px rgba(47, 128, 255, 0.12);
   transition: transform 0.15s ease, color 0.2s ease, background 0.2s ease;
 }
 .nora-voice .nora-voice-dashboard:hover {
   transform: translateY(-1px);
-  color: var(--ink-strong);
-  background: rgba(255, 255, 255, 0.09);
+  color: #1f6fff;
+  background: #ffffff;
 }
 
 /* UI chrome entrance — staggered fade + rise as the screen reveals at 3s.
@@ -449,15 +463,26 @@
    her agents. Anchored to the stage's right edge; doesn't disturb the orb. */
 .nora-voice-agents {
   position: absolute;
-  top: 0;
+  /* Start well below the top-right control buttons (which sit at top:24px and are
+     ~44px tall) so there's a clear gap between the buttons and the panel header —
+     and both the nav (left) and the buttons stay clickable while Nora speaks. */
+  top: 88px;
   right: 0;
   bottom: 0;
-  z-index: 60;
+  z-index: 40;
   display: flex;
   pointer-events: auto;
 }
 .nora-voice-agents .agent-panel {
   height: 100%;
-  background: linear-gradient(180deg, rgba(20, 22, 48, 0.62) 0%, rgba(10, 12, 28, 0.8) 100%);
-  border-left: 1px solid rgba(124, 131, 245, 0.22);
+  background:
+    radial-gradient(circle at 90% 6%, rgba(86, 158, 255, 0.12), transparent 40%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(246, 251, 255, 0.96) 100%);
+  /* Defined top + left edges so the panel reads as its own surface, clearly
+     separated from the buttons above and the orb to the left. */
+  border-left: 1px solid rgba(86, 158, 255, 0.22);
+  border-top: 1px solid rgba(86, 158, 255, 0.22);
+  border-top-left-radius: 22px;
+  backdrop-filter: blur(24px) saturate(1.16);
+  box-shadow: -18px 0 50px rgba(47, 128, 255, 0.1);
 }

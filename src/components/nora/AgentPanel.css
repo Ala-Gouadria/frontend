@@ -1,15 +1,15 @@
 .agent-panel {
   display: flex;
   flex-direction: column;
-  width: clamp(320px, 30vw, 460px);
+  /* Fluid width — scales smoothly with the viewport instead of fixed breakpoints. */
+  width: clamp(300px, 30vw, 480px);
   flex-shrink: 0;
   height: 100%;
-  padding: 24px 18px 18px;
+  /* Fluid padding — grows with available width. */
+  padding: clamp(20px, 2.4vw, 34px) clamp(16px, 1.8vw, 28px) clamp(16px, 1.8vw, 28px);
   box-sizing: border-box;
-  background: linear-gradient(180deg, rgba(20, 22, 48, 0.55) 0%, rgba(12, 14, 32, 0.7) 100%);
-  border-left: 1px solid rgba(124, 131, 245, 0.18);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: transparent; /* the .nora-voice-agents wrapper paints the glass */
+  border-left: 1px solid rgba(86, 158, 255, 0.18);
   overflow: hidden;
   animation: agent-panel-in 460ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -26,24 +26,27 @@
 }
 
 .agent-panel__header {
-  margin-bottom: 18px;
+  margin-bottom: clamp(16px, 1.8vw, 28px);
+  padding-bottom: clamp(14px, 1.4vw, 20px);
+  /* Divider line separating the panel header from the capability cards below. */
+  border-bottom: 1px solid rgba(86, 158, 255, 0.2);
   flex-shrink: 0;
 }
 
 .agent-panel__eyebrow {
   display: inline-block;
-  font-size: 11px;
+  font-size: clamp(10px, 0.75vw, 12px);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(124, 131, 245, 0.9);
+  color: #2f80ff;
   margin-bottom: 4px;
 }
 
 .agent-panel__title {
   margin: 0;
-  font-size: 20px;
+  font-size: clamp(17px, 1.4vw, 22px);
   font-weight: 600;
-  color: #f3f4ff;
+  color: #111111;
 }
 
 .agent-panel__scroll {
@@ -51,10 +54,10 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  padding-right: 6px;
+  gap: clamp(12px, 1.2vw, 18px);
+  padding-right: 8px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(124, 131, 245, 0.4) transparent;
+  scrollbar-color: rgba(86, 158, 255, 0.4) transparent;
 }
 
 .agent-panel__scroll::-webkit-scrollbar {
@@ -62,7 +65,7 @@
 }
 
 .agent-panel__scroll::-webkit-scrollbar-thumb {
-  background: rgba(124, 131, 245, 0.4);
+  background: rgba(86, 158, 255, 0.4);
   border-radius: 3px;
 }
 
@@ -90,21 +93,21 @@
 .agent-panel__section-head {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
   text-align: left;
   cursor: pointer;
   font: inherit;
   color: inherit;
-  padding: 12px 14px;
+  padding: clamp(12px, 1.2vw, 18px) clamp(12px, 1.2vw, 18px);
   border-radius: 14px;
-  border: 1px solid rgba(124, 131, 245, 0.22);
-  background: rgba(124, 131, 245, 0.08);
+  border: 1px solid rgba(86, 158, 255, 0.24);
+  background: rgba(255, 255, 255, 0.7);
   transition: background 160ms ease, border-color 160ms ease, transform 120ms ease;
 }
 .agent-panel__section-head:hover {
-  background: rgba(124, 131, 245, 0.16);
-  border-color: rgba(124, 131, 245, 0.4);
+  background: #ffffff;
+  border-color: rgba(86, 158, 255, 0.45);
 }
 .agent-panel__section-head:active {
   transform: scale(0.99);
@@ -118,7 +121,7 @@
 
 .agent-panel__chevron {
   flex-shrink: 0;
-  color: rgba(214, 217, 245, 0.7);
+  color: rgba(107, 114, 128, 0.8);
   transition: transform 200ms ease;
 }
 .agent-panel__chevron.is-open {
@@ -141,16 +144,16 @@
 
 .agent-panel__section-title {
   margin: 0;
-  font-size: 15px;
+  font-size: clamp(14px, 1vw, 16px);
   font-weight: 600;
-  color: #eef0ff;
+  color: #111111;
 }
 
 .agent-panel__section-tagline {
   margin: 2px 0 0;
-  font-size: 12px;
+  font-size: clamp(11px, 0.85vw, 13px);
   line-height: 1.35;
-  color: rgba(214, 217, 245, 0.66);
+  color: rgba(75, 85, 99, 0.85);
   max-height: 40px;
   opacity: 0.85;
   overflow: hidden;
@@ -176,11 +179,12 @@
   border: 1px solid rgba(124, 131, 245, 0.5);
 }
 
-/* Provider accent — each section carries a CSS var the theming reads from, so
-   the dot, badge, border and glow all share one colour per provider. */
-.agent-panel__section[data-provider='anthropic'] { --accent: 217, 119, 87; }   /* warm */
-.agent-panel__section[data-provider='openai']    { --accent: 16, 163, 127; }   /* teal */
-.agent-panel__section[data-provider='gemini']    { --accent: 66, 133, 244; }   /* blue */
+/* Capability accent — each section carries a CSS var the theming reads from, so
+   the dot, badge, border and glow share one colour. Tonal variants of Nora's
+   blue scheme (#2f80ff), never third-party brand colors. */
+.agent-panel__section[data-provider='analyst']  { --accent: 47, 128, 255; }   /* Nora blue */
+.agent-panel__section[data-provider='strategy'] { --accent: 91, 110, 245; }   /* indigo */
+.agent-panel__section[data-provider='social']   { --accent: 37, 165, 222; }   /* sky */
 
 .agent-panel__provider {
   background: rgba(var(--accent, 124, 131, 245), 0.28);
@@ -219,13 +223,15 @@
 .agent-panel__cards {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 12px;
+  gap: clamp(10px, 1vw, 16px);
+  padding: clamp(12px, 1.2vw, 18px);
+  min-width: 0;
+  overflow: hidden;
   border: 1px solid rgba(var(--accent, 124, 131, 245), 0.3);
   border-top: none;
   border-bottom-left-radius: 14px;
   border-bottom-right-radius: 14px;
-  background: rgba(12, 14, 32, 0.45);
+  background: rgba(255, 255, 255, 0.55);
 }
 /* Fade the card contents in only while open. */
 .agent-panel__section.is-collapsed .agent-panel__cards {
@@ -249,8 +255,29 @@
 
 .agent-panel__card {
   transform-origin: top center;
+  width: 100%;
+  min-width: 0;
   animation: agent-card-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: calc((var(--agent-index, 0) * 140ms) + (var(--card-index, 0) * 90ms) + 120ms);
+}
+
+/* The real dashboard cards are authored at a fixed 410px for the IntelligenceMap.
+   Inside this side panel they must fill the (narrower, fluid) column instead of
+   overflowing and clipping on the right edge. Force every card — and its fixed-
+   width inner blocks — fluid. Scoped to the panel so the dashboard copies keep
+   their original sizing. */
+.agent-panel__card > [class*='-card'] {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+.agent-panel__card [class*='-card'] * {
+  max-width: 100%;
+}
+/* Let inner flex/grid children shrink rather than force horizontal overflow. */
+.agent-panel__card :where(div, section, ul, li) {
+  min-width: 0;
 }
 
 @keyframes agent-card-in {
@@ -306,12 +333,10 @@
   to   { background-position: -200% 0; }
 }
 
-/* ── Responsive: collapse to a slimmer panel on narrow viewports ── */
-@media (max-width: 1100px) {
-  .agent-panel { width: clamp(260px, 40vw, 380px); }
-}
-@media (max-width: 820px) {
-  .agent-panel { width: min(86vw, 360px); }
+/* ── Responsive: the fluid clamp() width handles most sizing smoothly; on
+   genuinely narrow viewports let the panel take most of the screen. ── */
+@media (max-width: 700px) {
+  .agent-panel { width: min(88vw, 380px); }
   .nora-voice-agents { backdrop-filter: blur(10px); }
 }
 

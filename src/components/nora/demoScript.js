@@ -10,15 +10,19 @@ export const DEMO_TURNS = [
     match: ['introduce', 'who are you', 'what do you do', 'tell me about yourself'],
     // The frozen reply Nora "says" (also scanned for agent keywords → cards).
     text:
-      "Hello! I am Nora AI, an advanced AI orchestrator designed to help businesses operate, grow, and make informed decisions. I don't answer alone; instead, I coordinate a specialized team of agents to tackle your tasks. My Analyst agent reads the numbers to understand performance, funnels, and what's working. The Strategy agent then turns these insights into actionable plans for growth, positioning, and opportunities. Finally, my Social Media agent creates and schedules content like posts and captions. I intelligently route each task to the best model for the job across leading providers: Anthropic (Claude), OpenAI, and Google Gemini, ensuring you get the most precise and effective assistance.",
-    // Pre-generated audio served statically from /public.
-    audio: '/demo-audio/intro.mp3',
+      "Hello! I am Nora, the AI Operating System built by XWorldLTD. I bring everything a business needs to operate, grow, and make decisions into one unified intelligence. I handle analysis — reading your numbers, performance, and funnels to understand what's working. I handle strategy — turning those insights into clear plans for growth, positioning, and opportunities. And I handle social and content — creating and scheduling your posts and campaigns. One system, built by XWorldLTD, working across your whole business.",
+    // NOTE: the previously cached intro.mp3 spoke the OLD script (named external
+    // providers + "orchestrator"). Until a clean MP3 is regenerated from the text
+    // above, no `audio` is set so this turn speaks the clean text via live TTS
+    // (still instant-matched + reveals the capability cards in sync).
   },
   {
     id: 'dashboard',
     match: ['dashboard', 'take me to', 'open the dashboard', 'show me the dashboard'],
     text:
-      'Of course. Opening your dashboard now — here are the Analyst, Strategy, and Social Media agents working together.',
+      'Of course. Opening your dashboard now — here are your analysis, strategy, and social capabilities working together.',
+    // dashboard.mp3 does NOT name any external provider, so it stays cached; its
+    // wording ("agents") is slightly older than the text above but is not a leak.
     audio: '/demo-audio/dashboard.mp3',
     // After Nora finishes speaking, navigate the app to this view.
     navigateTo: 'dashboard',

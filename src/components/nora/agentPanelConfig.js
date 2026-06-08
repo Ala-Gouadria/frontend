@@ -3,16 +3,17 @@ import { SocialMediaManagerCard, SocialMediaStrategyCard } from '../Cards/Social
 import { AnalyticsReportingCard, PerformanceSummaryCard } from '../Cards/Analytics'
 
 /**
- * The three agents Nora narrates during the orchestration demo, each backed by
- * a real NORA-AI agent and shown with the model/provider it is routed to.
+ * The capabilities Nora surfaces as she talks. Each is a module of Nora — the
+ * AI Operating System by XWorldLTD — NOT a third-party model or provider. The
+ * `module` label is what shows on the card badge (never a vendor name).
  * `keywords` are scanned (case-insensitive) against Nora's streaming reply to
- * decide when each agent's cards animate into the side panel.
+ * decide when each module's cards animate into the side panel.
  */
 export const DEMO_AGENTS = [
   {
     key: 'analyst',
-    label: 'Analyst',
-    provider: 'OpenAI',
+    label: 'Analysis',
+    module: 'Nora',
     tagline: 'Reads the numbers — performance, funnels, what is working.',
     keywords: ['analyst', 'analyt', 'analy', 'data', 'insight', 'report'],
     cards: [AnalyticsReportingCard, PerformanceSummaryCard],
@@ -20,15 +21,15 @@ export const DEMO_AGENTS = [
   {
     key: 'strategy',
     label: 'Strategy',
-    provider: 'Anthropic',
+    module: 'Nora',
     tagline: 'Turns insight into a plan — growth, positioning, opportunities.',
     keywords: ['strateg', 'growth', 'plan', 'opportun', 'market', 'positioning'],
     cards: [StrategyIntelligenceCard, GrowthStrategyCard, MarketInsightsCard],
   },
   {
     key: 'social',
-    label: 'Social Media',
-    provider: 'Gemini',
+    label: 'Social & Content',
+    module: 'Nora',
     tagline: 'Creates and ships content — posts, captions, scheduling.',
     keywords: ['social', 'content', 'caption', 'post', 'community', 'media'],
     cards: [SocialMediaManagerCard, SocialMediaStrategyCard],
