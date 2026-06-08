@@ -184,7 +184,11 @@
    Tells the browser each card is a self-contained paint region.
    Prevents a single card's repaint from invalidating the whole canvas. */
 .intelligence-map-card-shell {
-  contain: layout style paint;
+  contain: layout style;
+}
+
+.intelligence-map-card-shell .analytics-card {
+  width: 100%;
 }
 
 /* ── Zoomed-out optimisation mode (scale < 0.45) ────────────────────────────

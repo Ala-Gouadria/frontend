@@ -60,7 +60,7 @@ import './IntelligenceMap.css'
 // ─── Canvas constants ───────────────────────────────────────────────────────
 const CANVAS = { width: 7800, height: 4300, centerX: 3900, centerY: 2150 }
 const AVATAR  = { x: CANVAS.centerX, y: CANVAS.centerY, radius: 66 }
-const CARD_WIDTH  = 418
+const CARD_WIDTH  = 480
 const CARD_HEIGHT = 500
 
 // ─── Node factory ───────────────────────────────────────────────────────────
@@ -112,7 +112,7 @@ const CARD_NODES = {
   opportunityDetection: createNode(OpportunityDetectionCard,  5120, 1490, { revealDelay: 1100, enterY:  16 }),
   riskDetection:        createNode(RiskDetectionCard,         5900, 1320, { revealDelay: 1270, enterY:  18 }),
 
-  social:               createNode(SocialMediaManagerCard,    4580, 2040, { width: 419, height: 496, revealDelay: 520 }),
+  social:               createNode(SocialMediaManagerCard,    4580, 2040, { height: 496, revealDelay: 520 }),
   socialStrategy:       createNode(SocialMediaStrategyCard,   5200, 2040, { revealDelay: 690 }),
   performance:          createNode(PerformanceTrackingCard,   5840, 2040, { revealDelay: 860 }),
   image:                createNode(ImageGenerationCard,       6500, 1490, { revealDelay: 1030, enterY: -18 }),
@@ -291,6 +291,7 @@ function createCardStyle(node, position, isVisible, isDragging) {
     position: 'absolute',
     left: position.left,
     top:  position.top,
+    width: node.width,
     zIndex: isDragging ? 20 : position.left > CANVAS.centerX ? 5 : 4,
     opacity: isVisible ? 1 : 0,
     transform: `translate(${isVisible ? 0 : node.enterX}px, ${isVisible ? 0 : node.enterY}px) scale(${isVisible ? 1 : 0.94})`,
