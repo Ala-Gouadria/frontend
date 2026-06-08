@@ -264,48 +264,51 @@ export const ONBOARDING_FLOW_STEPS = [
   },
 ]
 
+// Blank starting values — the form must begin empty so users enter their own
+// data. (Previously seeded with "Nora Smith / Marketing / $2,000-$5,000" demo
+// values, which leaked into real saves whenever a field was left unedited.)
 export const ONBOARDING_INITIAL_VALUES = {
   profile: {
-    firstName: 'Nora',
-    lastName: 'Smith',
-    industry: 'Marketing',
+    firstName: '',
+    lastName: '',
+    industry: '',
     profileImage: [],
     logo: [],
   },
   business: {
-    websiteUrl: 'https://www.norabrand.com',
-    businessType: 'Agency',
-    pricingRange: '$2,000 - $5,000',
+    websiteUrl: '',
+    businessType: '',
+    pricingRange: '',
     offerAssets: [],
   },
   brand: {
-    primaryColor: '#2F80ED',
-    secondaryColor: '#F4D7EE',
-    brandTone: 'Professional',
+    primaryColor: '',
+    secondaryColor: '',
+    brandTone: '',
     brandStory: '',
     brandAssets: [],
   },
   audience: {
-    ageRange: '25-45',
-    primaryLocation: 'United States',
+    ageRange: '',
+    primaryLocation: '',
     painPoints: '',
     audienceInterests: '',
   },
   channels: {
-    instagram: '@nora.ai',
+    instagram: '',
     facebookPage: '',
     linkedIn: '',
     threads: '',
     keyLandingPages: '',
   },
   content: {
-    contentTypes: ['Educational'],
+    contentTypes: [],
     postFrequency: '',
     visualStyle: '',
     ctaStyle: '',
   },
   goals: {
-    mainGoal: 'Lead generation',
+    mainGoal: '',
     monthlyTarget: '',
     conversionGoal: '',
     successSignal: '',

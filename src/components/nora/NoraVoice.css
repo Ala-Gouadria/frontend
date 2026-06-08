@@ -175,19 +175,16 @@
 }
 
 .nora-voice .wordmark {
-  color: #fff;
-  font-family: 'Poppins', 'Urbanist', system-ui, sans-serif;
-  /* Match the brand wordmark: bolder, tighter, lowercase — reads as the logo
-     rather than spaced-out caps-style text. */
-  font-weight: 700;
-  /* scales with the orb (≈22% of its diameter) */
-  font-size: calc(var(--orb) * 0.22);
-  letter-spacing: -1px;
-  text-shadow:
-    0 2px 18px rgba(31, 111, 255, 0.45),
-    0 1px 2px rgba(20, 60, 160, 0.35);
-  transform: translateY(-2px);
+  /* The actual brand wordmark glyph (white SVG), scaled to the orb. Using the
+     real logo art — the humped letterforms can't be reproduced with a font. */
+  display: block;
+  width: calc(var(--orb) * 0.58);
+  height: auto;
+  /* keep the SVG's aspect ratio (252:31) */
+  filter: drop-shadow(0 2px 16px rgba(31, 111, 255, 0.45));
+  transform: translateY(-1px);
   user-select: none;
+  pointer-events: none;
 }
 
 /* Bottom dock — centered column under the orb: label, prompt, controls. */
