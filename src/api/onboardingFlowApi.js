@@ -149,8 +149,10 @@ export const onboardingFlowApi = {
     if (payload) {
       try {
         await post('/api/v1/company/onboarding/step', payload)
-      } catch {
-        // Non-fatal: UI continues even if this step's backend sync fails
+      } catch (err) {
+        // Non-fatal: UI continues even if this step's backend sync fails, but
+        // surface it so a silent 401/400 isn't mistaken for a successful save.
+        console.warn(`[onboarding] saveStep "${stepId}" failed to persist:`, err?.message ?? err)
       }
     }
 
@@ -183,8 +185,9 @@ export const onboardingFlowApi = {
     // Try to sync the full company profile to the AI service
     try {
       await post('/api/v1/company/sync-to-ai')
-    } catch {
-      // Non-fatal
+    } catch (err) {
+      // Non-fatal, but surface it — this is the step that feeds Nora's memory.
+      console.warn('[onboarding] sync-to-ai failed:', err?.message ?? err)
     }
 
     return {
