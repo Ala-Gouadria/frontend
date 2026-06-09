@@ -6,7 +6,6 @@
   justify-content: center;
   gap: 28px;
   padding: 0 46px;
-  border: 4px solid #eff8bb;
   border-radius: 999px;
   background: #ffffff;
   color: #548d00;
@@ -15,40 +14,18 @@
   overflow: visible;
 }
 
-.activity-progress-pill::before {
-  content: '';
+.activity-progress-pill__border-svg {
   position: absolute;
-  top: -4px;
-  right: 62px;
-  left: max(49%, var(--activity-progress-start));
-  height: 4px;
-  border-radius: 999px;
-  background: #4f8d00;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
+  z-index: 0;
+  overflow: visible;
 }
 
-.activity-progress-pill::after {
-  content: '';
-  position: absolute;
-  inset: -4px -4px -4px 50%;
-  border: 4px solid #4f8d00;
-  border-left: 0;
-  border-radius: 0 999px 999px 0;
-  pointer-events: none;
-}
-
-.activity-progress-pill__dot {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: #cce43e;
-  box-shadow: none;
-  flex: 0 0 auto;
-  z-index: 2;
+.activity-progress-pill__dot-svg {
+  filter: drop-shadow(0 0 3px rgba(204, 228, 62, 0.5));
 }
 
 .activity-progress-pill__label {
@@ -59,6 +36,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 500;
+  z-index: 1;
 }
 
 .activity-progress-pill__value {
@@ -66,4 +44,5 @@
   flex: 0 0 auto;
   font-size: 0.84rem;
   font-weight: 800;
+  z-index: 1;
 }

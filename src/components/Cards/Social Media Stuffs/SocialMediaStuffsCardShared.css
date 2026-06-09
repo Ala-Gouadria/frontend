@@ -248,21 +248,19 @@
   width: 410px;
   padding: 26px 26px 24px;
   gap: 17px;
-  border: 1px solid rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(220, 220, 220, 0.6);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.97);
   box-shadow:
-    0 18px 34px rgba(24, 24, 27, 0.16),
-    0 0 0 8px rgba(72, 80, 72, 0.38),
-    0 0 0 1px rgba(255, 255, 255, 0.72) inset;
+    0 18px 34px rgba(24, 24, 27, 0.10),
+    0 4px 12px rgba(24, 24, 27, 0.06);
 }
 
 .analytics-card:hover {
   transform: translateY(-3px);
   box-shadow:
-    0 24px 44px rgba(24, 24, 27, 0.2),
-    0 0 0 8px rgba(72, 80, 72, 0.32),
-    0 0 0 1px rgba(255, 255, 255, 0.82) inset;
+    0 24px 44px rgba(24, 24, 27, 0.14),
+    0 4px 12px rgba(24, 24, 27, 0.08);
 }
 
 .analytics-card__title {
