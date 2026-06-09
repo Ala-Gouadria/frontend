@@ -7,18 +7,51 @@
   gap: 2px;
   border-radius: 8px;
   overflow: hidden;
+  border: 2px solid transparent;
 }
 
-.platform-engagement-card--blue {
-  background:
-    linear-gradient(180deg, rgba(236, 249, 255, 0.86), rgba(224, 244, 255, 0.74));
-  --platform-engagement-color: #007ce3;
+.platform-engagement-card--blue,
+.platform-engagement-card--facebook {
+  background: rgba(24, 119, 242, 0.1);
+  border-color: #1877F2;
+  --platform-engagement-color: #1877F2;
 }
 
-.platform-engagement-card--pink {
-  background:
-    linear-gradient(180deg, rgba(255, 238, 246, 0.9), rgba(255, 229, 241, 0.78));
-  --platform-engagement-color: #e44177;
+.platform-engagement-card--linkedin {
+  background: rgba(0, 126, 187, 0.1);
+  border-color: #007EBB;
+  --platform-engagement-color: #007EBB;
+}
+
+.platform-engagement-card--pink,
+.platform-engagement-card--instagram {
+  background: rgba(221, 42, 123, 0.1);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  --platform-engagement-color: #DD2A7B;
+}
+
+.platform-engagement-card--instagram {
+  position: relative;
+}
+
+.platform-engagement-card--instagram::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 10px;
+  padding: 2px;
+  background: linear-gradient(45deg, #FAAD4F 14.61%, #DD2A7B 39.38%, #9537B0 58.49%, #515BD4 85.39%);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .platform-engagement-card__top {
