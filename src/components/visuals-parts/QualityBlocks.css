@@ -2,7 +2,7 @@
   container-type: inline-size;
   display: flex;
   align-items: stretch;
-  gap: clamp(4px, 0.8cqw, 9px);
+  gap: clamp(2px, 0.5cqw, 5px);
   min-width: 0;
   padding: 6px 2px;
   overflow: visible;
@@ -11,8 +11,8 @@
 .quality-blocks__block {
   flex: 1 1 0;
   min-width: 0;
-  height: clamp(42px, 8.4cqw, 64px);
-  border-radius: 0;
+  height: clamp(32px, 6.5cqw, 46px);
+  border-radius: 2px;
   cursor: crosshair;
   position: relative;
   overflow: hidden;

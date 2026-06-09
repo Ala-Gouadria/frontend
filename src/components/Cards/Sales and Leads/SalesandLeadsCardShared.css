@@ -129,11 +129,11 @@
 
 .analytics-card__panel-body {
   min-height: 44px;
-  padding: 15px 14px 16px;
+  padding: 16px 16px 18px;
   display: grid;
-  gap: 12px;
+  gap: 14px;
   background: #fff;
-  border-radius: 12px;
+  border-radius: 14px;
 }
 
 .analytics-card__panel-grid {
@@ -384,23 +384,17 @@
 
 .analytics-card {
   width: 410px;
-  padding: 26px 26px 24px;
-  gap: 17px;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow:
-    0 18px 34px rgba(24, 24, 27, 0.16),
-    0 0 0 8px rgba(72, 80, 72, 0.38),
-    0 0 0 1px rgba(255, 255, 255, 0.72) inset;
+  padding: 20px 18px 18px;
+  gap: 14px;
+  border: 1px solid rgba(24, 24, 27, 0.08);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(24, 24, 27, 0.08);
 }
 
 .analytics-card:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    0 24px 44px rgba(24, 24, 27, 0.2),
-    0 0 0 8px rgba(72, 80, 72, 0.32),
-    0 0 0 1px rgba(255, 255, 255, 0.82) inset;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(24, 24, 27, 0.12);
 }
 
 .analytics-card__title {

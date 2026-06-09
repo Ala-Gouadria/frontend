@@ -30,6 +30,33 @@
   --mini-line-glow: rgba(47, 128, 237, 0.16);
 }
 
+.mini-line-chart--facebook {
+  --mini-line-color: #1877F2;
+  --mini-line-stroke-start: #1877F2;
+  --mini-line-stroke-end: #1877F2;
+  --mini-line-fill-top: rgba(24, 119, 242, 0.2);
+  --mini-line-fill-bottom: rgba(24, 119, 242, 0);
+  --mini-line-glow: rgba(24, 119, 242, 0.16);
+}
+
+.mini-line-chart--linkedin {
+  --mini-line-color: #007EBB;
+  --mini-line-stroke-start: #007EBB;
+  --mini-line-stroke-end: #007EBB;
+  --mini-line-fill-top: rgba(0, 126, 187, 0.2);
+  --mini-line-fill-bottom: rgba(0, 126, 187, 0);
+  --mini-line-glow: rgba(0, 126, 187, 0.16);
+}
+
+.mini-line-chart--instagram {
+  --mini-line-color: #DD2A7B;
+  --mini-line-stroke-start: #DD2A7B;
+  --mini-line-stroke-end: #9537B0;
+  --mini-line-fill-top: rgba(221, 42, 123, 0.2);
+  --mini-line-fill-bottom: rgba(221, 42, 123, 0);
+  --mini-line-glow: rgba(221, 42, 123, 0.16);
+}
+
 .mini-line-chart--purple {
   --mini-line-color: #b05ae4;
   --mini-line-stroke-start: #c88af0;

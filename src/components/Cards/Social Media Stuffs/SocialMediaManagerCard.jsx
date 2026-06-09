@@ -19,7 +19,7 @@ const defaultEngagement = [
     iconSrc: facebookIcon,
     iconAlt: 'Facebook',
     delta: '+ 32%',
-    tone: 'blue',
+    tone: 'facebook',
     points: '0,36 14,34 28,37 42,35 56,38 70,31 84,32 98,28 112,31 126,26 140,42 154,24 168,47 182,29 194,38',
   },
   {
@@ -27,7 +27,7 @@ const defaultEngagement = [
     iconSrc: linkedinIcon,
     iconAlt: 'LinkedIn',
     delta: '+ 32%',
-    tone: 'blue',
+    tone: 'linkedin',
     points: '0,39 14,36 28,38 42,41 56,35 70,37 84,33 98,35 112,29 126,31 140,43 154,24 168,45 182,25 194,39',
   },
   {
@@ -35,7 +35,7 @@ const defaultEngagement = [
     iconSrc: instagramIcon,
     iconAlt: 'Instagram',
     delta: '+ 24%',
-    tone: 'pink',
+    tone: 'instagram',
     points: '0,26 14,43 28,38 42,40 56,36 70,42 84,37 98,40 112,34 126,37 140,35 154,23 168,42 182,54 194,35',
   },
 ]

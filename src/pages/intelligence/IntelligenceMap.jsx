@@ -112,7 +112,7 @@ const CARD_NODES = {
   opportunityDetection: createNode(OpportunityDetectionCard,  5120, 1490, { revealDelay: 1100, enterY:  16 }),
   riskDetection:        createNode(RiskDetectionCard,         5900, 1320, { revealDelay: 1270, enterY:  18 }),
 
-  social:               createNode(SocialMediaManagerCard,    4580, 2040, { height: 496, revealDelay: 520 }),
+  social:               createNode(SocialMediaManagerCard,    4580, 2040, { width: 410, height: 478, revealDelay: 520 }),
   socialStrategy:       createNode(SocialMediaStrategyCard,   5200, 2040, { revealDelay: 690 }),
   performance:          createNode(PerformanceTrackingCard,   5840, 2040, { revealDelay: 860 }),
   image:                createNode(ImageGenerationCard,       6500, 1490, { revealDelay: 1030, enterY: -18 }),

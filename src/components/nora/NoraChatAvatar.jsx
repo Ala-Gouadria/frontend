@@ -77,7 +77,7 @@ export default function NoraAvatar({
           height: size,
           borderRadius: '50%',
           overflow: 'hidden',
-          background: 'linear-gradient(135deg, #1f7dff 0%, #5b98ff 44%, #c9c0f6 78%, #fff7fb 100%)',
+          background: 'linear-gradient(97.07deg, #1877F2 6.35%, #6DA3FF 42.96%, #FFDFEA 94.89%)',
           boxShadow: `
             inset 10px 10px 20px rgba(255,255,255,0.35),
             inset -10px -10px 24px rgba(255,255,255,0.70),
@@ -86,39 +86,6 @@ export default function NoraAvatar({
           animation: 'breatheScale 3.8s ease-in-out infinite',
           zIndex: 1,
         }}>
-          {/* Color layer 1 */}
-          <div style={{
-            position: 'absolute', inset: 0, borderRadius: '50%',
-            background: 'radial-gradient(ellipse at center, rgba(99,102,241,0.55) 0%, rgba(59,130,246,0.3) 45%, transparent 70%)',
-            animation: 'layer1Drift 4.8s ease-in-out infinite',
-            pointerEvents: 'none', zIndex: 2,
-          }} />
-
-          {/* Color layer 2 */}
-          <div style={{
-            position: 'absolute', inset: 0, borderRadius: '50%',
-            background: 'radial-gradient(ellipse at center, rgba(196,181,253,0.65) 0%, rgba(167,139,250,0.35) 40%, transparent 65%)',
-            animation: 'layer2Drift 6.2s ease-in-out infinite',
-            pointerEvents: 'none', zIndex: 3,
-          }} />
-
-          {/* Specular highlight */}
-          <div style={{
-            position: 'absolute', top: '8%', left: '12%',
-            width: '35%', height: '30%',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,255,255,0.72) 0%, transparent 80%)',
-            filter: 'blur(5px)',
-            animation: 'highlightShift 3.8s ease-in-out infinite',
-            zIndex: 4, pointerEvents: 'none',
-          }} />
-
-          {/* Depth shadow */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'radial-gradient(circle at 30% 50%, rgba(37,99,235,0.4) 0%, transparent 60%)',
-            pointerEvents: 'none', zIndex: 2,
-          }} />
 
           {/* Logo */}
           <div style={{
