@@ -93,7 +93,7 @@ export function SocialMediaManagerCard({
         </MetricVisualPanel>
         <MetricVisualPanel label="Share" value={share} valueTone="good" className="smm-card__metric smm-card__metric--share">
           <MiniLineChart
-            points="0,29 14,40 28,38 42,37 56,35 70,20 84,18 98,15 112,30 126,36 140,33 154,29 168,25 182,23 194,44"
+            points="0,48 14,42 28,36 42,22 56,18 70,24 84,20 98,26 112,30 126,32 140,34 154,30 168,28 182,12 194,8"
             tone="green"
             className="smm-card__share-chart"
           />

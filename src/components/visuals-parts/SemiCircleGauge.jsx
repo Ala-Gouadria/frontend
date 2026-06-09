@@ -13,11 +13,11 @@ function clamp(value, min, max, fallback = min) {
 
 const ARC = {
   cx: 255,
-  cy: 230,
-  rx: 242,
-  ry: 168,
-  startAngle: 160 * (Math.PI / 180),
-  endAngle: 20 * (Math.PI / 180),
+  cy: 260,
+  rx: 230,
+  ry: 210,
+  startAngle: 155 * (Math.PI / 180),
+  endAngle: 25 * (Math.PI / 180),
 }
 
 function getArcAngle(progress) {
@@ -53,7 +53,7 @@ function getPathData() {
   return `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${ARC.rx} ${ARC.ry} 0 0 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`
 }
 
-const TICK_PROGRESS = Array.from({ length: 32 }, (_, i) => (i + 1) / 34)
+const TICK_PROGRESS = Array.from({ length: 18 }, (_, i) => (i + 1) / 20)
 
 export function SemiCircleGauge({
   current = 578,
@@ -84,19 +84,19 @@ export function SemiCircleGauge({
   return (
     <div className={classNames('semi-circle-gauge', `semi-circle-gauge--${tone}`, className)}>
       {title ? <div className="semi-circle-gauge__title">{title}</div> : null}
-      <svg className="semi-circle-gauge__svg" viewBox="0 0 510 260" aria-hidden="true">
+      <svg className="semi-circle-gauge__svg" viewBox="0 0 510 310" aria-hidden="true">
         <defs>
           {/* Horizontal fade — band dissolves to nothing at both ends */}
           <linearGradient id={fadeId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="510" y2="0">
             <stop offset="0%" stopColor="white" stopOpacity="0" />
-            <stop offset="7%" stopColor="white" stopOpacity="0.12" />
-            <stop offset="15%" stopColor="white" stopOpacity="0.5" />
-            <stop offset="26%" stopColor="white" stopOpacity="0.92" />
-            <stop offset="34%" stopColor="white" stopOpacity="1" />
-            <stop offset="72%" stopColor="white" stopOpacity="1" />
-            <stop offset="83%" stopColor="white" stopOpacity="0.7" />
-            <stop offset="92%" stopColor="white" stopOpacity="0.3" />
-            <stop offset="98%" stopColor="white" stopOpacity="0.06" />
+            <stop offset="5%" stopColor="white" stopOpacity="0.08" />
+            <stop offset="12%" stopColor="white" stopOpacity="0.4" />
+            <stop offset="22%" stopColor="white" stopOpacity="0.85" />
+            <stop offset="30%" stopColor="white" stopOpacity="1" />
+            <stop offset="75%" stopColor="white" stopOpacity="1" />
+            <stop offset="85%" stopColor="white" stopOpacity="0.6" />
+            <stop offset="93%" stopColor="white" stopOpacity="0.2" />
+            <stop offset="98%" stopColor="white" stopOpacity="0.04" />
             <stop offset="100%" stopColor="white" stopOpacity="0" />
           </linearGradient>
 
@@ -117,27 +117,27 @@ export function SemiCircleGauge({
           </radialGradient>
 
           {/* Mask spans viewBox + overflow so glow bleed is caught and faded */}
-          <mask id={maskId} maskUnits="userSpaceOnUse" x="-80" y="-80" width="670" height="400">
-            <rect x="-80" y="-80" width="670" height="400" fill={'url(#' + fadeId + ')'} />
+          <mask id={maskId} maskUnits="userSpaceOnUse" x="-60" y="-60" width="630" height="430">
+            <rect x="-60" y="-60" width="630" height="430" fill={'url(#' + fadeId + ')'} />
           </mask>
         </defs>
 
         <g mask={'url(#' + maskId + ')'}>
-          {/* Soft blurred track — wider pale band visible on unfilled side */}
+          {/* Soft blurred track — pale band behind everything */}
           <path
             d={pathData}
             fill="none"
             stroke="var(--gauge-track)"
-            strokeWidth="50"
+            strokeWidth="46"
             strokeLinecap="round"
-            style={{ filter: 'blur(8px)' }}
+            style={{ filter: 'blur(10px)' }}
           />
           {/* Crisp track */}
           <path
             d={pathData}
             fill="none"
             stroke="var(--gauge-track)"
-            strokeWidth="38"
+            strokeWidth="32"
             strokeLinecap="butt"
           />
 
@@ -146,18 +146,18 @@ export function SemiCircleGauge({
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="50"
+            strokeWidth="46"
             strokeLinecap="round"
             pathLength="100"
             strokeDasharray={dash}
-            style={{ filter: 'blur(10px)', opacity: 0.35 }}
+            style={{ filter: 'blur(10px)', opacity: 0.3 }}
           />
           {/* Progress fill — main band */}
           <path
             d={pathData}
             fill="none"
             stroke={'url(#' + progGradId + ')'}
-            strokeWidth="38"
+            strokeWidth="32"
             strokeLinecap="butt"
             pathLength="100"
             strokeDasharray={dash}
@@ -167,12 +167,12 @@ export function SemiCircleGauge({
           <path
             d={pathData}
             fill="none"
-            stroke="rgba(255,255,255,0.18)"
-            strokeWidth="16"
+            stroke="rgba(255,255,255,0.15)"
+            strokeWidth="12"
             strokeLinecap="butt"
             pathLength="100"
             strokeDasharray={dash}
-            style={{ filter: 'blur(4px)' }}
+            style={{ filter: 'blur(3px)' }}
           />
 
           {/* Tick dividers */}
@@ -186,8 +186,8 @@ export function SemiCircleGauge({
                   y1={tick.y1}
                   x2={tick.x2}
                   y2={tick.y2}
-                  stroke="rgba(255,255,255,0.48)"
-                  strokeWidth="1.5"
+                  stroke="rgba(255,255,255,0.5)"
+                  strokeWidth="1.8"
                   strokeLinecap="butt"
                 />
               )
@@ -211,7 +211,7 @@ export function SemiCircleGauge({
         />
 
         {/* Value label */}
-        <text x="255" y="210" textAnchor="middle" className="semi-circle-gauge__value">
+        <text x="255" y="265" textAnchor="middle" className="semi-circle-gauge__value">
           <tspan className="semi-circle-gauge__current">{currentLabel}</tspan>
           {targetLabel ? <tspan className="semi-circle-gauge__target">/{targetLabel}</tspan> : null}
         </text>
