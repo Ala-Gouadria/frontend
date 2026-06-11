@@ -54,7 +54,7 @@ import {
   WebsiteTrafficStatusCard,
 } from '../../components/Cards/Website & Traffic'
 import WeekTask from '../../components/tasks/Weektask'
-import DotGrid from '../../components/background/DotGrid'
+import mainBackground from '../../assets/background/Main_background.png'
 import './IntelligenceMap.css'
 
 // ─── Canvas constants ───────────────────────────────────────────────────────
@@ -889,14 +889,13 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
           cursor: draggingId ? 'grabbing' : toolMode === 'hand' ? 'grab' : 'default',
         }}
       >
-        {/* DotGrid: viewport-sized (position:absolute in root div = ~1 300 dots max).
-             Canvas background is transparent so dots show through the map gaps.
-             Listens to window mousemove directly so pointer-events:none is fine. */}
-        <DotGrid
-          style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}
-          dotSize={4} gap={28} baseColor="#b0b8c8" activeColor="#4f7fff"
-          proximity={130} shockRadius={260} shockStrength={5}
-          resistance={750} returnDuration={1.5}
+        <img
+          src={mainBackground}
+          alt=""
+          style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'cover', zIndex: 0, pointerEvents: 'none',
+          }}
         />
 
         <div style={{ position:'absolute', inset:0, transformOrigin:'center center', willChange:'transform', transition:'transform 580ms cubic-bezier(0.22,1,0.36,1)', transform:'scale(1) translateX(0px)' }}>
