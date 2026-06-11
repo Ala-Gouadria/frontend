@@ -69,14 +69,8 @@ export const trafficQualityCardData = {
   },
   panelTitle: 'Conversion health',
   panelMetrics: [
-    { label: 'High intent', value: '44%', bars: [22, 58, 32, 18, 42, 26, 18, 14, 24, 18, 34, 20], type: 'bars' },
-    {
-      label: 'Bounce risk',
-      value: '22%',
-      type: 'line',
-      points: '0,30 18,40 36,38 54,20 72,18 90,26 108,24 126,28 144,26 162,28 180,26 198,30 216,16 234,8 252,12 270,30',
-      fillPoints: '0,44 0,30 18,40 36,38 54,20 72,18 90,26 108,24 126,28 144,26 162,28 180,26 198,30 216,16 234,8 252,12 270,30 270,44',
-    },
+    { label: 'High intent', value: '44%', bars: [22, 58, 32, 18, 42, 26, 18, 14, 24, 18, 34, 20] },
+    { label: 'Bounce risk', value: '22%', bars: [18, 30, 40, 38, 20, 18, 26, 24, 28, 26, 28, 26] },
   ],
   intentMixTitle: 'Intent mix',
   intentMixMeta: 'Share of visitors',
