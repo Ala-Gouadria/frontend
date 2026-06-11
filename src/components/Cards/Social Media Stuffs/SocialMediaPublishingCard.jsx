@@ -1,7 +1,6 @@
 import './SocialMediaStuffsCardShared.css'
 import './SocialMediaPublishingCard.css'
 import {
-  ActivityProgressPill,
   AiActionButton,
   AiInsight,
   SocialPlatformBadge,
@@ -50,15 +49,14 @@ export function SocialMediaPublishingCard({
         <span className="analytics-card__status smp-card__status">{status}</span>
       </div>
 
-      <section className="smp-card__section" aria-label="Current batch">
+      <div>
         <p className="analytics-card__section-title smp-card__section-title">Current Batch</p>
-        <ActivityProgressPill
-          label={batchLabel}
-          progress={progress}
-          value={`${batchProgress}/${batchTotal}`}
-          className="smp-card__current-batch"
-        />
-      </section>
+        <div className="smp-card__batch-bar">
+          <span className="smp-card__batch-dot" />
+          <span className="smp-card__batch-label">{batchLabel}</span>
+          <span className="smp-card__batch-count">{batchProgress}/{batchTotal}</span>
+        </div>
+      </div>
 
       <div className="smp-card__platforms" aria-label="Publishing platforms">
         {platforms.map((platform) => (
