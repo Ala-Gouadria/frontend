@@ -1,4 +1,4 @@
-import { MiniLineChart, QualityBlocks, WebsiteStagePath } from '../../visuals-parts'
+import { MiniLineChart, QualityBlocks, StageFlow } from '../../visuals-parts'
 import { websiteTrafficStatusCardData } from '../../../api/websiteTrafficMockData'
 import {
   BlockLegend,
@@ -29,11 +29,17 @@ export function WebsiteTrafficStatusCard({ data = websiteTrafficStatusCardData }
         />
       </section>
 
-      <section className="website-traffic-status-card__drop">
-        <h3>{data.problemTitle}</h3>
-        <p>{data.problemText}</p>
-        <WebsiteStagePath stages={data.stages} />
-      </section>
+      <div className="analytics-card__panel website-traffic-status-card__problem-panel">
+        <div className="analytics-card__panel-title">{data.problemTitle}</div>
+        <div className="analytics-card__panel-body website-traffic-status-card__problem-body">
+          <p className="website-traffic-status-card__problem-desc">{data.problemText}</p>
+          <StageFlow
+            stages={data.stages}
+            activeIndex={data.stages.length - 1}
+            className="website-traffic-status-card__stage-flow"
+          />
+        </div>
+      </div>
 
       <section className="website-traffic-status-card__quality">
         <h3>{data.qualityTitle}</h3>

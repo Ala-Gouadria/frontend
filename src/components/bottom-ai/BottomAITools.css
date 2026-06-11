@@ -286,7 +286,7 @@
   overflow: hidden;
   border-radius: 999px;
   border: 4px solid #0d0d0d;
-  background: #0d0d0d;
+  background: #ffffff;
   gap: 0;
   box-shadow:
     0 8px 18px rgba(15, 23, 42, 0.15),
@@ -302,12 +302,16 @@
   box-shadow: none;
 }
 
+.bottom-ai-tools__status-group .bottom-ai-tools__pill--task {
+  border-right: 3px solid #0d0d0d;
+}
+
 /* ── Task pill ────────────────────────────────────────────── */
 .bottom-ai-tools__pill--task {
   min-width: 160px;
   background: #ffffff;
   border-radius: 0;
-  border-right: 4px solid #0d0d0d !important;
+  border-right: 3px solid #0d0d0d;
 }
 
 .bottom-ai-tools__task-ring-wrap {
@@ -338,7 +342,7 @@
   position: relative;
   overflow: hidden;
   justify-content: flex-start;
-  background: linear-gradient(90deg, #f5fbeb 0%, #cbe5ad 55%, #edf9df 100%);
+  background: linear-gradient(90deg, #f5fbeb 0%, #e8f4d4 55%, #edf9df 100%);
   border-radius: 0;
   transition: transform 0.16s ease;
 }
@@ -346,7 +350,7 @@
 .bottom-ai-tools__analyzing-fill {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #b5d42d 0%, #cbe845 100%);
+  background: linear-gradient(90deg, #d4e4a8 0%, #e2f0c0 100%);
   transform: translateX(-100%);
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;

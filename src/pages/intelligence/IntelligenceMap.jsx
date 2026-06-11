@@ -54,7 +54,7 @@ import {
   WebsiteTrafficStatusCard,
 } from '../../components/Cards/Website & Traffic'
 import WeekTask from '../../components/tasks/Weektask'
-import DotGrid from '../../components/background/DotGrid'
+import mainBackground from '../../assets/background/Main_background.png'
 import './IntelligenceMap.css'
 
 // ─── Canvas constants ───────────────────────────────────────────────────────
@@ -499,11 +499,6 @@ const MapCanvas = memo(function MapCanvas({
     <div className="intelligence-map-grid"
       style={{ width:CANVAS.width, height:CANVAS.height, position:'relative', background:'transparent' }}>
 
-      {/* Ambient glow around avatar */}
-      <div style={{ position:'absolute', left:AVATAR.x-320, top:AVATAR.y-320, width:640, height:640, borderRadius:'50%',
-        background:'radial-gradient(circle,rgba(88,148,255,0.18) 0%,rgba(88,148,255,0.09) 35%,rgba(88,148,255,0) 75%)',
-        filter:'blur(16px)', opacity:sceneVisible?1:0.32, transition:'opacity 1200ms ease' }} />
-
       <GraphLines sceneVisible={sceneVisible} visibleEdges={visibleEdges} positions={positions} svgRef={svgRef} />
 
       <CardsLayer
@@ -524,22 +519,13 @@ const MapCanvas = memo(function MapCanvas({
   )
 })
 
-// Focus cards for the voice-demo dashboard hand-off: Analyst (analytics),
-// Strategy (strategy), Social Media (social). When IntelligenceMap is opened
-// with autoReveal, the scene starts active and these three groups expanded.
-const FOCUS_NODE_IDS = ['analytics', 'strategy', 'social']
-
 // ─── Root component ──────────────────────────────────────────────────────────
-export default function IntelligenceMap({ activeNavId = 'stars', onNavigate, autoReveal = false }) {
-  const [isActive,        setIsActive]        = useState(autoReveal)
+export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
+  const [isActive,        setIsActive]        = useState(false)
   const [isTaskOpen,      setIsTaskOpen]       = useState(false)
   const [mounted,         setMounted]          = useState(false)
   const [sceneVisible,    setSceneVisible]     = useState(false)
-  const [collapsedNodes,  setCollapsedNodes]   = useState(() =>
-    autoReveal
-      ? new Set(MAIN_CARD_NODE_IDS.filter((id) => !FOCUS_NODE_IDS.includes(id)))
-      : createInitialCollapsedNodes(),
-  )
+  const [collapsedNodes,  setCollapsedNodes]   = useState(() => createInitialCollapsedNodes())
   const [isWorkspaceOpen, setIsWorkspaceOpen]  = useState(false)
   const [toolMode,        setToolMode]         = useState('hand')
 
@@ -800,14 +786,24 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate, aut
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
 
-  // NOTE: We intentionally do NOT compensate browser-menu zoom-out here.
-  // The container is sized in `vw`/`vh` units (--vw/--vh), which already track
-  // the visible viewport at any browser zoom — it always covers exactly the
-  // screen, no more. The previous `zoom: 1/ratio` hack double-counted that
-  // (vw grows AND we re-zoomed), inflating the container to ~2x the viewport on
-  // zoom-out. That overflow is what rendered/animated DotGrid dots off-screen
-  // ("invisible barrier") and tanked performance. Browser zoom on this page now
-  // behaves like every other page in the app.
+  // Counteract browser-menu zoom-out (Brave/Chrome ⋮ → Zoom 25%, which keyboard
+  // shortcuts can't block). Chromium multiplies devicePixelRatio by the browser
+  // zoom factor, so we capture DPR at mount as the 100% baseline. On resize,
+  // if the ratio drops below 1 (zoom-out), apply inverse `zoom` to the map
+  // container so the rendered scale stays constant regardless of browser zoom.
+  useEffect(() => {
+    const baseDPR = window.devicePixelRatio || 1
+    const el = zoomContainerRef.current
+    if (!el) return
+
+    const correct = () => {
+      const ratio = (window.devicePixelRatio || 1) / baseDPR
+      el.style.zoom = ratio < 0.999 ? String(1 / ratio) : ''
+    }
+    correct()
+    window.addEventListener('resize', correct)
+    return () => window.removeEventListener('resize', correct)
+  }, [])
 
   // Cleanup stale listeners if component unmounts mid-drag
   useEffect(() => () => {
@@ -888,15 +884,13 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate, aut
           cursor: draggingId ? 'grabbing' : toolMode === 'hand' ? 'grab' : 'default',
         }}
       >
-        {/* DotGrid: hard-capped to the visible viewport so it never builds dots
-             off-screen, and its render loop idles when nothing is animating.
-             Canvas background is transparent so dots show through the map gaps.
-             Listens to window mousemove directly so pointer-events:none is fine. */}
-        <DotGrid
-          style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}
-          dotSize={4} gap={28} baseColor="#b0b8c8" activeColor="#4f7fff"
-          proximity={130} shockRadius={260} shockStrength={5}
-          resistance={750} returnDuration={1.5}
+        <img
+          src={mainBackground}
+          alt=""
+          style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'cover', zIndex: 0, pointerEvents: 'none',
+          }}
         />
 
         <div style={{ position:'absolute', inset:0, transformOrigin:'center center', willChange:'transform', transition:'transform 580ms cubic-bezier(0.22,1,0.36,1)', transform:'scale(1) translateX(0px)' }}>

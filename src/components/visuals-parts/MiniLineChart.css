@@ -9,7 +9,7 @@
   width: 100%;
   min-height: 60px;
   height: 80px;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .mini-line-chart--red {
@@ -82,7 +82,7 @@
 .mini-line-chart__line {
   fill: none;
   stroke: var(--mini-line-color);
-  stroke-width: 2.2;
+  stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 320;

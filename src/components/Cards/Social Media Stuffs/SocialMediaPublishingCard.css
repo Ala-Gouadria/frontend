@@ -1,24 +1,28 @@
-/* ── Shared upcoming-batch panel ──────────────────────────── */
+/* ── Shared upcoming-batch panel (green MetricDots style) ─── */
 .smc-card__upcoming-panel {
   overflow: hidden;
-  border: 2px solid #8ab80d;
-  border-radius: 8px;
-  box-shadow: 0 12px 22px rgba(138, 184, 13, 0.14);
+  border: none;
+  border-radius: 18px;
+  padding: 0 5px 5px;
+  background: linear-gradient(180deg, #cde83e 0%, #74a503 100%);
+  box-shadow: 0 10px 24px rgba(128, 170, 18, 0.22);
 }
 
 .smc-card__upcoming-title {
-  padding: 6px 10px;
-  background: linear-gradient(180deg, #c2e030 0%, #74a608 100%);
+  margin: 0;
+  padding: 13px 14px 11px;
+  background: transparent;
   color: #fff;
-  font-size: 0.74rem;
-  font-weight: 600;
+  font-size: 0.84rem;
+  font-weight: 400;
 }
 
 .smc-card__upcoming-body {
-  padding: 8px 10px;
+  padding: 12px 14px;
   display: grid;
   gap: 8px;
   background: #fff;
+  border-radius: 12px;
 }
 
 .smc-card__upcoming-row {
