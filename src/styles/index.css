@@ -155,6 +155,10 @@ html.is-rtl {
   font-size: 18px !important;
   line-height: 22px !important;
   letter-spacing: -0.18px !important;
+  background: linear-gradient(105.26deg, #000000 18.5%, #747474 81.5%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
   color: #000000 !important;
 }
 
