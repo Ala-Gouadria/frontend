@@ -302,12 +302,16 @@
   box-shadow: none;
 }
 
+.bottom-ai-tools__status-group .bottom-ai-tools__pill--task {
+  border-right: 3px solid #0d0d0d;
+}
+
 /* ── Task pill ────────────────────────────────────────────── */
 .bottom-ai-tools__pill--task {
   min-width: 160px;
   background: #ffffff;
   border-radius: 0;
-  border-right: 4px solid #0d0d0d !important;
+  border-right: 3px solid #0d0d0d;
 }
 
 .bottom-ai-tools__task-ring-wrap {
