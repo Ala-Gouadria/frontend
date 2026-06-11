@@ -499,11 +499,6 @@ const MapCanvas = memo(function MapCanvas({
     <div className="intelligence-map-grid"
       style={{ width:CANVAS.width, height:CANVAS.height, position:'relative', background:'transparent' }}>
 
-      {/* Ambient glow around avatar */}
-      <div style={{ position:'absolute', left:AVATAR.x-320, top:AVATAR.y-320, width:640, height:640, borderRadius:'50%',
-        background:'radial-gradient(circle,rgba(88,148,255,0.18) 0%,rgba(88,148,255,0.09) 35%,rgba(88,148,255,0) 75%)',
-        filter:'blur(16px)', opacity:sceneVisible?1:0.32, transition:'opacity 1200ms ease' }} />
-
       <GraphLines sceneVisible={sceneVisible} visibleEdges={visibleEdges} positions={positions} svgRef={svgRef} />
 
       <CardsLayer
