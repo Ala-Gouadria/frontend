@@ -260,7 +260,7 @@ function AnalyticsReport() {
       <div className="reports-page__analytics-top">
         <div>
           <h3>{t('reports.revenue')}</h3>
-          <AreaRevenueChart {...analyticsReportingCardData.revenueChart} />
+          <AreaRevenueChart {...analyticsReportingCardData.revenueChart} tone="blue" />
         </div>
         <div>
           <h3>{portfolioAnalyticsCardData.gaugeTitle}</h3>
