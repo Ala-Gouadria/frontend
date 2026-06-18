@@ -61,6 +61,7 @@ export function AnalyticsReportingCard({ data = analyticsReportingCardData }) {
           upperSeries={data.revenueChart.upperSeries}
           lowerSeries={data.revenueChart.lowerSeries}
           activeIndex={data.revenueChart.activeIndex}
+          tone="blue"
         />
       </section>
 
