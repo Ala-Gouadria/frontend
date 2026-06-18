@@ -84,7 +84,7 @@ export function SemiCircleGauge({
   return (
     <div className={classNames('semi-circle-gauge', `semi-circle-gauge--${tone}`, className)}>
       {title ? <div className="semi-circle-gauge__title">{title}</div> : null}
-      <svg className="semi-circle-gauge__svg" viewBox="0 0 510 310" aria-hidden="true">
+      <svg className="semi-circle-gauge__svg" viewBox="0 0 510 290" aria-hidden="true">
         <defs>
           {/* Horizontal fade — band dissolves to nothing at both ends */}
           <linearGradient id={fadeId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="510" y2="0">
@@ -210,12 +210,11 @@ export function SemiCircleGauge({
           className="semi-circle-gauge__cap"
         />
 
-        {/* Value label */}
-        <text x="255" y="265" textAnchor="middle" className="semi-circle-gauge__value">
-          <tspan className="semi-circle-gauge__current">{currentLabel}</tspan>
-          {targetLabel ? <tspan className="semi-circle-gauge__target">/{targetLabel}</tspan> : null}
-        </text>
       </svg>
+      <div className="semi-circle-gauge__value">
+        <span className="semi-circle-gauge__current">{currentLabel}</span>
+        {targetLabel ? <span className="semi-circle-gauge__target">/{targetLabel}</span> : null}
+      </div>
     </div>
   )
 }

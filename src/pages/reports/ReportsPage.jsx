@@ -264,7 +264,7 @@ function AnalyticsReport() {
         </div>
         <div>
           <h3>{portfolioAnalyticsCardData.gaugeTitle}</h3>
-          <SemiCircleGauge {...portfolioAnalyticsCardData.gauge} />
+          <SemiCircleGauge {...portfolioAnalyticsCardData.gauge} tone="blue" />
         </div>
       </div>
 
