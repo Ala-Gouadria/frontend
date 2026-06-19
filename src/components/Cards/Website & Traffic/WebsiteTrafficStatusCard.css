@@ -75,7 +75,7 @@
 }
 
 .website-traffic-status-card__quality-blocks .quality-blocks__block--green {
-  --quality-block-glow: rgba(126, 174, 4, 0.16);
+  --quality-block-glow: rgba(24, 119, 242, 0.16);
 }
 
 .website-traffic-status-card__quality-blocks .quality-blocks__block--red {

@@ -378,7 +378,11 @@
 }
 
 .reports-page__legend-dot--blue {
-  background: linear-gradient(180deg, #5ba1ff 0%, #2e7fff 100%);
+  background: #1877F2;
+}
+
+.reports-page__legend-dot--purple {
+  background: #9389E8;
 }
 
 .reports-page__legend-dot--orange {
@@ -386,7 +390,7 @@
 }
 
 .reports-page__legend-dot--red {
-  background: linear-gradient(180deg, #ff8a8a 0%, #f04444 100%);
+  background: #FF4D4D;
 }
 
 .reports-page .stacked-bars {
