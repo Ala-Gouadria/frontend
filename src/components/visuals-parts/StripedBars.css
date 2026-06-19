@@ -1,15 +1,21 @@
 .striped-bars {
   display: grid;
   gap: 6px;
-  --striped-fill-base: linear-gradient(90deg, #D5E64C 0%, #5F8F00 100%);
-  --striped-glow: rgba(95, 143, 0, 0.22);
-  --striped-track: linear-gradient(90deg, rgba(213, 230, 76, 0.3) 0%, rgba(95, 143, 0, 0.3) 100%);
+  --striped-fill-base: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
+  --striped-glow: rgba(24, 119, 242, 0.22);
+  --striped-track: rgba(24, 119, 242, 0.1);
 }
 
 .striped-bars--orange {
-  --striped-fill-base: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
-  --striped-glow: rgba(255, 106, 0, 0.22);
-  --striped-track: rgba(255, 170, 90, 0.25);
+  --striped-fill-base: #CB81DE;
+  --striped-glow: rgba(203, 129, 222, 0.22);
+  --striped-track: rgba(147, 137, 232, 0.2);
+}
+
+.striped-bars--red {
+  --striped-fill-base: #FF5757;
+  --striped-glow: rgba(255, 87, 87, 0.22);
+  --striped-track: rgba(255, 87, 87, 0.3);
 }
 
 .striped-bars--blue {
@@ -28,11 +34,11 @@
 }
 
 .striped-bars__head strong {
-  color: #7ca30a;
+  color: #1877F2;
 }
 
 .striped-bars__track {
-  height: 14px;
+  height: 12px;
   overflow: hidden;
   border-radius: 999px;
   background: var(--striped-track);
@@ -68,8 +74,8 @@
     -45deg,
     rgba(255, 255, 255, 0.16) 0px,
     rgba(255, 255, 255, 0.16) 6px,
-    rgba(40, 80, 0, 0.08)     6px,
-    rgba(40, 80, 0, 0.08)     12px
+    rgba(0, 0, 0, 0.06)       6px,
+    rgba(0, 0, 0, 0.06)       12px
   );
   will-change: transform;
   animation: stripedBarsMove 1.6s linear infinite;

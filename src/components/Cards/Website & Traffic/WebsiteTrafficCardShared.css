@@ -249,27 +249,22 @@
 
 .website-card__striped-row--green .website-card__row-head strong,
 .website-card__striped-row--green .website-card__row-head span:first-child {
-  color: #438c00;
+  color: #1877F2;
 }
 
 .website-card__striped-row--orange .website-card__row-head strong,
 .website-card__striped-row--orange .website-card__row-head small:last-child {
-  color: #ff7629;
+  color: #CB81DE;
 }
 
 .website-card__striped-row--red .website-card__row-head strong,
 .website-card__striped-row--red .website-card__row-head small:last-child {
-  color: #ff2738;
+  color: #FF5757;
 }
 
 .website-card__striped-bar .striped-bars__track {
-  height: 11px;
-  background: rgba(208, 222, 167, 0.72);
-}
-
-.website-card__striped-bar.striped-bars--red {
-  --striped-fill: repeating-linear-gradient(-60deg, #ff9292 0, #ff9292 5px, #ff5a64 5px, #ff5a64 9px);
-  --striped-glow: rgba(255, 90, 100, 0.18);
+  height: 12px;
+  background: var(--striped-track);
 }
 
 .website-card__legend {
