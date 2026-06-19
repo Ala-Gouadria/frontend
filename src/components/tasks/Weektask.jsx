@@ -225,7 +225,7 @@ export default function WeekTask({ onClose }) {
         <div className="wt-chart-card">
           <TaskHistoryLineChart
             data={chartState.points}
-            tone="green"
+            tone="blue"
             className="wt-history-chart"
           />
           <span className="wt-chart-badge">{chartState.average}</span>
