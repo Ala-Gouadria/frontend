@@ -4,7 +4,7 @@
 
   overflow: hidden;
   border-radius: 18px;
-  padding: 0 7px 7px;
+  padding: 0 16px 16px;
   background: var(--colored-panel-bg);
   box-shadow: 0 12px 24px var(--colored-panel-shadow);
   transition: transform 190ms ease, box-shadow 190ms ease;

@@ -157,7 +157,7 @@
 .website-card__metric-panel {
   overflow: hidden;
   border-radius: 18px;
-  padding: 0 5px 5px;
+  padding: 0 16px 16px;
 }
 
 .website-card__metric-panel--orange {
