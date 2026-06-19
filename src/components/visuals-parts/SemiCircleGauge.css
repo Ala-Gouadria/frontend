@@ -1,24 +1,24 @@
 .semi-circle-gauge {
-  /* ---- Green (default) ---- */
-  --gauge-track:      rgba(190, 210, 80, 0.22);
+  /* ---- Blue (default) ---- */
+  --gauge-track: rgba(24, 119, 242, 0.08);
 
-  /* progress band gradient: pale lime → vivid → deep green */
-  --gauge-progress-0: #D4DE7C;
-  --gauge-progress-1: #C0D24A;
-  --gauge-progress-2: #A8C230;
-  --gauge-progress-3: #94B420;
-  --gauge-progress-4: #7EA214;
+  /* progress band: translucent #1877F2 body, deepening toward the knob */
+  --gauge-progress-0: rgba(24, 119, 242, 0.10);
+  --gauge-progress-1: rgba(24, 119, 242, 0.20);
+  --gauge-progress-2: rgba(24, 119, 242, 0.30);
+  --gauge-progress-3: rgba(24, 119, 242, 0.45);
+  --gauge-progress-4: rgba(24, 119, 242, 0.62);
 
-  /* knob radial fill — muted, less saturated than the band */
-  --gauge-knob-0: #DDE2AE;
-  --gauge-knob-1: #C0C862;
-  --gauge-knob-2: #A0AA3A;
+  /* knob fill — flat blue, faint top→bottom shade only */
+  --gauge-knob-1: #4E92F6;
+  --gauge-knob-2: #2E76E8;
 
   --gauge-cap-ring: #ffffff;
-  --gauge-cap-shadow: rgba(120, 140, 20, 0.18);
+  --gauge-cap-shadow: rgba(24, 119, 242, 0.30);
+  --gauge-fog: rgba(120, 170, 250, 0.14);
 
-  --gauge-text:       #1a1a1a;
-  --gauge-text-muted: rgba(27, 28, 32, 0.38);
+  --gauge-text: #6b7178;
+  --gauge-text-muted: rgba(27, 28, 32, 0.26);
 
   position: relative;
   display: grid;
@@ -32,21 +32,22 @@
   font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
 }
 
-.semi-circle-gauge--blue {
-  --gauge-track:      rgba(24, 119, 242, 0.20); /* #1877F233 */
-  --gauge-progress-0: #BFD7FE;
-  --gauge-progress-1: #7FB1FB;
-  --gauge-progress-2: #4F92F8;
-  --gauge-progress-3: #1877F2;
-  --gauge-progress-4: #1565D1;
-  --gauge-knob-0: #DBEAFE;
-  --gauge-knob-1: #5A9EF5;
-  --gauge-knob-2: #1877F2;
-  --gauge-cap-shadow: rgba(24, 119, 242, 0.28);
+.semi-circle-gauge--green {
+  --gauge-track: rgba(190, 210, 80, 0.20);
+  --gauge-progress-0: #D4DE7C;
+  --gauge-progress-1: #C0D24A;
+  --gauge-progress-2: #A8C230;
+  --gauge-progress-3: #94B420;
+  --gauge-progress-4: #7EA214;
+  --gauge-knob-0: #F0F4D8;
+  --gauge-knob-1: #C0C862;
+  --gauge-knob-2: #8A9A2A;
+  --gauge-cap-shadow: rgba(120, 140, 20, 0.30);
+  --gauge-fog: rgba(190, 210, 90, 0.18);
 }
 
 .semi-circle-gauge--orange {
-  --gauge-track:      rgba(253, 186, 116, 0.22);
+  --gauge-track: rgba(253, 186, 116, 0.20);
   --gauge-progress-0: #FED7AA;
   --gauge-progress-1: #FDBA74;
   --gauge-progress-2: #FB923C;
@@ -54,20 +55,50 @@
   --gauge-progress-4: #EA580C;
   --gauge-knob-0: #FFEDD5;
   --gauge-knob-1: #FDBA74;
-  --gauge-knob-2: #F97316;
+  --gauge-knob-2: #C2410C;
+  --gauge-cap-shadow: rgba(234, 88, 12, 0.32);
+  --gauge-fog: rgba(251, 146, 60, 0.20);
 }
 
 .semi-circle-gauge__title {
   justify-self: start;
-  margin: 0 0 3cqw;
+  text-align: left;
+  width: 100%;
+  margin: 0 0 2cqw;
   font-size: clamp(0.95rem, 3.7cqw, 2.2rem);
-  line-height: 1.1;
-  font-weight: 500;
+  line-height: 1.15;
+  font-weight: 400;
   letter-spacing: -0.01em;
   color: #111111;
 }
 
+/* Holds the arc + the centered value overlay */
+.semi-circle-gauge__chart {
+  position: relative;
+  width: 100%;
+}
+
+/* Soft foggy glow behind the arc */
+.semi-circle-gauge__chart::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 86%;
+  height: 120%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    58% 52% at 50% 36%,
+    var(--gauge-fog) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
 .semi-circle-gauge__svg {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: auto;
   display: block;
@@ -80,7 +111,7 @@
 
 .semi-circle-gauge__cap-ring {
   fill: var(--gauge-cap-ring);
-  filter: drop-shadow(0 3px 10px var(--gauge-cap-shadow));
+  filter: drop-shadow(0 4px 12px var(--gauge-cap-shadow));
   animation: semiGaugeCap 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-box: fill-box;
   transform-origin: center;
@@ -93,24 +124,30 @@
 }
 
 .semi-circle-gauge__value {
-  margin-top: clamp(8px, 2cqw, 24px);
+  position: absolute;
+  left: 50%;
+  top: 64%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  margin: 0;
   font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
-  font-size: clamp(1.6rem, 7cqw, 3.4rem);
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  font-size: clamp(1.2rem, 5.4cqw, 2.8rem);
+  font-weight: 500;
+  letter-spacing: 0;
   line-height: 1;
   text-align: center;
+  white-space: nowrap;
   pointer-events: none;
 }
 
 .semi-circle-gauge__current {
   color: var(--gauge-text);
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .semi-circle-gauge__target {
   color: var(--gauge-text-muted);
-  font-weight: 400;
+  font-weight: 500;
 }
 
 @keyframes semiGaugeIn {
