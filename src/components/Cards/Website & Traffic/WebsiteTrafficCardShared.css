@@ -161,13 +161,13 @@
 }
 
 .website-card__metric-panel--orange {
-  background: linear-gradient(180deg, #ffb067 0%, #ff7b1d 100%);
-  box-shadow: 0 10px 24px rgba(255, 123, 29, 0.22);
+  background: linear-gradient(97.16deg, #98BEFE 2.09%, #FFDFEA 98.89%);
+  box-shadow: 0 10px 24px rgba(152, 190, 254, 0.24);
 }
 
 .website-card__metric-panel--green {
-  background: linear-gradient(180deg, #cde83e 0%, #74a503 100%);
-  box-shadow: 0 10px 24px rgba(128, 170, 18, 0.22);
+  background: linear-gradient(97.13deg, #CBC6FF 2.65%, #B49FE4 100%);
+  box-shadow: 0 10px 24px rgba(180, 159, 228, 0.28);
 }
 
 .website-card__metric-panel h3 {
