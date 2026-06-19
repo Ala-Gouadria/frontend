@@ -30,22 +30,22 @@
   animation: automationArcGrow 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transition: stroke-width 160ms ease;
   filter:
-    drop-shadow(0 0 8px rgba(193,224,54,.42))
-    drop-shadow(0 0 18px rgba(193,224,54,.18));
+    drop-shadow(0 0 8px rgba(24,119,242,.42))
+    drop-shadow(0 0 18px rgba(24,119,242,.18));
 }
 
 .automation-arc-gauge__cap {
-  fill: #b6d62a;
+  fill: #1877F2;
   stroke: #fff;
   stroke-width: 4;
-filter:
+  filter:
     drop-shadow(0 2px 4px rgba(0,0,0,.06));
   transition: transform 160ms ease, filter 160ms ease;
   transform-origin: center;
 }
 
 .automation-arc-gauge__tick {
-  stroke: #96c800;
+  stroke: #6DA3FF;
   stroke-width: 2.5;
   stroke-linecap: round;
   animation: automationTickIn 520ms ease both;
@@ -54,7 +54,7 @@ filter:
 
 .automation-arc-gauge:hover .automation-arc-gauge__cap {
   transform: scale(1.08);
-  filter: drop-shadow(0 4px 8px rgba(90, 133, 0, 0.35));
+  filter: drop-shadow(0 4px 8px rgba(24, 119, 242, 0.35));
 }
 
 .automation-arc-gauge::after {
@@ -64,11 +64,11 @@ filter:
   z-index: 25;
   max-width: 230px;
   padding: 6px 9px;
-  border: 1px solid rgba(86, 156, 0, 0.22);
+  border: 1px solid rgba(24, 119, 242, 0.22);
   border-radius: 7px;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 12px 24px rgba(24, 24, 27, 0.14);
-  color: #4b9500;
+  color: #1877F2;
   content: attr(data-tooltip);
   font-size: 0.68rem;
   font-weight: 700;

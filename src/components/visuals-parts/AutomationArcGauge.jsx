@@ -88,10 +88,10 @@ export function AutomationArcGauge({ progress = 0.7, label = '70% In Progress', 
             x2={gradEnd.x} y2={gradEnd.y}
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%" stopColor="rgba(214,245,112,.10)" />
-            <stop offset="16%" stopColor="#d3ed5f" />
-            <stop offset="52%" stopColor="#a9d121" />
-            <stop offset="100%" stopColor="#8cbf1b" />
+            <stop offset="0%" stopColor="rgba(109,163,255,.10)" />
+            <stop offset="16%" stopColor="#6DA3FF" />
+            <stop offset="52%" stopColor="#3d8ef5" />
+            <stop offset="100%" stopColor="#1877F2" />
           </linearGradient>
           <linearGradient
             id="trackGradient"
@@ -99,9 +99,9 @@ export function AutomationArcGauge({ progress = 0.7, label = '70% In Progress', 
             x2={trackEnd.x} y2={trackEnd.y}
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%" stopColor="rgba(205,221,176,.85)" />
-            <stop offset="55%" stopColor="rgba(214,224,196,.45)" />
-            <stop offset="100%" stopColor="rgba(220,228,205,0)" />
+            <stop offset="0%" stopColor="rgba(109,163,255,.50)" />
+            <stop offset="55%" stopColor="rgba(109,163,255,.22)" />
+            <stop offset="100%" stopColor="rgba(109,163,255,0)" />
           </linearGradient>
         </defs>
 

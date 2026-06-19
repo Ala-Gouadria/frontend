@@ -9,30 +9,29 @@
 }
 
 .automation-execution-card__gauge {
-  width: 82%;
-  justify-self: center;
-  margin: -6px 0 -2px;
+  width: calc(100% + 52px);
+  margin: -6px -26px -2px;
   overflow: visible;
 }
 
 .automation-execution-card__gauge .automation-arc-gauge__progress {
-  stroke-width: 10;
-  filter: drop-shadow(0 0 6px rgba(193, 224, 54, 0.25));
+  stroke-width: 12;
+  filter: drop-shadow(0 0 6px rgba(24, 119, 242, 0.25));
 }
 
 .automation-execution-card__gauge .automation-arc-gauge__track {
-  stroke-width: 10;
+  stroke-width: 12;
   opacity: 0.5;
 }
 
 .automation-execution-card__gauge .automation-arc-gauge__tick {
-  stroke: #b7d966;
+  stroke: #6DA3FF;
   stroke-width: 1.5;
   opacity: 0.6;
 }
 
 .automation-execution-card__gauge .automation-arc-gauge__cap {
-  fill: #b2d433;
+  fill: #1877F2;
   stroke-width: 0;
 }
 
