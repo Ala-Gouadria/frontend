@@ -1,7 +1,7 @@
 .automation-execution-card {
   min-height: 0;
   gap: 8px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .automation-execution-card__state {
@@ -10,7 +10,7 @@
 
 .automation-execution-card__gauge {
   width: calc(100% + 52px);
-  margin: -6px -26px -2px;
+  margin: -14px -26px -10px;
   overflow: visible;
 }
 
