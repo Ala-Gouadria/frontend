@@ -66,7 +66,7 @@ export function SemiCircleGauge({
   progress,
   label,
   title,
-  tone = 'green',
+  tone = 'blue',
   className = '',
 }) {
   const id = useId().replace(/[^a-zA-Z0-9]/g, '')
@@ -131,6 +131,29 @@ export function SemiCircleGauge({
           </defs>
 
           <g mask={'url(#' + maskId + ')'}>
+            {/* Wide blue halo — outermost diffuse glow following the band */}
+            <path
+              d={pathData}
+              fill="none"
+              stroke={'url(#' + progGradId + ')'}
+              strokeWidth={BAND_WIDTH + 46}
+              strokeLinecap="round"
+              pathLength="100"
+              strokeDasharray={dash}
+              style={{ filter: 'blur(22px)', opacity: 0.30 }}
+            />
+            {/* White halo — soft white glow hugging the band (bright rim + sheen) */}
+            <path
+              d={pathData}
+              fill="none"
+              stroke="rgba(255,255,255,0.9)"
+              strokeWidth={BAND_WIDTH + 18}
+              strokeLinecap="round"
+              pathLength="100"
+              strokeDasharray={dash}
+              style={{ filter: 'blur(11px)', opacity: 0.6 }}
+            />
+
             {/* Faint full track — even soft base behind everything */}
             <path
               d={pathData}
