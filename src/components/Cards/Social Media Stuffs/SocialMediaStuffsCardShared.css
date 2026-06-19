@@ -91,7 +91,7 @@
   overflow: hidden;
   border-radius: 18px;
   background: linear-gradient(97.16deg, #98BEFE 2.09%, #FFDFEA 98.89%);
-  padding: 0 16px 16px;
+  padding: 0 5px 5px;
   box-shadow: 0 12px 24px rgba(152, 190, 254, 0.24);
   transition: transform 190ms ease, box-shadow 190ms ease;
 }
