@@ -58,11 +58,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background:
-    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.78), transparent 35%),
-    linear-gradient(180deg, #d8ed4c 0%, #81b604 100%);
+  background: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
   box-shadow:
-    0 7px 13px rgba(84, 133, 0, 0.32),
+    0 7px 13px rgba(24, 119, 242, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
   color: #fff;
   font-size: 0.72rem;

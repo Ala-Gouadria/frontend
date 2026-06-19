@@ -9,14 +9,10 @@
   justify-content: center;
   flex: 0 0 auto;
   border-radius: 999px;
-  background:
-    radial-gradient(circle at 16% 50%, rgba(225, 255, 74, 0.98) 0%, rgba(199, 230, 42, 0.72) 28%, transparent 55%),
-    radial-gradient(circle at 84% 46%, rgba(63, 115, 0, 0.62) 0%, transparent 54%),
-    linear-gradient(180deg, #bee236 0%, #75ad00 100%);
+  background: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
   box-shadow:
-    10px 2px 14px rgba(61, 113, 0, 0.24) inset,
-    -10px 2px 15px rgba(223, 255, 78, 0.28) inset,
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    0 8px 20px rgba(24, 119, 242, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
   color: #fff;
   font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
   font-size: 0.86rem;
