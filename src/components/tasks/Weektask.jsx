@@ -71,7 +71,7 @@ function normalizeHistoryTask(task, index) {
 function CompletedCircle() {
   return (
     <svg viewBox="0 0 20 20" width="20" height="20" fill="none" aria-hidden="true">
-      <circle cx="10" cy="10" r="10" fill="currentColor" />
+      <circle cx="10" cy="10" r="9.25" fill="#1877F2" stroke="#1877F2" strokeWidth="1.5" />
       <path d="m6 10.2 2.3 2.25L14 7" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
