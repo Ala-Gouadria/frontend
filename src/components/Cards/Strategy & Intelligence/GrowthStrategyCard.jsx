@@ -1,6 +1,6 @@
 import './StrategyIntelligenceCardShared.css'
 import './GrowthStrategyCard.css'
-import { MiniLineChart, StackedBars, ColoredPanel, AiInsight, AiActionButton } from '../../visuals-parts'
+import { MiniLineChart, StackedBars, ColoredPanel, QualityBlocks, AiInsight, AiActionButton } from '../../visuals-parts'
 
 const defaultSegments = [
   { label: 'Strong Hook', value: 25, tone: 'blue' },
@@ -24,7 +24,11 @@ export function GrowthStrategyCard({
   aiText = 'Strong signals from Traffic, Returning Users combined with conversion drop suggest retargeting will recover lost conversions.',
   className = '',
 }) {
-  const blockCounts = { blue: 14, green: 8, orange: 3 }
+  const qualityBlocks = [
+    { tone: 'green',  count: 14 },
+    { tone: 'blue',   count: 8  },
+    { tone: 'orange', count: 3  },
+  ]
 
   return (
     <div className={`analytics-card ${className}`}>
@@ -70,13 +74,7 @@ export function GrowthStrategyCard({
             </div>
           ))}
         </div>
-        <div className="gs-card__blocks">
-          {Object.entries(blockCounts).flatMap(([tone, count]) =>
-            Array.from({ length: count }).map((_, i) => (
-              <span key={`${tone}-${i}`} className={`gs-card__block gs-card__block--${tone}`} />
-            ))
-          )}
-        </div>
+        <QualityBlocks blocks={qualityBlocks} />
       </ColoredPanel>
 
       <AiInsight>{aiText}</AiInsight>

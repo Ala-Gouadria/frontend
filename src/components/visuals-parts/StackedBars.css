@@ -8,7 +8,7 @@
 .stacked-bars__segment {
   position: relative;
   min-width: 0;
-  border-radius: 0px;
+  border-radius: 8px;
   width: 0%;
   opacity: 0;
   transition:
@@ -17,39 +17,18 @@
 }
 
 .stacked-bars__segment--blue {
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      rgba(255, 255, 255, 0.18) 0px,
-      rgba(255, 255, 255, 0.18) 3px,
-      rgba(0, 0, 0, 0.04)       3px,
-      rgba(0, 0, 0, 0.04)       6px
-    ),
-    linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
+  background: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
+  box-shadow: 0 4px 18px rgba(24, 119, 242, 0.3);
 }
 
 .stacked-bars__segment--green {
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      rgba(255, 255, 255, 0.18) 0px,
-      rgba(255, 255, 255, 0.18) 3px,
-      rgba(0, 0, 0, 0.04)       3px,
-      rgba(0, 0, 0, 0.04)       6px
-    ),
-    linear-gradient(90deg, #D5E64C 0%, #5F8F00 100%);
+  background: #9389E8;
+  box-shadow: 0 4px 18px rgba(147, 137, 232, 0.3);
 }
 
 .stacked-bars__segment--orange {
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      rgba(255, 255, 255, 0.18) 0px,
-      rgba(255, 255, 255, 0.18) 3px,
-      rgba(0, 0, 0, 0.04)       3px,
-      rgba(0, 0, 0, 0.04)       6px
-    ),
-    linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
+  background: #CB81DE;
+  box-shadow: 0 4px 18px rgba(203, 129, 222, 0.3);
 }
 
 .stacked-bars__segment::before {

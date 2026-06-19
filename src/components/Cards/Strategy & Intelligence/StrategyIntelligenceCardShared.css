@@ -234,9 +234,9 @@
   border-radius: 2px;
 }
 
-.analytics-card__swatch--blue   { background: linear-gradient(180deg, #a8cfff 0%, #5c9df4 100%); }
-.analytics-card__swatch--green  { background: linear-gradient(180deg, #e7f6ad 0%, #aacb3d 100%); }
-.analytics-card__swatch--orange { background: linear-gradient(180deg, #fff0df 0%, #ffba84 100%); }
+.analytics-card__swatch--blue   { background: linear-gradient(180deg, #6DA3FF 0%, #1877F2 100%); }
+.analytics-card__swatch--green  { background: linear-gradient(180deg, #b8b2f4 0%, #9389E8 100%); }
+.analytics-card__swatch--orange { background: linear-gradient(180deg, #dfa7ec 0%, #CB81DE 100%); }
 
 @keyframes analyticsCardIn {
   from { opacity: 0; transform: translateY(18px); }
