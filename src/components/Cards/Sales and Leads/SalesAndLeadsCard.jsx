@@ -1,9 +1,11 @@
+import { useMemo } from 'react'
 import './SalesAndLeadsCard.css'
 import './SalesandLeadsCardShared.css'
 import { MiniLineChart } from '../../visuals-parts/MiniLineChart'
 import { StageFlow } from '../../visuals-parts/StageFlow'
 import { QualityBlocks } from '../../visuals-parts/QualityBlocks'
 import { AiInsight, AiActionButton } from '../../visuals-parts/AiInsight'
+import { useCrmData } from '../../../hooks/useAnalyticsData'
 
 const defaultData = {
   title: 'Sales and Leads',
@@ -41,8 +43,100 @@ function classNames(...values) {
   return values.filter(Boolean).join(' ')
 }
 
-export function SalesAndLeadsCard({ data = defaultData, className = '' }) {
-  const d = { ...defaultData, ...data }
+// Transform CRM API data to card format
+function transformCrmData(apiData, mockData) {
+  if (!apiData?.current) return null
+
+  const current = apiData.current
+  const leadsChange = apiData.leadsChange || 0
+
+  // Transform deals by stage to stage flow
+  const dealsByStage = current.dealsByStage || {}
+  const stages = Object.keys(dealsByStage)
+  const totalDeals = Object.values(dealsByStage).reduce((sum, s) => sum + (s.count || 0), 0)
+
+  // Determine active stage (stage with most deals)
+  let activeIndex = 0
+  let maxDeals = 0
+  stages.forEach((stage, idx) => {
+    if (dealsByStage[stage]?.count > maxDeals) {
+      maxDeals = dealsByStage[stage].count
+      activeIndex = idx
+    }
+  })
+
+  // Transform leads by stage to quality blocks
+  const leadsByStage = current.leadsByStage || {}
+  const totalLeads = current.totalLeads || 1
+  const stageOrder = ['subscriber', 'lead', 'marketingqualifiedlead', 'salesqualifiedlead', 'opportunity', 'customer']
+
+  let highLeads = 0
+  let midLeads = 0
+  let lowLeads = 0
+
+  Object.entries(leadsByStage).forEach(([stage, count]) => {
+    const stageLower = stage.toLowerCase()
+    if (['customer', 'opportunity', 'salesqualifiedlead'].some(s => stageLower.includes(s))) {
+      highLeads += count
+    } else if (['marketingqualifiedlead', 'lead'].some(s => stageLower.includes(s))) {
+      midLeads += count
+    } else {
+      lowLeads += count
+    }
+  })
+
+  const highPct = Math.round((highLeads / totalLeads) * 100)
+  const midPct = Math.round((midLeads / totalLeads) * 100)
+  const lowPct = 100 - highPct - midPct
+
+  return {
+    ...mockData,
+    title: 'Sales and Leads',
+    subtitle: 'Real-time data from HubSpot',
+    status: current.totalDeals > 0 ? 'Active' : 'No Data',
+    revenueStatus: {
+      label: 'Pipeline Value',
+      value: current.totalDealValue
+        ? `$${Math.round(current.totalDealValue).toLocaleString()}`
+        : 'No deals',
+      good: (current.winRate || 0) > 20,
+    },
+    mainProblem: {
+      title: 'Pipeline Overview',
+      description: `${current.totalDeals || 0} deals in pipeline, ${current.winRate?.toFixed(0) || 0}% win rate`,
+      stages: stages.length > 0 ? stages.slice(0, 4) : mockData.mainProblem.stages,
+      activeIndex: Math.min(activeIndex, 3),
+    },
+    leadQuality: {
+      label: 'Lead Quality',
+      legend: [
+        { tone: 'green', label: 'High', percent: `${highPct}%` },
+        { tone: 'orange', label: 'Mid', percent: `${midPct}%` },
+        { tone: 'red', label: 'Low', percent: `${lowPct}%` },
+      ],
+      blocks: [
+        { tone: 'green', count: Math.round(highPct / 5) || 1 },
+        { tone: 'orange', count: Math.round(midPct / 5) || 1 },
+        { tone: 'red', count: Math.round(lowPct / 5) || 1 },
+      ],
+    },
+    aiInsight: current.totalLeads > 0
+      ? `You have ${current.newLeads || 0} new leads this period. Lead volume is ${leadsChange >= 0 ? 'up' : 'down'} ${Math.abs(leadsChange).toFixed(0)}%. Focus on converting ${stages[activeIndex] || 'qualified'} stage deals.`
+      : mockData.aiInsight,
+  }
+}
+
+export function SalesAndLeadsCard({ data: propData, className = '', useRealData = true }) {
+  const { data: apiData, loading, hasRealData } = useCrmData({ days: 30 })
+
+  const d = useMemo(() => {
+    if (propData) return { ...defaultData, ...propData }
+    if (useRealData && hasRealData) {
+      const transformed = transformCrmData(apiData, defaultData)
+      if (transformed) return transformed
+    }
+    return defaultData
+  }, [propData, useRealData, hasRealData, apiData])
 
   return (
     <div className={classNames('analytics-card', 'sales-and-leads-card', className)}>

@@ -1,10 +1,10 @@
-import { get, post, del } from './client.js'
+import { get, post, del, patch } from './client.js'
 
 // Static catalog — visual metadata only; connection state comes from backend
 const CATALOG = [
   { id: 'openai',      name: 'Open Ai',    iconKey: 'openAi',    description: 'Connect OpenAI to power AI-driven features and content generation.' },
   { id: 'vimeo',       name: 'Vimeo',      iconKey: 'vimeo',     description: 'Integrate your Vimeo account to upload videos and analyze viewer engagement.' },
-  { id: 'shopify',     name: 'Shopify',    iconKey: 'shopify',   description: 'Connect Shopify to sync products, orders, and customer data.' },
+  { id: 'shopify',     name: 'Shopify',    iconKey: 'shopify',   description: 'Connect Shopify to sync products, orders, and customer data.', hasOAuth: true },
   { id: 'notion',      name: 'Notion',     iconKey: 'notion',    description: 'Link Notion to manage notes, tasks, and databases all in one place.' },
   { id: 'google-ads',  name: 'Google Ads', iconKey: 'googleAds', description: 'Monitor campaigns and optimize ad performance in real time.' },
   { id: 'stripe',      name: 'Stripe',     iconKey: 'stripe',    description: 'Connect Stripe to track payments, subscriptions, and revenue.' },
@@ -13,6 +13,11 @@ const CATALOG = [
   { id: 'gmail',       name: 'Gmail',      iconKey: 'gmail',     description: 'Connect Gmail to manage emails and automate outreach.' },
   { id: 'github',      name: 'Github',     iconKey: 'github',    description: 'Integrate GitHub to monitor repositories and automate dev workflows.' },
   { id: 'paypal',      name: 'Paypal',     iconKey: 'paypal',    description: 'Connect PayPal to track payments and automate invoicing.' },
+  // Analytics integrations
+  { id: 'google',      name: 'Google Analytics', iconKey: 'google', description: 'Connect Google Analytics and Search Console for traffic and SEO data.', hasOAuth: true },
+  { id: 'hubspot',     name: 'HubSpot',    iconKey: 'hubspot',   description: 'Connect HubSpot CRM to sync leads, deals, and pipeline data.', hasOAuth: true },
+  { id: 'ahrefs',      name: 'Ahrefs',     iconKey: 'ahrefs',    description: 'Connect Ahrefs for backlink analysis and SEO insights.', hasApiKey: true },
+  { id: 'mixpanel',    name: 'Mixpanel',   iconKey: 'mixpanel',  description: 'Connect Mixpanel for user behavior and product analytics.', hasApiKey: true },
 ]
 
 function mergeWithCatalog(backendItems) {
@@ -91,5 +96,130 @@ export const facebookApi = {
   },
   async campaigns() {
     return get('/api/v1/integrations/facebook/campaigns')
+  },
+}
+
+// Google Analytics + Search Console — OAuth integration
+export const googleApi = {
+  // { connected, ga4Properties, searchConsoleSites, selectedGa4Property, selectedSearchConsoleSite, ... }
+  async status() {
+    return get('/api/v1/integrations/google/status')
+  },
+  async connectUrl() {
+    const res = await get('/api/v1/integrations/google/connect')
+    return res?.url
+  },
+  async disconnect() {
+    return del('/api/v1/integrations/google')
+  },
+  // Update selected GA4 property or Search Console site
+  async updateSelection({ ga4PropertyId, searchConsoleSite }) {
+    return patch('/api/v1/integrations/google/selection', { ga4PropertyId, searchConsoleSite })
+  },
+  async sync() {
+    return post('/api/v1/integrations/google/sync', {})
+  },
+  async getTrafficData(options = {}) {
+    const params = new URLSearchParams()
+    if (options.startDate) params.append('startDate', options.startDate)
+    if (options.endDate) params.append('endDate', options.endDate)
+    return get(`/api/v1/integrations/google/traffic?${params}`)
+  },
+  async getSeoData(options = {}) {
+    const params = new URLSearchParams()
+    if (options.startDate) params.append('startDate', options.startDate)
+    if (options.endDate) params.append('endDate', options.endDate)
+    return get(`/api/v1/integrations/google/seo?${params}`)
+  },
+}
+
+// HubSpot CRM — OAuth integration
+export const hubspotApi = {
+  // { connected, portalId, hubDomain, pipelines, connectedAt, lastSyncAt }
+  async status() {
+    return get('/api/v1/integrations/hubspot/status')
+  },
+  async connectUrl() {
+    const res = await get('/api/v1/integrations/hubspot/connect')
+    return res?.url
+  },
+  async disconnect() {
+    return del('/api/v1/integrations/hubspot')
+  },
+  async sync() {
+    return post('/api/v1/integrations/hubspot/sync', {})
+  },
+  async getCrmData(options = {}) {
+    const params = new URLSearchParams()
+    if (options.days) params.append('days', options.days)
+    return get(`/api/v1/integrations/hubspot/crm?${params}`)
+  },
+}
+
+// Shopify — OAuth integration (requires shop domain)
+export const shopifyApi = {
+  // { connected, shop, scope, connectedAt, lastSyncAt }
+  async status() {
+    return get('/api/v1/integrations/shopify/status')
+  },
+  // Shopify requires shop domain upfront; returns OAuth URL
+  async connectUrl(shopDomain) {
+    const res = await post('/api/v1/integrations/shopify/connect', { shop: shopDomain })
+    return res?.url
+  },
+  async disconnect() {
+    return del('/api/v1/integrations/shopify')
+  },
+  async sync() {
+    return post('/api/v1/integrations/shopify/sync', {})
+  },
+  async getRevenueData(options = {}) {
+    const params = new URLSearchParams()
+    if (options.days) params.append('days', options.days)
+    return get(`/api/v1/integrations/shopify/revenue?${params}`)
+  },
+}
+
+// Ahrefs — API key integration
+export const ahrefsApi = {
+  // { connected, domain, connectedAt, lastSyncAt }
+  async status() {
+    return get('/api/v1/integrations/ahrefs/status')
+  },
+  // Configure with API key and domain
+  async configure({ apiKey, domain }) {
+    return post('/api/v1/integrations/ahrefs/configure', { apiKey, domain })
+  },
+  async disconnect() {
+    return del('/api/v1/integrations/ahrefs')
+  },
+  async sync() {
+    return post('/api/v1/integrations/ahrefs/sync', {})
+  },
+  async getSeoData() {
+    return get('/api/v1/integrations/ahrefs/data')
+  },
+}
+
+// Mixpanel — API key integration
+export const mixpanelApi = {
+  // { connected, projectId, connectedAt, lastSyncAt }
+  async status() {
+    return get('/api/v1/integrations/mixpanel/status')
+  },
+  // Configure with service account credentials
+  async configure({ serviceAccountId, secret, projectId }) {
+    return post('/api/v1/integrations/mixpanel/configure', { serviceAccountId, secret, projectId })
+  },
+  async disconnect() {
+    return del('/api/v1/integrations/mixpanel')
+  },
+  async sync() {
+    return post('/api/v1/integrations/mixpanel/sync', {})
+  },
+  async getAnalyticsData(options = {}) {
+    const params = new URLSearchParams()
+    if (options.days) params.append('days', options.days)
+    return get(`/api/v1/integrations/mixpanel/data?${params}`)
   },
 }
