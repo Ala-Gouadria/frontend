@@ -67,6 +67,7 @@ export function SemiCircleGauge({
   label,
   title,
   tone = 'blue',
+  bandWidth = 40,
   className = '',
 }) {
   const id = useId().replace(/[^a-zA-Z0-9]/g, '')
@@ -83,6 +84,9 @@ export function SemiCircleGauge({
   const pathData = getPathData()
   const knob = getArcPoint(safeProgress)
   const dash = `${safeProgress * 100} 100`
+
+  const capRingR = Math.round(bandWidth * 0.85)
+  const capR = Math.round(bandWidth * 0.575)
 
   // Ticks only along the filled (progress) portion of the arc.
   const progressTicks = TICK_PROGRESS.filter((tp) => tp <= safeProgress + 0.01)
@@ -136,7 +140,7 @@ export function SemiCircleGauge({
               d={pathData}
               fill="none"
               stroke={'url(#' + progGradId + ')'}
-              strokeWidth={BAND_WIDTH + 46}
+              strokeWidth={bandWidth + 46}
               strokeLinecap="round"
               pathLength="100"
               strokeDasharray={dash}
@@ -147,7 +151,7 @@ export function SemiCircleGauge({
               d={pathData}
               fill="none"
               stroke="rgba(255,255,255,0.9)"
-              strokeWidth={BAND_WIDTH + 18}
+              strokeWidth={bandWidth + 18}
               strokeLinecap="round"
               pathLength="100"
               strokeDasharray={dash}
@@ -159,7 +163,7 @@ export function SemiCircleGauge({
               d={pathData}
               fill="none"
               stroke="var(--gauge-track)"
-              strokeWidth={BAND_WIDTH + 14}
+              strokeWidth={bandWidth + 14}
               strokeLinecap="round"
               style={{ filter: 'blur(9px)' }}
             />
@@ -167,7 +171,7 @@ export function SemiCircleGauge({
               d={pathData}
               fill="none"
               stroke="var(--gauge-track)"
-              strokeWidth={BAND_WIDTH}
+              strokeWidth={bandWidth}
               strokeLinecap="butt"
             />
 
@@ -176,7 +180,7 @@ export function SemiCircleGauge({
               d={pathData}
               fill="none"
               stroke={'url(#' + progGradId + ')'}
-              strokeWidth={BAND_WIDTH + 14}
+              strokeWidth={bandWidth + 14}
               strokeLinecap="round"
               pathLength="100"
               strokeDasharray={dash}
@@ -187,7 +191,7 @@ export function SemiCircleGauge({
               d={pathData}
               fill="none"
               stroke={'url(#' + progGradId + ')'}
-              strokeWidth={BAND_WIDTH}
+              strokeWidth={bandWidth}
               strokeLinecap="butt"
               pathLength="100"
               strokeDasharray={dash}
@@ -208,7 +212,7 @@ export function SemiCircleGauge({
             {/* Tick dividers — light vertical marks across the band */}
             <g>
               {progressTicks.map((tp) => {
-                const tick = getTickLine(tp, BAND_WIDTH - 4)
+                const tick = getTickLine(tp, bandWidth - 4)
                 return (
                   <line
                     key={tp}
@@ -226,11 +230,11 @@ export function SemiCircleGauge({
           </g>
 
           {/* Knob — outside the mask, always fully visible */}
-          <circle cx={knob.x} cy={knob.y} r="34" className="semi-circle-gauge__cap-ring" />
+          <circle cx={knob.x} cy={knob.y} r={capRingR} className="semi-circle-gauge__cap-ring" />
           <circle
             cx={knob.x}
             cy={knob.y}
-            r="23"
+            r={capR}
             fill={'url(#' + knobGradId + ')'}
             className="semi-circle-gauge__cap"
           />

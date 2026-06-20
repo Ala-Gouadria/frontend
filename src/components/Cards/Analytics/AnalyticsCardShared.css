@@ -349,7 +349,7 @@
 }
 
 .analytics-card__gauge-wrap .semi-circle-gauge__value {
-  color: #0f1116;
+  color: var(--gauge-text, #0f1116);
 }
 
 .analytics-card__gauge-wrap .semi-circle-gauge__svg {

@@ -2,4 +2,38 @@
 
 .portfolio-analytics-card {
   min-height: 612px;
+  width: 448px;
+}
+
+/* ── Lead Generation gauge section ─────────────────────────── */
+.portfolio-analytics-card .analytics-card__gauge-wrap {
+  margin-top: 4px;
+  min-height: 0;
+  height: 204px;
+  overflow: visible;
+}
+
+/* Vivid blue gradient — stronger than the default */
+.portfolio-analytics-card .semi-circle-gauge {
+  --gauge-progress-0: rgba(24, 119, 242, 0.10);
+  --gauge-progress-1: rgba(24, 119, 242, 0.28);
+  --gauge-progress-2: rgba(24, 119, 242, 0.52);
+  --gauge-progress-3: rgba(20, 105, 228, 0.76);
+  --gauge-progress-4: #1877F2;
+  --gauge-fog: rgba(100, 160, 250, 0.24);
+}
+
+/* Blue value label to match design */
+.portfolio-analytics-card .analytics-card__gauge-wrap .semi-circle-gauge__value {
+  color: #1877F2;
+}
+
+.portfolio-analytics-card .analytics-card__gauge-wrap .semi-circle-gauge__current {
+  color: #1877F2;
+  font-weight: 700;
+}
+
+.portfolio-analytics-card .analytics-card__gauge-wrap .semi-circle-gauge__target {
+  color: #1877F2;
+  font-weight: 600;
 }
