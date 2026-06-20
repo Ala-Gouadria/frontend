@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './SocialMediaStuffsCardShared.css'
 import './ImageGenerationCard.css'
-import { AiInsight, AiActionButton } from '../../visuals-parts'
+import { AiInsight, AiActionButton, NoraImageLoader } from '../../visuals-parts'
 
 const defaultBatch = [
   { label: 'Instagram Live Hack posts', count: '12 Images' },
@@ -12,9 +12,10 @@ const defaultBatch = [
 function LazyImage({ src, alt, className }) {
   const [loaded, setLoaded] = useState(false)
   const [error,  setError]  = useState(false)
+  const showLoader = !loaded || error || !src
   return (
     <div className={`ig-card__lazy-wrap ${className || ''}`}>
-      {(!loaded || error) && <span className="ig-card__img-spinner" />}
+      {showLoader && <NoraImageLoader className="ig-card__loader" />}
       {!error && src && (
         <img
           src={src}
@@ -23,9 +24,6 @@ function LazyImage({ src, alt, className }) {
           onError={() => setError(true)}
           style={{ opacity: loaded ? 1 : 0 }}
         />
-      )}
-      {(error || !src) && loaded === false && (
-        <span className="ig-card__img-placeholder" />
       )}
     </div>
   )

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './SocialPostPreview.css'
+import { NoraImageLoader } from './NoraImageLoader'
 
 function classNames(...values) {
   return values.filter(Boolean).join(' ')
@@ -34,7 +35,7 @@ export function SocialPostPreview({
       </header>
 
       <div className="social-post-preview__media">
-        {(!loaded || error || !postSrc) && <span className="social-post-preview__spinner" />}
+        {(!loaded || error || !postSrc) && <NoraImageLoader className="social-post-preview__loader" />}
         {showMedia && (
           <img
             src={postSrc}
