@@ -5,6 +5,8 @@ import { detectAgents, DEMO_AGENTS } from './agentPanelConfig'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
 import { voiceApi } from '../../api/voiceApi'
 import { matchDemoTurn, DEMO_MODE_ENABLED } from './demoScript'
+import { matchCommand } from './voiceCommands'
+import { GREETING, consumeGreet } from './voiceGreeting'
 import noraWordmark from '../../assets/splash_screen/logo.svg'
 import './NoraVoice.css'
 
@@ -45,7 +47,7 @@ function lerp(a, b, t) {
   return a + (b - a) * t
 }
 
-export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
+export default function NoraVoice({ activeNavId = 'stars', onNavigate, globalVoiceActive = false }) {
   const [mode, setMode] = useState('idle') // 'idle' | 'listening' | 'speaking'
   const [notice, setNotice] = useState('')
   const [prompt, setPrompt] = useState('')
@@ -405,10 +407,13 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
       try {
         url = await voiceApi.speak(text)
       } catch {
-        // No audio — still reveal cards from the text so the demo isn't blank.
+        // No audio — still reveal cards from the text so the demo isn't blank,
+        // and still fire onEnded so any queued action (e.g. navigation) runs
+        // even when TTS is unavailable.
         setRevealedAgents((prev) => new Set([...prev, ...detectAgents(text)]))
         setMode('idle')
         setNotice('Voice unavailable right now — showing Nora’s answer visually.')
+        onEnded?.()
         return
       }
     }
@@ -508,6 +513,31 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
     setIsSending(true)
     setNotice('')
 
+    // Command fast-path (Phase A): turn an utterance into a UI action — navigate
+    // to another view or open/close the side panel — instead of a chat answer.
+    // Nora speaks a short confirmation, then performs the action. Anything that
+    // isn't a recognized command falls through to the demo / chat paths below.
+    const command = matchCommand(text)
+    if (command) {
+      try {
+        if (command.kind === 'navigate') {
+          // Speak the confirmation, then route once she finishes (or right away
+          // if TTS is unavailable — playNoraVoice fires onEnded in both cases).
+          await playNoraVoice(command.say, undefined, () => handleNavInterrupt(command.target))
+        } else if (command.kind === 'panel') {
+          if (command.op === 'open') {
+            setRevealedAgents(new Set(DEMO_AGENT_KEYS))
+          } else {
+            setRevealedAgents(new Set())
+          }
+          await playNoraVoice(command.say)
+        }
+      } finally {
+        setIsSending(false)
+      }
+      return
+    }
+
     // Demo fast-path: if VITE_VOICE_MODE=demo (default) and the question matches
     // a pre-captured turn, play the cached reply + pre-generated audio instantly.
     // Set VITE_VOICE_MODE=live to always use the real OpenAI TTS + chat pipeline.
@@ -534,6 +564,7 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
         serviceId: 'general',
         text,
         chatOnly: true, // voice demo wants Nora's spoken chat reply, not the planner echo
+        mode: 'voice', // ask the AI for a short, plain, TTS-friendly answer
       })
       const reply = result?.assistantMessage?.text || ''
       if (reply) {
@@ -606,6 +637,19 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
   // Tear down audio if the component unmounts mid-session.
   useEffect(() => () => { stopAudio(); stopNoraVoice() }, [])
 
+  // On a fresh login that lands here, Nora greets once ("Hey boss, …").
+  // consumeGreet() clears the per-session flag so it never repeats on refresh.
+  useEffect(() => {
+    // When the global always-listening assistant is mounted alongside the orb,
+    // it owns the greeting + the microphone — skip the orb's copy to avoid a
+    // double "Hey boss" and two recognizers fighting for the mic.
+    if (!globalVoiceActive && consumeGreet()) {
+      const t = setTimeout(() => { void playNoraVoice(GREETING) }, 700)
+      return () => clearTimeout(t)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div className="nora-voice">
       <div className="stage" style={{ '--tone': CONFIG.bgTone }}>
@@ -645,7 +689,7 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
         <div className="dock">
           <div className="state-label nv-enter" style={{ '--d': '60ms' }} data-mode={mode}>
             {isSending && 'Nora is thinking…'}
-            {!isSending && mode === 'idle' && 'Tap the mic to talk to Nora'}
+            {!isSending && mode === 'idle' && (globalVoiceActive ? 'Say “Hey Nora” anytime' : 'Tap the mic to talk to Nora')}
             {!isSending && mode === 'listening' && 'Listening…'}
             {!isSending && mode === 'speaking' && 'Nora is speaking…'}
           </div>
@@ -666,27 +710,29 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
               placeholder="Ask Nora about your business"
               aria-label="Ask Nora about your business"
             />
-            <button
-              type="button"
-              className={'prompt-mic ' + (isListening ? 'active' : '')}
-              onClick={toggleMic}
-              aria-label={isListening ? 'Stop listening' : 'Talk to Nora'}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            {!globalVoiceActive && (
+              <button
+                type="button"
+                className={'prompt-mic ' + (isListening ? 'active' : '')}
+                onClick={toggleMic}
+                aria-label={isListening ? 'Stop listening' : 'Talk to Nora'}
               >
-                <rect x="9" y="3" width="6" height="11" rx="3" />
-                <path d="M5 11a7 7 0 0 0 14 0" />
-                <path d="M12 18v3" />
-              </svg>
-            </button>
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="9" y="3" width="6" height="11" rx="3" />
+                  <path d="M5 11a7 7 0 0 0 14 0" />
+                  <path d="M12 18v3" />
+                </svg>
+              </button>
+            )}
             <button
               type="button"
               className="prompt-send"
@@ -714,43 +760,45 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate }) {
             </button>
           </div>
 
-          <div className="controls nv-enter" style={{ '--d': '220ms' }}>
-            <button
-              type="button"
-              className={'ctl ' + (mode === 'speaking' ? 'active' : '')}
-              onClick={toggleSpeak}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+          {!globalVoiceActive && (
+            <div className="controls nv-enter" style={{ '--d': '220ms' }}>
+              <button
+                type="button"
+                className={'ctl ' + (mode === 'speaking' ? 'active' : '')}
+                onClick={toggleSpeak}
               >
-                <path d="M4 9v6h4l5 4V5L8 9H4z" />
-                <path d="M17 8a5 5 0 0 1 0 8" />
-              </svg>
-              Hear Nora
-            </button>
-            {mode !== 'idle' && (
-              <button type="button" className="ctl ghost" onClick={goIdle} aria-label="Stop">
                 <svg
                   viewBox="0 0 24 24"
-                  width="18"
-                  height="18"
+                  width="20"
+                  height="20"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.8"
                   strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <path d="M6 6l12 12M18 6L6 18" />
+                  <path d="M4 9v6h4l5 4V5L8 9H4z" />
+                  <path d="M17 8a5 5 0 0 1 0 8" />
                 </svg>
+                Hear Nora
               </button>
-            )}
-          </div>
+              {mode !== 'idle' && (
+                <button type="button" className="ctl ghost" onClick={goIdle} aria-label="Stop">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  >
+                    <path d="M6 6l12 12M18 6L6 18" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          )}
 
           {notice && <div className="notice">{notice}</div>}
         </div>

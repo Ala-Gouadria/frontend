@@ -25,6 +25,8 @@ import Assets from '../pages/assets/Assets'
 import ActivityLog from '../pages/activityLog/activityLog'
 import AnalyticsCardsPreview from '../pages/analyticsCardsPreview/AnalyticsCardsPreview'
 import NoraChatPage from '../pages/chatnora/norachat'
+import GlobalVoiceAssistant from '../components/nora/GlobalVoiceAssistant'
+import { markLoggedIn } from '../components/nora/voiceGreeting'
 import '../styles/responsive-overrides.css'
 
 /* global __APP_SESSION__ */
@@ -127,6 +129,10 @@ export default function App() {
   const previewAnalyticsCards = isAnalyticsCardsPreviewRequest()
   const setupComplete = readStoredFlag(STORAGE_KEYS.setupComplete)
   const storedView = readStoredView()
+  // Returning from the Facebook OAuth callback (redirect to /?fb=connected|error)
+  // → open the Integrate page, which reads ?fb to show the result + refresh status.
+  const fbReturn =
+    typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('fb')
   const [isAuthenticated, setIsAuthenticated] = useState(
     previewAnalyticsCards || tokenStore.getAccessToken() !== null || setupComplete,
   )
@@ -137,9 +143,11 @@ export default function App() {
   const [view, setView] = useState(
     previewAnalyticsCards
       ? 'analytics-cards-preview'
-      : setupComplete
-        ? storedView || 'voice'
-        : 'setup',
+      : !setupComplete
+        ? 'setup'
+        : fbReturn
+          ? 'integrate'
+          : storedView || 'voice',
   )
 
   // On mount: if only the refresh token survived a hard reload, attempt silent refresh
@@ -316,12 +324,15 @@ export default function App() {
     } catch {
       // keep the local flag value
     }
+    // Returning user whose business is already set up → Nora greets on entry.
+    if (complete) markLoggedIn()
     navigateTo(complete ? readStoredView() || 'voice' : 'setup')
   }
 
   const completeSetup = () => {
     writeStorage(STORAGE_KEYS.authenticated, 'true')
     writeStorage(STORAGE_KEYS.setupComplete, 'true')
+    markLoggedIn()
     navigateTo('voice')
   }
 
@@ -364,6 +375,7 @@ export default function App() {
     )
   }
 
+  const renderView = () => {
   if (view === 'settings') {
     return <Settings onNavigate={handleNavigation} />
   }
@@ -429,7 +441,7 @@ export default function App() {
   }
 
   if (view === 'voice') {
-    return <NoraVoice activeNavId="stars" onNavigate={handleNavigation} />
+    return <NoraVoice activeNavId="stars" onNavigate={handleNavigation} globalVoiceActive />
   }
 
   if (view === 'dashboard') {
@@ -437,4 +449,24 @@ export default function App() {
   }
 
   return <IntelligenceMap activeNavId="stars" onNavigate={handleNavigation} />
+  }
+
+  // The persistent, app-wide voice assistant ("Hey Nora") rides above every
+  // authenticated view so it survives navigation, speaks from anywhere, and
+  // runs UI actions — including the orb home and the dashboard, so voice is
+  // always-listening everywhere (no button press). On the orb home the orb's
+  // own tap-mic is suppressed (globalVoiceActive) so there's a single mic.
+  const showVoiceAssistant =
+    isAuthenticated &&
+    view !== 'setup' &&
+    view !== 'analytics-cards-preview'
+
+  return (
+    <>
+      {renderView()}
+      {showVoiceAssistant && (
+        <GlobalVoiceAssistant onNavigate={handleNavigation} wakeless={view === 'voice'} />
+      )}
+    </>
+  )
 }

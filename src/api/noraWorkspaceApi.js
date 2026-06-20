@@ -1,11 +1,51 @@
 import { NORA_SEED_CONVERSATIONS, NORA_SERVICES } from './noraWorkspaceMockData'
 import { chatApi } from './chatApi.js'
 import { orchestrationsApi } from './orchestrationsApi.js'
+import { resolveAuthedImageUrl } from './authedImage.js'
 
 let idCounter = 0
 function createId(prefix) {
   idCounter += 1
   return `${prefix}-${Date.now()}-${idCounter}`
+}
+
+// Heuristic: does this message ask Nora to produce an image? Used to route the
+// request to the chat path (which has conversation context) instead of the
+// context-blind agentic planner. Kept deliberately loose — a false positive
+// just means the chat LLM decides image_prompt=null and nothing is generated.
+function looksLikeImageRequest(text = '') {
+  const t = String(text).toLowerCase()
+  return (
+    /\b(generate|create|make|design|draw|render|produce)\b/.test(t) &&
+    /\b(image|images|picture|pictures|photo|photos|visual|visuals|graphic|graphics|illustration|artwork|poster|thumbnail)\b/.test(t)
+  )
+}
+
+// Map orchestration/chat `artifacts` (e.g. generated images) into chat
+// attachment objects the message renderer understands. Auth-protected URLs are
+// fetched as blobs (see resolveAuthedImageUrl). Failures to load an individual
+// image are dropped rather than failing the whole message.
+async function artifactsToAttachments(artifacts = []) {
+  if (!Array.isArray(artifacts)) return []
+  const images = artifacts.filter((a) => a && a.type === 'image' && a.url)
+  const settled = await Promise.all(
+    images.map(async (a) => {
+      try {
+        return {
+          id: createId('img'),
+          type: 'image',
+          url: await resolveAuthedImageUrl(a.url),
+          name: a.caption ? a.caption.slice(0, 60) : 'Generated image',
+          sizeLabel: 'AI-generated',
+          // Mark AI-generated images so the chat renders them large + zoomable.
+          generated: true,
+        }
+      } catch {
+        return null
+      }
+    }),
+  )
+  return settled.filter(Boolean)
 }
 
 function formatSize(size = 0) {
@@ -56,24 +96,28 @@ function mapSession(session) {
   }
 }
 
-function mapMessage(msg) {
+async function mapMessage(msg) {
+  // Generated images are stored in metadata.artifacts (not in an attachments
+  // field), so resolve them here too — otherwise images vanish on reload.
+  const metaArtifacts = msg.metadata?.artifacts
+  const fromArtifacts = metaArtifacts ? await artifactsToAttachments(metaArtifacts) : []
   return {
     id: msg.id,
     role: msg.role,
     text: msg.content ?? msg.text ?? '',
     createdAt: msg.createdAt,
-    attachments: msg.attachments ?? [],
+    attachments: [...(msg.attachments ?? []), ...fromArtifacts],
   }
 }
 
-function mapFullSession(session) {
+async function mapFullSession(session) {
   const sessionWithTitle = applyTitleOverride(session)
   return {
     id: sessionWithTitle.id,
     title: sessionWithTitle.title ?? 'Chat',
     serviceId: sessionWithTitle.agentType ?? sessionWithTitle.serviceId ?? 'general',
     updatedAt: sessionWithTitle.updatedAt ?? sessionWithTitle.createdAt,
-    messages: (sessionWithTitle.messages ?? []).map(mapMessage),
+    messages: await Promise.all((sessionWithTitle.messages ?? []).map(mapMessage)),
   }
 }
 
@@ -158,11 +202,16 @@ export const noraWorkspaceApi = {
     return this.uploadAttachment(file, 'audio', options)
   },
 
-  async sendMessage({ conversationId, serviceId = 'general', text = '', attachments = [], chatOnly = false }) {
+  async sendMessage({ conversationId, serviceId = 'general', text = '', attachments = [], chatOnly = false, mode }) {
     // Pure chat proxy. Reads the assistant text across the response shapes the
-    // backend may use (aiMessage.content is the current contract).
+    // backend may use (aiMessage.content is the current contract). The chat
+    // backend may also attach generated-image artifacts in message metadata
+    // (when the conversational LLM was asked to make an image). `mode` (e.g.
+    // 'voice') is forwarded so the AI can keep spoken replies short + plain.
     const viaChat = async () => {
-      const result = await chatApi.sendMessage(conversationId, { message: text, attachments })
+      const result = await chatApi.sendMessage(conversationId, { message: text, attachments, mode })
+      const metadata =
+        result?.aiMessage?.metadata ?? result?.assistantMessage?.metadata ?? result?.metadata ?? {}
       const assistantMessage = {
         id: createId('msg'),
         role: 'assistant',
@@ -174,14 +223,17 @@ export const noraWorkspaceApi = {
           result?.answer ??
           '',
         createdAt: new Date().toISOString(),
-        attachments: [],
+        attachments: await artifactsToAttachments(metadata.artifacts),
       }
       return { conversation: { id: conversationId, serviceId }, assistantMessage }
     }
 
     // Conversational callers (e.g. the voice orb) want Nora's spoken chat reply,
     // not the agentic planner's intent echo — go straight to chat.
-    if (chatOnly) {
+    // Image-generation requests also go straight to chat: the chat path carries
+    // the conversation history (so "generate the image" resolves to the concept
+    // discussed earlier), whereas the agentic planner is context-blind here.
+    if (chatOnly || looksLikeImageRequest(text)) {
       return viaChat()
     }
 
@@ -194,7 +246,7 @@ export const noraWorkspaceApi = {
         role: 'assistant',
         text: orchResult.answer ?? orchResult.result ?? '',
         createdAt: new Date().toISOString(),
-        attachments: [],
+        attachments: await artifactsToAttachments(orchResult.artifacts),
         workflowId: orchResult.workflowId,
         workflowStatus: orchResult.status,
       }

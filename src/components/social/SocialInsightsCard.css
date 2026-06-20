@@ -1,0 +1,90 @@
+.social-insights {
+  max-width: 760px;
+  margin: 24px auto 0;
+  padding: 18px 20px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(28, 37, 51, 0.08);
+  border-radius: 16px;
+}
+
+.social-insights__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.social-insights__title { margin: 0; font-size: 16px; font-weight: 600; color: #1c2533; }
+.social-insights__sub { margin: 2px 0 0; font-size: 12px; color: #6b7790; }
+.social-insights__badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.12);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.social-insights__metrics {
+  display: flex;
+  gap: 28px;
+  margin: 16px 0 8px;
+}
+.si-metric { display: flex; flex-direction: column; }
+.si-metric__v { font-size: 22px; font-weight: 700; color: #1c2533; line-height: 1.1; }
+.si-metric__l { font-size: 11px; color: #6b7790; }
+
+.si-section {
+  margin: 16px 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8a94a8;
+}
+
+.social-insights__chart svg { width: 100%; height: auto; }
+
+.si-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
+}
+.si-bar-row__label { width: 72px; font-size: 12px; color: #1c2533; }
+.si-bar-row__val { width: 56px; text-align: right; font-size: 12px; color: #6b7790; }
+.si-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(28, 37, 51, 0.07);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.si-bar__fill { height: 100%; border-radius: 999px; transition: width 0.6s ease; }
+.si-bar__fill--fb { background: #1877f2; }
+.si-bar__fill--ig { background: linear-gradient(90deg, #f58529, #dd2a7b 60%, #8134af); }
+
+.si-top-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.si-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.si-top__tag {
+  flex: none;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+.si-top__tag--facebook { background: #1877f2; }
+.si-top__tag--instagram { background: #dd2a7b; }
+.si-top__msg {
+  flex: 1;
+  min-width: 0;
+  color: #1c2533;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.si-top__eng { flex: none; font-weight: 600; color: #2f80ff; }

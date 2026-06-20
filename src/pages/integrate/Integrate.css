@@ -530,3 +530,75 @@
     flex: 1;
   }
 }
+
+/* OAuth result banner (Facebook connect return). */
+.integrate-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px auto 0;
+  max-width: 720px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(47, 128, 255, 0.12);
+  border: 1px solid rgba(47, 128, 255, 0.35);
+  color: #2f80ff;
+  font-size: 14px;
+}
+.integrate-notice button {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Recent synced content (real posts pulled from Facebook/Instagram). */
+.integrate-synced {
+  max-width: 760px;
+  margin: 24px auto 0;
+}
+.integrate-synced__title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: #1c2533;
+}
+.synced-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.synced-post {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(28, 37, 51, 0.08);
+  border-radius: 12px;
+}
+.synced-post__icon { width: 22px; height: 22px; flex: none; }
+.synced-post__body { flex: 1; min-width: 0; }
+.synced-post__msg {
+  margin: 0;
+  font-size: 13px;
+  color: #1c2533;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.synced-post__meta { font-size: 11px; color: #6b7790; }
+.synced-post__link {
+  flex: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2f80ff;
+  text-decoration: none;
+}
+.synced-post__link:hover { text-decoration: underline; }

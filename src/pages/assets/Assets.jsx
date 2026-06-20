@@ -6,6 +6,7 @@ import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
 import { BottomAIStatusTools } from '../../components/bottom-ai/BottomAITools'
 import { assetsApi } from '../../api/assetsApi'
+import { downloadUrl } from '../../api/authedImage'
 import brandLogo from '../../assets/logo/Nora_Componennts_Logo.png'
 import './Assets.css'
 
@@ -74,12 +75,16 @@ function SegmentedControl({ label, items, value, onChange }) {
 }
 
 function ImageCard({ item, index }) {
+  const handleDownload = () => {
+    const safe = `${(item.title || 'image').replace(/[^a-z0-9-_]+/gi, '-').slice(0, 40)}.png`
+    downloadUrl(item.src, safe)
+  }
   return (
     <article className="asset-image-card" style={{ '--asset-delay': `${index * 45}ms` }}>
       <img src={item.src} alt={item.title} loading="lazy" />
       <div className="asset-image-card__overlay">
         <span>{item.date}</span>
-        <button type="button" aria-label={`Download ${item.title}`}>
+        <button type="button" aria-label={`Download ${item.title}`} onClick={handleDownload}>
           <DownloadIcon />
         </button>
       </div>

@@ -30,6 +30,23 @@ const STEP_ICONS = {
   optimization: OptimIcon,
 }
 
+function fmtUploadSize(bytes) {
+  if (typeof bytes !== 'number') return ''
+  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+  if (bytes >= 1024) return `${Math.round(bytes / 1024)} KB`
+  return `${bytes} B`
+}
+
+// Tells the user what actually happened to each file: documents go into the AI
+// knowledge base (RAG), images are just stored, and anything that failed to
+// reach the server is flagged so it isn't mistaken for a saved upload.
+function UploadBadge({ file }) {
+  const base = { fontStyle: 'normal', fontSize: '11px', padding: '1px 7px', borderRadius: '999px', color: '#fff', whiteSpace: 'nowrap' }
+  if (file.knowledge) return <em style={{ ...base, background: '#1f7a3d' }}>✓ Knowledge base</em>
+  if (file.uploaded) return <em style={{ ...base, background: '#2b3a55' }}>✓ Uploaded</em>
+  return <em style={{ ...base, background: '#8a3b1f' }}>⚠ Not saved</em>
+}
+
 function UploadField({ field, value = [], onUpload, onRemove }) {
   const { t } = useTranslation()
   const inputRef = useRef(null)
@@ -51,9 +68,11 @@ function UploadField({ field, value = [], onUpload, onRemove }) {
         {value.length > 0 ? (
           <div className="f-upload-files">
             {value.map((file) => (
-              <div key={file.id} className="f-upload-file">
-                <span>{file.name}</span>
-                <button type="button" onClick={() => onRemove(field.id, file.id)}>x</button>
+              <div key={file.id} className="f-upload-file" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</span>
+                {file.size ? <span style={{ fontSize: '11px', opacity: 0.7 }}>{fmtUploadSize(file.size)}</span> : null}
+                <UploadBadge file={file} />
+                <button type="button" onClick={() => onRemove(field.id, file)}>x</button>
               </div>
             ))}
           </div>
@@ -313,29 +332,53 @@ export default function OnboardingFlow({ activeNavId = 'database', onNavigate })
 
     try {
       const uploaded = await onboardingFlowApi.uploadFieldFiles(fieldId, files)
-      setValues((current) => ({
-        ...current,
-        [currentStep.id]: {
-          ...current[currentStep.id],
-          [fieldId]: [...(current[currentStep.id]?.[fieldId] ?? []), ...uploaded],
-        },
-      }))
-      setStatusMessage(`${uploaded.length} file${uploaded.length > 1 ? 's' : ''} added to ${fieldId}.`)
+      const newDocs = uploaded.filter((u) => u.knowledge)
+      const newNonDocs = uploaded.filter((u) => !u.knowledge)
+      setValues((current) => {
+        const existing = current[currentStep.id]?.[fieldId] ?? []
+        let nextValue
+        if (newDocs.length) {
+          // Knowledge documents are single-per-field and REPLACE the previous
+          // one (the backend keeps only the latest for this source). Any
+          // non-document items (e.g. images) on the field are kept.
+          const keptNonDocs = existing.filter((f) => !f.knowledge)
+          nextValue = [...keptNonDocs, ...newNonDocs, newDocs[newDocs.length - 1]]
+        } else {
+          nextValue = [...existing, ...newNonDocs]
+        }
+        return { ...current, [currentStep.id]: { ...current[currentStep.id], [fieldId]: nextValue } }
+      })
+      setStatusMessage(
+        newDocs.length
+          ? `Document saved to knowledge base (replaces any previous file on this field).`
+          : `${uploaded.length} file${uploaded.length > 1 ? 's' : ''} added.`,
+      )
     } finally {
       setSaving(false)
     }
   }
 
-  const handleRemoveUpload = (fieldId, fileId) => {
+  const handleRemoveUpload = async (fieldId, file) => {
     if (!currentStep) {
       return
+    }
+
+    const fileId = typeof file === 'string' ? file : file?.id
+    // Knowledge docs live in the backend — actually delete them (and their
+    // vectors) so removing here truly takes them out of the knowledge base.
+    if (file && typeof file === 'object' && file.knowledge && file.id) {
+      try {
+        await onboardingFlowApi.deleteKbDocument(file.id)
+      } catch (err) {
+        console.warn('[onboarding] failed to delete document:', err?.message ?? err)
+      }
     }
 
     setValues((current) => ({
       ...current,
       [currentStep.id]: {
         ...current[currentStep.id],
-        [fieldId]: (current[currentStep.id]?.[fieldId] ?? []).filter((file) => file.id !== fileId),
+        [fieldId]: (current[currentStep.id]?.[fieldId] ?? []).filter((item) => item.id !== fileId),
       },
     }))
   }

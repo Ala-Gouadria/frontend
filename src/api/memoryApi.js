@@ -2,22 +2,46 @@ import { get, post, del } from './client.js'
 
 const CATEGORIES = ['Social Media', 'Analytics', 'Strategy', 'Sales', 'Website', 'Automation']
 const DURATIONS = ['Today', 'Weekly', 'Monthly', 'Custom']
-const STATUSES = ['Positive', 'Neutral', 'Negative']
+// Knowledge-base document indexing states (mirror the backend KBDocument.status).
+const STATUSES = ['Ready', 'Processing', 'Failed']
 
+const DOC_STATUS_LABEL = { ready: 'Ready', processing: 'Processing', failed: 'Failed' }
+const DOC_STATUS_OUTCOME = {
+  Ready: 'Indexed into the knowledge base — Nora can use it in answers.',
+  Processing: 'Still being processed — will be searchable once indexing finishes.',
+  Failed: 'Indexing failed — try re-uploading this document.',
+}
+
+function fmtBytes(n) {
+  if (typeof n !== 'number') return ''
+  if (n >= 1024 * 1024) return `${(n / (1024 * 1024)).toFixed(1)} MB`
+  if (n >= 1024) return `${Math.round(n / 1024)} KB`
+  return `${n} B`
+}
+
+// Map a backend KBDocument ({ id, filename, mimetype, size, status, createdAt })
+// onto the card shape the Memory page renders. Surfaces the REAL filename and
+// indexing status so the user can tell what's in their knowledge base and
+// whether it finished processing.
 function mapDocument(doc) {
+  const rawStatus = String(doc.status ?? '').toLowerCase()
+  const status = DOC_STATUS_LABEL[rawStatus] ?? (doc.status ? String(doc.status) : 'Ready')
+  const created = doc.createdAt ?? doc.created_at
+  const sizeLabel = fmtBytes(doc.size)
+  const meta = [sizeLabel, doc.mimetype].filter(Boolean).join(' · ')
   return {
     id: doc.id,
-    title: doc.title ?? doc.name ?? 'Untitled',
-    summary: doc.description ?? doc.content?.slice?.(0, 120) ?? '',
-    time: doc.createdAt ? new Date(doc.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '',
+    title: doc.filename ?? doc.title ?? doc.name ?? 'Untitled',
+    summary: meta || doc.description || '',
+    time: created ? new Date(created).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '',
     category: doc.metadata?.category ?? 'Strategy',
     categoryLabel: doc.metadata?.category ?? 'Strategy',
     duration: 'Custom',
-    status: 'Positive',
-    decision: doc.description ?? '',
-    outcome: '',
+    status,
+    decision: doc.filename ?? '',
+    outcome: DOC_STATUS_OUTCOME[status] ?? '',
     reasoning: '',
-    details: doc.content?.slice?.(0, 300) ?? '',
+    details: [meta, `Status: ${status}`].filter(Boolean).join(' · '),
     decisionDuration: '',
   }
 }

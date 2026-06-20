@@ -66,3 +66,30 @@ export const integrationsApi = {
     return current ?? { id: integrationId, connected: false }
   },
 }
+
+// Facebook / Instagram (Meta) — real OAuth via the backend. Instagram rides on
+// the same connection (the IG account is linked to the connected Facebook Page).
+export const facebookApi = {
+  // { connected, pages, adAccounts, connectedAt, tokenExpiresAt, lastSyncAt }
+  async status() {
+    return get('/api/v1/integrations/facebook/status')
+  },
+  // Returns the Meta OAuth dialog URL; caller redirects the browser to it.
+  async connectUrl() {
+    const res = await get('/api/v1/integrations/facebook/connect')
+    return res?.url
+  },
+  async disconnect() {
+    return del('/api/v1/integrations/facebook')
+  },
+  // Pull real posts/campaigns from Meta and push a summary into Nora's memory.
+  async sync() {
+    return post('/api/v1/integrations/facebook/sync', {})
+  },
+  async posts() {
+    return get('/api/v1/integrations/facebook/posts')
+  },
+  async campaigns() {
+    return get('/api/v1/integrations/facebook/campaigns')
+  },
+}

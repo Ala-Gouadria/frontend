@@ -9,9 +9,9 @@ import './MemoryPage.css'
 
 const ALL_FILTER = 'All'
 const DEFAULT_FILTERS = {
-  category: 'Strategy',
+  category: ALL_FILTER,
   duration: 'Custom',
-  status: 'Negative',
+  status: ALL_FILTER,
   query: '',
 }
 
@@ -79,6 +79,8 @@ export default function MemoryPage({ onNavigate }) {
   const [detailKey, setDetailKey] = useState(0)
   const [removingIds, setRemovingIds] = useState([])
   const removeTimersRef = useRef([])
+  const fileInputRef = useRef(null)
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     let isMounted = true
@@ -117,23 +119,45 @@ export default function MemoryPage({ onNavigate }) {
     setFilters((current) => ({ ...current, [key]: value }))
   }
 
-  const selectMemory = (id) => {
-    if (removingIds.includes(id)) {
-      return
-    }
+  const reloadMemories = async () => {
+    const items = await memoryApi.listMemories()
+    setMemories(items)
+    setSelectedId((current) => current ?? items[0]?.id ?? null)
+    return items
+  }
 
+  // Upload one or more documents straight into the knowledge base (RAG), then
+  // refresh the list and keep re-polling so each doc flips Processing -> Ready
+  // on its own without a manual refresh.
+  const handleUploadDocuments = async (files) => {
+    if (!files.length) return
+    setUploading(true)
+    try {
+      for (const file of files) {
+        await memoryApi.uploadDocument(file)
+      }
+      await reloadMemories()
+      let tries = 0
+      const poll = window.setInterval(async () => {
+        tries += 1
+        const items = await reloadMemories()
+        if (tries >= 6 || !items.some((item) => item.status === 'Processing')) {
+          window.clearInterval(poll)
+        }
+      }, 2500)
+    } catch (err) {
+      console.warn('[memory] document upload failed:', err?.message ?? err)
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  // Select a document to view its details. (Previously this also removed the
+  // item from the list after 680ms — a mock leftover that made documents vanish
+  // on click. Documents must stay in the list, so we only select here.)
+  const selectMemory = (id) => {
     setSelectedId(id)
     setDetailKey((current) => current + 1)
-    setRemovingIds((current) => [...current, id])
-
-    const timerId = window.setTimeout(() => {
-      setMemories((current) => current.filter((memory) => memory.id !== id))
-      setRemovingIds((current) => current.filter((itemId) => itemId !== id))
-      setSelectedId((current) => (current === id ? null : current))
-      setDetailKey((current) => current + 1)
-    }, 680)
-
-    removeTimersRef.current.push(timerId)
   }
 
   return (
@@ -173,6 +197,37 @@ export default function MemoryPage({ onNavigate }) {
                     onChange={(event) => updateFilter('query', event.target.value)}
                   />
                 </label>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  style={{
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '8px 14px',
+                    cursor: uploading ? 'default' : 'pointer',
+                    background: '#3b5bdb',
+                    color: '#fff',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    whiteSpace: 'nowrap',
+                    opacity: uploading ? 0.6 : 1,
+                  }}
+                >
+                  {uploading ? 'Uploading…' : '+ Upload document'}
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  hidden
+                  multiple
+                  accept=".pdf,.docx,.txt,.md,.csv"
+                  onChange={(event) => {
+                    const files = Array.from(event.target.files ?? [])
+                    handleUploadDocuments(files)
+                    event.target.value = ''
+                  }}
+                />
                 <Segmented label={t('memory.status')} items={filterOptions.statuses} active={filters.status} onChange={(value) => updateFilter('status', value)} align="right" />
               </div>
 

@@ -1,0 +1,126 @@
+.gva {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 4000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  font-family: inherit;
+}
+
+/* ---- floating dock (always visible) ---- */
+.gva-dock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gva-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(20, 28, 46, 0.85);
+  color: #cfe0ff;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  opacity: 0.85;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.gva-toggle:hover { opacity: 1; }
+.gva--open .gva-toggle { transform: rotate(180deg); }
+
+.gva-mic {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(140deg, #2f80ff, #569eff);
+  box-shadow: 0 8px 24px rgba(47, 128, 255, 0.45);
+  display: grid;
+  place-items: center;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+.gva-mic:hover { transform: scale(1.06); }
+.gva-mic--on { animation: gva-pulse 1.4s ease-in-out infinite; }
+
+/* state-driven glow on the mic */
+.gva--listening .gva-mic { box-shadow: 0 0 0 6px rgba(47, 128, 255, 0.18), 0 8px 24px rgba(47, 128, 255, 0.5); }
+.gva--speaking .gva-mic { background: linear-gradient(140deg, #16a34a, #34d399); box-shadow: 0 0 0 6px rgba(52, 211, 153, 0.18); }
+.gva--thinking .gva-mic { opacity: 0.85; }
+
+@keyframes gva-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(47, 128, 255, 0.45), 0 8px 24px rgba(47, 128, 255, 0.5); }
+  50% { box-shadow: 0 0 0 12px rgba(47, 128, 255, 0), 0 8px 24px rgba(47, 128, 255, 0.5); }
+}
+
+/* ---- expandable panel ---- */
+.gva-panel {
+  width: min(340px, calc(100vw - 40px));
+  background: rgba(14, 20, 34, 0.96);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(120, 160, 255, 0.18);
+  border-radius: 16px;
+  padding: 14px;
+  color: #e8eefc;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  animation: gva-rise 0.18s ease;
+}
+@keyframes gva-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.gva-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.gva-title { font-weight: 600; letter-spacing: 0.02em; }
+.gva-x {
+  border: none; background: transparent; color: #9fb3d9;
+  font-size: 20px; line-height: 1; cursor: pointer; padding: 0 4px;
+}
+.gva-x:hover { color: #fff; }
+
+.gva-state { font-size: 12px; color: #8fb0ff; margin-bottom: 8px; }
+
+.gva-line {
+  font-size: 13px; line-height: 1.45; margin: 4px 0;
+  word-break: break-word;
+}
+.gva-line b { color: #9fb3d9; font-weight: 600; margin-right: 4px; }
+.gva-you { color: #cdd9f0; }
+.gva-nora { color: #ffffff; }
+
+.gva-notice { font-size: 12px; color: #ffcf7a; margin: 6px 0; }
+
+.gva-textbar { display: flex; gap: 6px; margin-top: 10px; }
+.gva-input {
+  flex: 1; min-width: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(120, 160, 255, 0.2);
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: #fff; font-size: 13px; outline: none;
+}
+.gva-input::placeholder { color: #7e8db0; }
+.gva-input:focus { border-color: rgba(86, 158, 255, 0.6); }
+.gva-send {
+  border: none; border-radius: 10px; padding: 0 12px; cursor: pointer;
+  background: #2f80ff; color: #fff; font-size: 14px;
+}
+
+.gva-mute {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: #9fb3d9; margin-top: 10px; cursor: pointer;
+  user-select: none;
+}
+.gva-mute input { accent-color: #2f80ff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gva-mic--on, .gva-panel { animation: none; }
+}

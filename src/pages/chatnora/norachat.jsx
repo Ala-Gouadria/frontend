@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import './norachat.css'
 import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
@@ -10,6 +12,8 @@ import attachmentIcon from '../../assets/icons/Nora-AI-Icon/attachment-icon.svg'
 import micIcon from '../../assets/icons/Nora-AI-Icon/mic-icon.svg'
 import sentIcon from '../../assets/icons/Nora-AI-Icon/sent-icon.svg'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
+import { chatApi } from '../../api/chatApi'
+import { downloadUrl, resolveAuthedImageUrl } from '../../api/authedImage'
 import ProjectList from '../../components/layout/ProjectList'
 
 function formatClock(value) {
@@ -60,8 +64,67 @@ function isFloatingPromptMessage(message, index) {
   return normalized.length > 0 && normalized.length <= 32
 }
 
+function ImageLightbox({ src, name, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <div className="nora-lightbox" role="dialog" aria-modal="true" onClick={onClose}>
+      <div className="nora-lightbox__inner" onClick={(e) => e.stopPropagation()}>
+        <img src={src} alt={name} className="nora-lightbox__image" />
+        <div className="nora-lightbox__bar">
+          <span className="nora-lightbox__name">{name}</span>
+          <div className="nora-lightbox__actions">
+            <button type="button" onClick={() => downloadUrl(src, `${(name || 'image').replace(/[^a-z0-9-_]+/gi, '-').slice(0, 40)}.png`)}>
+              Download
+            </button>
+            <button type="button" onClick={onClose}>Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function AttachmentPreview({ attachment, compact = false }) {
+  const [zoomed, setZoomed] = useState(false)
+
   if (attachment.type === 'image') {
+    // AI-generated images render large and open a zoom modal on click; small
+    // composer attachments keep the compact chip style.
+    if (attachment.generated) {
+      return (
+        <>
+          <figure className="nora-generated-image">
+            <img
+              src={attachment.url}
+              alt={attachment.name}
+              className="nora-generated-image__img"
+              onClick={() => setZoomed(true)}
+              loading="lazy"
+            />
+            <figcaption className="nora-generated-image__cap">
+              <span>{attachment.name}</span>
+              <button
+                type="button"
+                className="nora-generated-image__dl"
+                onClick={() => downloadUrl(attachment.url, `${(attachment.name || 'image').replace(/[^a-z0-9-_]+/gi, '-').slice(0, 40)}.png`)}
+              >
+                Download
+              </button>
+            </figcaption>
+          </figure>
+          {zoomed ? (
+            <ImageLightbox src={attachment.url} name={attachment.name} onClose={() => setZoomed(false)} />
+          ) : null}
+        </>
+      )
+    }
     return (
       <div className={`nora-attachment-card ${compact ? 'nora-attachment-card--compact' : ''}`}>
         <img src={attachment.url} alt={attachment.name} className="nora-attachment-card__image" />
@@ -102,9 +165,58 @@ function AttachmentPreview({ attachment, compact = false }) {
   )
 }
 
-function MessageBubble({ message, index }) {
+// Does this message ask Nora to make an image? Used to show an image-specific
+// "Generating image…" loader while the (slow) generation is in flight.
+function isImageIntent(text = '') {
+  const t = String(text).toLowerCase()
+  return (
+    /\b(generate|create|make|design|draw|render|produce)\b/.test(t) &&
+    /\b(image|images|picture|pictures|photo|photos|visual|visuals|graphic|graphics|illustration|artwork|poster|thumbnail)\b/.test(t)
+  )
+}
+
+// Reveal `fullText` chunk-by-chunk for a typewriter effect. Animates only when
+// `animate` is true (freshly-arrived replies) — history renders instantly.
+// Total reveal time is roughly constant (~2s) regardless of length. `onTick`
+// fires on each reveal so the view can follow the growing text.
+function useTypewriter(fullText, animate, onTick) {
+  const text = String(fullText ?? '')
+  const [count, setCount] = useState(animate ? 0 : text.length)
+
+  useEffect(() => {
+    if (!animate) {
+      setCount(text.length)
+      return undefined
+    }
+    setCount(0)
+    let i = 0
+    const step = Math.max(2, Math.round(text.length / 110))
+    const id = setInterval(() => {
+      i += step
+      if (i >= text.length) {
+        setCount(text.length)
+        clearInterval(id)
+      } else {
+        setCount(i)
+      }
+      onTick?.()
+    }, 16)
+    return () => clearInterval(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text, animate])
+
+  return animate ? text.slice(0, count) : text
+}
+
+function MessageBubble({ message, index, scrollAnchorRef }) {
   const lines = String(message.text ?? '').split('\n').filter(Boolean)
   const useFloatingPrompt = isFloatingPromptMessage(message, index)
+  const tickRef = useRef(0)
+  const animate = message.role === 'assistant' && !!message.animate && !message.isLoading
+  const displayText = useTypewriter(String(message.text ?? ''), animate, () => {
+    tickRef.current += 1
+    if (tickRef.current % 3 === 0) scrollAnchorRef?.current?.scrollIntoView({ block: 'end' })
+  })
 
   return (
     <div className={`nora-chat-row nora-chat-row--${message.role} ${useFloatingPrompt ? 'nora-chat-row--floating-prompt' : ''}`}>
@@ -114,18 +226,49 @@ function MessageBubble({ message, index }) {
         ) : null}
 
         {message.isLoading ? (
-          <div className="nora-typing-indicator" aria-label="Nora is typing">
-            <span />
-            <span />
-            <span />
-          </div>
+          message.pendingImage ? (
+            <div className="nora-image-loading" aria-label="Generating image">
+              <div className="nora-image-loading__box">
+                <span className="nora-image-loading__spinner" />
+              </div>
+              <span className="nora-image-loading__label">Generating image…</span>
+            </div>
+          ) : (
+            <div className="nora-typing-indicator" aria-label="Nora is typing">
+              <span />
+              <span />
+              <span />
+            </div>
+          )
         ) : (
           <>
-            {lines.map((line, index) => (
-              <p key={`${message.id}-${index}`} className="nora-message-line">
-                {line}
-              </p>
-            ))}
+            {message.role === 'user' ? (
+              lines.map((line, index) => (
+                <p key={`${message.id}-${index}`} className="nora-message-line">
+                  {line}
+                </p>
+              ))
+            ) : (
+              <div className="nora-message-md">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    a: ({ node, ...props }) => <a {...props} target="_blank" rel="noreferrer" />,
+                  }}
+                >
+                  {displayText}
+                </ReactMarkdown>
+              </div>
+            )}
+
+            {message.imageLoading ? (
+              <div className="nora-image-loading" aria-label="Generating image">
+                <div className="nora-image-loading__box">
+                  <span className="nora-image-loading__spinner" />
+                </div>
+                <span className="nora-image-loading__label">Generating image…</span>
+              </div>
+            ) : null}
 
             {message.attachments?.length ? (
               <div className="nora-attachments-grid">
@@ -758,6 +901,9 @@ function NoraChatWorkspace({ open, onClose, onNavigate, pairedWithTask = false, 
             createdAt: timestamp,
             attachments: [],
             isLoading: true,
+            // Show an "Generating image…" loader (instead of typing dots) while
+            // an image request is in flight, since that step is slow.
+            pendingImage: isImageIntent(messageText),
             serviceLabel: service.shortLabel,
           },
         ],
@@ -775,34 +921,75 @@ function NoraChatWorkspace({ open, onClose, onNavigate, pairedWithTask = false, 
         messageCount: optimisticConversation.messages.length,
       })
 
-      const result = await noraWorkspaceApi.sendMessage({
-        conversationId,
-        serviceId: service.id,
-        text: messageText,
-        attachments: attachmentsToSend,
-        // Use the chat brain (which injects the company profile / memory) rather
-        // than the agent-orchestration path, whose synthesizer can't see the
-        // profile and apologizes when a tool returns nothing.
-        chatOnly: true,
-      })
-
-      const confirmedMessages = result.conversation.messages?.length
-        ? result.conversation.messages
-        : [
-            ...optimisticConversation.messages.filter((message) => !message.isLoading),
-            ...(result.assistantMessage ? [result.assistantMessage] : []),
-          ]
-      const confirmedConversation = {
-        ...optimisticConversation,
-        ...result.conversation,
-        title: result.conversation.title ?? optimisticConversation.title,
-        serviceId: result.conversation.serviceId ?? optimisticConversation.serviceId,
-        updatedAt: result.conversation.updatedAt ?? new Date().toISOString(),
-        messages: confirmedMessages,
+      const assistantId = `pending-assistant-${timestamp}`
+      // Patch the live (streaming) assistant message in place.
+      const patchAssistant = (patch) => {
+        setActiveConversation((prev) => {
+          if (!prev) return prev
+          return {
+            ...prev,
+            messages: prev.messages.map((m) =>
+              m.id === assistantId ? { ...m, ...(typeof patch === 'function' ? patch(m) : patch) } : m,
+            ),
+          }
+        })
       }
 
-      setActiveConversation(confirmedConversation)
-      setSelectedServiceId(confirmedConversation.serviceId)
+      let acc = ''
+      let streamedAnything = false
+      try {
+        await chatApi.streamMessage(conversationId, { message: messageText }, async (evt) => {
+          if (evt.type === 'token' && evt.text) {
+            streamedAnything = true
+            acc += evt.text
+            // Live text — no typewriter; the tokens themselves are the stream.
+            patchAssistant({ text: acc, isLoading: false, animate: false, pendingImage: false })
+          } else if (evt.type === 'image_pending') {
+            patchAssistant({ isLoading: false, imageLoading: true })
+          } else if (evt.type === 'image' && evt.url) {
+            const url = await resolveAuthedImageUrl(evt.url)
+            patchAssistant((m) => ({
+              imageLoading: false,
+              attachments: [
+                ...(m.attachments ?? []),
+                {
+                  id: `img-${timestamp}-${(m.attachments?.length ?? 0)}`,
+                  type: 'image',
+                  url,
+                  name: (evt.caption || 'Generated image').slice(0, 60),
+                  sizeLabel: 'AI-generated',
+                  generated: true,
+                },
+              ],
+            }))
+          } else if (evt.type === 'image_failed') {
+            patchAssistant({ imageLoading: false })
+          } else if (evt.type === 'done') {
+            patchAssistant((m) => ({ id: evt.id || m.id, isLoading: false, imageLoading: false }))
+          } else if (evt.type === 'error' && !streamedAnything) {
+            throw new Error(evt.message || 'stream error')
+          }
+        })
+      } catch (streamErr) {
+        if (streamedAnything) throw streamErr
+        // Streaming unavailable — fall back to the non-streaming path.
+        const result = await noraWorkspaceApi.sendMessage({
+          conversationId,
+          serviceId: service.id,
+          text: messageText,
+          attachments: attachmentsToSend,
+          chatOnly: true,
+        })
+        patchAssistant(() => ({
+          ...(result.assistantMessage ?? { text: '' }),
+          id: assistantId,
+          isLoading: false,
+          imageLoading: false,
+          animate: true,
+        }))
+      }
+
+      setSelectedServiceId(service.id)
       setConversationList(await noraWorkspaceApi.listConversations())
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'Unable to send the message right now.')
@@ -890,7 +1077,7 @@ function NoraChatWorkspace({ open, onClose, onNavigate, pairedWithTask = false, 
             {isLoadingConversation ? <div className="nora-workspace-loading">{t('chat.loadingConversation')}</div> : null}
 
             {currentMessages.map((message, index) => (
-              <MessageBubble key={message.id} message={message} index={index} />
+              <MessageBubble key={message.id} message={message} index={index} scrollAnchorRef={conversationEndRef} />
             ))}
 
             <div ref={conversationEndRef} />

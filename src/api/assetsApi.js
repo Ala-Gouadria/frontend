@@ -1,10 +1,19 @@
 import { get, post } from './client.js'
+import { resolveAuthedImageUrl } from './authedImage.js'
 
-function mapBackendAsset(item) {
+async function mapBackendAsset(item) {
+  // Backend asset file URLs are auth-protected (and on a different origin), so
+  // resolve them to renderable object URLs. Failures fall back to the raw URL.
+  let src = item.url ?? ''
+  try {
+    src = await resolveAuthedImageUrl(item.url)
+  } catch {
+    src = item.url ?? ''
+  }
   return {
     id: item.id,
     title: item.name,
-    src: item.url ?? '',
+    src,
     date: item.createdAt ? new Date(item.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '',
     type: item.type ?? 'image',
   }
@@ -44,7 +53,9 @@ export const assetsApi = {
     try {
       const result = await get('/api/v1/brand/assets', { params: { pageSize: 100 } })
       const items = Array.isArray(result) ? result : (result?.items ?? result?.data ?? [])
-      const images = items.map(mapBackendAsset)
+      // Surface generated/visual assets first; resolve their thumbnails.
+      const visual = items.filter((it) => (it.url ?? '').match(/\.(png|jpe?g|webp|gif|svg)$/i) || ['image', 'ai-image', 'logo', 'icon'].includes(it.type))
+      const images = await Promise.all(visual.map(mapBackendAsset))
       const mock = makeMockAssets()
       return {
         images: images.length ? images : mock.images,

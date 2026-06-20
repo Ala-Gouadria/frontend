@@ -3,7 +3,7 @@ import {
   ONBOARDING_FLOW_STEPS,
   ONBOARDING_INITIAL_VALUES,
 } from './onboardingFlowMockData'
-import { get, post } from './client.js'
+import { get, post, del } from './client.js'
 
 // Maps frontend step IDs to backend step numbers + payload builders
 function buildBackendPayload(stepId, values) {
@@ -99,6 +99,25 @@ function cloneValues(values) {
   )
 }
 
+// Document types the AI knowledge base can parse + embed (must match the
+// backend KB allow-list in config/constants.ts). Files matching these go to
+// /kb/documents so Nora actually extracts, embeds, and can answer from their
+// contents (RAG). Everything else (logos, profile images) is brand-asset
+// storage only and is NOT read by the AI.
+const KB_DOC_EXTENSIONS = ['pdf', 'docx', 'txt', 'md', 'csv']
+const KB_DOC_MIMES = [
+  'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'text/plain',
+  'text/markdown',
+  'text/csv',
+]
+
+function isKnowledgeDoc(file) {
+  const ext = (file.name?.split('.').pop() ?? '').toLowerCase()
+  return KB_DOC_MIMES.includes(file.type) || KB_DOC_EXTENSIONS.includes(ext)
+}
+
 function buildUploadRecord(file, fieldId) {
   return {
     id: `${fieldId}-${Date.now()}-${Math.round(Math.random() * 1000)}`,
@@ -173,6 +192,57 @@ export const onboardingFlowApi = {
       set('goals', 'successSignal', prefs.successSignal)
       set('optimization', 'priorityMetric', prefs.priorityMetric)
       set('optimization', 'brandAdmire', prefs.brandAdmire)
+
+      // Authoritative overlay: the complete saved form. Every non-upload field
+      // round-trips exactly as the user entered it (upload fields are hydrated
+      // from the knowledge base below so they reflect real indexing status).
+      const onboardingData = profile.onboardingData ?? {}
+      const uploadFieldIds = new Set()
+      for (const step of ONBOARDING_FLOW_STEPS) {
+        for (const f of step.fields) if (f.type === 'upload') uploadFieldIds.add(f.id)
+      }
+      for (const step of ONBOARDING_FLOW_STEPS) {
+        const saved = onboardingData[step.id]
+        if (!saved || typeof saved !== 'object') continue
+        const mergedStep = { ...values[step.id] }
+        for (const [fieldId, fieldValue] of Object.entries(saved)) {
+          if (uploadFieldIds.has(fieldId)) continue
+          mergedStep[fieldId] = fieldValue
+        }
+        values[step.id] = mergedStep
+      }
+    }
+
+    // Re-display documents the user already uploaded to the knowledge base, on
+    // the same onboarding field they came from (tagged via `source`). This is
+    // what makes a returning user see their saved files instead of an empty box.
+    try {
+      const kbResult = await get('/api/v1/kb/documents')
+      const docs = Array.isArray(kbResult) ? kbResult : (kbResult?.items ?? kbResult?.data ?? [])
+      // Build: upload field id -> step id, from the flow definition.
+      const uploadFieldToStep = {}
+      for (const step of ONBOARDING_FLOW_STEPS) {
+        for (const f of step.fields) {
+          if (f.type === 'upload') uploadFieldToStep[f.id] = step.id
+        }
+      }
+      for (const doc of docs) {
+        const stepId = uploadFieldToStep[doc.source]
+        if (!stepId) continue
+        const record = {
+          id: doc.id,
+          name: doc.filename ?? 'document',
+          size: doc.size ?? 0,
+          type: doc.mimetype ?? '',
+          uploaded: true,
+          knowledge: true,
+          status: doc.status ?? 'ready',
+        }
+        const existing = Array.isArray(values[stepId]?.[doc.source]) ? values[stepId][doc.source] : []
+        values[stepId] = { ...values[stepId], [doc.source]: [...existing, record] }
+      }
+    } catch {
+      // No documents yet, or KB endpoint unavailable — leave upload fields empty.
     }
 
     const progress = buildProgress(ONBOARDING_FLOW_STEPS, values)
@@ -199,34 +269,73 @@ export const onboardingFlowApi = {
   async saveStep({ steps, values, stepId }) {
     const progress = buildProgress(steps, values)
 
-    const payload = buildBackendPayload(stepId, values)
-    if (payload) {
-      try {
-        await post('/api/v1/company/onboarding/step', payload)
-      } catch (err) {
-        // Non-fatal: UI continues even if this step's backend sync fails, but
-        // surface it so a silent 401/400 isn't mistaken for a successful save.
-        console.warn(`[onboarding] saveStep "${stepId}" failed to persist:`, err?.message ?? err)
-      }
+    // Lossless save: send this step's raw values verbatim. The backend stores
+    // the full form (every field, even new ones) and derives the structured
+    // columns + AI memory from it — nothing is dropped.
+    const stepNumber = Math.max(1, steps.findIndex((s) => s.id === stepId) + 1)
+    try {
+      await post('/api/v1/company/onboarding/form', {
+        stepId,
+        values: values[stepId] ?? {},
+        step: stepNumber,
+      })
+    } catch (err) {
+      // Non-fatal: UI continues even if this step's backend sync fails, but
+      // surface it so a silent 401/400 isn't mistaken for a successful save.
+      console.warn(`[onboarding] saveStep "${stepId}" failed to persist:`, err?.message ?? err)
     }
 
     return { stepId, savedAt: new Date().toISOString(), ...progress }
   },
 
+  // Delete a knowledge-base document (removes its vectors too, server-side).
+  async deleteKbDocument(docId) {
+    return del(`/api/v1/kb/documents/${docId}`)
+  },
+
   async uploadFieldFiles(fieldId, files) {
-    // Best-effort: upload to brand assets, fall back to local record on failure
+    // Route each file by purpose:
+    //  • Documents (PDF/DOCX/TXT/MD/CSV) → /kb/documents so the AI extracts,
+    //    embeds, and can answer from their contents (RAG knowledge base).
+    //  • Images (logos, profile pictures) → brand asset storage only.
+    // Both are best-effort: on failure we keep a local record so the onboarding
+    // flow is never blocked, but we surface the error so a silent 401/400 isn't
+    // mistaken for a successful upload.
     const results = []
     for (const file of files) {
       try {
-        const form = new FormData()
-        form.append('file', file)
-        form.append('name', file.name)
-        form.append('type', 'image')
-        const result = await post('/api/v1/brand/assets/upload', form, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
-        results.push({ id: result.id ?? buildUploadRecord(file, fieldId).id, name: file.name, size: file.size, type: file.type })
-      } catch {
+        if (isKnowledgeDoc(file)) {
+          const form = new FormData()
+          form.append('file', file)
+          form.append('title', file.name)
+          // Tag the document with the onboarding field it was uploaded under, so
+          // it can be re-displayed on this exact field when the user returns.
+          form.append('source', fieldId)
+          const result = await post('/api/v1/kb/documents', form, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          })
+          results.push({
+            id: result.id ?? buildUploadRecord(file, fieldId).id,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            uploaded: true,
+            knowledge: true,
+            status: result.status ?? 'processing',
+            taskId: result.taskId ?? result.task_id ?? null,
+          })
+        } else {
+          const form = new FormData()
+          form.append('file', file)
+          form.append('name', file.name)
+          form.append('type', file.type?.startsWith('image/') ? 'image' : 'file')
+          const result = await post('/api/v1/brand/assets/upload', form, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          })
+          results.push({ id: result.id ?? buildUploadRecord(file, fieldId).id, name: file.name, size: file.size, type: file.type, uploaded: true })
+        }
+      } catch (err) {
+        console.warn(`[onboarding] upload "${file.name}" failed to persist:`, err?.message ?? err)
         results.push(buildUploadRecord(file, fieldId))
       }
     }
@@ -236,12 +345,17 @@ export const onboardingFlowApi = {
   async completeFlow({ steps, values }) {
     const progress = buildProgress(steps, values)
 
-    // Try to sync the full company profile to the AI service
+    // Save the entire form one last time, mark onboarding complete, and sync
+    // the full profile to the AI memory — all in one lossless call.
     try {
-      await post('/api/v1/company/sync-to-ai')
+      await post('/api/v1/company/onboarding/form', {
+        allValues: values,
+        step: steps.length,
+        completed: true,
+      })
     } catch (err) {
       // Non-fatal, but surface it — this is the step that feeds Nora's memory.
-      console.warn('[onboarding] sync-to-ai failed:', err?.message ?? err)
+      console.warn('[onboarding] completeFlow failed:', err?.message ?? err)
     }
 
     return {
