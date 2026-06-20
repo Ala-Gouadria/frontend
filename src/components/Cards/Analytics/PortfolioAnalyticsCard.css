@@ -13,27 +13,30 @@
   overflow: visible;
 }
 
-/* Vivid blue gradient — stronger than the default */
+/* Vivid blue gradient + visible track */
 .portfolio-analytics-card .semi-circle-gauge {
+  --gauge-track: rgba(24, 119, 242, 0.13);
   --gauge-progress-0: rgba(24, 119, 242, 0.10);
   --gauge-progress-1: rgba(24, 119, 242, 0.28);
   --gauge-progress-2: rgba(24, 119, 242, 0.52);
   --gauge-progress-3: rgba(20, 105, 228, 0.76);
   --gauge-progress-4: #1877F2;
-  --gauge-fog: rgba(100, 160, 250, 0.24);
+  --gauge-fog: rgba(100, 160, 250, 0.18);
 }
 
-/* Blue value label to match design */
+/* Blue value label — large and bold */
 .portfolio-analytics-card .analytics-card__gauge-wrap .semi-circle-gauge__value {
-  color: #1877F2;
+  font-size: clamp(1.5rem, 6.2cqw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .portfolio-analytics-card .analytics-card__gauge-wrap .semi-circle-gauge__current {
   color: #1877F2;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .portfolio-analytics-card .analytics-card__gauge-wrap .semi-circle-gauge__target {
   color: #1877F2;
-  font-weight: 600;
+  font-weight: 700;
 }

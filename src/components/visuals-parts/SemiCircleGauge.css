@@ -15,7 +15,7 @@
 
   --gauge-cap-ring: #ffffff;
   --gauge-cap-shadow: rgba(24, 119, 242, 0.30);
-  --gauge-fog: rgba(120, 170, 250, 0.14);
+  --gauge-fog: rgba(120, 170, 250, 0.10);
 
   --gauge-text: #6b7178;
   --gauge-text-muted: rgba(27, 28, 32, 0.26);
@@ -78,17 +78,17 @@
   width: 100%;
 }
 
-/* Soft foggy glow behind the arc */
+/* Very subtle background glow */
 .semi-circle-gauge__chart::before {
   content: "";
   position: absolute;
   left: 50%;
   top: 42%;
-  width: 86%;
-  height: 120%;
+  width: 80%;
+  height: 100%;
   transform: translate(-50%, -50%);
   background: radial-gradient(
-    58% 52% at 50% 36%,
+    50% 44% at 50% 32%,
     var(--gauge-fog) 0%,
     rgba(255, 255, 255, 0) 70%
   );
@@ -111,7 +111,7 @@
 
 .semi-circle-gauge__cap-ring {
   fill: var(--gauge-cap-ring);
-  filter: drop-shadow(0 4px 12px var(--gauge-cap-shadow));
+  filter: drop-shadow(0 2px 6px var(--gauge-cap-shadow));
   animation: semiGaugeCap 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-box: fill-box;
   transform-origin: center;

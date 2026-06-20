@@ -85,8 +85,8 @@ export function SemiCircleGauge({
   const knob = getArcPoint(safeProgress)
   const dash = `${safeProgress * 100} 100`
 
-  const capRingR = Math.round(bandWidth * 0.85)
-  const capR = Math.round(bandWidth * 0.575)
+  const capRingR = Math.round(bandWidth * 0.54)
+  const capR    = Math.round(bandWidth * 0.39)
 
   // Ticks only along the filled (progress) portion of the arc.
   const progressTicks = TICK_PROGRESS.filter((tp) => tp <= safeProgress + 0.01)
@@ -101,16 +101,13 @@ export function SemiCircleGauge({
       <div className="semi-circle-gauge__chart">
         <svg className="semi-circle-gauge__svg" viewBox="0 0 720 320" aria-hidden="true">
           <defs>
-            {/* Horizontal fade — the band dissolves to nothing at both ends */}
+            {/* Horizontal fade — gentle dissolve at both ends */}
             <linearGradient id={fadeId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="720" y2="0">
-              <stop offset="0%" stopColor="white" stopOpacity="0" />
-              <stop offset="4%" stopColor="white" stopOpacity="0.05" />
-              <stop offset="10%" stopColor="white" stopOpacity="0.4" />
-              <stop offset="18%" stopColor="white" stopOpacity="0.85" />
-              <stop offset="26%" stopColor="white" stopOpacity="1" />
-              <stop offset="82%" stopColor="white" stopOpacity="1" />
-              <stop offset="90%" stopColor="white" stopOpacity="0.5" />
-              <stop offset="96%" stopColor="white" stopOpacity="0.12" />
+              <stop offset="0%"   stopColor="white" stopOpacity="0" />
+              <stop offset="5%"   stopColor="white" stopOpacity="0.5" />
+              <stop offset="12%"  stopColor="white" stopOpacity="1" />
+              <stop offset="88%"  stopColor="white" stopOpacity="1" />
+              <stop offset="95%"  stopColor="white" stopOpacity="0.5" />
               <stop offset="100%" stopColor="white" stopOpacity="0" />
             </linearGradient>
 
@@ -135,37 +132,14 @@ export function SemiCircleGauge({
           </defs>
 
           <g mask={'url(#' + maskId + ')'}>
-            {/* Wide blue halo — outermost diffuse glow following the band */}
-            <path
-              d={pathData}
-              fill="none"
-              stroke={'url(#' + progGradId + ')'}
-              strokeWidth={bandWidth + 46}
-              strokeLinecap="round"
-              pathLength="100"
-              strokeDasharray={dash}
-              style={{ filter: 'blur(22px)', opacity: 0.30 }}
-            />
-            {/* White halo — soft white glow hugging the band (bright rim + sheen) */}
-            <path
-              d={pathData}
-              fill="none"
-              stroke="rgba(255,255,255,0.9)"
-              strokeWidth={bandWidth + 18}
-              strokeLinecap="round"
-              pathLength="100"
-              strokeDasharray={dash}
-              style={{ filter: 'blur(11px)', opacity: 0.6 }}
-            />
-
-            {/* Faint full track — even soft base behind everything */}
+            {/* Background track — full arc in light blue, defines the gauge path */}
             <path
               d={pathData}
               fill="none"
               stroke="var(--gauge-track)"
-              strokeWidth={bandWidth + 14}
+              strokeWidth={bandWidth + 10}
               strokeLinecap="round"
-              style={{ filter: 'blur(9px)' }}
+              style={{ filter: 'blur(5px)' }}
             />
             <path
               d={pathData}
@@ -175,16 +149,16 @@ export function SemiCircleGauge({
               strokeLinecap="butt"
             />
 
-            {/* Progress soft glow — single even halo that hugs the band */}
+            {/* Progress subtle glow */}
             <path
               d={pathData}
               fill="none"
               stroke={'url(#' + progGradId + ')'}
-              strokeWidth={bandWidth + 14}
+              strokeWidth={bandWidth + 10}
               strokeLinecap="round"
               pathLength="100"
               strokeDasharray={dash}
-              style={{ filter: 'blur(9px)', opacity: 0.35 }}
+              style={{ filter: 'blur(7px)', opacity: 0.28 }}
             />
             {/* Progress main band */}
             <path
@@ -201,15 +175,15 @@ export function SemiCircleGauge({
             <path
               d={pathData}
               fill="none"
-              stroke="rgba(255,255,255,0.14)"
-              strokeWidth="14"
+              stroke="rgba(255,255,255,0.18)"
+              strokeWidth="10"
               strokeLinecap="butt"
               pathLength="100"
               strokeDasharray={dash}
-              style={{ filter: 'blur(3px)' }}
+              style={{ filter: 'blur(2px)' }}
             />
 
-            {/* Tick dividers — light vertical marks across the band */}
+            {/* Tick dividers */}
             <g>
               {progressTicks.map((tp) => {
                 const tick = getTickLine(tp, bandWidth - 4)
@@ -220,7 +194,7 @@ export function SemiCircleGauge({
                     y1={tick.y1}
                     x2={tick.x2}
                     y2={tick.y2}
-                    stroke="rgba(255,255,255,0.10)"
+                    stroke="rgba(255,255,255,0.13)"
                     strokeWidth="2.3"
                     strokeLinecap="round"
                   />
