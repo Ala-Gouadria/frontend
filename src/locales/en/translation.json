@@ -295,25 +295,99 @@
     "sidebarTitle": "Setup steps",
     "sidebarSubcopy": "Each step builds a deeper business profile for Nora.",
     "steps": {
-      "profile":      { "label": "Profile setup",          "titleLead": "Profile",       "titleTail": "setup",        "subtitle": "This helps Nora identify your business and personalize your workspace from the start.",                           "whyMatters": "A clear owner profile helps Nora tailor messaging, workspace defaults, and strategic recommendations." },
-      "business":     { "label": "Business setup",         "titleLead": "Business",      "titleTail": "setup",        "subtitle": "Nora uses this to understand what you sell, how you position it, and how your business makes money.",           "whyMatters": "Business context gives Nora better recommendations for offers, campaigns, pricing, and automation priorities." },
-      "brand":        { "label": "Brand Identity",         "titleLead": "Brand",         "titleTail": "identity",     "subtitle": "This helps Nora match your visual style, language, and overall brand presentation.",                           "whyMatters": "A consistent identity helps Nora produce on-brand visuals, tone, and positioning suggestions." },
-      "audience":     { "label": "Targeted Audience",      "titleLead": "Target",        "titleTail": "audience",     "subtitle": "Nora uses this to create messaging, content, and campaigns that speak to the right people.",                   "whyMatters": "Audience clarity improves copy, hooks, targeting, and the quality of generated growth ideas." },
-      "channels":     { "label": "Channels & Integration", "titleLead": "Channels &",    "titleTail": "Integration",  "subtitle": "Nora uses your active channels to connect publishing, measurement, and cross-platform recommendations.",        "whyMatters": "Connected channels let Nora align ideas with the platforms where your brand already performs best." },
-      "content":      { "label": "Content direction",      "titleLead": "Content",       "titleTail": "direction",    "subtitle": "This tells Nora what type of content to create, how often to publish, and what style to lean into.",           "whyMatters": "Content preferences help Nora generate faster ideas that feel native to your audience and channels." },
-      "goals":        { "label": "Business Goal",          "titleLead": "Business",      "titleTail": "goals",        "subtitle": "Nora will prioritize strategy, campaigns, and automation around your primary business outcome.",               "whyMatters": "Clear goals help Nora sort what matters now versus what can wait." },
-      "optimization": { "label": "Optimization Inputs",    "titleLead": "Optimization",  "titleTail": "inputs",       "subtitle": "Optional inputs that help Nora learn faster, benchmark smarter, and improve output quality.",                  "whyMatters": "The more context you give Nora here, the more specific and useful future output becomes." }
+      "profile": {
+        "label": "Profile setup",
+        "titleLead": "Profile",
+        "titleTail": "setup",
+        "subtitle": "This helps Nora identify your business and personalize your workspace from the start.",
+        "whyMatters": "A clear owner profile helps Nora tailor messaging, workspace defaults, and strategic recommendations."
+      },
+      "business": {
+        "label": "Business setup",
+        "titleLead": "Business",
+        "titleTail": "setup",
+        "subtitle": "Nora uses this to understand what you sell, how you position it, and how your business makes money.",
+        "whyMatters": "Business context gives Nora better recommendations for offers, campaigns, pricing, and automation priorities."
+      },
+      "brand": {
+        "label": "Brand Identity",
+        "titleLead": "Brand",
+        "titleTail": "identity",
+        "subtitle": "This helps Nora match your visual style, language, and overall brand presentation.",
+        "whyMatters": "A consistent identity helps Nora produce on-brand visuals, tone, and positioning suggestions."
+      },
+      "audience": {
+        "label": "Targeted Audience",
+        "titleLead": "Target",
+        "titleTail": "audience",
+        "subtitle": "Nora uses this to create messaging, content, and campaigns that speak to the right people.",
+        "whyMatters": "Audience clarity improves copy, hooks, targeting, and the quality of generated growth ideas."
+      },
+      "channels": {
+        "label": "Channels & Integration",
+        "titleLead": "Channels &",
+        "titleTail": "Integration",
+        "subtitle": "Nora uses your active channels to connect publishing, measurement, and cross-platform recommendations.",
+        "whyMatters": "Connected channels let Nora align ideas with the platforms where your brand already performs best."
+      },
+      "content": {
+        "label": "Content direction",
+        "titleLead": "Content",
+        "titleTail": "direction",
+        "subtitle": "This tells Nora what type of content to create, how often to publish, and what style to lean into.",
+        "whyMatters": "Content preferences help Nora generate faster ideas that feel native to your audience and channels."
+      },
+      "goals": {
+        "label": "Business Goal",
+        "titleLead": "Business",
+        "titleTail": "goals",
+        "subtitle": "Nora will prioritize strategy, campaigns, and automation around your primary business outcome.",
+        "whyMatters": "Clear goals help Nora sort what matters now versus what can wait."
+      },
+      "optimization": {
+        "label": "Optimization Inputs",
+        "titleLead": "Optimization",
+        "titleTail": "inputs",
+        "subtitle": "Optional inputs that help Nora learn faster, benchmark smarter, and improve output quality.",
+        "whyMatters": "The more context you give Nora here, the more specific and useful future output becomes."
+      }
     },
     "fields": {
-      "firstName": "First Name", "lastName": "Last Name", "industry": "Industry",
-      "profileImage": "Upload profile image", "logo": "Upload logo",
-      "websiteUrl": "Website URL", "businessType": "Business Type", "pricingRange": "Pricing range", "offerAssets": "Upload offer or pricing material",
-      "primaryColor": "Primary Color", "secondaryColor": "Secondary Color", "brandTone": "Brand tone", "brandStory": "Brand Story", "brandAssets": "Upload brand assets",
-      "ageRange": "Age Range", "primaryLocation": "Primary Location", "painPoints": "Main pain points to solve", "audienceInterests": "Audience interests and behavior",
-      "instagram": "Instagram", "facebookPage": "Facebook Page", "linkedIn": "LinkedIn", "threads": "Threads", "keyLandingPages": "Key Landing Pages",
-      "contentTypes": "Content Type", "postFrequency": "Post Frequency", "visualStyle": "Visual Style", "ctaStyle": "CTA Style",
-      "mainGoal": "Main Goal", "monthlyTarget": "Monthly Target", "conversionGoal": "Conversion focus", "successSignal": "Success signal",
-      "brandAdmire": "Brand you admire", "competitorLinks": "Competitors links", "existingAssets": "Upload existing assets", "priorityMetric": "Priority Metric"
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "industry": "Industry",
+      "profileImage": "Upload profile image",
+      "logo": "Upload logo",
+      "websiteUrl": "Website URL",
+      "businessType": "Business Type",
+      "pricingRange": "Pricing range",
+      "offerAssets": "Upload offer or pricing material",
+      "primaryColor": "Primary Color",
+      "secondaryColor": "Secondary Color",
+      "brandTone": "Brand tone",
+      "brandStory": "Brand Story",
+      "brandAssets": "Upload brand assets",
+      "ageRange": "Age Range",
+      "primaryLocation": "Primary Location",
+      "painPoints": "Main pain points to solve",
+      "audienceInterests": "Audience interests and behavior",
+      "instagram": "Instagram",
+      "facebookPage": "Facebook Page",
+      "linkedIn": "LinkedIn",
+      "threads": "Threads",
+      "keyLandingPages": "Key Landing Pages",
+      "contentTypes": "Content Type",
+      "postFrequency": "Post Frequency",
+      "visualStyle": "Visual Style",
+      "ctaStyle": "CTA Style",
+      "mainGoal": "Main Goal",
+      "monthlyTarget": "Monthly Target",
+      "conversionGoal": "Conversion focus",
+      "successSignal": "Success signal",
+      "brandAdmire": "Brand you admire",
+      "competitorLinks": "Competitors links",
+      "existingAssets": "Upload existing assets",
+      "priorityMetric": "Priority Metric"
     }
   },
   "integrate": {
@@ -327,11 +401,253 @@
     "syncing": "Syncing...",
     "platforms": {
       "pinterest": "Connect a Pinterest account so Nora can monitor performance, publish content, and track audience activity.",
-      "facebook":  "Connect a Facebook Page so Nora can monitor performance, publish content, and track audience activity.",
-      "reddit":    "Connect a Reddit account so Nora can monitor performance, publish content, and track audience activity.",
+      "facebook": "Connect a Facebook Page so Nora can monitor performance, publish content, and track audience activity.",
+      "reddit": "Connect a Reddit account so Nora can monitor performance, publish content, and track audience activity.",
       "instagram": "Connect an Instagram account so Nora can monitor performance, publish content, and track audience activity.",
-      "x":         "Connect an X account so Nora can monitor performance, publish content, and track audience activity.",
-      "tiktok":    "Connect a TikTok account so Nora can monitor performance, publish content, and track audience activity."
+      "x": "Connect an X account so Nora can monitor performance, publish content, and track audience activity.",
+      "tiktok": "Connect a TikTok account so Nora can monitor performance, publish content, and track audience activity."
+    }
+  },
+  "terms": {
+    "title": "Terms",
+    "subtitle": "Understand the terms, responsibilities, platform usage policies, and conditions that govern access to NORA and its services.",
+    "tocTitle": "Table of contents",
+    "lastUpdated": "Last updated: [05/11/2026]",
+    "toc": {
+      "privacy-policy": "Privacy Policy",
+      "privacy-information": "Information We Collect",
+      "privacy-use": "How we use data",
+      "privacy-lawful": "Lawful Basis",
+      "privacy-ai": "AI Processing",
+      "privacy-sharing": "Data Sharing",
+      "privacy-transfers": "International Transfers",
+      "privacy-retention": "Data Retention",
+      "privacy-rights": "User Rights",
+      "privacy-security": "Security",
+      "privacy-children": "Children",
+      "privacy-updates": "Updates",
+      "terms-conditions": "Terms & Conditions",
+      "refund-policy": "Refund & Cancellation Policy",
+      "disclaimer": "Disclaimer"
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "intro": [
+        "NORA is operated by XWorld LTD (\"XWorld\", \"NORA\", \"we\", \"us\", or \"our\"). This Privacy Policy explains how we collect, use, store, and protect personal data when users access NORA, our AI operating system, dashboard, tools, websites, and related services."
+      ],
+      "sections": [
+        {
+          "title": "1. Information We Collect",
+          "body": "We may collect:",
+          "bullets": [
+            "Account information: name, email address, company name, role, password, billing details, and contact information.",
+            "Business data: workspace content, documents, prompts, reports, tasks, workflows, integrations, and uploaded files.",
+            "Usage data: login activity, device data, browser type, IP address, pages visited, features used, and system logs.",
+            "Payment data: billing status, subscription plan, invoices, and payment confirmations. Payment card details are processed by third-party payment providers.",
+            "AI interaction data: prompts, generated outputs, feedback, user instructions, and usage history.",
+            "Communication data: support messages, emails, onboarding requests, and service inquiries."
+          ]
+        },
+        {
+          "title": "2. How We Use Data",
+          "body": "We use personal data to:",
+          "bullets": [
+            "Provide access to NORA and its dashboard.",
+            "Operate AI tools, workflows, reports, automations, and business features.",
+            "Manage accounts, subscriptions, billing, and customer support.",
+            "Improve platform performance, security, reliability, and user experience.",
+            "Detect abuse, fraud, misuse, or security risks.",
+            "Send service updates, legal notices, and important account communications.",
+            "Comply with legal, accounting, tax, and regulatory obligations."
+          ]
+        },
+        {
+          "title": "3. Lawful Basis",
+          "body": "Where UK GDPR applies, we process personal data based on:",
+          "bullets": [
+            "Contract: to provide the services users request.",
+            "Legitimate interests: to secure, improve, and operate the platform.",
+            "Legal obligation: to comply with accounting, tax, fraud prevention, and regulatory requirements.",
+            "Consent: for optional marketing cookies, newsletters, or non-essential tracking."
+          ]
+        },
+        {
+          "title": "4. AI Processing",
+          "paragraphs": [
+            "NORA uses AI systems to assist with business operations, analysis, planning, automation, and content generation. AI outputs may be inaccurate, incomplete, or require human review. Users are responsible for reviewing AI-generated outputs before relying on them for business, legal, financial, technical, or operational decisions.",
+            "We do not intentionally use customer confidential business data for public disclosure. Data may be processed by infrastructure, AI, analytics, hosting, security, payment, and support providers strictly for service delivery and platform operation."
+          ]
+        },
+        {
+          "title": "5. Data Sharing",
+          "body": "We may share data with:",
+          "bullets": [
+            "Hosting and cloud infrastructure providers.",
+            "AI model and automation providers.",
+            "Payment processors.",
+            "Analytics and monitoring providers.",
+            "Security and fraud prevention tools.",
+            "Legal, accounting, or compliance advisors.",
+            "Authorities where legally required."
+          ],
+          "footer": "We do not sell personal data."
+        },
+        {
+          "title": "6. International Transfers",
+          "paragraphs": [
+            "Some service providers may process data outside the UK or European Economic Area. Where required, we use appropriate safeguards such as contractual protections, data processing agreements, or approved transfer mechanisms."
+          ]
+        },
+        {
+          "title": "7. Data Retention",
+          "paragraphs": [
+            "We retain personal data only as long as necessary for platform operation, legal compliance, dispute resolution, security, accounting, and legitimate business purposes. Account data may be retained after cancellation where required by law or for fraud prevention, audit, or compliance reasons."
+          ]
+        },
+        {
+          "title": "8. User Rights",
+          "body": "Depending on applicable law, users may have the right to:",
+          "bullets": [
+            "Access their personal data.",
+            "Correct inaccurate data.",
+            "Request deletion.",
+            "Object to certain processing.",
+            "Restrict processing.",
+            "Request data portability.",
+            "Withdraw consent where processing is based on consent."
+          ],
+          "footer": "Requests can be sent to: nor-legal@xworldltd.com. Website: www.xworldltd.com"
+        },
+        {
+          "title": "9. Security",
+          "paragraphs": [
+            "We apply technical and organisational measures designed to protect user data, including access controls, authentication, monitoring, encryption where appropriate, and internal security processes. No online system is guaranteed to be completely secure."
+          ]
+        },
+        {
+          "title": "10. Children",
+          "paragraphs": [
+            "NORA is intended for business and professional users. It is not intended for children or users under 18."
+          ]
+        },
+        {
+          "title": "11. Updates",
+          "paragraphs": [
+            "We may update this Privacy Policy from time to time. Continued use of NORA after updates means the user accepts the revised policy."
+          ]
+        }
+      ]
+    },
+    "termsConditions": {
+      "title": "Terms & Conditions",
+      "intro": [
+        "These Terms & Conditions govern access to and use of NORA, an AI-powered business operating system operated by XWorld LTD.",
+        "By using NORA, users agree to these Terms."
+      ],
+      "sections": [
+        {
+          "title": "1. Information We Collect",
+          "body": "We may collect:",
+          "bullets": [
+            "Account information: name, email address, company name, role, password, billing details, and contact information.",
+            "Business data: workspace content, documents, prompts, reports, tasks, workflows, integrations, and uploaded files.",
+            "Usage data: login activity, device data, browser type, IP address, pages visited, features used, and system logs.",
+            "Payment data: billing status, subscription plan, invoices, and payment confirmations. Payment card details are processed by third-party payment providers.",
+            "AI interaction data: prompts, generated outputs, feedback, user instructions, and usage history.",
+            "Communication data: support messages, emails, onboarding requests, and service inquiries."
+          ]
+        },
+        {
+          "title": "2. How We Use Data",
+          "body": "We use personal data to:",
+          "bullets": [
+            "Provide access to NORA and its dashboard.",
+            "Operate AI tools, workflows, reports, automations, and business features.",
+            "Manage accounts, subscriptions, billing, and customer support.",
+            "Improve platform performance, security, reliability, and user experience.",
+            "Detect abuse, fraud, misuse, or security risks.",
+            "Send service updates, legal notices, and important account communications.",
+            "Comply with legal, accounting, tax, and regulatory obligations."
+          ]
+        },
+        {
+          "title": "3. Lawful Basis",
+          "body": "Where UK GDPR applies, we process personal data based on:",
+          "bullets": [
+            "Contract: to provide the services users request.",
+            "Legitimate interests: to secure, improve, and operate the platform.",
+            "Legal obligation: to comply with accounting, tax, fraud prevention, and regulatory requirements.",
+            "Consent: for optional marketing cookies, newsletters, or non-essential tracking."
+          ]
+        },
+        {
+          "title": "4. AI Processing",
+          "paragraphs": [
+            "NORA uses AI systems to assist with business operations, analysis, planning, automation, and content generation. AI outputs may be inaccurate, incomplete, or require human review. Users are responsible for reviewing AI-generated outputs before relying on them for business, legal, financial, technical, or operational decisions.",
+            "We do not intentionally use customer confidential business data for public disclosure. Data may be processed by infrastructure, AI, analytics, hosting, security, payment, and support providers strictly for service delivery and platform operation."
+          ]
+        },
+        {
+          "title": "5. Data Sharing",
+          "body": "We may share data with:",
+          "bullets": [
+            "Hosting and cloud infrastructure providers.",
+            "AI model and automation providers.",
+            "Payment processors.",
+            "Analytics and monitoring providers.",
+            "Security and fraud prevention tools.",
+            "Legal, accounting, or compliance advisors.",
+            "Authorities where legally required."
+          ],
+          "footer": "We do not sell personal data."
+        },
+        {
+          "title": "6. International Transfers",
+          "paragraphs": [
+            "Some service providers may process data outside the UK or European Economic Area. Where required, we use appropriate safeguards such as contractual protections, data processing agreements, or approved transfer mechanisms."
+          ]
+        },
+        {
+          "title": "7. Data Retention",
+          "paragraphs": [
+            "We retain personal data only as long as necessary for platform operation, legal compliance, dispute resolution, security, accounting, and legitimate business purposes. Account data may be retained after cancellation where required by law or for fraud prevention, audit, or compliance reasons."
+          ]
+        },
+        {
+          "title": "8. User Rights",
+          "body": "Depending on applicable law, users may have the right to:",
+          "bullets": [
+            "Access their personal data.",
+            "Correct inaccurate data.",
+            "Request deletion.",
+            "Object to certain processing.",
+            "Restrict processing.",
+            "Request data portability.",
+            "Withdraw consent where processing is based on consent."
+          ],
+          "footer": "Requests can be sent to: nor-legal@xworldltd.com. Website: www.xworldltd.com"
+        },
+        {
+          "title": "9. Security",
+          "paragraphs": [
+            "We apply technical and organisational measures designed to protect user data, including access controls, authentication, monitoring, encryption where appropriate, and internal security processes. No online system is guaranteed to be completely secure."
+          ]
+        },
+        {
+          "title": "10. Children",
+          "paragraphs": [
+            "NORA is intended for business and professional users. It is not intended for children or users under 18."
+          ]
+        }
+      ]
+    },
+    "refund": {
+      "title": "Refund & Cancellation Policy",
+      "body": "Refunds and cancellations are reviewed according to the active subscription, service usage, billing status, and applicable legal requirements."
+    },
+    "disclaimer": {
+      "title": "Disclaimer",
+      "body": "NORA provides AI-assisted business tools and generated outputs for operational support. Users remain responsible for reviewing outputs before relying on them for business, legal, financial, technical, or strategic decisions."
     }
   }
 }

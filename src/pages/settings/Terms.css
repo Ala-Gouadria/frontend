@@ -147,6 +147,15 @@
   transform: none;
 }
 
+/* TOC chevron points toward the content; flip it under RTL */
+.terms-toc__chevron {
+  display: inline-block;
+}
+
+html.is-rtl .terms-toc__chevron {
+  transform: scaleX(-1);
+}
+
 .terms-toc__link--active {
   position: relative;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(224, 238, 250, 0.96) 54%, rgba(255, 255, 255, 0) 100%);
