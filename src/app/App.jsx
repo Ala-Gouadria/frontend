@@ -79,12 +79,13 @@ function writeStorage(key, value) {
 export default function App() {
   const { i18n } = useTranslation()
 
-  // Sync lang and RTL class whenever the language changes.
-  // We use a class instead of dir="rtl" on <html> to avoid flipping the
-  // physical margin-left offsets that position content beside the nav.
+  // Sync lang, dir and RTL class whenever the language changes.
+  // dir="rtl" mirrors the whole layout (flex rows, text alignment, and the
+  // logical-property offsets that position content beside the nav rail).
   useEffect(() => {
     const isArabic = i18n.language?.startsWith('ar')
     document.documentElement.lang = i18n.language || 'en'
+    document.documentElement.dir = isArabic ? 'rtl' : 'ltr'
     document.documentElement.classList.toggle('is-rtl', isArabic)
   }, [i18n.language])
 

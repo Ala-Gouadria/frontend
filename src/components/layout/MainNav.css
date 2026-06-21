@@ -1,6 +1,6 @@
 .mnav-shell {
   position: fixed;
-  left: 18px;
+  inset-inline-start: 18px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 50;
@@ -162,6 +162,6 @@
 
 @media (max-width: 768px) {
   .mnav-shell {
-    left: 16px;
+    inset-inline-start: 16px;
   }
 }

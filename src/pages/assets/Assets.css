@@ -36,13 +36,13 @@
   position: relative;
   z-index: 5;
   width: min(1114px, calc(var(--vw) - 380px));
-  margin-left: clamp(130px, 12.45vw, 185px);
+  margin-inline-start: clamp(130px, 12.45vw, 185px);
   padding-top: 54px;
   animation: assetsPageIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .assets-header {
-  padding-left: 8px;
+  padding-inline-start: 8px;
 }
 
 .assets-header h1 {
@@ -333,7 +333,7 @@
 @media (max-width: 1280px) {
   .assets-content {
     width: calc(var(--vw) - 180px);
-    margin-left: 120px;
+    margin-inline-start: 120px;
   }
 
   .assets-image-grid,
