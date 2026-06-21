@@ -11,88 +11,92 @@ function clamp(value, min, max, fallback = min) {
   return Math.max(min, Math.min(safeValue, max))
 }
 
-/* Tall, well-curved elliptical arc. Coordinates live in a 720 x 320 viewBox. */
+/*
+  Arc geometry — elliptical bow, viewBox 720 × 320.
+  Center is well below the viewBox so only the upper arc is visible.
+  Angles are standard math (CCW from +x). SVG sweep-flag=1 draws CW,
+  which with a flipped y-axis gives us left-to-right visual progress.
+*/
 const ARC = {
   cx: 360,
   cy: 330,
   rx: 332,
   ry: 255,
   startAngle: 164 * (Math.PI / 180),
-  endAngle: 16 * (Math.PI / 180),
+  endAngle:    16 * (Math.PI / 180),
 }
 
-const BAND_WIDTH = 40
+// The visible band is thick — 68px in SVG units (~9.4% of viewBox width)
+const BAND_WIDTH = 68
 
-function getArcAngle(progress) {
-  return ARC.startAngle + (ARC.endAngle - ARC.startAngle) * progress
+// 20 ticks across the full arc interior
+const TICK_COUNT    = 20
+const TICK_PROGRESS = Array.from({ length: TICK_COUNT - 1 }, (_, i) => (i + 1) / TICK_COUNT)
+
+function getArcAngle(p) {
+  return ARC.startAngle + (ARC.endAngle - ARC.startAngle) * p
 }
 
-function getArcPoint(progress) {
-  const angle = getArcAngle(progress)
+function getArcPoint(p) {
+  const a = getArcAngle(p)
+  return { x: ARC.cx + ARC.rx * Math.cos(a), y: ARC.cy - ARC.ry * Math.sin(a) }
+}
+
+// Short line perpendicular to the arc — used for tick stripes
+function getTickLine(p, length) {
+  const a     = getArcAngle(p)
+  const pt    = getArcPoint(p)
+  const tan   = { x: -ARC.rx * Math.sin(a), y: -ARC.ry * Math.cos(a) }
+  const norm  = Math.hypot(tan.x, tan.y) || 1
+  const perp  = { x: -tan.y / norm, y: tan.x / norm }
   return {
-    x: ARC.cx + ARC.rx * Math.cos(angle),
-    y: ARC.cy - ARC.ry * Math.sin(angle),
-  }
-}
-
-// A short line perpendicular to the arc at the given progress — used for ticks.
-function getTickLine(progress, length) {
-  const angle = getArcAngle(progress)
-  const point = getArcPoint(progress)
-  const tangent = { x: -ARC.rx * Math.sin(angle), y: -ARC.ry * Math.cos(angle) }
-  const norm = Math.hypot(tangent.x, tangent.y) || 1
-  const normal = { x: -tangent.y / norm, y: tangent.x / norm }
-  return {
-    x1: point.x - (normal.x * length) / 2,
-    y1: point.y - (normal.y * length) / 2,
-    x2: point.x + (normal.x * length) / 2,
-    y2: point.y + (normal.y * length) / 2,
+    x1: pt.x - (perp.x * length) / 2,
+    y1: pt.y - (perp.y * length) / 2,
+    x2: pt.x + (perp.x * length) / 2,
+    y2: pt.y + (perp.y * length) / 2,
   }
 }
 
 function getPathData() {
-  const start = getArcPoint(0)
-  const end = getArcPoint(1)
-  return `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${ARC.rx} ${ARC.ry} 0 0 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`
+  const s = getArcPoint(0)
+  const e = getArcPoint(1)
+  return `M ${s.x.toFixed(2)} ${s.y.toFixed(2)} A ${ARC.rx} ${ARC.ry} 0 0 1 ${e.x.toFixed(2)} ${e.y.toFixed(2)}`
 }
 
-// Evenly spaced tick positions along the whole arc.
-const TICK_COUNT = 26
-const TICK_PROGRESS = Array.from({ length: TICK_COUNT - 1 }, (_, i) => (i + 1) / TICK_COUNT)
-
 export function SemiCircleGauge({
-  current = 578,
-  target = 700,
+  current   = 578,
+  target    = 700,
   progress,
   label,
   title,
-  tone = 'blue',
-  bandWidth = 40,
+  tone      = 'blue',
   className = '',
 }) {
-  const id = useId().replace(/[^a-zA-Z0-9]/g, '')
-  const maskId = 'm' + id
-  const fadeId = 'f' + id
-  const progGradId = 'p' + id
-  const knobGradId = 'k' + id
+  const raw        = useId().replace(/[^a-zA-Z0-9]/g, '')
+  const maskId     = 'm'  + raw
+  const fadeId     = 'f'  + raw
+  const progGradId = 'pg' + raw
+  const glowGradId = 'gg' + raw
+  const knobGradId = 'kg' + raw
 
   const safeTarget = Number(target)
-  const derivedProgress =
-    Number.isFinite(safeTarget) && safeTarget !== 0 ? Number(current) / safeTarget : 0
-  const safeProgress = clamp(progress ?? derivedProgress, 0, 1)
+  const derived    = Number.isFinite(safeTarget) && safeTarget !== 0
+    ? Number(current) / safeTarget : 0
+  const pct        = clamp(progress ?? derived, 0, 1)
 
   const pathData = getPathData()
-  const knob = getArcPoint(safeProgress)
-  const dash = `${safeProgress * 100} 100`
+  const knob     = getArcPoint(pct)
+  const dash     = `${pct * 100} 100`
 
-  const capRingR = Math.round(bandWidth * 0.54)
-  const capR    = Math.round(bandWidth * 0.39)
+  // Knob: large ring + inner dot, proportional to the thick band
+  const ringR = Math.round(BAND_WIDTH * 0.52)   // white outer ring
+  const dotR  = Math.round(BAND_WIDTH * 0.37)   // solid blue dot
 
-  // Ticks only along the filled (progress) portion of the arc.
-  const progressTicks = TICK_PROGRESS.filter((tp) => tp <= safeProgress + 0.01)
+  // Ticks only inside the filled region
+  const filledTicks = TICK_PROGRESS.filter(tp => tp <= pct + 0.008)
 
-  const valueLabel = label ?? `${current}/${target}`
-  const [currentLabel, targetLabel] = valueLabel.split('/')
+  const valueLabel   = label ?? `${current}/${target}`
+  const [cur, tgt]   = valueLabel.split('/')
 
   return (
     <div className={classNames('semi-circle-gauge', `semi-circle-gauge--${tone}`, className)}>
@@ -101,122 +105,132 @@ export function SemiCircleGauge({
       <div className="semi-circle-gauge__chart">
         <svg className="semi-circle-gauge__svg" viewBox="0 0 720 320" aria-hidden="true">
           <defs>
-            {/* Horizontal fade — gentle dissolve at both ends */}
+
+            {/* ── Horizontal edge-fade mask ─────────────────────────────────── */}
             <linearGradient id={fadeId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="720" y2="0">
-              <stop offset="0%"   stopColor="white" stopOpacity="0" />
-              <stop offset="5%"   stopColor="white" stopOpacity="0.5" />
-              <stop offset="12%"  stopColor="white" stopOpacity="1" />
-              <stop offset="88%"  stopColor="white" stopOpacity="1" />
-              <stop offset="95%"  stopColor="white" stopOpacity="0.5" />
-              <stop offset="100%" stopColor="white" stopOpacity="0" />
+              <stop offset="0%"   stopColor="white" stopOpacity="0"   />
+              <stop offset="6%"   stopColor="white" stopOpacity="0.4" />
+              <stop offset="14%"  stopColor="white" stopOpacity="1"   />
+              <stop offset="86%"  stopColor="white" stopOpacity="1"   />
+              <stop offset="94%"  stopColor="white" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="white" stopOpacity="0"   />
             </linearGradient>
 
-            {/* Progress band gradient — pale blue → vivid blue */}
+            {/* ── Progress band: pale → vivid (left → right) ───────────────── */}
             <linearGradient id={progGradId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="720" y2="0">
-              <stop offset="0%" stopColor="var(--gauge-progress-0)" />
-              <stop offset="22%" stopColor="var(--gauge-progress-1)" />
-              <stop offset="48%" stopColor="var(--gauge-progress-2)" />
-              <stop offset="74%" stopColor="var(--gauge-progress-3)" />
+              <stop offset="0%"   stopColor="var(--gauge-progress-0)" />
+              <stop offset="25%"  stopColor="var(--gauge-progress-1)" />
+              <stop offset="55%"  stopColor="var(--gauge-progress-2)" />
+              <stop offset="80%"  stopColor="var(--gauge-progress-3)" />
               <stop offset="100%" stopColor="var(--gauge-progress-4)" />
             </linearGradient>
 
-            {/* Knob — flat blue, only a faint top-to-bottom shade */}
+            {/* ── Wide outer glow gradient — same hue, very transparent ─────── */}
+            <linearGradient id={glowGradId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="720" y2="0">
+              <stop offset="0%"   stopColor="var(--gauge-glow-0)" />
+              <stop offset="50%"  stopColor="var(--gauge-glow-1)" />
+              <stop offset="100%" stopColor="var(--gauge-glow-2)" />
+            </linearGradient>
+
+            {/* ── Knob gradient: light-blue top → vivid-blue bottom ─────────── */}
             <linearGradient id={knobGradId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--gauge-knob-1)" />
+              <stop offset="0%"   stopColor="var(--gauge-knob-1)" />
               <stop offset="100%" stopColor="var(--gauge-knob-2)" />
             </linearGradient>
 
-            <mask id={maskId} maskUnits="userSpaceOnUse" x="-80" y="-80" width="880" height="460">
-              <rect x="-80" y="-80" width="880" height="460" fill={'url(#' + fadeId + ')'} />
+            {/* ── Fade mask applied to the whole track group ───────────────── */}
+            <mask id={maskId} maskUnits="userSpaceOnUse" x="-80" y="-80" width="880" height="480">
+              <rect x="-80" y="-80" width="880" height="480" fill={`url(#${fadeId})`} />
             </mask>
+
           </defs>
 
-          <g mask={'url(#' + maskId + ')'}>
-            {/* Background track — full arc in light blue, defines the gauge path */}
-            <path
-              d={pathData}
-              fill="none"
-              stroke="var(--gauge-track)"
-              strokeWidth={bandWidth + 10}
+          <g mask={`url(#${maskId})`}>
+
+            {/* ── 1. Wide outer glow — very blurred, extends far beyond band ── */}
+            <path d={pathData} fill="none"
+              stroke={`url(#${glowGradId})`}
+              strokeWidth={BAND_WIDTH + 80}
               strokeLinecap="round"
-              style={{ filter: 'blur(5px)' }}
+              style={{ filter: 'blur(18px)', opacity: 0.55 }}
             />
-            <path
-              d={pathData}
-              fill="none"
+
+            {/* ── 2. Mid glow — moderate blur ─────────────────────────────── */}
+            <path d={pathData} fill="none"
+              stroke={`url(#${glowGradId})`}
+              strokeWidth={BAND_WIDTH + 40}
+              strokeLinecap="round"
+              style={{ filter: 'blur(10px)', opacity: 0.35 }}
+            />
+
+            {/* ── 3. Background track — full-arc pale fill ─────────────────── */}
+            <path d={pathData} fill="none"
               stroke="var(--gauge-track)"
-              strokeWidth={bandWidth}
+              strokeWidth={BAND_WIDTH}
               strokeLinecap="butt"
             />
 
-            {/* Progress subtle glow */}
-            <path
-              d={pathData}
-              fill="none"
-              stroke={'url(#' + progGradId + ')'}
-              strokeWidth={bandWidth + 10}
-              strokeLinecap="round"
+            {/* ── 4. Progress glow — blurred behind the filled band ────────── */}
+            <path d={pathData} fill="none"
+              stroke={`url(#${progGradId})`}
+              strokeWidth={BAND_WIDTH + 14}
+              strokeLinecap="butt"
               pathLength="100"
               strokeDasharray={dash}
-              style={{ filter: 'blur(7px)', opacity: 0.28 }}
+              style={{ filter: 'blur(8px)', opacity: 0.4 }}
             />
-            {/* Progress main band */}
-            <path
-              d={pathData}
-              fill="none"
-              stroke={'url(#' + progGradId + ')'}
-              strokeWidth={bandWidth}
+
+            {/* ── 5. Progress band — main crisp fill ───────────────────────── */}
+            <path d={pathData} fill="none"
+              stroke={`url(#${progGradId})`}
+              strokeWidth={BAND_WIDTH}
               strokeLinecap="butt"
               pathLength="100"
               strokeDasharray={dash}
               className="semi-circle-gauge__progress"
             />
-            {/* Inner-edge highlight */}
-            <path
-              d={pathData}
-              fill="none"
-              stroke="rgba(255,255,255,0.18)"
-              strokeWidth="10"
+
+            {/* ── 6. Inner-edge highlight stripe ───────────────────────────── */}
+            <path d={pathData} fill="none"
+              stroke="rgba(255,255,255,0.22)"
+              strokeWidth="8"
               strokeLinecap="butt"
               pathLength="100"
               strokeDasharray={dash}
               style={{ filter: 'blur(2px)' }}
             />
 
-            {/* Tick dividers */}
+            {/* ── 7. Tick dividers — wide semi-transparent stripes ──────────── */}
             <g>
-              {progressTicks.map((tp) => {
-                const tick = getTickLine(tp, bandWidth - 4)
+              {filledTicks.map(tp => {
+                const t = getTickLine(tp, BAND_WIDTH + 4)
                 return (
-                  <line
-                    key={tp}
-                    x1={tick.x1}
-                    y1={tick.y1}
-                    x2={tick.x2}
-                    y2={tick.y2}
-                    stroke="rgba(255,255,255,0.13)"
-                    strokeWidth="2.3"
-                    strokeLinecap="round"
+                  <line key={tp}
+                    x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
+                    stroke="rgba(255,255,255,0.38)"
+                    strokeWidth="9"
+                    strokeLinecap="butt"
                   />
                 )
               })}
             </g>
+
           </g>
 
-          {/* Knob — outside the mask, always fully visible */}
-          <circle cx={knob.x} cy={knob.y} r={capRingR} className="semi-circle-gauge__cap-ring" />
-          <circle
-            cx={knob.x}
-            cy={knob.y}
-            r={capR}
-            fill={'url(#' + knobGradId + ')'}
+          {/* ── Knob — outside the mask, always fully visible ─────────────── */}
+          <circle cx={knob.x} cy={knob.y} r={ringR}
+            className="semi-circle-gauge__cap-ring"
+          />
+          <circle cx={knob.x} cy={knob.y} r={dotR}
+            fill={`url(#${knobGradId})`}
             className="semi-circle-gauge__cap"
           />
+
         </svg>
 
         <div className="semi-circle-gauge__value">
-          <span className="semi-circle-gauge__current">{currentLabel}</span>
-          {targetLabel ? <span className="semi-circle-gauge__target">/{targetLabel}</span> : null}
+          <span className="semi-circle-gauge__current">{cur}</span>
+          {tgt ? <span className="semi-circle-gauge__target">/{tgt}</span> : null}
         </div>
       </div>
     </div>
