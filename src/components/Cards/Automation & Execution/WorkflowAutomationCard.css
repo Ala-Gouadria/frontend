@@ -19,7 +19,7 @@
   color: #00a34a;
   font-size: 0.76rem;
   font-weight: 400;
-  text-align: right;
+  text-align: end;
 }
 
 .workflow-automation-card__panel {
@@ -57,7 +57,7 @@
 }
 
 .workflow-automation-card__workflow-head > div:last-child {
-  text-align: right;
+  text-align: end;
 }
 
 .workflow-automation-card__workflow-head > div:last-child strong {

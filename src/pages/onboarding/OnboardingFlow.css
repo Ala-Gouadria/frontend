@@ -309,7 +309,7 @@ textarea {
   border-radius: 8px;
   background: transparent;
   color: #131317;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
   transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 }

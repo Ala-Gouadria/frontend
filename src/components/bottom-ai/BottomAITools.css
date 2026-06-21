@@ -6,6 +6,9 @@
   z-index: 92;
   display: flex;
   pointer-events: none;
+  /* Centered control dock: keep its internal order/design fixed (LTR)
+     so RTL does not reverse and break the segmented pills. */
+  direction: ltr;
 }
 
 .bottom-ai-tools__row {

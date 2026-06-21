@@ -293,7 +293,7 @@ textarea {
   background: transparent;
   color: #11111d;
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   transition:
     transform 160ms ease,
     background 160ms ease,

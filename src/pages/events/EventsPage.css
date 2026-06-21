@@ -276,7 +276,7 @@
   background: rgba(255, 255, 255, 0.5);
   color: #15161a;
   font: inherit;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
   transition: background 160ms ease, box-shadow 160ms ease;
 }
