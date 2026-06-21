@@ -131,6 +131,16 @@ export function SemiCircleGauge({
             </mask>
           </defs>
 
+          {/* Blue glow layer — follows the arc band only */}
+          <path
+            d={pathData}
+            fill="none"
+            stroke="rgba(24, 119, 242, 0.20)"
+            strokeWidth={bandWidth + 40}
+            strokeLinecap="round"
+            style={{ filter: 'blur(8px)' }}
+          />
+
           <g mask={'url(#' + maskId + ')'}>
             {/* Background track — full arc in light blue, defines the gauge path */}
             <path
@@ -171,17 +181,6 @@ export function SemiCircleGauge({
               strokeDasharray={dash}
               className="semi-circle-gauge__progress"
             />
-            {/* Inner-edge highlight */}
-            <path
-              d={pathData}
-              fill="none"
-              stroke="rgba(255,255,255,0.18)"
-              strokeWidth="10"
-              strokeLinecap="butt"
-              pathLength="100"
-              strokeDasharray={dash}
-              style={{ filter: 'blur(2px)' }}
-            />
 
             {/* Tick dividers */}
             <g>
@@ -194,9 +193,9 @@ export function SemiCircleGauge({
                     y1={tick.y1}
                     x2={tick.x2}
                     y2={tick.y2}
-                    stroke="rgba(255,255,255,0.13)"
-                    strokeWidth="2.3"
-                    strokeLinecap="round"
+                    stroke="rgba(255, 255, 255, 0.10)"
+                    strokeWidth="2.345"
+                    strokeLinecap="butt"
                   />
                 )
               })}

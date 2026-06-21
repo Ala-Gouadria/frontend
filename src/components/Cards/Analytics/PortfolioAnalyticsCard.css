@@ -11,6 +11,9 @@
   min-height: 0;
   height: 204px;
   overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Vivid blue gradient + visible track */
