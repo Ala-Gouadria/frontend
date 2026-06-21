@@ -24,6 +24,16 @@
   transform-origin: 0 0;
 }
 
+/* The map is a fixed coordinate canvas (cards positioned by absolute
+   left/top) driven by react-zoom-pan-pinch, whose pan/zoom math assumes
+   LTR. Keep the canvas subtree LTR even in Arabic so it doesn't shift
+   off-screen — only the surrounding chrome (nav, project switcher) mirrors. */
+.react-transform-wrapper,
+.react-transform-component,
+.intelligence-map-grid {
+  direction: ltr;
+}
+
 /* Force high-quality rasterization inside the zoom wrapper */
 .react-transform-wrapper {
   image-rendering: -webkit-optimize-contrast;
