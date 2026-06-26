@@ -1,8 +1,11 @@
 import { useRef, useEffect, useState } from 'react'
 import MainNav from '../layout/MainNav'
 import AgentPanel from './AgentPanel'
+import AgentIndicator from './AgentIndicator'
+import AgentCorrection from './AgentCorrection'
 import { detectAgents, DEMO_AGENTS } from './agentPanelConfig'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
+import { orchestrationsApi } from '../../api/orchestrationsApi'
 import { voiceApi } from '../../api/voiceApi'
 import { matchDemoTurn, DEMO_MODE_ENABLED } from './demoScript'
 import { matchCommand } from './voiceCommands'
@@ -11,6 +14,12 @@ import noraWordmark from '../../assets/splash_screen/logo.svg'
 import './NoraVoice.css'
 
 const DEMO_AGENT_KEYS = DEMO_AGENTS.map((a) => a.key)
+const MAX_CONVERSATION_TURNS = 10
+
+// Generate a session ID for conversation tracking
+function generateSessionId() {
+  return `nv-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+}
 
 // Index of the earliest keyword for `agentKey` within `lowerText` (-1 if none).
 function firstKeywordIndex(lowerText, agentKey) {
@@ -55,6 +64,15 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate, globalVoi
   const [isSending, setIsSending] = useState(false)
   const [revealedAgents, setRevealedAgents] = useState(() => new Set())
   const conversationIdRef = useRef(null)
+  // Voice orchestration state
+  const [agentRouting, setAgentRouting] = useState(null)
+  const [isClassifying, setIsClassifying] = useState(false)
+  const [followUpSuggestions, setFollowUpSuggestions] = useState([])
+  const [lastQuery, setLastQuery] = useState('')
+  // Multi-turn conversation tracking
+  const [conversationHistory, setConversationHistory] = useState([])
+  const [isFollowUp, setIsFollowUp] = useState(false)
+  const sessionIdRef = useRef(generateSessionId())
   const modeRef = useRef('idle')
   useEffect(() => {
     modeRef.current = mode
@@ -510,8 +528,15 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate, globalVoi
   async function handleConversation(userText) {
     const text = (userText || '').trim()
     if (!text || isSending) return
+
+    // When GlobalVoiceAssistant is active, don't process here - it handles everything
+    if (globalVoiceActive) return
     setIsSending(true)
     setNotice('')
+    setAgentRouting(null)
+    setFollowUpSuggestions([])
+    setLastQuery(text)
+    setIsFollowUp(false)
 
     // Command fast-path (Phase A): turn an utterance into a UI action — navigate
     // to another view or open/close the side panel — instead of a chat answer.
@@ -554,27 +579,104 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate, globalVoi
       return
     }
 
+    // Use voice orchestration for intelligent agent routing
+    setIsClassifying(true)
+
+    // Add user turn to history before sending
+    const userTurn = {
+      role: 'user',
+      content: text,
+      timestamp: new Date().toISOString(),
+    }
+
     try {
-      if (!conversationIdRef.current) {
-        const convo = await noraWorkspaceApi.createConversation({ serviceId: 'general' })
-        conversationIdRef.current = convo.id
-      }
-      const result = await noraWorkspaceApi.sendMessage({
-        conversationId: conversationIdRef.current,
-        serviceId: 'general',
-        text,
-        chatOnly: true, // voice demo wants Nora's spoken chat reply, not the planner echo
-        mode: 'voice', // ask the AI for a short, plain, TTS-friendly answer
+      const result = await orchestrationsApi.voiceOrchestrate({
+        transcript: text,
+        context: {
+          currentPage: window.location.pathname,
+        },
+        maxWords: 60,
+        conversationHistory: conversationHistory,
+        sessionId: sessionIdRef.current,
       })
-      const reply = result?.assistantMessage?.text || ''
+
+      // Update agent routing info for display
+      if (result.routing) {
+        setAgentRouting({
+          agent: result.routing.primary_agent,
+          confidence: result.routing.confidence,
+          reasoning: result.routing.reasoning,
+          secondaryAgents: result.routing.secondary_agents || [],
+          intentSummary: result.routing.intent_summary,
+        })
+        // Also reveal agent in the side panel based on routing
+        if (result.routing.primary_agent) {
+          setRevealedAgents((prev) => new Set([...prev, result.routing.primary_agent]))
+        }
+        // Check if this was detected as a follow-up
+        if (result.routing.is_follow_up) {
+          setIsFollowUp(true)
+        }
+      }
+      setIsClassifying(false)
+
+      // Store follow-up suggestions
+      if (result.follow_up_suggestions?.length > 0) {
+        setFollowUpSuggestions(result.follow_up_suggestions)
+      }
+
+      const reply = result.answer || ''
+
+      // Update conversation history
       if (reply) {
+        const assistantTurn = {
+          role: 'assistant',
+          content: reply,
+          agent: result.routing?.primary_agent,
+          timestamp: new Date().toISOString(),
+        }
+        setConversationHistory((prev) => {
+          const updated = [...prev, userTurn, assistantTurn]
+          return updated.slice(-MAX_CONVERSATION_TURNS)
+        })
         await playNoraVoice(reply)
       } else {
+        setConversationHistory((prev) => [...prev, userTurn].slice(-MAX_CONVERSATION_TURNS))
         setMode('idle')
       }
-    } catch {
-      setNotice('Nora is unreachable right now. Check the backend is running.')
-      setMode('idle')
+    } catch (orchError) {
+      // Fall back to regular chat if orchestration fails
+      setIsClassifying(false)
+      setAgentRouting(null)
+      console.warn('Voice orchestration failed, falling back to chat:', orchError)
+
+      try {
+        if (!conversationIdRef.current) {
+          const convo = await noraWorkspaceApi.createConversation({ serviceId: 'general' })
+          conversationIdRef.current = convo.id
+        }
+        const result = await noraWorkspaceApi.sendMessage({
+          conversationId: conversationIdRef.current,
+          serviceId: 'general',
+          text,
+          chatOnly: true,
+          mode: 'voice',
+        })
+        const reply = result?.assistantMessage?.text || ''
+        if (reply) {
+          setConversationHistory((prev) => {
+            const updated = [...prev, userTurn, { role: 'assistant', content: reply, timestamp: new Date().toISOString() }]
+            return updated.slice(-MAX_CONVERSATION_TURNS)
+          })
+          await playNoraVoice(reply)
+        } else {
+          setConversationHistory((prev) => [...prev, userTurn].slice(-MAX_CONVERSATION_TURNS))
+          setMode('idle')
+        }
+      } catch {
+        setNotice('Nora is unreachable right now. Check the backend is running.')
+        setMode('idle')
+      }
     } finally {
       setIsSending(false)
     }
@@ -688,29 +790,82 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate, globalVoi
         {revealed && (
         <div className="dock">
           <div className="state-label nv-enter" style={{ '--d': '60ms' }} data-mode={mode}>
-            {isSending && 'Nora is thinking…'}
-            {!isSending && mode === 'idle' && (globalVoiceActive ? 'Say “Hey Nora” anytime' : 'Tap the mic to talk to Nora')}
+            {isSending && !isClassifying && 'Nora is thinking…'}
+            {isClassifying && 'Routing to the right agent…'}
+            {!isSending && mode === 'idle' && (globalVoiceActive ? 'Say "Hey Nora" anytime' : 'Tap the mic to talk to Nora')}
             {!isSending && mode === 'listening' && 'Listening…'}
             {!isSending && mode === 'speaking' && 'Nora is speaking…'}
           </div>
 
-          <div className="prompt-bar nv-enter" style={{ '--d': '140ms' }}>
-            <input
-              className="prompt-input"
-              type="text"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && prompt.trim()) {
-                  const said = prompt.trim()
-                  setPrompt('')
-                  void handleConversation(said)
-                }
-              }}
-              placeholder="Ask Nora about your business"
-              aria-label="Ask Nora about your business"
-            />
-            {!globalVoiceActive && (
+          {/* Conversation context indicator - only show when GlobalVoiceAssistant is NOT active */}
+          {!globalVoiceActive && conversationHistory.length > 0 && mode === 'idle' && !isSending && (
+            <div className="nv-context-bar nv-enter" style={{ '--d': '70ms' }}>
+              <span className="nv-context-label">
+                {conversationHistory.length} turn{conversationHistory.length !== 1 ? 's' : ''} in conversation
+              </span>
+              <button
+                type="button"
+                className="nv-context-clear"
+                onClick={() => {
+                  setConversationHistory([])
+                  sessionIdRef.current = generateSessionId()
+                }}
+              >
+                New chat
+              </button>
+            </div>
+          )}
+
+          {/* Follow-up indicator - only show when GlobalVoiceAssistant is NOT active */}
+          {!globalVoiceActive && isFollowUp && lastQuery && (
+            <div className="nv-follow-up-badge nv-enter" style={{ '--d': '75ms' }}>
+              Following up on previous question
+            </div>
+          )}
+
+          {/* Agent routing indicator - only show when GlobalVoiceAssistant is NOT active */}
+          {!globalVoiceActive && (isClassifying || agentRouting) && (
+            <div className="nv-agent-indicator nv-enter" style={{ '--d': '80ms' }}>
+              <AgentIndicator
+                agent={agentRouting?.agent}
+                confidence={agentRouting?.confidence}
+                reasoning={agentRouting?.reasoning}
+                secondaryAgents={agentRouting?.secondaryAgents}
+                isLoading={isClassifying}
+                compact={true}
+              />
+              {/* Show correction option after response */}
+              {agentRouting && !isClassifying && mode === 'idle' && lastQuery && (
+                <AgentCorrection
+                  query={lastQuery}
+                  currentAgent={agentRouting.agent}
+                  onCorrected={(newAgent) => {
+                    setAgentRouting((prev) => prev ? { ...prev, agent: newAgent } : null)
+                  }}
+                  inline
+                />
+              )}
+            </div>
+          )}
+
+          {/* Hide prompt bar when GlobalVoiceAssistant is active - it handles all input */}
+          {!globalVoiceActive && (
+            <div className="prompt-bar nv-enter" style={{ '--d': '140ms' }}>
+              <input
+                className="prompt-input"
+                type="text"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && prompt.trim()) {
+                    const said = prompt.trim()
+                    setPrompt('')
+                    void handleConversation(said)
+                  }
+                }}
+                placeholder="Ask Nora about your business"
+                aria-label="Ask Nora about your business"
+              />
               <button
                 type="button"
                 className={'prompt-mic ' + (isListening ? 'active' : '')}
@@ -732,33 +887,33 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate, globalVoi
                   <path d="M12 18v3" />
                 </svg>
               </button>
-            )}
-            <button
-              type="button"
-              className="prompt-send"
-              aria-label="Send"
-              disabled={isSending || !prompt.trim()}
-              onClick={() => {
-                const said = prompt.trim()
-                if (!said) return
-                setPrompt('')
-                void handleConversation(said)
-              }}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              <button
+                type="button"
+                className="prompt-send"
+                aria-label="Send"
+                disabled={isSending || !prompt.trim()}
+                onClick={() => {
+                  const said = prompt.trim()
+                  if (!said) return
+                  setPrompt('')
+                  void handleConversation(said)
+                }}
               >
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </button>
-          </div>
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+          )}
 
           {!globalVoiceActive && (
             <div className="controls nv-enter" style={{ '--d': '220ms' }}>
@@ -801,6 +956,28 @@ export default function NoraVoice({ activeNavId = 'stars', onNavigate, globalVoi
           )}
 
           {notice && <div className="notice">{notice}</div>}
+
+          {/* Follow-up suggestions - only show when GlobalVoiceAssistant is NOT active */}
+          {!globalVoiceActive && followUpSuggestions.length > 0 && mode === 'idle' && !isSending && (
+            <div className="nv-suggestions nv-enter" style={{ '--d': '300ms' }}>
+              <span className="nv-suggestions-label">Try asking:</span>
+              <div className="nv-suggestions-list">
+                {followUpSuggestions.map((suggestion, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className="nv-suggestion-chip"
+                    onClick={() => {
+                      setPrompt(suggestion)
+                      void handleConversation(suggestion)
+                    }}
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         )}
 

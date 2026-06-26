@@ -341,6 +341,114 @@
   padding: 0 20px;
 }
 
+/* Agent indicator in the dock */
+.nora-voice .nv-agent-indicator {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.nora-voice .nv-agent-indicator .agent-indicator--compact {
+  background: rgba(47, 128, 255, 0.08);
+  border: 1px solid rgba(47, 128, 255, 0.15);
+}
+
+/* Conversation context bar */
+.nora-voice .nv-context-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 8px 0;
+  padding: 6px 14px;
+  background: rgba(47, 128, 255, 0.06);
+  border: 1px solid rgba(47, 128, 255, 0.12);
+  border-radius: 20px;
+}
+
+.nora-voice .nv-context-label {
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.nora-voice .nv-context-clear {
+  font-family: inherit;
+  font-size: 11px;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid rgba(47, 128, 255, 0.2);
+  border-radius: 12px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nora-voice .nv-context-clear:hover {
+  background: rgba(47, 128, 255, 0.08);
+  color: var(--accent);
+}
+
+/* Follow-up indicator badge */
+.nora-voice .nv-follow-up-badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 4px 12px;
+  margin: 6px 0;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+  color: #8b5cf6;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Follow-up suggestions */
+.nora-voice .nv-suggestions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 0 20px;
+  max-width: 500px;
+}
+
+.nora-voice .nv-suggestions-label {
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nora-voice .nv-suggestions-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.nora-voice .nv-suggestion-chip {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 8px 14px;
+  background: rgba(47, 128, 255, 0.06);
+  border: 1px solid rgba(47, 128, 255, 0.18);
+  border-radius: 20px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nora-voice .nv-suggestion-chip:hover {
+  background: rgba(47, 128, 255, 0.12);
+  border-color: rgba(47, 128, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.nora-voice .nv-suggestion-chip:active {
+  transform: translateY(0);
+}
+
 /* Left-side main navigation, matching how IntelligenceMap positions it. */
 /* MainNav positions itself (fixed, left-centred). This wrapper must NOT set
    position or transform — a transformed/positioned wrapper becomes the

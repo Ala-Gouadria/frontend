@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { voiceApi } from '../../api/voiceApi'
 import { noraWorkspaceApi } from '../../api/noraWorkspaceApi'
+import { orchestrationsApi } from '../../api/orchestrationsApi'
 import { matchCommand } from './voiceCommands'
 import { GREETING, consumeGreet } from './voiceGreeting'
+import AgentIndicator from './AgentIndicator'
+import AgentCorrection from './AgentCorrection'
 import './GlobalVoiceAssistant.css'
 
 // Wake phrases that arm the assistant in always-listening mode. Anything spoken
@@ -10,6 +13,12 @@ import './GlobalVoiceAssistant.css'
 // follows, the assistant arms and treats the NEXT utterance as the command.
 const WAKE_PHRASES = ['hey nora', 'hey, nora', 'hi nora', 'okay nora', 'ok nora', 'nora']
 const MUTE_KEY = 'nora:voiceMuted'
+const MAX_CONVERSATION_TURNS = 10 // Keep last N turns for context
+
+// Generate a session ID for conversation tracking
+function generateSessionId() {
+  return `gva-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+}
 
 function getSR() {
   return typeof window !== 'undefined'
@@ -71,6 +80,14 @@ export default function GlobalVoiceAssistant({ onNavigate, wakeless = false }) {
   const [muted, setMuted] = useState(() => {
     try { return window.localStorage.getItem(MUTE_KEY) === '1' } catch { return false }
   })
+  // Agent routing state for voice orchestration
+  const [agentRouting, setAgentRouting] = useState(null)
+  const [isClassifying, setIsClassifying] = useState(false)
+  const [followUpSuggestions, setFollowUpSuggestions] = useState([])
+  // Multi-turn conversation tracking
+  const [conversationHistory, setConversationHistory] = useState([])
+  const [isFollowUp, setIsFollowUp] = useState(false)
+  const sessionIdRef = useRef(generateSessionId())
 
   // Control refs (read inside async/recognition callbacks without stale closures).
   const recRef = useRef(null)
@@ -149,6 +166,9 @@ export default function GlobalVoiceAssistant({ onNavigate, wakeless = false }) {
     disarm()
     setTranscript(text)
     setNotice('')
+    setAgentRouting(null) // Reset previous agent info
+    setFollowUpSuggestions([]) // Reset suggestions
+    setIsFollowUp(false)
 
     const command = matchCommand(text)
     if (command?.kind === 'navigate') {
@@ -164,28 +184,112 @@ export default function GlobalVoiceAssistant({ onNavigate, wakeless = false }) {
       return
     }
 
-    // Not a command → ask Nora (spoken answer from anywhere).
+    // Not a command → use voice orchestration for intelligent agent routing.
     setMode('thinking')
+    setIsClassifying(true)
     setExpanded(true)
+
+    // Add user turn to history before sending
+    const userTurn = {
+      role: 'user',
+      content: text,
+      timestamp: new Date().toISOString(),
+    }
+
     try {
-      if (!conversationIdRef.current) {
-        const convo = await noraWorkspaceApi.createConversation({ serviceId: 'general' })
-        conversationIdRef.current = convo.id
-      }
-      const result = await noraWorkspaceApi.sendMessage({
-        conversationId: conversationIdRef.current,
-        serviceId: 'general',
-        text,
-        chatOnly: true,
-        mode: 'voice',
+      // Use voice orchestration for full agent routing + response
+      const result = await orchestrationsApi.voiceOrchestrate({
+        transcript: text,
+        context: {
+          currentPage: window.location.pathname,
+        },
+        maxWords: 60, // Keep voice responses concise
+        conversationHistory: conversationHistory,
+        sessionId: sessionIdRef.current,
       })
-      const answer = result?.assistantMessage?.text || ''
-      if (answer) await speak(summarizeForSpeech(answer), cleanForVoice(answer))
-      else { setMode('idle'); maybeStartLoop() }
-    } catch {
-      setMode('idle')
-      setNotice('Nora is unreachable right now.')
-      maybeStartLoop()
+
+      // Update agent routing info for display
+      if (result.routing) {
+        setAgentRouting({
+          agent: result.routing.primary_agent,
+          confidence: result.routing.confidence,
+          reasoning: result.routing.reasoning,
+          secondaryAgents: result.routing.secondary_agents || [],
+          intentSummary: result.routing.intent_summary,
+        })
+        // Check if this was detected as a follow-up
+        if (result.routing.is_follow_up) {
+          setIsFollowUp(true)
+        }
+      }
+      setIsClassifying(false)
+
+      // Store follow-up suggestions
+      if (result.follow_up_suggestions?.length > 0) {
+        setFollowUpSuggestions(result.follow_up_suggestions)
+      }
+
+      const answer = result.answer || ''
+
+      // Update conversation history with both user and assistant turns
+      if (answer) {
+        const assistantTurn = {
+          role: 'assistant',
+          content: answer,
+          agent: result.routing?.primary_agent,
+          timestamp: new Date().toISOString(),
+        }
+        setConversationHistory((prev) => {
+          const updated = [...prev, userTurn, assistantTurn]
+          // Keep only the last N turns
+          return updated.slice(-MAX_CONVERSATION_TURNS)
+        })
+        await speak(summarizeForSpeech(answer), cleanForVoice(answer))
+      } else {
+        // Still add user turn even if no answer
+        setConversationHistory((prev) => {
+          const updated = [...prev, userTurn]
+          return updated.slice(-MAX_CONVERSATION_TURNS)
+        })
+        setMode('idle')
+        maybeStartLoop()
+      }
+    } catch (orchError) {
+      // Fall back to regular chat if orchestration fails
+      setIsClassifying(false)
+      setAgentRouting(null)
+      console.warn('Voice orchestration failed, falling back to chat:', orchError)
+
+      try {
+        if (!conversationIdRef.current) {
+          const convo = await noraWorkspaceApi.createConversation({ serviceId: 'general' })
+          conversationIdRef.current = convo.id
+        }
+        const result = await noraWorkspaceApi.sendMessage({
+          conversationId: conversationIdRef.current,
+          serviceId: 'general',
+          text,
+          chatOnly: true,
+          mode: 'voice',
+        })
+        const answer = result?.assistantMessage?.text || ''
+        if (answer) {
+          // Update history even for fallback chat
+          setConversationHistory((prev) => {
+            const updated = [...prev, userTurn, { role: 'assistant', content: answer, timestamp: new Date().toISOString() }]
+            return updated.slice(-MAX_CONVERSATION_TURNS)
+          })
+          await speak(summarizeForSpeech(answer), cleanForVoice(answer))
+        } else {
+          setConversationHistory((prev) => [...prev, userTurn].slice(-MAX_CONVERSATION_TURNS))
+          setMode('idle')
+          maybeStartLoop()
+        }
+      } catch {
+        setMode('idle')
+        setNotice('Nora is unreachable right now.')
+        maybeStartLoop()
+      }
     }
   }
 
@@ -354,9 +458,75 @@ export default function GlobalVoiceAssistant({ onNavigate, wakeless = false }) {
             <button type="button" className="gva-x" aria-label="Close" onClick={() => setExpanded(false)}>×</button>
           </div>
           <div className="gva-state">{stateLabel}</div>
+          {/* Show conversation context indicator */}
+          {conversationHistory.length > 0 && mode === 'idle' && (
+            <div className="gva-context-bar">
+              <span className="gva-context-label">
+                {conversationHistory.length} turn{conversationHistory.length !== 1 ? 's' : ''} in conversation
+              </span>
+              <button
+                type="button"
+                className="gva-context-clear"
+                onClick={() => {
+                  setConversationHistory([])
+                  sessionIdRef.current = generateSessionId()
+                }}
+                title="Start new conversation"
+              >
+                New chat
+              </button>
+            </div>
+          )}
+          {/* Show follow-up indicator */}
+          {isFollowUp && transcript && (
+            <div className="gva-follow-up-badge">Following up on previous question</div>
+          )}
+          {/* Show agent routing indicator when processing */}
+          {(isClassifying || agentRouting) && (
+            <div className="gva-agent">
+              <AgentIndicator
+                agent={agentRouting?.agent}
+                confidence={agentRouting?.confidence}
+                reasoning={agentRouting?.reasoning}
+                secondaryAgents={agentRouting?.secondaryAgents}
+                isLoading={isClassifying}
+                compact={false}
+              />
+              {/* Show correction option after response */}
+              {agentRouting && !isClassifying && mode === 'idle' && transcript && (
+                <AgentCorrection
+                  query={transcript}
+                  currentAgent={agentRouting.agent}
+                  onCorrected={(newAgent) => {
+                    setAgentRouting((prev) => prev ? { ...prev, agent: newAgent } : null)
+                  }}
+                  inline
+                />
+              )}
+            </div>
+          )}
           {transcript && <div className="gva-line gva-you"><b>You:</b> {transcript}</div>}
           {reply && <div className="gva-line gva-nora"><b>Nora:</b> {reply}</div>}
           {notice && <div className="gva-notice">{notice}</div>}
+          {/* Follow-up suggestions */}
+          {followUpSuggestions.length > 0 && mode === 'idle' && (
+            <div className="gva-suggestions">
+              <span className="gva-suggestions-label">Try asking:</span>
+              {followUpSuggestions.map((suggestion, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  className="gva-suggestion"
+                  onClick={() => {
+                    setTextValue(suggestion)
+                    void runUtterance(suggestion)
+                  }}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          )}
           <form className="gva-textbar" onSubmit={submitText}>
             <input
               className="gva-input"

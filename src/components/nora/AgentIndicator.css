@@ -1,0 +1,198 @@
+/* AgentIndicator — shows which agent is handling the request */
+
+.agent-indicator {
+  --agent-color: #2f80ff;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--agent-color) 8%, white), white);
+  border: 1px solid color-mix(in srgb, var(--agent-color) 20%, transparent);
+  border-radius: 12px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.agent-indicator.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Primary agent row */
+.agent-indicator__primary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.agent-indicator__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--agent-color);
+  color: white;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.agent-indicator__info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.agent-indicator__label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
+.agent-indicator__desc {
+  font-size: 12px;
+  color: #666;
+}
+
+.agent-indicator__confidence {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--agent-color);
+  background: color-mix(in srgb, var(--agent-color) 12%, white);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* Reasoning text */
+.agent-indicator__reasoning {
+  font-size: 12px;
+  color: #555;
+  line-height: 1.4;
+  margin: 0;
+  padding-left: 46px; /* align with info */
+}
+
+/* Secondary agents */
+.agent-indicator__secondary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 46px;
+}
+
+.agent-indicator__secondary-label {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.agent-indicator__secondary-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.agent-indicator__secondary-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: color-mix(in srgb, var(--agent-color) 10%, white);
+  border: 1px solid color-mix(in srgb, var(--agent-color) 20%, transparent);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--agent-color);
+}
+
+.agent-indicator__secondary-chip svg {
+  opacity: 0.8;
+}
+
+/* Loading state */
+.agent-indicator__loading-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #666;
+  font-size: 13px;
+}
+
+.agent-indicator__loading {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e5e7eb;
+  border-top-color: var(--agent-color);
+  border-radius: 50%;
+  animation: agent-indicator-spin 0.8s linear infinite;
+}
+
+@keyframes agent-indicator-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Compact mode — just icon + label inline */
+.agent-indicator--compact {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: color-mix(in srgb, var(--agent-color) 10%, white);
+  border-radius: 8px;
+}
+
+.agent-indicator--compact .agent-indicator__icon {
+  width: 24px;
+  height: 24px;
+  background: var(--agent-color);
+  border-radius: 6px;
+}
+
+.agent-indicator--compact .agent-indicator__label {
+  font-size: 13px;
+}
+
+.agent-indicator--compact .agent-indicator__loading {
+  width: 16px;
+  height: 16px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .agent-indicator {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--agent-color) 15%, #1a1a1a), #1a1a1a);
+    border-color: color-mix(in srgb, var(--agent-color) 30%, transparent);
+  }
+
+  .agent-indicator__label {
+    color: #f0f0f0;
+  }
+
+  .agent-indicator__desc,
+  .agent-indicator__reasoning {
+    color: #aaa;
+  }
+
+  .agent-indicator__confidence {
+    background: color-mix(in srgb, var(--agent-color) 20%, #1a1a1a);
+  }
+
+  .agent-indicator__secondary-chip {
+    background: color-mix(in srgb, var(--agent-color) 15%, #1a1a1a);
+    border-color: color-mix(in srgb, var(--agent-color) 30%, transparent);
+  }
+
+  .agent-indicator--compact {
+    background: color-mix(in srgb, var(--agent-color) 15%, #1a1a1a);
+  }
+
+  .agent-indicator__loading {
+    border-color: #333;
+    border-top-color: var(--agent-color);
+  }
+}
