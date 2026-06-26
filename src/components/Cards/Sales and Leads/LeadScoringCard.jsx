@@ -1,8 +1,10 @@
+import { useMemo } from 'react'
 import './LeadScoringCard.css'
 import './SalesandLeadsCardShared.css'
 import { MiniLineChart } from '../../visuals-parts/MiniLineChart'
 import { StripedBars } from '../../visuals-parts/StripedBars'
 import { AiInsight, AiActionButton } from '../../visuals-parts/AiInsight'
+import { useLeadsData } from '../../../hooks/useAnalyticsData'
 
 const defaultData = {
   title: 'Lead Scoring',
@@ -49,11 +51,118 @@ function classNames(...values) {
   return values.filter(Boolean).join(' ')
 }
 
-export function LeadScoringCard({ data = defaultData, className = '' }) {
-  const d = { ...defaultData, ...data }
+// Transform real API data to card data format
+function transformApiData(apiData, mockData) {
+  if (!apiData) return null
+
+  // If API returned but no leads, show zeros
+  if (!apiData.data || apiData.data.length === 0) {
+    return {
+      ...mockData,
+      title: 'Lead Scoring',
+      subtitle: 'No data available',
+      status: 'No Data',
+      scoredLeads: {
+        label: 'Scored leads',
+        value: '0 active leads',
+        delta: '0 total',
+      },
+      leads: [{ name: 'No leads', description: 'Connect CRM to see leads', intent: 'N/A', score: 0 }],
+      topSource: {
+        label: 'Top Source',
+        source: 'No data',
+        conversion: '0% Conversion',
+        progressLabel: 'Lead',
+        progressEndLabel: '0 leads',
+        progressValue: 0,
+      },
+      aiInsight: 'No lead data available. Connect your CRM or add leads to see scoring insights.',
+    }
+  }
+
+  const leads = apiData.data.filter(l => l.score && l.score > 0)
+
+  // Count active leads (not won/lost)
+  const activeLeads = leads.filter(l => !['won', 'lost'].includes(l.stage))
+
+  // Get top 3 by score
+  const topLeads = [...leads]
+    .sort((a, b) => (b.score || 0) - (a.score || 0))
+    .slice(0, 3)
+    .map(lead => {
+      const intent = (lead.score || 0) >= 70 ? 'High intent' : (lead.score || 0) >= 40 ? 'Mid Intent' : 'Low intent'
+      return {
+        name: lead.name,
+        description: lead.notes || `${lead.stage} stage lead from ${lead.source || 'unknown source'}`,
+        intent,
+        score: lead.score || 0,
+      }
+    })
+
+  // Group by source to find top source
+  const sourceGroups = {}
+  leads.forEach(lead => {
+    const source = lead.source || 'Unknown'
+    if (!sourceGroups[source]) {
+      sourceGroups[source] = { count: 0, won: 0 }
+    }
+    sourceGroups[source].count++
+    if (lead.stage === 'won') {
+      sourceGroups[source].won++
+    }
+  })
+
+  const topSource = Object.entries(sourceGroups)
+    .map(([source, stats]) => ({
+      source,
+      count: stats.count,
+      conversion: stats.count > 0 ? (stats.won / stats.count) * 100 : 0,
+    }))
+    .sort((a, b) => b.count - a.count)[0] || { source: 'Website', conversion: 0, count: 0 }
+
+  return {
+    ...mockData,
+    title: 'Lead Scoring',
+    subtitle: 'Real-time lead value and intent ranking',
+    status: 'Live',
+    scoredLeads: {
+      label: 'Scored leads',
+      value: `${activeLeads.length} active leads`,
+      delta: apiData.total ? `${apiData.total} total` : '+0% this week',
+    },
+    leads: topLeads.length > 0 ? topLeads : mockData.leads,
+    topSource: {
+      label: 'Top Source',
+      source: topSource.source,
+      conversion: `${Math.round(topSource.conversion)}% Conversion`,
+      progressLabel: 'Lead',
+      progressEndLabel: `${topSource.count} leads`,
+      progressValue: Math.min(100, topSource.conversion),
+    },
+    aiInsight: topLeads.length > 0
+      ? `${topLeads.length} high-scoring leads identified. Top lead: ${topLeads[0].name} (${topLeads[0].score}%). Focus on ${topSource.source} channel (${Math.round(topSource.conversion)}% conversion).`
+      : mockData.aiInsight,
+  }
+}
+
+export function LeadScoringCard({ data: propData, className = '', useRealData = true }) {
+  const { data: apiData, loading, hasRealData } = useLeadsData({
+    sort: '-score',
+    pageSize: 50
+  })
+
+  const d = useMemo(() => {
+    if (propData) return { ...defaultData, ...propData }
+    // Show real data even if it's 0 (only fallback to mock if API fails)
+    if (useRealData && apiData) {
+      const transformed = transformApiData(apiData, defaultData)
+      if (transformed) return transformed
+    }
+    return defaultData
+  }, [propData, useRealData, apiData])
 
   return (
-    <div className={classNames('analytics-card', 'lead-scoring-card', className)}>
+    <div className={classNames('analytics-card', 'lead-scoring-card', className, loading && 'loading')}>
 
       {/* ── Header ── */}
       <div className="analytics-card__header">

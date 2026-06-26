@@ -1,7 +1,9 @@
+import { useMemo } from 'react'
 import './PipelineTrackingCard.css'
 import './SalesandLeadsCardShared.css'
 import { MiniLineChart } from '../../visuals-parts/MiniLineChart'
 import { AiInsight, AiActionButton } from '../../visuals-parts/AiInsight'
+import { usePipelineData } from '../../../hooks/useAnalyticsData'
 
 const defaultData = {
   title: 'Pipeline Tracking',
@@ -32,11 +34,93 @@ function classNames(...values) {
   return values.filter(Boolean).join(' ')
 }
 
-export function PipelineTrackingCard({ data = defaultData, className = '' }) {
-  const d = { ...defaultData, ...data }
+// Transform real API data to card data format
+function transformApiData(apiData, mockData) {
+  if (!apiData) return null
+
+  // If API returned but no data, show zeros
+  if (Object.keys(apiData).length === 0) {
+    return {
+      ...mockData,
+      title: 'Pipeline Tracking',
+      subtitle: 'No data available',
+      status: 'No Data',
+      pipeline: {
+        label: 'Open pipeline',
+        value: '0 active deals',
+        delta: '0 won',
+        good: true,
+      },
+      stages: [
+        { label: 'New Deals', value: 0, tone: 'good' },
+        { label: 'Qualified', value: 0, tone: 'good' },
+        { label: 'Proposal', value: 0, tone: 'good' },
+        { label: 'Stuck', value: 0, tone: 'bad' },
+        { label: 'Closed', value: 0, tone: 'good' },
+      ],
+      winRate: { label: 'Win Rate', value: '0%' },
+      aiInsight: 'No pipeline data available. Add deals to see pipeline tracking.',
+    }
+  }
+
+  // Pipeline data is an object with stage names as keys
+  const stages = Object.entries(apiData)
+    .filter(([stage]) => !['won', 'lost'].includes(stage.toLowerCase()))
+    .map(([stage, data]) => {
+      const stageName = stage.charAt(0).toUpperCase() + stage.slice(1)
+      return {
+        label: stageName,
+        value: data.count || 0,
+        tone: stage.toLowerCase() === 'stuck' ? 'bad' : 'good',
+      }
+    })
+
+  // Calculate total active deals
+  const totalActive = stages.reduce((sum, s) => sum + s.value, 0)
+
+  // Calculate win rate if we have won/lost data
+  const wonData = apiData.won || { count: 0 }
+  const lostData = apiData.lost || { count: 0 }
+  const totalClosed = wonData.count + lostData.count
+  const winRate = totalClosed > 0 ? (wonData.count / totalClosed) * 100 : 0
+
+  return {
+    ...mockData,
+    title: 'Pipeline Tracking',
+    subtitle: 'Real-time deal flow across sales stages',
+    status: 'Live',
+    pipeline: {
+      label: 'Open pipeline',
+      value: `${totalActive} active deals`,
+      delta: wonData.count > 0 ? `${wonData.count} won` : '+0% this week',
+      good: true,
+    },
+    stages: stages.length > 0 ? stages : mockData.stages,
+    winRate: {
+      label: 'Win Rate',
+      value: `${Math.round(winRate)}%`,
+    },
+    aiInsight: stages.length > 0
+      ? `${totalActive} active deals in pipeline. Win rate: ${Math.round(winRate)}%. Focus on moving ${stages.find(s => s.tone === 'bad')?.label || 'stuck'} deals forward.`
+      : mockData.aiInsight,
+  }
+}
+
+export function PipelineTrackingCard({ data: propData, className = '', useRealData = true }) {
+  const { data: apiData, loading, hasRealData } = usePipelineData()
+
+  const d = useMemo(() => {
+    if (propData) return { ...defaultData, ...propData }
+    // Show real data even if it's 0 (only fallback to mock if API fails)
+    if (useRealData && apiData) {
+      const transformed = transformApiData(apiData, defaultData)
+      if (transformed) return transformed
+    }
+    return defaultData
+  }, [propData, useRealData, apiData])
 
   return (
-    <div className={classNames('analytics-card', 'pipeline-tracking-card', className)}>
+    <div className={classNames('analytics-card', 'pipeline-tracking-card', className, loading && 'loading')}>
 
       {/* ── Header ── */}
       <div className="analytics-card__header">

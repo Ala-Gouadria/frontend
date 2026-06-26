@@ -1,9 +1,11 @@
+import { useMemo } from 'react'
 import {
   AiActionButton,
   AiInsight,
   SegmentedStripedBar,
 } from '../../visuals-parts'
 import { workflowAutomationCardData } from '../../../api/automationExecutionMockData.js'
+import { useSocialData } from '../../../hooks/useAnalyticsData'
 import './Automation & ExecutionCardShared.css'
 import './WorkflowAutomationCard.css'
 
@@ -14,12 +16,47 @@ function getWorkflowProgress(workflow) {
   return Math.round((completed / total) * 100)
 }
 
-export function WorkflowAutomationCard({ data = workflowAutomationCardData }) {
-  const insight =
-    'Strong signals from Traffic, Returning Users combined with conversion drop suggest retargeting will recover lost conversions.'
+function transformData(socialData, mockData) {
+  if (!socialData) return null
+
+  // If no platforms data, show zeros
+  if (!socialData.platforms || Object.keys(socialData.platforms).length === 0) {
+    return {
+      ...mockData,
+      title: 'Workflow Automation',
+      subtitle: 'No data available',
+      status: 'No Data',
+      pulseLabel: 'Workflow Pulse',
+      pulseValue: 'Inactive',
+      workflows: mockData.workflows.map(w => ({ ...w, state: 'Inactive', result: '0%', blocks: [0, 0, 0, 0, 0] })),
+      insight: 'No workflow data available. Connect your integrations to enable workflows.',
+    }
+  }
+
+  const connectedPlatforms = Object.keys(socialData.platforms).length
+
+  return {
+    ...mockData,
+    status: 'Live',
+    pulseValue: connectedPlatforms > 0 ? 'Active' : 'Inactive',
+    insight: `${connectedPlatforms} integrations connected. Workflow automation ready.`,
+  }
+}
+
+export function WorkflowAutomationCard({ data: propData, useRealData = true }) {
+  const { data: socialData, loading } = useSocialData({ days: 30 })
+
+  const data = useMemo(() => {
+    if (propData) return propData
+    if (useRealData && socialData) {
+      const transformed = transformData(socialData, workflowAutomationCardData)
+      if (transformed) return transformed
+    }
+    return workflowAutomationCardData
+  }, [propData, useRealData, socialData])
 
   return (
-    <article className="analytics-card automation-card workflow-automation-card">
+    <article className={`analytics-card automation-card workflow-automation-card ${loading ? 'loading' : ''}`}>
       <header className="analytics-card__header">
         <div>
           <h2 className="analytics-card__title">{data.title}</h2>
@@ -69,7 +106,7 @@ export function WorkflowAutomationCard({ data = workflowAutomationCardData }) {
       </section>
 
       <footer className="analytics-card__footer">
-        <AiInsight>{insight}</AiInsight>
+        <AiInsight>{data.insight || 'Strong signals from Traffic, Returning Users combined with conversion drop suggest retargeting will recover lost conversions.'}</AiInsight>
         <AiActionButton>{data.ctaLabel}</AiActionButton>
       </footer>
     </article>

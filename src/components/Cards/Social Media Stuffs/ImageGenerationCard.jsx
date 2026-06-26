@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import './SocialMediaStuffsCardShared.css'
 import './ImageGenerationCard.css'
 import { AiInsight, AiActionButton } from '../../visuals-parts'
+import { useSocialData } from '../../../hooks/useAnalyticsData'
 
 const defaultBatch = [
   { label: 'Instagram Live Hack posts', count: '12 Images' },
@@ -31,33 +32,81 @@ function LazyImage({ src, alt, className }) {
   )
 }
 
+function transformData(socialData, defaults) {
+  if (!socialData) return null
+
+  // If no platforms data, show zeros
+  if (!socialData.platforms || Object.keys(socialData.platforms).length === 0) {
+    return {
+      status: 'No Data',
+      batchLabel: 'No image batches',
+      batchProgress: 0,
+      batchTotal: 0,
+      upcomingBatch: [{ label: 'No scheduled batches', count: '0 images' }],
+      aiText: 'No image data available. Generate images to see activity.',
+    }
+  }
+
+  // Show connected state but keep defaults (no image tracking API yet)
+  const connectedPlatforms = Object.keys(socialData.platforms).length
+
+  return {
+    status: 'Live',
+    batchLabel: defaults.batchLabel,
+    batchProgress: defaults.batchProgress,
+    batchTotal: defaults.batchTotal,
+    upcomingBatch: defaults.upcomingBatch,
+    aiText: `Connected to ${connectedPlatforms} platforms. Image generation ready.`,
+  }
+}
+
 export function ImageGenerationCard({
-  status        = 'Active',
-  batchLabel    = 'Instagram Live Hack posts',
-  batchProgress = 7,
-  batchTotal    = 12,
+  status,
+  batchLabel,
+  batchProgress,
+  batchTotal,
   mainSrc,
-  thumbnails    = [null, null, null, null],
-  upcomingBatch = defaultBatch,
-  aiText        = 'Users are saving educational posts more than other content',
-  className     = '',
+  thumbnails = [null, null, null, null],
+  upcomingBatch,
+  aiText,
+  className = '',
+  useRealData = true,
 }) {
+  const { data: socialData, loading } = useSocialData({ days: 30 })
+
+  const defaults = {
+    status: status || 'Active',
+    batchLabel: batchLabel || 'Instagram Live Hack posts',
+    batchProgress: batchProgress || 7,
+    batchTotal: batchTotal || 12,
+    upcomingBatch: upcomingBatch || defaultBatch,
+    aiText: aiText || 'Users are saving educational posts more than other content',
+  }
+
+  const data = useMemo(() => {
+    if (useRealData && socialData) {
+      const transformed = transformData(socialData, defaults)
+      if (transformed) return transformed
+    }
+    return defaults
+  }, [useRealData, socialData])
+
   return (
-    <div className={`analytics-card ${className}`}>
+    <div className={`analytics-card ${className} ${loading ? 'loading' : ''}`}>
       <div className="analytics-card__header">
         <div>
           <h2 className="analytics-card__title">Image Generation</h2>
           <p className="analytics-card__subtitle">Live batch image production</p>
         </div>
-        <span className="analytics-card__status">{status}</span>
+        <span className="analytics-card__status">{data.status}</span>
       </div>
 
       <div>
         <p className="analytics-card__section-title">Current Batch</p>
         <div className="smp-card__batch-bar">
           <span className="smp-card__batch-dot" />
-          <span className="smp-card__batch-label">{batchLabel}</span>
-          <span className="smp-card__batch-count">{batchProgress}/{batchTotal}</span>
+          <span className="smp-card__batch-label">{data.batchLabel}</span>
+          <span className="smp-card__batch-count">{data.batchProgress}/{data.batchTotal}</span>
         </div>
       </div>
 
@@ -72,7 +121,7 @@ export function ImageGenerationCard({
       <div className="smc-card__upcoming-panel">
         <div className="smc-card__upcoming-title">Upcoming Batch</div>
         <div className="smc-card__upcoming-body">
-          {upcomingBatch.map(item => (
+          {data.upcomingBatch.map(item => (
             <div key={item.label} className="smc-card__upcoming-row">
               <span className="smc-card__upcoming-dot" />
               <span className="smc-card__upcoming-label">{item.label}</span>
@@ -82,7 +131,7 @@ export function ImageGenerationCard({
         </div>
       </div>
 
-      <AiInsight>{aiText}</AiInsight>
+      <AiInsight>{data.aiText}</AiInsight>
       <AiActionButton />
     </div>
   )

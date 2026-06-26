@@ -45,7 +45,38 @@ function classNames(...values) {
 
 // Transform CRM API data to card format
 function transformCrmData(apiData, mockData) {
-  if (!apiData?.current) return null
+  if (!apiData) return null
+
+  // If API returned but no current data, show zeros
+  if (!apiData.current) {
+    return {
+      ...mockData,
+      title: 'Sales and Leads',
+      subtitle: 'No data available',
+      status: 'No Data',
+      revenueStatus: {
+        label: 'Pipeline Value',
+        value: '$0',
+        good: false,
+      },
+      mainProblem: {
+        title: 'Pipeline Overview',
+        description: '0 deals in pipeline, 0% win rate',
+        stages: ['Leads', 'Qualified', 'Proposal', 'Closed'],
+        activeIndex: 0,
+      },
+      leadQuality: {
+        label: 'Lead Quality',
+        legend: [
+          { tone: 'green', label: 'High', percent: '0%' },
+          { tone: 'orange', label: 'Mid', percent: '0%' },
+          { tone: 'red', label: 'Low', percent: '0%' },
+        ],
+        blocks: [{ tone: 'gray', count: 20 }],
+      },
+      aiInsight: 'No CRM data available. Connect HubSpot to see real data.',
+    }
+  }
 
   const current = apiData.current
   const leadsChange = apiData.leadsChange || 0
@@ -131,12 +162,12 @@ export function SalesAndLeadsCard({ data: propData, className = '', useRealData 
 
   const d = useMemo(() => {
     if (propData) return { ...defaultData, ...propData }
-    if (useRealData && hasRealData) {
+    if (useRealData && apiData) {
       const transformed = transformCrmData(apiData, defaultData)
       if (transformed) return transformed
     }
     return defaultData
-  }, [propData, useRealData, hasRealData, apiData])
+  }, [propData, useRealData, apiData])
 
   return (
     <div className={classNames('analytics-card', 'sales-and-leads-card', className)}>

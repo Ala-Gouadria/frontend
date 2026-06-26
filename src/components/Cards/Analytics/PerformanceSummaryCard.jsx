@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   AiActionButton,
   AiInsight,
@@ -6,11 +7,70 @@ import {
   MiniLineChart,
 } from '../../visuals-parts'
 import { performanceSummaryCardData } from '../../../api/analyticsMockData'
+import { useSocialData, useCrmData } from '../../../hooks/useAnalyticsData'
 import './PerformanceSummaryCard.css'
 
-export function PerformanceSummaryCard({ data = performanceSummaryCardData }) {
+function transformData(socialData, crmData, mockData) {
+  // If no data at all, show zeros
+  if (!socialData && !crmData) {
+    return {
+      ...mockData,
+      title: 'Performance Summary',
+      subtitle: 'No data available',
+      status: 'No Data',
+      snapshotState: 'No data available',
+      results: [
+        { label: 'Reach', value: '0', columns: mockData.results[0].columns.map(c => ({ ...c, count: 0 })) },
+        { label: 'Engagement', value: '0%', columns: mockData.results[1].columns.map(c => ({ ...c, count: 0 })) },
+        { label: 'Leads', value: '0', columns: mockData.results[2].columns.map(c => ({ ...c, count: 0 })) },
+      ],
+      insight: 'No performance data available. Connect your integrations to see real data.',
+    }
+  }
+
+  const social = socialData?.current
+  const crm = crmData?.current
+
+  const totalReach = social?.totalReach || 0
+  const engagementRate = social?.engagementRate ? Number(social.engagementRate).toFixed(1) : 0
+  const totalLeads = crm?.totalLeads || 0
+
+  const socialGrowth = socialData?.growth?.reach || 0
+  const isImproving = socialGrowth >= 0
+
+  return {
+    ...mockData,
+    title: 'Performance Summary',
+    subtitle: 'Real-time outcome snapshot',
+    status: 'Live',
+    snapshotState: isImproving ? 'Performance improving' : 'Performance declining',
+    results: [
+      { label: 'Reach', value: totalReach > 1000 ? `${(totalReach / 1000).toFixed(0)}k` : String(totalReach), columns: mockData.results[0].columns },
+      { label: 'Engagement', value: `${engagementRate}%`, columns: mockData.results[1].columns },
+      { label: 'Leads', value: totalLeads.toLocaleString(), columns: mockData.results[2].columns },
+    ],
+    insight: totalReach > 0 || totalLeads > 0
+      ? `Total reach: ${totalReach.toLocaleString()}. Engagement rate: ${engagementRate}%. ${totalLeads} leads generated.`
+      : mockData.insight,
+  }
+}
+
+export function PerformanceSummaryCard({ data: propData, useRealData = true }) {
+  const { data: socialData, loading: loadingSocial } = useSocialData({ days: 30 })
+  const { data: crmData, loading: loadingCrm } = useCrmData({ days: 30 })
+
+  const data = useMemo(() => {
+    if (propData) return propData
+    if (useRealData && (socialData || crmData)) {
+      return transformData(socialData, crmData, performanceSummaryCardData)
+    }
+    return performanceSummaryCardData
+  }, [propData, useRealData, socialData, crmData])
+
+  const loading = loadingSocial || loadingCrm
+
   return (
-    <article className="analytics-card performance-summary-card">
+    <article className={`analytics-card performance-summary-card ${loading ? 'loading' : ''}`}>
       <header className="analytics-card__header">
         <div>
           <h2 className="analytics-card__title">{data.title}</h2>

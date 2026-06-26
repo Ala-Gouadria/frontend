@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   AiActionButton,
   AiInsight,
@@ -5,6 +6,7 @@ import {
   QualityBlocks,
 } from '../../visuals-parts'
 import { automationExecutionCardData } from '../../../api/automationExecutionMockData.js'
+import { useSocialData } from '../../../hooks/useAnalyticsData'
 import './Automation & ExecutionCardShared.css'
 import './AutomationExecutionCard.css'
 
@@ -37,12 +39,54 @@ function laneBlocks(value, tone) {
   ]
 }
 
-export function AutomationExecutionCard({ data = automationExecutionCardData }) {
-  const insight =
-    'Strong signals from Traffic, Returning Users combined with conversion drop suggest retargeting will recover lost conversions.'
+function transformData(socialData, mockData) {
+  if (!socialData) return null
+
+  // If no platforms data, show zeros
+  if (!socialData.platforms || Object.keys(socialData.platforms).length === 0) {
+    return {
+      ...mockData,
+      title: 'Automation & Execution',
+      subtitle: 'No data available',
+      status: 'No Data',
+      stateLabel: 'Automation State',
+      stateValue: 'Inactive',
+      gauge: { progress: 0, label: '0 Tasks', sublabel: 'No active tasks' },
+      lanes: [
+        { label: 'High Intent', value: '0%' },
+        { label: 'Campaign Launch', value: '0%' },
+        { label: 'Audience Sync', value: '0%' },
+      ],
+      insight: 'No automation data available. Connect your integrations to enable automations.',
+    }
+  }
+
+  // Show connected state
+  const connectedPlatforms = Object.keys(socialData.platforms).length
+
+  return {
+    ...mockData,
+    status: 'Live',
+    stateValue: connectedPlatforms > 0 ? 'Active' : 'Inactive',
+    gauge: { ...mockData.gauge, progress: connectedPlatforms > 0 ? 75 : 0 },
+    insight: `Connected to ${connectedPlatforms} platforms. Automation systems ready.`,
+  }
+}
+
+export function AutomationExecutionCard({ data: propData, useRealData = true }) {
+  const { data: socialData, loading } = useSocialData({ days: 30 })
+
+  const data = useMemo(() => {
+    if (propData) return propData
+    if (useRealData && socialData) {
+      const transformed = transformData(socialData, automationExecutionCardData)
+      if (transformed) return transformed
+    }
+    return automationExecutionCardData
+  }, [propData, useRealData, socialData])
 
   return (
-    <article className="analytics-card automation-card automation-execution-card">
+    <article className={`analytics-card automation-card automation-execution-card ${loading ? 'loading' : ''}`}>
       <header className="analytics-card__header">
         <div>
           <h2 className="analytics-card__title">{data.title}</h2>
@@ -89,7 +133,7 @@ export function AutomationExecutionCard({ data = automationExecutionCardData }) 
       </section>
 
       <footer className="analytics-card__footer">
-        <AiInsight>{insight}</AiInsight>
+        <AiInsight>{data.insight || 'Strong signals from Traffic, Returning Users combined with conversion drop suggest retargeting will recover lost conversions.'}</AiInsight>
         <AiActionButton>{data.ctaLabel}</AiActionButton>
       </footer>
     </article>

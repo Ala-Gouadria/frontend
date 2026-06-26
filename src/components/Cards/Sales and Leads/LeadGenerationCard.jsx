@@ -1,9 +1,11 @@
+import { useMemo } from 'react'
 import './LeadGenerationCard.css'
 import './SalesandLeadsCardShared.css'
 import { MiniLineChart } from '../../visuals-parts/MiniLineChart'
 import { DottedDataBars } from '../../visuals-parts/DottedDataBars'
 import { ProgressBars } from '../../visuals-parts/ProgressBars'
 import { AiInsight, AiActionButton } from '../../visuals-parts/AiInsight'
+import { useCrmData } from '../../../hooks/useAnalyticsData'
 
 const defaultData = {
   title: 'Lead Generation',
@@ -66,11 +68,94 @@ function classNames(...values) {
   return values.filter(Boolean).join(' ')
 }
 
-export function LeadGenerationCard({ data = defaultData, className = '' }) {
-  const d = { ...defaultData, ...data }
+// Transform real API data to card data format
+function transformApiData(apiData, mockData) {
+  if (!apiData) return null
+
+  // If API returned but no current data, show zeros
+  if (!apiData.current) {
+    return {
+      ...mockData,
+      title: 'Lead Generation',
+      subtitle: 'No data available',
+      status: 'No Data',
+      leadFlow: {
+        label: 'Lead flow',
+        delta: '+0%',
+        deltaGood: true,
+      },
+      reasons: [
+        { label: 'No data', value: 0, columns: mockData.reasons[0].columns },
+      ],
+      topSource: {
+        label: 'Top Source',
+        source: 'No data',
+        conversion: '0% of total',
+        progressLabel: 'Lead',
+        progressValue: 0,
+      },
+      aiInsight: 'No lead generation data available. Connect your CRM to see lead sources.',
+    }
+  }
+
+  const current = apiData.current
+  const leadsChange = apiData.leadsChange || 0
+
+  // Transform leadsBySource to reasons format
+  const leadsBySource = current.leadsBySource || {}
+  const reasons = Object.entries(leadsBySource)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([source, count]) => ({
+      label: source,
+      value: count,
+      columns: mockData.reasons[0].columns, // Keep mock columns for now (daily breakdown not in API)
+    }))
+
+  // Find top source
+  const topSourceEntry = reasons[0] || { label: 'Website', value: 0 }
+  const totalLeads = Object.values(leadsBySource).reduce((sum, c) => sum + c, 0)
+  const topSourcePct = totalLeads > 0 ? (topSourceEntry.value / totalLeads) * 100 : 0
+
+  return {
+    ...mockData,
+    title: 'Lead Generation',
+    subtitle: 'Real-time lead flow and acquisition sources',
+    status: 'Live',
+    leadFlow: {
+      label: 'Lead flow',
+      delta: `${leadsChange >= 0 ? '+' : ''}${leadsChange.toFixed(0)}%`,
+      deltaGood: leadsChange >= 0,
+    },
+    reasons: reasons.length > 0 ? reasons : mockData.reasons,
+    topSource: {
+      label: 'Top Source',
+      source: topSourceEntry.label,
+      conversion: `${Math.round(topSourcePct)}% of total`,
+      progressLabel: 'Lead',
+      progressValue: Math.round(topSourcePct),
+    },
+    aiInsight: reasons.length > 0
+      ? `${topSourceEntry.label} is your top lead source with ${topSourceEntry.value} leads (${Math.round(topSourcePct)}% of total). Total leads: ${current.totalLeads?.toLocaleString() || 0}.`
+      : mockData.aiInsight,
+  }
+}
+
+export function LeadGenerationCard({ data: propData, className = '', useRealData = true }) {
+  const { data: apiData, loading, hasRealData } = useCrmData({ days: 30 })
+
+  const d = useMemo(() => {
+    if (propData) return { ...defaultData, ...propData }
+    // Show real data even if it's 0 (only fallback to mock if API fails)
+    if (useRealData && apiData) {
+      const transformed = transformApiData(apiData, defaultData)
+      if (transformed) return transformed
+    }
+    return defaultData
+  }, [propData, useRealData, apiData])
 
   return (
-    <div className={classNames('analytics-card', 'lead-generation-card', className)}>
+    <div className={classNames('analytics-card', 'lead-generation-card', className, loading && 'loading')}>
 
       {/* ── Header ── */}
       <div className="analytics-card__header">

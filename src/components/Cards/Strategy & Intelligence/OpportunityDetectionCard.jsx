@@ -1,6 +1,8 @@
+import { useMemo } from 'react'
 import './StrategyIntelligenceCardShared.css'
 import './OpportunityDetectionCard.css'
 import { MiniLineChart, ColoredPanel, AiInsight, AiActionButton } from '../../visuals-parts'
+import { useTrafficData, useSocialData } from '../../../hooks/useAnalyticsData'
 
 const defaultOpportunities = [
   {
@@ -23,34 +25,97 @@ const defaultOpportunities = [
   },
 ]
 
+function transformData(trafficData, socialData, defaults) {
+  if (!trafficData && !socialData) return null
+
+  // If no data in either source, show zeros
+  if (!trafficData?.current && !socialData?.platforms) {
+    return {
+      status: 'No Data',
+      topOpportunity: 'No opportunities detected',
+      opportunities: defaultOpportunities.map(o => ({ ...o, delta: '+0%' })),
+      reasonText: 'No data available to detect opportunities.',
+      aiText: 'Connect your analytics to see opportunity insights.',
+    }
+  }
+
+  const visitorsChange = trafficData?.visitorsChange || 0
+  const reachGrowth = socialData?.growth?.reach || 0
+  const engagementGrowth = socialData?.growth?.engagement || 0
+
+  // Determine top opportunity based on positive growth
+  let topOpp = 'Content Optimization'
+  if (reachGrowth > visitorsChange && reachGrowth > engagementGrowth) {
+    topOpp = 'Social Reach'
+  } else if (visitorsChange > 0) {
+    topOpp = 'Traffic Growth'
+  } else if (engagementGrowth > 0) {
+    topOpp = 'Engagement'
+  }
+
+  return {
+    status: 'Live',
+    topOpportunity: topOpp,
+    opportunities: [
+      { ...defaultOpportunities[0], delta: `${reachGrowth >= 0 ? '+' : ''}${reachGrowth.toFixed(0)}% reach` },
+      { ...defaultOpportunities[1], delta: `${visitorsChange >= 0 ? '+' : ''}${visitorsChange.toFixed(0)}% traffic` },
+      { ...defaultOpportunities[2], delta: `${engagementGrowth >= 0 ? '+' : ''}${engagementGrowth.toFixed(0)}% engagement` },
+    ],
+    reasonText: reachGrowth > 0 || visitorsChange > 0 ? 'Positive trends detected across channels.' : 'Monitor for emerging opportunities.',
+    aiText: `Top growth areas: ${topOpp}. Focus on channels showing positive momentum.`,
+  }
+}
+
 export function OpportunityDetectionCard({
-  status = 'Active',
-  topOpportunity = 'Instagram + Organic',
-  opportunities = defaultOpportunities,
-  reasonText = 'Audience response is strongest where educational content meets high-intent traffic.',
-  aiText = 'Strong signals from Traffic, Returning Users combined with conversion drop suggest retargeting will recover lost conversions.',
+  status,
+  topOpportunity,
+  opportunities,
+  reasonText,
+  aiText,
   className = '',
+  useRealData = true,
 }) {
+  const { data: trafficData, loading: loadingTraffic } = useTrafficData({ days: 30 })
+  const { data: socialData, loading: loadingSocial } = useSocialData({ days: 30 })
+
+  const defaults = {
+    status: status || 'Active',
+    topOpportunity: topOpportunity || 'Instagram + Organic',
+    opportunities: opportunities || defaultOpportunities,
+    reasonText: reasonText || 'Audience response is strongest where educational content meets high-intent traffic.',
+    aiText: aiText || 'Strong signals from Traffic, Returning Users combined with conversion drop suggest retargeting will recover lost conversions.',
+  }
+
+  const data = useMemo(() => {
+    if (useRealData && (trafficData || socialData)) {
+      const transformed = transformData(trafficData, socialData, defaults)
+      if (transformed) return transformed
+    }
+    return defaults
+  }, [useRealData, trafficData, socialData])
+
+  const loading = loadingTraffic || loadingSocial
+
   return (
-    <div className={`analytics-card ${className}`}>
+    <div className={`analytics-card ${className} ${loading ? 'loading' : ''}`}>
       <div className="analytics-card__header">
         <div>
           <h2 className="analytics-card__title">Opportunity Detection</h2>
           <p className="analytics-card__subtitle">Growth opportunities identified from live signals</p>
         </div>
-        <span className="analytics-card__status">{status}</span>
+        <span className="analytics-card__status">{data.status}</span>
       </div>
 
       <div className="analytics-card__row">
         <div>
           <p className="analytics-card__section-title">Top Opportunity</p>
-          <span className="od-card__opportunity-top">{topOpportunity}</span>
+          <span className="od-card__opportunity-top">{data.topOpportunity}</span>
         </div>
         <MiniLineChart className="analytics-card__top-chart" tone="green" />
       </div>
 
       <ColoredPanel title="3 high Potential Area" tone="green">
-        {opportunities.map((opp) => (
+        {data.opportunities.map((opp) => (
           <div key={opp.label} className="od-card__opp-row">
             <div className="analytics-card__row">
               <span className="od-card__opp-label">{opp.label}</span>
@@ -67,10 +132,10 @@ export function OpportunityDetectionCard({
       </ColoredPanel>
 
       <ColoredPanel title="Reasons" tone="orange">
-        <p className="od-card__reason-text">{reasonText}</p>
+        <p className="od-card__reason-text">{data.reasonText}</p>
       </ColoredPanel>
 
-      <AiInsight>{aiText}</AiInsight>
+      <AiInsight>{data.aiText}</AiInsight>
       <AiActionButton />
     </div>
   )

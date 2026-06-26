@@ -245,6 +245,10 @@ function buildVisibleNodeSet(collapsedNodes) {
 }
 
 function buildOrthogonalPoints(start, end, axis, bendRatio) {
+  // Safety check for invalid start/end points
+  if (!start || !end || isNaN(start.x) || isNaN(start.y) || isNaN(end.x) || isNaN(end.y)) {
+    return [{ x: 0, y: 0 }, { x: 0, y: 0 }]
+  }
   if (axis === 'vertical') {
     const midY = start.y + (end.y - start.y) * bendRatio
     return [start, { x: start.x, y: midY }, { x: end.x, y: midY }, end]
@@ -254,6 +258,14 @@ function buildOrthogonalPoints(start, end, axis, bendRatio) {
 }
 
 function buildRoundedCablePath(points, radius = 24) {
+  // Safety check for invalid points
+  if (!points || points.length === 0) return ''
+  if (points.some(p => !p || isNaN(p.x) || isNaN(p.y))) {
+    // Return simple line if any point is invalid
+    const validPoints = points.filter(p => p && !isNaN(p.x) && !isNaN(p.y))
+    if (validPoints.length === 0) return ''
+    return validPoints.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
+  }
   if (points.length <= 2) {
     return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
   }
@@ -263,6 +275,11 @@ function buildRoundedCablePath(points, radius = 24) {
     const inX = cur.x - prev.x, inY = cur.y - prev.y
     const outX = next.x - cur.x, outY = next.y - cur.y
     const inLen = Math.hypot(inX, inY), outLen = Math.hypot(outX, outY)
+    // Prevent division by zero - skip curve if points overlap
+    if (inLen < 0.01 || outLen < 0.01) {
+      path += ` L ${cur.x} ${cur.y}`
+      continue
+    }
     const r = Math.min(radius, inLen / 2, outLen / 2)
     const entry = { x: cur.x - (inX / inLen) * r,  y: cur.y - (inY / inLen) * r }
     const exit  = { x: cur.x + (outX / outLen) * r, y: cur.y + (outY / outLen) * r }
@@ -274,6 +291,10 @@ function buildRoundedCablePath(points, radius = 24) {
 }
 
 function buildElasticDragPath(start, end, axis, velocityX = 0, velocityY = 0) {
+  // Safety check for invalid start/end points
+  if (!start || !end || isNaN(start.x) || isNaN(start.y) || isNaN(end.x) || isNaN(end.y)) {
+    return ''
+  }
   const dx = end.x - start.x
   const dy = end.y - start.y
   const dist = Math.hypot(dx, dy)

@@ -1,8 +1,10 @@
+import { useMemo } from 'react'
 import './RevenueFeedbackCard.css'
 import './SalesandLeadsCardShared.css'
 import { MiniLineChart } from '../../visuals-parts/MiniLineChart'
 import { StripedBars } from '../../visuals-parts/StripedBars'
 import { AiInsight, AiActionButton } from '../../visuals-parts/AiInsight'
+import { useRevenueData } from '../../../hooks/useAnalyticsData'
 
 const defaultData = {
   title: 'Revenue Feedback',
@@ -26,11 +28,74 @@ function classNames(...values) {
   return values.filter(Boolean).join(' ')
 }
 
-export function RevenueFeedbackCard({ data = defaultData, className = '' }) {
-  const d = { ...defaultData, ...data }
+// Transform revenue API data to card format
+function transformRevenueData(apiData, mockData) {
+  if (!apiData) return null
+
+  // If API returned but no current data, show zeros
+  if (!apiData.current) {
+    return {
+      ...mockData,
+      title: 'Revenue Feedback',
+      subtitle: 'No data available',
+      status: 'No Data',
+      revenueResponse: {
+        label: 'Revenue response',
+        delta: '+0% this week',
+        good: false,
+      },
+      sources: [
+        { label: 'No data', value: 0 },
+      ],
+      aiInsight: 'No revenue data available. Connect your e-commerce platform to see real data.',
+    }
+  }
+
+  const current = apiData.current
+  const revenueChange = apiData.revenueChange || 0
+
+  // Transform revenue by source
+  const revenueBySource = current.revenueBySource || {}
+  const totalRevenue = current.totalRevenue || 1
+  const sources = Object.entries(revenueBySource)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([source, amount]) => ({
+      label: source,
+      value: Math.round((amount / totalRevenue) * 100),
+    }))
+
+  return {
+    ...mockData,
+    title: 'Revenue Feedback',
+    subtitle: 'Real-time revenue data',
+    status: 'Live',
+    revenueResponse: {
+      label: 'Revenue response',
+      delta: `${revenueChange >= 0 ? '+' : ''}${revenueChange.toFixed(0)}% this period`,
+      good: revenueChange >= 0,
+    },
+    sources: sources.length > 0 ? sources : mockData.sources,
+    aiInsight: current.totalRevenue > 0
+      ? `Total revenue: $${Math.round(current.totalRevenue).toLocaleString()}. Revenue is ${revenueChange >= 0 ? 'up' : 'down'} ${Math.abs(revenueChange).toFixed(0)}% from last period.`
+      : mockData.aiInsight,
+  }
+}
+
+export function RevenueFeedbackCard({ data: propData, className = '', useRealData = true }) {
+  const { data: apiData, loading } = useRevenueData({ days: 30 })
+
+  const d = useMemo(() => {
+    if (propData) return { ...defaultData, ...propData }
+    if (useRealData && apiData) {
+      const transformed = transformRevenueData(apiData, defaultData)
+      if (transformed) return transformed
+    }
+    return defaultData
+  }, [propData, useRealData, apiData])
 
   return (
-    <div className={classNames('analytics-card', 'revenue-feedback-card', className)}>
+    <div className={classNames('analytics-card', 'revenue-feedback-card', className, loading && 'loading')}>
 
       {/* ── Header ── */}
       <div className="analytics-card__header">

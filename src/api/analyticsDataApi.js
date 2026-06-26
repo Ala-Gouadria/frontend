@@ -78,6 +78,26 @@ export const analyticsDataApi = {
   },
 
   /**
+   * Get social media data from Facebook, Instagram, Twitter, LinkedIn, TikTok
+   * @param {Object} options - Query options
+   * @param {string} options.platform - Filter by platform (instagram, facebook, twitter, linkedin, tiktok)
+   * @param {number} options.days - Number of days of history (default: 30)
+   */
+  async getSocialData(options = {}) {
+    const params = new URLSearchParams()
+    if (options.platform) params.append('platform', options.platform)
+    if (options.days) params.append('days', options.days)
+    return get(`/api/v1/analytics/data/social?${params}`)
+  },
+
+  /**
+   * Get aggregated social media summary across all platforms
+   */
+  async getSocialSummary() {
+    return get('/api/v1/analytics/data/social/summary')
+  },
+
+  /**
    * Get comprehensive dashboard summary with all metrics
    * Returns aggregated data from all connected integrations
    */
