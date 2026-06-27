@@ -135,10 +135,10 @@ export function SemiCircleGauge({
           <path
             d={pathData}
             fill="none"
-            stroke="rgba(24, 119, 242, 0.20)"
-            strokeWidth={bandWidth + 40}
+            stroke="rgba(24, 119, 242, 0.45)"
+            strokeWidth={bandWidth + 20}
             strokeLinecap="round"
-            style={{ filter: 'blur(8px)' }}
+            style={{ filter: 'blur(14px)' }}
           />
 
           <g mask={'url(#' + maskId + ')'}>
