@@ -3,6 +3,25 @@ import './SocialMediaStuffsCardShared.css'
 import './CaptionGenerationCard.css'
 import { AiInsight, AiActionButton } from '../../visuals-parts'
 import { useSocialData } from '../../../hooks/useAnalyticsData'
+import { socialApi } from '../../../api/social.js'
+import { setDraftCaption } from '../../../lib/contentDraftStore.js'
+
+// Build caption topics grounded in the tenant's actual top-performing posts.
+function buildTopics(socialData) {
+  const platform = socialData?.current?.platform || 'instagram'
+  const posts = socialData?.current?.topPosts || []
+  const fromPosts = posts
+    .slice(0, 3)
+    .map((p) => (p.content || '').replace(/\s+/g, ' ').trim().slice(0, 120))
+    .filter(Boolean)
+    .map((topic) => ({ topic, platform }))
+  if (fromPosts.length) return fromPosts
+  return [
+    { topic: 'A highlight of our most popular product or offer', platform },
+    { topic: 'An engaging tip or value our audience cares about', platform },
+    { topic: 'A timely seasonal promotion or announcement', platform },
+  ]
+}
 
 const defaultCaptions = [
   `Most people don't fail because they lack talent.\nThey fail because they lack consistency.\n\nYou don't need a perfect plan.\nYou need to show up — even on the days you don't feel like it.\n\nThe ones who win are the ones who keep going when it's boring, slow, and unnoticed.\n\nStart small. Stay consistent. Watch what happens.\n\nIf you're serious about changing your life, type "START" below.`,
@@ -79,13 +98,39 @@ export function CaptionGenerationCard({
 
   const [index, setIndex] = useState(0)
   const [generating, setGenerating] = useState(false)
+  const [liveCaptions, setLiveCaptions] = useState(null)
+  const [error, setError] = useState(null)
+
+  // Real captions from the AI when generated; otherwise the card's defaults.
+  const captionsList = liveCaptions ?? data.captions
 
   function navigate(dir) {
+    setIndex((prev) => {
+      const next = (prev + dir + captionsList.length) % captionsList.length
+      // Keep the publishing card's preview in sync with the visible caption.
+      if (liveCaptions) setDraftCaption(captionsList[next])
+      return next
+    })
+  }
+
+  async function handleGenerate() {
     setGenerating(true)
-    setTimeout(() => {
-      setIndex((prev) => (prev + dir + data.captions.length) % data.captions.length)
+    setError(null)
+    try {
+      const res = await socialApi.generateCaptions({ topics: buildTopics(socialData) })
+      const caps = (res?.captions || []).map((c) => c.caption).filter(Boolean)
+      if (caps.length) {
+        setLiveCaptions(caps)
+        setIndex(0)
+        setDraftCaption(caps[0]) // hand off to the publishing card preview
+      } else {
+        setError('No captions returned')
+      }
+    } catch (e) {
+      setError(e?.message || 'Caption generation failed')
+    } finally {
       setGenerating(false)
-    }, 600)
+    }
   }
 
   return (
@@ -117,11 +162,11 @@ export function CaptionGenerationCard({
         <div className={`cg-card__caption-body ${generating ? 'cg-card__caption-body--loading' : ''}`}>
           {generating
             ? <span className="cg-card__spinner" />
-            : <p className="cg-card__caption-text">{data.captions[index]}</p>}
+            : <p className="cg-card__caption-text">{captionsList[index]}</p>}
         </div>
         <div className="cg-card__pagination">
           <button onClick={() => navigate(-1)}>‹</button>
-          <span>{index + 1}/{data.captions.length}</span>
+          <span>{index + 1}/{captionsList.length}</span>
           <button onClick={() => navigate(1)}>›</button>
         </div>
       </div>
@@ -139,8 +184,10 @@ export function CaptionGenerationCard({
         </div>
       </div>
 
-      <AiInsight>{data.aiText}</AiInsight>
-      <AiActionButton />
+      <AiInsight>{error ? `Couldn't generate: ${error}` : liveCaptions ? 'Fresh captions generated from your top-performing posts.' : data.aiText}</AiInsight>
+      <AiActionButton onClick={handleGenerate} disabled={generating}>
+        {generating ? 'Generating…' : 'Generate captions from top posts'}
+      </AiActionButton>
     </div>
   )
 }

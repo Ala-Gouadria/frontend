@@ -6,7 +6,7 @@ import {
   QualityBlocks,
 } from '../../visuals-parts'
 import { automationExecutionCardData } from '../../../api/automationExecutionMockData.js'
-import { useSocialData } from '../../../hooks/useAnalyticsData'
+import { useWorkflowsData } from '../../../hooks/useAutomationData'
 import './Automation & ExecutionCardShared.css'
 import './AutomationExecutionCard.css'
 
@@ -39,51 +39,64 @@ function laneBlocks(value, tone) {
   ]
 }
 
-function transformData(socialData, mockData) {
-  if (!socialData) return null
+function transformData(workflows, mockData) {
+  if (!workflows) return null
 
-  // If no platforms data, show zeros
-  if (!socialData.platforms || Object.keys(socialData.platforms).length === 0) {
+  if (workflows.length === 0) {
     return {
       ...mockData,
-      title: 'Automation & Execution',
-      subtitle: 'No data available',
       status: 'No Data',
+      subtitle: 'No workflows yet',
       stateLabel: 'Automation State',
-      stateValue: 'Inactive',
-      gauge: { progress: 0, label: '0 Tasks', sublabel: 'No active tasks' },
+      stateValue: 'Idle',
+      gauge: { progress: 0, label: '0 Workflows', sublabel: 'No workflows run yet' },
       lanes: [
-        { label: 'High Intent', value: '0%' },
-        { label: 'Campaign Launch', value: '0%' },
-        { label: 'Audience Sync', value: '0%' },
+        { label: 'Completed', value: '0%' },
+        { label: 'Running', value: '0%' },
+        { label: 'Queued', value: '0%' },
       ],
-      insight: 'No automation data available. Connect your integrations to enable automations.',
+      insight: 'No automation workflows have run yet. Ask Nora to do something to kick off a workflow.',
     }
   }
 
-  // Show connected state
-  const connectedPlatforms = Object.keys(socialData.platforms).length
+  const total = workflows.length
+  const count = (s) => workflows.filter((w) => w.status === s).length
+  const completed = count('completed')
+  const running = count('running')
+  const queued = count('pending')
+  const pct = (n) => `${Math.round((n / total) * 100)}%`
+  const completionRate = Math.round((completed / total) * 100)
 
   return {
     ...mockData,
     status: 'Live',
-    stateValue: connectedPlatforms > 0 ? 'Active' : 'Inactive',
-    gauge: { ...mockData.gauge, progress: connectedPlatforms > 0 ? 75 : 0 },
-    insight: `Connected to ${connectedPlatforms} platforms. Automation systems ready.`,
+    stateLabel: 'Automation State',
+    stateValue: running > 0 ? `${running} Running` : `${total} Workflows`,
+    gauge: {
+      progress: completionRate,
+      label: `${completionRate}% Completed`,
+      sublabel: `${completed}/${total} workflows`,
+    },
+    lanes: [
+      { label: 'Completed', value: pct(completed) },
+      { label: 'Running', value: pct(running) },
+      { label: 'Queued', value: pct(queued) },
+    ],
+    insight: `${total} workflow${total === 1 ? '' : 's'} tracked — ${completed} completed, ${running} running, ${queued} queued.`,
   }
 }
 
 export function AutomationExecutionCard({ data: propData, useRealData = true }) {
-  const { data: socialData, loading } = useSocialData({ days: 30 })
+  const { items: workflows, loading } = useWorkflowsData()
 
   const data = useMemo(() => {
     if (propData) return propData
-    if (useRealData && socialData) {
-      const transformed = transformData(socialData, automationExecutionCardData)
+    if (useRealData && workflows) {
+      const transformed = transformData(workflows, automationExecutionCardData)
       if (transformed) return transformed
     }
     return automationExecutionCardData
-  }, [propData, useRealData, socialData])
+  }, [propData, useRealData, workflows])
 
   return (
     <article className={`analytics-card automation-card automation-execution-card ${loading ? 'loading' : ''}`}>

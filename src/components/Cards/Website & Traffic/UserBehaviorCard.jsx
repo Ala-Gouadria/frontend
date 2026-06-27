@@ -88,7 +88,7 @@ function transformApiData(apiData, mockData) {
     topChart: trendChart || mockData.topChart,
     metrics: [
       { label: 'Avg. session', value: `${minutes}m ${seconds}s`, bars: mockData.metrics[0].bars },
-      { label: 'Pages / visit', value: (current.pagesPerSession || 0).toFixed(1), bars: mockData.metrics[1].bars },
+      { label: 'Pages / visit', value: Number(current.pagesPerSession || 0).toFixed(1), bars: mockData.metrics[1].bars },
       { label: 'Bounce', value: `${bounceRate}%`, bars: mockData.metrics[2].bars, tone: bounceRate > 50 ? 'red' : undefined },
       { label: 'CTA clicks', value: 'N/A', bars: mockData.metrics[3].bars },
       { label: 'Scroll depth', value: 'N/A', bars: mockData.metrics[4].bars },

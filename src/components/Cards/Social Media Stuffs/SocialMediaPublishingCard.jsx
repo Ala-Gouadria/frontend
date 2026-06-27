@@ -8,6 +8,7 @@ import {
   SocialPostPreview,
 } from '../../visuals-parts'
 import { useSocialData } from '../../../hooks/useAnalyticsData'
+import { useContentDraft } from '../../../lib/contentDraftStore.js'
 import facebookIcon from '../../../assets/icons/Social-Media-Card-Icon/fb.svg'
 import linkedinIcon from '../../../assets/icons/Social-Media-Card-Icon/in.svg'
 import instagramIcon from '../../../assets/icons/Social-Media-Card-Icon/instagram.svg'
@@ -93,6 +94,7 @@ export function SocialMediaPublishingCard({
   useRealData = true,
 }) {
   const { data: socialData, loading } = useSocialData({ days: 30 })
+  const draft = useContentDraft()
 
   const defaults = {
     status: status || 'Active',
@@ -141,8 +143,8 @@ export function SocialMediaPublishingCard({
         accountName={accountName}
         accountSub={accountSub}
         accountSrc={accountSrc}
-        postSrc={postSrc}
-        caption={caption}
+        postSrc={draft.imageUrl ?? postSrc}
+        caption={draft.caption ?? caption}
       />
 
       <div className="smc-card__upcoming-panel smp-card__upcoming-panel">

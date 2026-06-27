@@ -8,6 +8,7 @@ import {
 } from '../../visuals-parts'
 import { performanceSummaryCardData } from '../../../api/analyticsMockData'
 import { useSocialData, useCrmData } from '../../../hooks/useAnalyticsData'
+import { seriesToPoints } from '../../../lib/sparkline'
 import './PerformanceSummaryCard.css'
 
 function transformData(socialData, crmData, mockData) {
@@ -32,17 +33,27 @@ function transformData(socialData, crmData, mockData) {
   const crm = crmData?.current
 
   const totalReach = social?.totalReach || 0
-  const engagementRate = social?.engagementRate ? Number(social.engagementRate).toFixed(1) : 0
+  // engagementRate is stored as a fraction (engagement / reach); display as a percent.
+  const engagementRate = social?.engagementRate ? (Number(social.engagementRate) * 100).toFixed(1) : 0
   const totalLeads = crm?.totalLeads || 0
 
   const socialGrowth = socialData?.growth?.reach || 0
   const isImproving = socialGrowth >= 0
+
+  // Real time-series for the snapshot chart, drawn from the social trend
+  // (engagement per day). Falls back to the mock chart until enough daily
+  // snapshots have accrued.
+  const trendPoints = seriesToPoints((socialData?.trend ?? []).map((t) => t.engagement))
+  const snapshotChart = trendPoints
+    ? { ...mockData.snapshotChart, points: trendPoints }
+    : mockData.snapshotChart
 
   return {
     ...mockData,
     title: 'Performance Summary',
     subtitle: 'Real-time outcome snapshot',
     status: 'Live',
+    snapshotChart,
     snapshotState: isImproving ? 'Performance improving' : 'Performance declining',
     results: [
       { label: 'Reach', value: totalReach > 1000 ? `${(totalReach / 1000).toFixed(0)}k` : String(totalReach), columns: mockData.results[0].columns },

@@ -5,7 +5,7 @@ import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
 import { BottomAIStatusTools } from '../../components/bottom-ai/BottomAITools'
-import { integrationsApi, googleApi, hubspotApi, shopifyApi, ahrefsApi, mixpanelApi } from '../../api/integrationsApi'
+import { integrationsApi, googleApi, hubspotApi, shopifyApi, linkedinApi, ahrefsApi, mixpanelApi } from '../../api/integrationsApi'
 import openAiIcon from '../../assets/icons/Integration-Icon/Group 140097.png'
 import vimeoIcon from '../../assets/icons/Integration-Icon/vimeo.png'
 import shopifyIcon from '../../assets/icons/Integration-Icon/Group 140090.png'
@@ -34,6 +34,7 @@ const ICONS = {
   // Analytics integrations - use Google Ads icon for Google Analytics temporarily
   google: googleAdsIcon,
   hubspot: stripeIcon, // placeholder - similar color scheme
+  linkedin: githubIcon, // placeholder
   ahrefs: vimeoIcon, // placeholder
   mixpanel: openAiIcon, // placeholder
 }
@@ -43,6 +44,7 @@ const OAUTH_PROVIDERS = {
   google: googleApi,
   hubspot: hubspotApi,
   shopify: shopifyApi,
+  linkedin: linkedinApi,
 }
 
 // API key providers that need configuration modal
@@ -228,7 +230,7 @@ export default function Integrations({ onNavigate }) {
 
       // Load OAuth statuses for special providers
       const statuses = {}
-      for (const provider of ['google', 'hubspot', 'shopify']) {
+      for (const provider of ['google', 'hubspot', 'shopify', 'linkedin']) {
         try {
           const api = OAUTH_PROVIDERS[provider]
           if (api) {
@@ -260,7 +262,7 @@ export default function Integrations({ onNavigate }) {
 
     // Check URL params for OAuth callback results
     const params = new URLSearchParams(window.location.search)
-    const providers = ['google', 'hubspot', 'shopify']
+    const providers = ['google', 'hubspot', 'shopify', 'linkedin']
     for (const provider of providers) {
       const status = params.get(provider)
       if (status === 'connected') {

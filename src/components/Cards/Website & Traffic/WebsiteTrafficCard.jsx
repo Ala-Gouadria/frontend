@@ -118,7 +118,7 @@ function transformApiData(apiData, mockData) {
       { label: 'Pageviews', value: current.pageviews?.toLocaleString() || '0' },
       { label: 'Bounce Rate', value: `${Math.round((current.bounceRate || 0) * 100)}%` },
       { label: 'Avg Duration', value: `${Math.floor((current.avgSessionDuration || 0) / 60)}m` },
-      { label: 'Pages/Session', value: (current.pagesPerSession || 0).toFixed(1) },
+      { label: 'Pages/Session', value: Number(current.pagesPerSession || 0).toFixed(1) },
     ],
     sourceMixTitle: 'Traffic Sources',
     sourceMix: sourceMix.length > 0 ? sourceMix : mockData.sourceMix,

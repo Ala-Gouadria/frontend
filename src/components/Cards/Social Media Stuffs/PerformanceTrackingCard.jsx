@@ -3,6 +3,7 @@ import './SocialMediaStuffsCardShared.css'
 import './PerformanceTrackingCard.css'
 import { MiniLineChart, DottedDataBars, StripedBars, AiInsight, AiActionButton } from '../../visuals-parts'
 import { useSocialData } from '../../../hooks/useAnalyticsData'
+import { seriesToColumns, topPostsToPerformers } from '../../../lib/socialCardData'
 
 const defaultMetrics = [
   { label: 'Reach',  value: '+34k', tone: 'good',
@@ -53,36 +54,48 @@ function transformApiData(apiData, defaults) {
 
   // Calculate aggregated metrics
   let totalReach = 0
+  let totalImpressions = 0
   let totalEngagement = 0
   let totalFollowers = 0
 
   Object.values(platforms).forEach(p => {
     totalReach += p.reach || 0
+    totalImpressions += p.impressions || 0
     totalEngagement += p.engagement || 0
     totalFollowers += p.followers || 0
   })
 
+  // Reach is limited on some platforms (Meta removed FB Page organic reach),
+  // so fall back to impressions when reach is unavailable.
+  const reachMetric = totalReach > 0 ? totalReach : totalImpressions
+  const reachLabel = totalReach > 0 ? 'Reach' : 'Impressions'
+
   const avgEngagementRate = totalFollowers > 0 ? (totalEngagement / totalFollowers) * 100 : 0
+
+  // Real sparkline columns from the daily trend series (fall back to mock when
+  // the series is still too sparse to draw).
+  const reachCols = seriesToColumns((apiData.trend || []).map((t) => t.reach)) || defaults.metrics[0].columns
+  const engCols = seriesToColumns((apiData.trend || []).map((t) => t.engagement)) || defaults.metrics[1].columns
 
   // Transform metrics
   const metrics = [
     {
-      label: 'Reach',
-      value: `${(totalReach / 1000).toFixed(1)}k`,
+      label: reachLabel,
+      value: reachMetric >= 1000 ? `${(reachMetric / 1000).toFixed(1)}k` : String(reachMetric),
       tone: 'good',
-      columns: defaults.metrics[0].columns, // Keep mock columns
+      columns: reachCols,
     },
     {
       label: 'Engagement',
       value: totalEngagement.toLocaleString(),
       tone: 'good',
-      columns: defaults.metrics[1].columns,
+      columns: engCols,
     },
     {
       label: 'Eng. Rate',
       value: `${avgEngagementRate.toFixed(1)}%`,
       tone: 'neutral',
-      columns: defaults.metrics[2].columns,
+      columns: engCols,
     },
   ]
 
@@ -109,9 +122,10 @@ function transformApiData(apiData, defaults) {
     status: 'Live',
     trendLabel: totalEngagement > 0 ? 'Engagement Growing' : 'No Activity',
     metrics,
-    topPerformers: defaults.topPerformers, // Keep mock for now (need content type breakdown)
+    // Real top performers from actual top posts (ranked by engagement).
+    topPerformers: topPostsToPerformers(apiData.current?.topPosts) || defaults.topPerformers,
     platforms: platformsArray.length > 0 ? platformsArray : defaults.platforms,
-    aiText: `Total reach: ${(totalReach / 1000).toFixed(1)}k across ${platformsArray.length} platforms. Average engagement rate: ${avgEngagementRate.toFixed(1)}%.`,
+    aiText: `${reachLabel}: ${reachMetric >= 1000 ? `${(reachMetric / 1000).toFixed(1)}k` : reachMetric} across ${platformsArray.length} platforms. Average engagement rate: ${avgEngagementRate.toFixed(1)}%.`,
   }
 }
 
@@ -125,7 +139,7 @@ export function PerformanceTrackingCard({
   className = '',
   useRealData = true,
 }) {
-  const { data: apiData, loading, hasRealData } = useSocialData()
+  const { data: apiData, loading } = useSocialData()
 
   const defaults = {
     status: status || 'Active',

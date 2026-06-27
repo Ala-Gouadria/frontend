@@ -17,9 +17,9 @@ export function AiInsight({ children, title = 'AI Insight', className = '' }) {
   )
 }
 
-export function AiActionButton({ children = 'Ask or assign Anything', className = '' }) {
+export function AiActionButton({ children = 'Ask or assign Anything', className = '', onClick, disabled = false }) {
   return (
-    <button type="button" className={classNames('ai-action-button', className)}>
+    <button type="button" className={classNames('ai-action-button', className)} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   )

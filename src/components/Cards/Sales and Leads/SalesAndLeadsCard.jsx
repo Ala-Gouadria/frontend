@@ -134,7 +134,7 @@ function transformCrmData(apiData, mockData) {
     },
     mainProblem: {
       title: 'Pipeline Overview',
-      description: `${current.totalDeals || 0} deals in pipeline, ${current.winRate?.toFixed(0) || 0}% win rate`,
+      description: `${current.totalDeals || 0} deals in pipeline, ${current.winRate != null ? Number(current.winRate).toFixed(0) : 0}% win rate`,
       stages: stages.length > 0 ? stages.slice(0, 4) : mockData.mainProblem.stages,
       activeIndex: Math.min(activeIndex, 3),
     },

@@ -16,6 +16,7 @@ const CATALOG = [
   // Analytics integrations
   { id: 'google',      name: 'Google Analytics', iconKey: 'google', description: 'Connect Google Analytics and Search Console for traffic and SEO data.', hasOAuth: true },
   { id: 'hubspot',     name: 'HubSpot',    iconKey: 'hubspot',   description: 'Connect HubSpot CRM to sync leads, deals, and pipeline data.', hasOAuth: true },
+  { id: 'linkedin',    name: 'LinkedIn',   iconKey: 'linkedin',  description: 'Connect LinkedIn to sign in and link your professional profile.', hasOAuth: true },
   { id: 'ahrefs',      name: 'Ahrefs',     iconKey: 'ahrefs',    description: 'Connect Ahrefs for backlink analysis and SEO insights.', hasApiKey: true },
   { id: 'mixpanel',    name: 'Mixpanel',   iconKey: 'mixpanel',  description: 'Connect Mixpanel for user behavior and product analytics.', hasApiKey: true },
 ]
@@ -153,6 +154,21 @@ export const hubspotApi = {
     const params = new URLSearchParams()
     if (options.days) params.append('days', options.days)
     return get(`/api/v1/integrations/hubspot/crm?${params}`)
+  },
+}
+
+// LinkedIn — OAuth integration (Sign In with LinkedIn / OpenID Connect)
+export const linkedinApi = {
+  // { connected, memberId, name, email, picture, scope, connectedAt, tokenExpiresAt, lastSyncAt }
+  async status() {
+    return get('/api/v1/integrations/linkedin/status')
+  },
+  async connectUrl() {
+    const res = await get('/api/v1/integrations/linkedin/connect')
+    return res?.url
+  },
+  async disconnect() {
+    return del('/api/v1/integrations/linkedin')
   },
 }
 

@@ -87,7 +87,7 @@ function transformApiData(apiData, mockData) {
     keywordsMeta: 'by clicks',
     keywords: keywords.length > 0 ? keywords : mockData.keywords,
     insight: current.totalClicks > 0
-      ? `Organic clicks ${clicksChange >= 0 ? 'up' : 'down'} ${Math.abs(clicksChange).toFixed(1)}% from last period. Avg position: ${current.avgPosition?.toFixed(1) || 'N/A'}.`
+      ? `Organic clicks ${clicksChange >= 0 ? 'up' : 'down'} ${Math.abs(clicksChange).toFixed(1)}% from last period. Avg position: ${current.avgPosition != null ? Number(current.avgPosition).toFixed(1) : 'N/A'}.`
       : mockData.insight,
   }
 }

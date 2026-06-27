@@ -1,8 +1,11 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import './SocialMediaStuffsCardShared.css'
 import './SocialMediaStrategyCard.css'
 import { DottedDataBars, AiInsight, AiActionButton } from '../../visuals-parts'
 import { useSocialData } from '../../../hooks/useAnalyticsData'
+import { useSocialPostCounts } from '../../../hooks/useSocialPosts'
+import { seriesToColumns } from '../../../lib/socialCardData'
+import { socialApi } from '../../../api/social.js'
 
 const defaultReasons = [
   {
@@ -31,7 +34,7 @@ const defaultPlans = [
   'Prepare 2 engagement-driven posts with questions or prompts to increase comments',
 ]
 
-function transformData(socialData, defaults) {
+function transformData(socialData, postCounts, livePlans, defaults) {
   if (!socialData) return null
 
   // If no platforms data, show zeros
@@ -54,30 +57,43 @@ function transformData(socialData, defaults) {
 
   // Calculate metrics from social data
   let totalEngagement = 0
-  let totalReach = 0
+  let totalPosts = 0
   Object.values(platforms).forEach(p => {
     totalEngagement += p.engagement || 0
-    totalReach += p.reach || 0
+    totalPosts += p.posts || 0
   })
 
   const engagementGrowth = socialData.growth?.engagement || 0
   const reachGrowth = socialData.growth?.reach || 0
 
+  // Real daily-trend sparklines (fall back to mock when series too sparse).
+  const engCols = seriesToColumns((socialData.trend || []).map(t => t.engagement)) || defaultReasons[0].columns
+  const reachCols = seriesToColumns((socialData.trend || []).map(t => t.reach)) || defaultReasons[2].columns
+
+  // Execution % from real publishing pipeline when posts exist; otherwise
+  // reflect connected-platform coverage.
+  const planned = postCounts.total
+  const executionPct = planned > 0
+    ? Math.round((postCounts.published / planned) * 100)
+    : Math.min(connectedCount * 33, 100)
+
   return {
     status: 'Live',
-    executionLabel: `Managing strategy for ${connectedCount} platforms`,
-    executionPct: connectedCount > 0 ? Math.min(connectedCount * 33, 100) : 0,
-    posts: totalReach > 0 ? Math.round(totalReach / 1000) : 0,
-    drafts: defaults.drafts,
-    queued: defaults.queued,
+    executionLabel: planned > 0
+      ? `${postCounts.published}/${planned} posts published`
+      : `Managing strategy for ${connectedCount} platforms`,
+    executionPct,
+    posts: totalPosts,                 // real: total posts across platforms
+    drafts: postCounts.draft,          // real: from social_posts
+    queued: postCounts.scheduled,      // real: scheduled posts
     reasons: [
-      { ...defaultReasons[0], delta: `${reachGrowth >= 0 ? '+' : ''}${reachGrowth.toFixed(0)}%`, tone: reachGrowth >= 0 ? 'good' : 'bad' },
-      { ...defaultReasons[1], delta: `${engagementGrowth >= 0 ? '+' : ''}${engagementGrowth.toFixed(0)}%`, tone: engagementGrowth >= 0 ? 'good' : 'bad' },
-      { ...defaultReasons[2], delta: `+${connectedCount * 10}%`, tone: 'good' },
+      { ...defaultReasons[0], label: 'Engagement', delta: `${engagementGrowth >= 0 ? '+' : ''}${engagementGrowth.toFixed(0)}%`, tone: engagementGrowth >= 0 ? 'good' : 'bad', columns: engCols },
+      { ...defaultReasons[1], label: 'Reach', delta: `${reachGrowth >= 0 ? '+' : ''}${reachGrowth.toFixed(0)}%`, tone: reachGrowth >= 0 ? 'good' : 'bad', columns: reachCols },
+      { ...defaultReasons[2], label: 'Followers', delta: `${(socialData.growth?.followers || 0) >= 0 ? '+' : ''}${(socialData.growth?.followers || 0).toFixed(0)}%`, tone: 'good', columns: engCols },
     ],
-    upcomingPlans: defaults.upcomingPlans,
+    upcomingPlans: livePlans ?? defaults.upcomingPlans,
     aiText: totalEngagement > 0
-      ? `Total reach: ${totalReach.toLocaleString()}. Engagement ${engagementGrowth >= 0 ? 'up' : 'down'} ${Math.abs(engagementGrowth).toFixed(0)}%.`
+      ? `${totalPosts} posts across ${connectedCount} platforms. Engagement ${engagementGrowth >= 0 ? 'up' : 'down'} ${Math.abs(engagementGrowth).toFixed(0)}%.`
       : defaults.aiText,
   }
 }
@@ -96,6 +112,9 @@ export function SocialMediaStrategyCard({
   useRealData = true,
 }) {
   const { data: socialData, loading } = useSocialData({ days: 30 })
+  const { counts: postCounts } = useSocialPostCounts()
+  const [livePlans, setLivePlans] = useState(null)
+  const [planLoading, setPlanLoading] = useState(false)
 
   const defaults = {
     status: status || 'Active',
@@ -111,11 +130,43 @@ export function SocialMediaStrategyCard({
 
   const data = useMemo(() => {
     if (useRealData && socialData) {
-      const transformed = transformData(socialData, defaults)
+      const transformed = transformData(socialData, postCounts, livePlans, defaults)
       if (transformed) return transformed
     }
     return defaults
-  }, [useRealData, socialData])
+  }, [useRealData, socialData, postCounts, livePlans])
+
+  // Generate a real weekly plan on demand. Uses the fast, reliable captions
+  // endpoint (OpenAI, ~2-4s) seeded from the tenant's actual top-post themes —
+  // the agent content-plan path is slower and returns a narrative, not a list.
+  async function handleGeneratePlan() {
+    setPlanLoading(true)
+    try {
+      const platform = socialData?.current?.platform || 'instagram'
+      const posts = socialData?.current?.topPosts || []
+      const themes = posts
+        .slice(0, 4)
+        .map((p) => (p.content || '').replace(/\s+/g, ' ').trim().slice(0, 90))
+        .filter(Boolean)
+      const topics = (themes.length
+        ? themes
+        : ['Highlight our most popular product', 'Share a customer success story',
+           'Post an engaging tip for our audience', 'Announce a timely seasonal offer']
+      ).map((topic) => ({ topic: `Short post idea: ${topic}`, platform }))
+
+      const res = await socialApi.generateCaptions({ topics })
+      const items = (res?.captions || [])
+        .map((c) => (c.caption || '').replace(/\s+/g, ' ').trim())
+        .filter(Boolean)
+        .map((c) => (c.length > 90 ? `${c.slice(0, 89)}…` : c))
+        .slice(0, 4)
+      if (items.length) setLivePlans(items)
+    } catch {
+      /* keep existing plans on error */
+    } finally {
+      setPlanLoading(false)
+    }
+  }
 
   return (
     <div className={`analytics-card ${className} ${loading ? 'loading' : ''}`}>
@@ -186,7 +237,9 @@ export function SocialMediaStrategyCard({
       </div>
 
       <AiInsight>{data.aiText}</AiInsight>
-      <AiActionButton />
+      <AiActionButton onClick={handleGeneratePlan} disabled={planLoading}>
+        {planLoading ? 'Generating plan…' : 'Generate weekly plan'}
+      </AiActionButton>
     </div>
   )
 }

@@ -3,6 +3,16 @@ import './SocialMediaStuffsCardShared.css'
 import './ImageGenerationCard.css'
 import { AiInsight, AiActionButton } from '../../visuals-parts'
 import { useSocialData } from '../../../hooks/useAnalyticsData'
+import { socialApi } from '../../../api/social.js'
+import { resolveAuthedImageUrl } from '../../../api/authedImage.js'
+import { setDraftImage } from '../../../lib/contentDraftStore.js'
+
+// Derive an image prompt from the tenant's top-performing post theme.
+function buildImagePrompt(socialData) {
+  const topPost = socialData?.current?.topPosts?.[0]?.content
+  const theme = topPost ? topPost.replace(/\s+/g, ' ').trim().slice(0, 140) : 'our latest product highlight'
+  return `Premium social media product photograph for this post theme: "${theme}". Clean, on-brand, vibrant, professional marketing visual.`
+}
 
 const defaultBatch = [
   { label: 'Instagram Live Hack posts', count: '12 Images' },
@@ -91,6 +101,56 @@ export function ImageGenerationCard({
     return defaults
   }, [useRealData, socialData])
 
+  const [options, setOptions] = useState(null) // array of resolved image URLs
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [generating, setGenerating] = useState(false)
+  const [error, setError] = useState(null)
+
+  // The main ("top") image always reflects the selected option.
+  const displayMainSrc = (options && options[selectedIndex]) ?? mainSrc
+  const displayThumbs = options ?? thumbnails
+
+  function selectOption(i) {
+    if (!options || !options[i]) return
+    setSelectedIndex(i)
+    setDraftImage(options[i]) // chosen one flows to the publishing card preview
+  }
+
+  async function handleGenerate() {
+    setGenerating(true)
+    setError(null)
+    try {
+      const basePrompt = buildImagePrompt(socialData)
+      // Distinct, on-brand variations so the user has real choices.
+      const variations = [
+        'front-facing hero product shot, centered composition',
+        'flat-lay top-down composition on a clean surface',
+        'lifestyle scene with a soft, on-brand background',
+        'close-up detail shot highlighting texture and quality',
+      ]
+      const results = await Promise.all(
+        variations.map((v) =>
+          socialApi
+            .generateImage({ prompt: `${basePrompt} Variation: ${v}.`, style: 'photographic', size: '1024x1024' })
+            .then((res) => resolveAuthedImageUrl(res?.imageUrl || res?.url))
+            .catch(() => null),
+        ),
+      )
+      const urls = results.filter(Boolean)
+      if (urls.length) {
+        setOptions(urls)
+        setSelectedIndex(0)
+        setDraftImage(urls[0]) // default selection → main image + publishing card
+      } else {
+        setError('No images returned')
+      }
+    } catch (e) {
+      setError(e?.message || 'Image generation failed')
+    } finally {
+      setGenerating(false)
+    }
+  }
+
   return (
     <div className={`analytics-card ${className} ${loading ? 'loading' : ''}`}>
       <div className="analytics-card__header">
@@ -98,7 +158,7 @@ export function ImageGenerationCard({
           <h2 className="analytics-card__title">Image Generation</h2>
           <p className="analytics-card__subtitle">Live batch image production</p>
         </div>
-        <span className="analytics-card__status">{data.status}</span>
+        <span className="analytics-card__status">{generating ? 'Generating…' : data.status}</span>
       </div>
 
       <div>
@@ -110,11 +170,28 @@ export function ImageGenerationCard({
         </div>
       </div>
 
-      <LazyImage src={mainSrc} alt="Main generated" className="ig-card__main" />
+      <LazyImage src={displayMainSrc} alt="Main generated" className="ig-card__main" />
 
       <div className="ig-card__thumbs">
-        {thumbnails.map((src, i) => (
-          <LazyImage key={i} src={src} alt={`Thumb ${i+1}`} className="ig-card__thumb" />
+        {displayThumbs.map((src, i) => (
+          <div
+            key={i}
+            role="button"
+            tabIndex={options ? 0 : -1}
+            aria-label={`Select image option ${i + 1}`}
+            aria-pressed={options ? i === selectedIndex : undefined}
+            onClick={() => selectOption(i)}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectOption(i) } }}
+            className="ig-card__thumb"
+            style={{
+              cursor: options ? 'pointer' : 'default',
+              outline: options && i === selectedIndex ? '2px solid var(--accent, #6c5ce7)' : 'none',
+              outlineOffset: 2,
+              borderRadius: 8,
+            }}
+          >
+            <LazyImage src={src} alt={`Option ${i + 1}`} />
+          </div>
         ))}
       </div>
 
@@ -131,8 +208,10 @@ export function ImageGenerationCard({
         </div>
       </div>
 
-      <AiInsight>{data.aiText}</AiInsight>
-      <AiActionButton />
+      <AiInsight>{error ? `Couldn't generate: ${error}` : options ? 'Pick an option — it updates the main image and the publishing preview.' : data.aiText}</AiInsight>
+      <AiActionButton onClick={handleGenerate} disabled={generating}>
+        {generating ? 'Generating 4 options…' : 'Generate 4 image options'}
+      </AiActionButton>
     </div>
   )
 }

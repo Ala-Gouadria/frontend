@@ -680,6 +680,14 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
 
   // ── FIX #6 — useCallback on all handlers ───────────────────────────────────
   const handleCardPointerDown = useCallback((event, id) => {
+    // Don't start a card drag when the pointer lands on an interactive control
+    // inside the card (buttons, links, inputs). The drag's preventDefault +
+    // pointer capture would otherwise swallow the control's click — which is
+    // why the in-card "Generate" / pagination buttons appeared dead.
+    if (event.target.closest('button, a, input, textarea, select, label, [role="button"]')) {
+      event.stopPropagation()
+      return
+    }
     event.preventDefault()
     event.stopPropagation()
     const pos = positionsRef.current[id]

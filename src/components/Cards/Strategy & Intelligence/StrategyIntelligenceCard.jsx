@@ -3,6 +3,7 @@ import './StrategyIntelligenceCardShared.css'
 import './StrategyIntelligenceCard.css'
 import { StripedBars, ProgressBars, DottedDataBars, ColoredPanel, AiInsight, AiActionButton } from '../../visuals-parts'
 import { useTrafficData, useSocialData, useRevenueData } from '../../../hooks/useAnalyticsData'
+import { useRecommendations } from '../../../hooks/useRecommendations'
 
 const defaultReasons = [
   { label: 'Traffic',     value: '80%', columns: [{label:'M',count:3},{label:'T',count:5},{label:'W',count:4},{label:'T',count:6},{label:'F',count:5}] },
@@ -79,6 +80,7 @@ export function StrategyIntelligenceCard({
   const { data: trafficData, loading: loadingTraffic } = useTrafficData({ days: 30 })
   const { data: socialData, loading: loadingSocial } = useSocialData({ days: 30 })
   const { data: revenueData, loading: loadingRevenue } = useRevenueData({ days: 30 })
+  const { top: topRecommendation } = useRecommendations()
 
   const defaults = {
     status: status || 'Active',
@@ -157,7 +159,13 @@ export function StrategyIntelligenceCard({
         </div>
       </ColoredPanel>
 
-      <AiInsight>{data.aiText}</AiInsight>
+      <AiInsight>
+        {topRecommendation?.recommendation_text
+          ? `${topRecommendation.recommendation_text}${
+              topRecommendation.agent_name ? ` — ${topRecommendation.agent_name} agent` : ''
+            }`
+          : data.aiText}
+      </AiInsight>
       <AiActionButton />
     </div>
   )
