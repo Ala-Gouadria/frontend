@@ -1,19 +1,19 @@
 .mini-line-chart {
-  --mini-line-color: #5F8F00;
-  --mini-line-stroke-start: #ABC831;
-  --mini-line-stroke-end: #5F8F00;
-  --mini-line-fill-top: rgba(188, 212, 0, 0.5);
-  --mini-line-fill-bottom: rgba(9, 169, 81, 0);
-  --mini-line-glow: rgba(95, 143, 0, 0.14);
+  --mini-line-color: #3787F7;
+  --mini-line-stroke-start: #3787F7;
+  --mini-line-stroke-end: #A2B8F7;
+  --mini-line-fill-top: rgba(24, 119, 242, 0.5);
+  --mini-line-fill-bottom: rgba(255, 255, 255, 0);
+  --mini-line-glow: rgba(24, 119, 242, 0.14);
   display: block;
   width: 100%;
-  min-height: 60px;
-  height: 80px;
+  min-height: 53px;
+  height: 53px;
   overflow: hidden;
 }
 
 .mini-line-chart--red {
-  --mini-line-color: #FF9A9A;
+  --mini-line-color: #FF9191;
   --mini-line-stroke-start: #FFA5A5;
   --mini-line-stroke-end: #FF8B8B;
   --mini-line-fill-top: rgba(255, 145, 145, 0.5);
@@ -75,6 +75,15 @@
   --mini-line-glow: rgba(228, 65, 119, 0.16);
 }
 
+.mini-line-chart--tiktok {
+  --mini-line-color: #FF004F;
+  --mini-line-stroke-start: #FF004F;
+  --mini-line-stroke-end: #00F2EA;
+  --mini-line-fill-top: rgba(0, 242, 234, 0.2);
+  --mini-line-fill-bottom: rgba(0, 242, 234, 0);
+  --mini-line-glow: rgba(0, 242, 234, 0.16);
+}
+
 .mini-line-chart__fill {
   opacity: 1;
 }
@@ -82,11 +91,11 @@
 .mini-line-chart__line {
   fill: none;
   stroke: var(--mini-line-color);
-  stroke-width: 3;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 320;
-  stroke-dashoffset: 320;
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
   animation: miniLineDraw 1s ease forwards;
   shape-rendering: geometricPrecision;
 }

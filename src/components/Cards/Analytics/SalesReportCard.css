@@ -23,13 +23,13 @@
 }
 
 .sales-report-card .analytics-card__swatch--blue {
-  background: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
+  background: linear-gradient(96.85deg, #9389E8 3.59%, #b5afe8 94.78%);
 }
 
 .sales-report-card .analytics-card__swatch--green {
-  background: #6FA011;
+  background: #1877F2;
 }
 
 .sales-report-card .analytics-card__swatch--orange {
-  background: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
+  background: var(--3rd, #CB81DE);
 }

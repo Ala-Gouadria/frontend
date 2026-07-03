@@ -97,13 +97,13 @@ export const salesAndLeadsCardData = {
   leadQualityTitle: 'Lead Quality',
   leadQualityLabel: 'Lead Quality',
   legend: [
-    { label: 'High', value: '55%', tone: 'green' },
-    { label: 'Mid', value: '30%', tone: 'orange' },
+    { label: 'High', value: '55%', tone: 'blue' },
+    { label: 'Mid', value: '30%', tone: 'purple' },
     { label: 'Low', value: '15%', tone: 'red' },
   ],
   blocks: [
-    { tone: 'green', count: 10 },
-    { tone: 'orange', count: 6 },
+    { tone: 'blue', count: 10 },
+    { tone: 'purple', count: 6 },
     { tone: 'red', count: 4 },
   ],
   insight:

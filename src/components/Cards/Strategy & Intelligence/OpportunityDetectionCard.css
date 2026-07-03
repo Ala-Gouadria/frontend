@@ -1,29 +1,29 @@
 .od-card__opportunity-top {
   font-size: 0.78rem;
   font-weight: 700;
-  color: #5d9700;
+  color: #1877F2;
 }
 
-/* Green opportunity panel — matches the framed "Reasons" pattern */
+/* Purple opportunity panel — matches the framed "Reasons" pattern */
 .od-card__panel {
   overflow: hidden;
   border-radius: 16px;
-  background: linear-gradient(180deg, #a8d81c 0%, #5d9700 100%);
+  background: linear-gradient(97.13deg, #CBC6FF 2.65%, #B49FE4 100%);
   padding: 0 5px 5px;
-  box-shadow: 0 12px 24px rgba(122, 184, 13, 0.24);
+  box-shadow: 0 12px 24px rgba(180, 159, 228, 0.28);
   transition: transform 190ms ease, box-shadow 190ms ease;
 }
 
 .od-card__panel:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 30px rgba(122, 184, 13, 0.3);
+  box-shadow: 0 16px 30px rgba(180, 159, 228, 0.3);
 }
 
 .od-card__panel-title {
   min-height: 28px;
   padding: 9px 12px;
   background: transparent;
-  color: #fff;
+  color: #000000;
   font-size: 0.78rem;
   font-weight: 600;
 }
@@ -45,13 +45,13 @@
 .od-card__opp-label {
   font-size: 0.74rem;
   font-weight: 600;
-  color: #5d9700;
+  color: #1877F2;
 }
 
 .od-card__opp-delta {
   font-size: 0.72rem;
   font-weight: 700;
-  color: #5d9700;
+  color: #1877F2;
   white-space: nowrap;
 }
 

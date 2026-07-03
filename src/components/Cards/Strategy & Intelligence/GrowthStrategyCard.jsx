@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import './StrategyIntelligenceCardShared.css'
 import './GrowthStrategyCard.css'
-import { MiniLineChart, StackedBars, ColoredPanel, AiInsight, AiActionButton } from '../../visuals-parts'
+import { MiniLineChart, StackedBars, ColoredPanel, QualityBlocks, AiInsight, AiActionButton } from '../../visuals-parts'
 import { useSocialData, useRevenueData } from '../../../hooks/useAnalyticsData'
 
 const defaultSegments = [
@@ -78,7 +78,11 @@ export function GrowthStrategyCard({
   }, [useRealData, socialData, revenueData])
 
   const loading = loadingSocial || loadingRevenue
-  const blockCounts = { blue: 14, green: 8, orange: 3 }
+  const qualityBlocks = [
+    { tone: 'green',  count: 14 },
+    { tone: 'blue',   count: 8  },
+    { tone: 'orange', count: 3  },
+  ]
 
   return (
     <div className={`analytics-card ${className} ${loading ? 'loading' : ''}`}>
@@ -124,13 +128,7 @@ export function GrowthStrategyCard({
             </div>
           ))}
         </div>
-        <div className="gs-card__blocks">
-          {Object.entries(blockCounts).flatMap(([tone, count]) =>
-            Array.from({ length: count }).map((_, i) => (
-              <span key={`${tone}-${i}`} className={`gs-card__block gs-card__block--${tone}`} />
-            ))
-          )}
-        </div>
+        <QualityBlocks blocks={qualityBlocks} />
       </ColoredPanel>
 
       <AiInsight>{data.aiText}</AiInsight>

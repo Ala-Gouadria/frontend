@@ -3,7 +3,7 @@
 .photo-wrapper {
   position: fixed;
   top: 18px;
-  left: 22px;
+  inset-inline-start: 22px;
   z-index: 56;
   width: auto;
   height: auto;
@@ -42,7 +42,7 @@
 
 .photo-user-avatar {
   position: absolute;
-  right: -10px;
+  inset-inline-end: -10px;
   bottom: -3px;
   width: 26px;
   height: 26px;
@@ -63,7 +63,7 @@
 @media (max-width: 768px) {
   .photo-wrapper {
     top: 16px;
-    left: 16px;
+    inset-inline-start: 16px;
   }
 
   .photo-card {
@@ -80,6 +80,6 @@
   .photo-user-avatar {
     width: 24px;
     height: 24px;
-    right: -9px;
+    inset-inline-end: -9px;
   }
 }

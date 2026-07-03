@@ -83,7 +83,7 @@
 .lead-scoring-card__lead-right {
   display: grid;
   gap: 1px;
-  text-align: right;
+  text-align: end;
   flex-shrink: 0;
 }
 

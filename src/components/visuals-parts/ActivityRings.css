@@ -5,14 +5,20 @@
 }
 
 .activity-rings__ring {
-  width: 42px;
-  height: 42px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   background:
-    conic-gradient(var(--ring-color, #a7cf18) var(--ring-progress, 270deg), rgba(176, 193, 113, 0.18) 0),
-    #eef4df;
-  box-shadow: 0 8px 14px rgba(155, 189, 25, 0.14);
-  mask: radial-gradient(circle at center, transparent 51%, #000 54%);
+    conic-gradient(
+      #A2B8F7,
+      #3787F7 var(--ring-progress, 270deg),
+      rgba(162, 184, 247, 0.15) 0
+    ),
+    rgba(162, 184, 247, 0.08);
+  box-shadow:
+    0 4px 12px rgba(55, 135, 247, 0.18),
+    inset 0 0 2.09px rgba(255, 255, 255, 0.9);
+  mask: radial-gradient(circle at center, transparent 50%, #000 54%);
   cursor: crosshair;
   animation: activityRingIn 620ms ease both;
   animation-delay: calc(var(--ring-index) * 70ms);
@@ -24,24 +30,68 @@
 
 .activity-rings__ring:hover {
   transform: translateY(-2px) scale(1.08);
-  filter: saturate(1.18);
+  filter: saturate(1.12);
+  box-shadow:
+    0 12px 20px rgba(55, 135, 247, 0.26),
+    inset 0 0 2.09px rgba(255, 255, 255, 0.9);
+}
+
+.activity-rings__ring--green {
+  background:
+    conic-gradient(
+      #c5e05a,
+      #a7cf18 var(--ring-progress, 270deg),
+      rgba(176, 193, 113, 0.18) 0
+    ),
+    #eef4df;
+  box-shadow: 0 8px 14px rgba(155, 189, 25, 0.14);
+}
+
+.activity-rings__ring--green:hover {
   box-shadow: 0 12px 20px rgba(155, 189, 25, 0.2);
 }
 
 .activity-rings__ring--blue {
-  --ring-color: #2f80ed;
+  background:
+    conic-gradient(
+      #A2B8F7,
+      #3787F7 var(--ring-progress, 270deg),
+      rgba(162, 184, 247, 0.15) 0
+    ),
+    rgba(162, 184, 247, 0.08);
 }
 
 .activity-rings__ring--pink {
-  --ring-color: #c96be8;
+  background:
+    conic-gradient(
+      #e8a8f5,
+      #c96be8 var(--ring-progress, 270deg),
+      rgba(201, 107, 232, 0.15) 0
+    ),
+    rgba(201, 107, 232, 0.08);
 }
 
 .activity-rings__ring--orange {
-  --ring-color: #ff872d;
+  background:
+    conic-gradient(
+      #ffb87d,
+      #ff872d var(--ring-progress, 270deg),
+      rgba(255, 135, 45, 0.15) 0
+    ),
+    rgba(255, 135, 45, 0.08);
 }
 
 .activity-rings__ring--soft {
-  --ring-color: rgba(167, 207, 24, 0.3);
+  background:
+    conic-gradient(
+      rgba(162, 184, 247, 0.4),
+      rgba(55, 135, 247, 0.25) var(--ring-progress, 270deg),
+      rgba(162, 184, 247, 0.08) 0
+    ),
+    rgba(162, 184, 247, 0.05);
+  box-shadow:
+    0 4px 12px rgba(55, 135, 247, 0.08),
+    inset 0 0 2.09px rgba(255, 255, 255, 0.9);
 }
 
 @keyframes activityRingIn {

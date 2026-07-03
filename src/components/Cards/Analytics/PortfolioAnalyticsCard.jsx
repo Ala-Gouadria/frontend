@@ -120,7 +120,7 @@ export function PortfolioAnalyticsCard({ data: propData, useRealData = true }) {
       <section>
         <h3 className="analytics-card__section-title">{data.gaugeTitle}</h3>
         <div className="analytics-card__gauge-wrap">
-          <SemiCircleGauge current={data.gauge.current} target={data.gauge.target} progress={data.gauge.progress} />
+          <SemiCircleGauge current={data.gauge.current} target={data.gauge.target} progress={data.gauge.progress} bandWidth={56} />
         </div>
       </section>
 

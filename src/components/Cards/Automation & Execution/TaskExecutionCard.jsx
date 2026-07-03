@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import {
   AiActionButton,
   AiInsight,
-  SegmentedStripedBar,
+  TaskProgressBar,
 } from '../../visuals-parts'
 import { taskExecutionCardData } from '../../../api/automationExecutionMockData.js'
 import { useTasksData } from '../../../hooks/useAutomationData'
@@ -121,12 +121,10 @@ export function TaskExecutionCard({ data: propData, useRealData = true }) {
                 <span>{task.label}</span>
                 <strong>{task.progress}</strong>
               </div>
-              <SegmentedStripedBar
+              <TaskProgressBar
                 value={getPercent(task.progress)}
                 segments={task.totalBlocks ?? 5}
                 activeSegments={task.activeBlocks}
-                tone="blue"
-                label={`${task.label}: ${task.progress}`}
               />
             </div>
           ))}

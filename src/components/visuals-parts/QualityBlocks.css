@@ -11,12 +11,13 @@
 .quality-blocks__block {
   flex: 1 1 0;
   min-width: 0;
-  height: clamp(32px, 6.5cqw, 46px);
+  height: 36px;
   border-radius: 2px;
   cursor: crosshair;
   position: relative;
   overflow: hidden;
   background: var(--block-bg);
+  box-shadow: inset 0 0 7px 0 #FFFFFF;
   animation: qualityBlockIn 0.95s ease both;
   animation-delay: calc(var(--block-index) * 38ms);
   transition:
@@ -29,79 +30,69 @@
   transform: translateY(-1.5px);
 }
 
-/* soft diagonal stripes — very subtle */
+/* diagonal stripes — static, matching StackedBars */
 .quality-blocks__block::before {
-  content: '';
-  position: absolute;
-  inset: -2px -20px;
-  background: repeating-linear-gradient(
-    72deg,
-    rgba(255, 255, 255, 0) 0,
-    rgba(255, 255, 255, 0) 6px,
-    rgba(255, 255, 255, 0.12) 6px,
-    rgba(255, 255, 255, 0.12) 8px
-  );
-  filter: blur(0.8px);
-  opacity: 0.7;
-  will-change: transform;
-  animation: qualityBlocksMove 1.8s linear infinite;
-}
-
-/* muted blocks — no stripes, no animation */
-.quality-blocks__block--green-muted::before,
-.quality-blocks__block--blue-muted::before,
-.quality-blocks__block--orange-muted::before {
-  display: none;
-}
-
-/* outer soft halo + vertical gloss */
-.quality-blocks__block::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.30) 0%,
-    rgba(255, 255, 255, 0.05) 45%,
-    rgba(0, 0, 0, 0.08) 100%
+  background: repeating-linear-gradient(
+    66deg,
+    rgba(255, 255, 255, 0.05) 0px,
+    rgba(255, 255, 255, 0.05) 2px,
+    transparent 2px,
+    transparent 5px
   );
   pointer-events: none;
 }
 
-/* ── Active tones ───────────────────────────── */
-.quality-blocks__block--green {
-  --block-bg: #6FA011;
-  --block-color: #6FA011;
-}
-.quality-blocks__block--blue {
-  --block-bg: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
-  --block-color: #1877F2;
-}
-.quality-blocks__block--orange {
-  --block-bg: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
-  --block-color: #FF6A00;
-}
-.quality-blocks__block--red {
-  --block-bg: var(--theRed, #FF5757);
-  --block-color: var(--theRed, #FF5757);
+/* muted blocks — no stripes */
+.quality-blocks__block--green-muted::before,
+.quality-blocks__block--blue-muted::before,
+.quality-blocks__block--orange-muted::before,
+.quality-blocks__block--purple-muted::before,
+.quality-blocks__block--red-muted::before {
+  display: none;
 }
 
-/* ── Muted (inactive) tones — pale, no stripes ── */
+/* ── Active tones ───────────────────────────── */
+.quality-blocks__block--green {
+  --block-bg: #1877F2;
+}
+.quality-blocks__block--blue {
+  --block-bg: #9389E8;
+}
+.quality-blocks__block--purple {
+  --block-bg: #9389E8;
+}
+.quality-blocks__block--orange {
+  --block-bg: #CB81DE;
+}
+.quality-blocks__block--red {
+  --block-bg: #FF4D4D;
+}
+
+/* ── Muted (inactive) tones — pale, no shadow ── */
 .quality-blocks__block--green-muted {
-  --block-bg: #cfe08f;
+  --block-bg: #b3d0fb;
   box-shadow: none;
   animation: none;
   opacity: 0.75;
 }
 .quality-blocks__block--blue-muted {
-  --block-bg: #bdd4f5;
+  --block-bg: #d4d0f5;
   box-shadow: none;
   animation: none;
   opacity: 0.75;
 }
 .quality-blocks__block--orange-muted {
-  --block-bg: #fde3ba;
+  --block-bg: #f0d5f7;
+  box-shadow: none;
+  animation: none;
+  opacity: 0.75;
+}
+.quality-blocks__block--purple-muted {
+  --block-bg: #d6d1f4;
   box-shadow: none;
   animation: none;
   opacity: 0.75;
@@ -112,14 +103,8 @@
   animation: none;
   opacity: 0.75;
 }
-.quality-blocks__block--red-muted::before { display: none; }
 
 @keyframes qualityBlockIn {
   from { opacity: 0; transform: scaleY(0.6); }
   to   { opacity: 1; transform: scaleY(1); }
-}
-
-@keyframes qualityBlocksMove {
-  from { transform: translateX(0); }
-  to   { transform: translateX(20px); }
 }

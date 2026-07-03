@@ -132,7 +132,7 @@
 
 /* Right: uptime % (gray) + latency (bold blue) */
 .system-monitoring-card__service-head > div:last-child {
-  text-align: right;
+  text-align: end;
   flex-shrink: 0;
 }
 

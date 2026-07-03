@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import {
   AiActionButton,
   AiInsight,
-  SegmentedStripedBar,
+  TaskProgressBar,
 } from '../../visuals-parts'
 import { workflowAutomationCardData } from '../../../api/automationExecutionMockData.js'
 import { useWorkflowsData } from '../../../hooks/useAutomationData'
@@ -119,12 +119,10 @@ export function WorkflowAutomationCard({ data: propData, useRealData = true }) {
                     <strong>{workflow.result}</strong>
                   </div>
                 </div>
-                <SegmentedStripedBar
+                <TaskProgressBar
                   value={progress}
                   segments={5}
                   activeSegments={activeSegments}
-                  tone="blue"
-                  label={`${workflow.label}: ${progress}% • ${workflow.result}`}
                 />
               </div>
             )

@@ -180,7 +180,7 @@
   background: rgba(27, 28, 32, 0.045);
   color: #15161a;
   font: inherit;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
   transition: background 160ms ease, transform 180ms ease;
 }

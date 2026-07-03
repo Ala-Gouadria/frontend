@@ -3,7 +3,7 @@ import {
   AiActionButton,
   AiInsight,
   DottedDataBars,
-  SegmentedStripedBar,
+  TaskProgressBar,
 } from '../../visuals-parts'
 import { systemMonitoringCardData } from '../../../api/automationExecutionMockData.js'
 import { useSystemHealth } from '../../../hooks/useAutomationData'
@@ -145,12 +145,10 @@ export function SystemMonitoringCard({ data: propData, useRealData = true }) {
                   <strong>{service.latency}</strong>
                 </div>
               </div>
-              <SegmentedStripedBar
+              <TaskProgressBar
                 value={(service.healthScore / 5) * 100}
                 segments={5}
                 activeSegments={service.healthScore}
-                tone="blue"
-                label={`${service.label}: ${service.uptime} uptime • ${service.latency}`}
               />
             </div>
           ))}

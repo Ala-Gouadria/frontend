@@ -59,6 +59,7 @@ export function MiniLineChart({
   const uid = safeId(useId())
   const gradientId = `mini-line-gradient-${uid}`
   const strokeGradientId = `mini-line-stroke-${uid}`
+  const innerShadowId = `mini-line-inner-shadow-${uid}`
   const parsedPoints = parsePoints(points)
   const linePath = buildSmoothPath(parsedPoints)
   const baseline = 58
@@ -82,11 +83,22 @@ export function MiniLineChart({
           <stop offset="0%" stopColor="var(--mini-line-stroke-start)" />
           <stop offset="100%" stopColor="var(--mini-line-stroke-end)" />
         </linearGradient>
+        <filter id={innerShadowId} x="-5%" y="-5%" width="110%" height="110%">
+          <feFlood result="flood" floodColor="#FFFFFF" floodOpacity="1" />
+          <feComposite in="flood" in2="SourceAlpha" operator="in" result="masked" />
+          <feOffset dx="0" dy="4" result="offset" />
+          <feGaussianBlur stdDeviation="4.4" in="offset" result="blurred" />
+          <feComposite in="blurred" in2="SourceAlpha" operator="in" result="clipped" />
+          <feMerge>
+            <feMergeNode in="SourceGraphic" />
+            <feMergeNode in="clipped" />
+          </feMerge>
+        </filter>
       </defs>
       <path
         d={fillPath || fillPoints}
         className="mini-line-chart__fill"
-        style={{ fill: `url(#${gradientId})` }}
+        style={{ fill: `url(#${gradientId})`, filter: `url(#${innerShadowId})` }}
         vectorEffect="non-scaling-stroke"
       />
       <path d={linePath} className="mini-line-chart__line" style={{ stroke: `url(#${strokeGradientId})` }} vectorEffect="non-scaling-stroke" />

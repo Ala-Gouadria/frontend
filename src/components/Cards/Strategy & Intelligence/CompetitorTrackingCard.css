@@ -51,7 +51,7 @@
 .ct-card__competitor-result {
   display: grid;
   gap: 1px;
-  text-align: right;
+  text-align: end;
 }
 
 .ct-card__tactic {

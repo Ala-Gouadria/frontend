@@ -109,6 +109,7 @@ export function AnalyticsReportingCard({ data: propData, useRealData = true }) {
           upperSeries={data.revenueChart.upperSeries}
           lowerSeries={data.revenueChart.lowerSeries}
           activeIndex={data.revenueChart.activeIndex}
+          tone="blue"
         />
       </section>
 

@@ -20,7 +20,7 @@
 
 .dotted-data-bars__dot {
   fill: var(--dotted-bars-color);
-  shape-rendering: crispEdges;
+  shape-rendering: geometricPrecision;
   cursor: crosshair;
   transition:
     fill 140ms ease,

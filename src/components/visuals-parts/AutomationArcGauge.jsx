@@ -5,9 +5,9 @@ function classNames(...values) {
 }
 
 function clampProgress(value, fallback = 0) {
-  const number = Number(value)
-  const safeValue = Number.isFinite(number) ? number : fallback
-  return Math.max(0, Math.min(safeValue, 1))
+  const n = Number(value)
+  const v = Number.isFinite(n) ? n : fallback
+  return Math.max(0, Math.min(v, 1))
 }
 
 function parseLabelParts(label) {
@@ -16,125 +16,108 @@ function parseLabelParts(label) {
   return { percent: null, rest: label }
 }
 
-const CX = 240
-const CY = 240
-const R = 200
-const START_RAD = (200 * Math.PI) / 180
-const END_RAD = (340 * Math.PI) / 180
-const SWEEP = END_RAD - START_RAD
+// ── Geometry: wide arched slice of an ellipse (matches Figma) ───────────────
+const CX = 360
+const CY = 245
+const RX = 330
+const RY = 215
+const START_ANGLE = 158 * (Math.PI / 180)
+const END_ANGLE   = 22  * (Math.PI / 180)
 
-function arcPoint(progress, radius = R) {
-  const a = START_RAD + progress * SWEEP
+function arcPoint(progress, offset = 0) {
+  const angle = START_ANGLE + (END_ANGLE - START_ANGLE) * progress
   return {
-    x: CX + radius * Math.cos(a),
-    y: CY + radius * Math.sin(a),
+    x: CX + (RX + offset) * Math.cos(angle),
+    y: CY - (RY + offset) * Math.sin(angle),
   }
 }
 
-const startPt = arcPoint(0)
-const endPt = arcPoint(1)
-const FULL_ARC = `M ${startPt.x.toFixed(2)} ${startPt.y.toFixed(2)} A ${R} ${R} 0 0 1 ${endPt.x.toFixed(2)} ${endPt.y.toFixed(2)}`
+const ARC_START = arcPoint(0)
+const ARC_END   = arcPoint(1)
+const FULL_PATH = `M ${ARC_START.x.toFixed(2)} ${ARC_START.y.toFixed(2)} A ${RX} ${RY} 0 0 1 ${ARC_END.x.toFixed(2)} ${ARC_END.y.toFixed(2)}`
 
-const STROKE = 16
 const TICK_COUNT = 17
-const OUTER_R = R + 34
-const INNER_R = R + 20
+const TICK_GAP   = 10  // gap between arc outer edge and tick start
+const MAJOR_LEN  = 22  // progress-side tick length
+const MINOR_LEN  = 14  // unfilled-side tick length
 
-// Compute a real bounding box from the geometry so the arc, ticks and cap
-// always fit inside the viewBox (the old version relied on overflow:visible,
-// which blew the arc past the frame and clipped the ticks).
-const ARC_BOTTOM_Y = CY + R * Math.sin(START_RAD)
-const LABEL_Y = ARC_BOTTOM_Y + 38
+const LABEL_Y = 152  // text sits inside the bowl, just above the arc ends
 
-const VIEW_BOX = (() => {
-  const PAD = 14
-  const xs = []
-  const ys = []
-  for (let i = 0; i <= 64; i++) {
-    const t = i / 64
-    const a = arcPoint(t)
-    const o = arcPoint(t, OUTER_R)
-    xs.push(a.x, o.x)
-    ys.push(a.y, o.y)
-  }
-  const minX = Math.min(...xs) - STROKE / 2 - PAD
-  const maxX = Math.max(...xs) + STROKE / 2 + PAD
-  const minY = Math.min(...ys) - PAD
-  const maxY = Math.max(Math.max(...ys) + STROKE / 2 + PAD + 4, LABEL_Y + 24)
-  return `${minX.toFixed(1)} ${minY.toFixed(1)} ${(maxX - minX).toFixed(1)} ${(maxY - minY).toFixed(1)}`
-})()
+const VIEW_BOX = '0 -8 720 196'
 
 export function AutomationArcGauge({ progress = 0.7, label = '70% In Progress', detail, className = '' }) {
-  const safeProgress = clampProgress(progress, 0.7)
-  const cap = arcPoint(safeProgress)
+  const safeProgress = clampProgress(progress)
+  const cap     = arcPoint(safeProgress)
   const tooltip = detail ?? `${label} • ${Math.round(safeProgress * 100)}%`
   const { percent, rest } = parseLabelParts(label)
 
-  // Progress gradient runs along the filled portion (start -> cap).
+  // Progress gradient runs from arc start (left) to the cap
   const gradStart = arcPoint(0)
-  const gradEnd = arcPoint(safeProgress)
-  // Track gradient: solid where the progress ends (the cap) and fading out
-  // toward the end of the arc — matching the design.
-  const trackStart = arcPoint(Math.min(safeProgress, 0.98))
-  const trackEnd = arcPoint(1)
+  const gradEnd   = arcPoint(safeProgress)
+
+  const dashFilled = `${safeProgress * 100} 100`
 
   return (
     <div className={classNames('automation-arc-gauge', className)} data-tooltip={tooltip} title={tooltip}>
-      <svg className="automation-arc-gauge__svg" viewBox={VIEW_BOX} preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <svg
+        className="automation-arc-gauge__svg"
+        viewBox={VIEW_BOX}
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden="true"
+      >
         <defs>
+          {/* #2D7CFF at arc start → #64A6FF at cap position */}
           <linearGradient
-            id="progressGradient"
+            id="aaProgressGrad"
             x1={gradStart.x} y1={gradStart.y}
-            x2={gradEnd.x} y2={gradEnd.y}
+            x2={gradEnd.x}   y2={gradEnd.y}
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%" stopColor="rgba(214,245,112,.10)" />
-            <stop offset="16%" stopColor="#d3ed5f" />
-            <stop offset="52%" stopColor="#a9d121" />
-            <stop offset="100%" stopColor="#8cbf1b" />
+            <stop offset="0%"   stopColor="#2D7CFF" />
+            <stop offset="100%" stopColor="#64A6FF" />
           </linearGradient>
-          <linearGradient
-            id="trackGradient"
-            x1={trackStart.x} y1={trackStart.y}
-            x2={trackEnd.x} y2={trackEnd.y}
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop offset="0%" stopColor="rgba(205,221,176,.85)" />
-            <stop offset="55%" stopColor="rgba(214,224,196,.45)" />
-            <stop offset="100%" stopColor="rgba(220,228,205,0)" />
-          </linearGradient>
+
         </defs>
 
+        {/* ── Tick marks ─────────────────────────────────────────────────── */}
         {Array.from({ length: TICK_COUNT }).map((_, i) => {
-          const t = i / (TICK_COUNT - 1)
-          const outer = arcPoint(t, OUTER_R)
-          const inner = arcPoint(t, INNER_R)
+          const t       = i / (TICK_COUNT - 1)
+          const isMuted = t > safeProgress + 0.025
+          const len     = isMuted ? MINOR_LEN : MAJOR_LEN
+          const inner   = arcPoint(t, TICK_GAP)
+          const outer   = arcPoint(t, TICK_GAP + len)
           return (
             <line
               key={i}
-              x1={outer.x} y1={outer.y}
-              x2={inner.x} y2={inner.y}
+              x1={inner.x} y1={inner.y}
+              x2={outer.x} y2={outer.y}
               className={classNames(
                 'automation-arc-gauge__tick',
-                t > safeProgress + 0.005 && 'automation-arc-gauge__tick--muted'
+                isMuted && 'automation-arc-gauge__tick--muted',
               )}
               style={{ '--tick-index': i }}
             />
           )
         })}
 
-        <path d={FULL_ARC} className="automation-arc-gauge__track" />
+        {/* ── Background track (full arc, no glow) ─────────────────────── */}
+        <path d={FULL_PATH} className="automation-arc-gauge__track" />
+
+        {/* ── Progress arc (gradient + subtle glow) ────────────────────── */}
         <path
-          d={FULL_ARC}
+          d={FULL_PATH}
           className="automation-arc-gauge__progress"
           pathLength="100"
-          strokeDasharray={`${safeProgress * 100} 100`}
+          strokeDasharray={dashFilled}
         />
-        <circle cx={cap.x} cy={cap.y} r="11" className="automation-arc-gauge__cap" />
 
+        {/* ── Cap / knob ────────────────────────────────────────────────── */}
+        <circle cx={cap.x} cy={cap.y} r="18" className="automation-arc-gauge__cap" />
+
+        {/* ── Label ─────────────────────────────────────────────────────── */}
         <text x={CX} y={LABEL_Y} textAnchor="middle" className="automation-arc-gauge__label-svg">
           {percent && <tspan className="automation-arc-gauge__label-percent">{percent}</tspan>}
-          {rest && <tspan className="automation-arc-gauge__label-rest"> {rest}</tspan>}
+          {rest    && <tspan className="automation-arc-gauge__label-rest"> {rest}</tspan>}
         </text>
       </svg>
     </div>

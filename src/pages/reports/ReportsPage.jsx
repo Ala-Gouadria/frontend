@@ -21,8 +21,12 @@ import {
   StageFlow,
   StackedBars,
   StripedBars,
-  WebsiteArcGauge,
 } from '../../components/visuals-parts'
+import { PlatformEngagementCard } from '../../components/visuals-parts/PlatformEngagementCard'
+import fbIconUrl from '../../assets/icons/Social-Media-Card-Icon/fb.svg'
+import inIconUrl from '../../assets/icons/Social-Media-Card-Icon/in.svg'
+import igIconUrl from '../../assets/icons/Social-Media-Card-Icon/instagram.svg'
+import tiktokIconUrl from '../../assets/icons/Patch-Icon/Tiktok-icon.png'
 import {
   analyticsReportingCardData,
   conversionFunnelCardData,
@@ -84,43 +88,28 @@ function barsToColumns(bars = []) {
   }))
 }
 
-function barsToDenseDotColumns(bars = []) {
-  return bars.map((bar, index) => ({
-    label: `P${index + 1}`,
-    value: bar,
-    count: Math.max(1, Math.round(bar / 9)),
-  }))
-}
-
-function expandDotColumns(columns = []) {
-  if (columns.length >= 10) {
-    return columns
-  }
-
-  return columns.flatMap((column, index) => {
-    const nextColumn = columns[index + 1]
-
-    if (!nextColumn || columns.length + index >= 10) {
-      return [column]
-    }
-
-    return [
-      column,
-      {
-        label: `${column.label}-${nextColumn.label}`,
-        value: column.value,
-        count: Math.max(1, Math.round((column.count + nextColumn.count) / 2)),
-      },
-    ]
-  }).slice(0, 10)
-}
-
-function metricToDotColumns(metric) {
+// Bars for MiniBarChart — use the raw bar series when present, otherwise
+// interpolate the sparse dot columns up to a denser, consistent run.
+function metricToBars(metric, target = 12) {
   if (metric.bars) {
-    return barsToDenseDotColumns(metric.bars)
+    return metric.bars
   }
 
-  return expandDotColumns(metric.columns ?? [])
+  const counts = (metric.columns ?? []).map((col) =>
+    typeof col === 'number' ? col : col.count ?? 0,
+  )
+
+  if (counts.length === 0 || counts.length >= target) {
+    return counts
+  }
+
+  return Array.from({ length: target }, (_, index) => {
+    const position = (index / (target - 1)) * (counts.length - 1)
+    const leftIndex = Math.floor(position)
+    const rightIndex = Math.min(counts.length - 1, leftIndex + 1)
+    const ratio = position - leftIndex
+    return counts[leftIndex] + (counts[rightIndex] - counts[leftIndex]) * ratio
+  })
 }
 
 function DownloadIcon() {
@@ -260,18 +249,18 @@ function AnalyticsReport() {
       <div className="reports-page__analytics-top">
         <div>
           <h3>{t('reports.revenue')}</h3>
-          <AreaRevenueChart {...analyticsReportingCardData.revenueChart} />
+          <AreaRevenueChart {...analyticsReportingCardData.revenueChart} tone="blue" />
         </div>
         <div>
           <h3>{portfolioAnalyticsCardData.gaugeTitle}</h3>
-          <SemiCircleGauge {...portfolioAnalyticsCardData.gauge} />
+          <SemiCircleGauge {...portfolioAnalyticsCardData.gauge} tone="blue" />
         </div>
       </div>
 
       <MetricGrid columns={5} className="reports-page__analytics-metrics">
         {topMetrics.map((metric) => (
           <MetricItem key={metric.label} label={metric.label} value={metric.value}>
-            <DottedDataBars columns={metricToDotColumns(metric)} className="reports-page__analytics-dots" />
+            <MiniBarChart bars={metricToBars(metric)} tone="green" className="reports-page__analytics-dots" />
           </MetricItem>
         ))}
       </MetricGrid>
@@ -363,6 +352,13 @@ function SalesReport() {
   )
 }
 
+const PLATFORM_ICONS = {
+  facebook: { src: fbIconUrl, alt: 'Facebook' },
+  linkedin: { src: inIconUrl, alt: 'LinkedIn' },
+  instagram: { src: igIconUrl, alt: 'Instagram' },
+  tiktok: { src: tiktokIconUrl, alt: 'TikTok' },
+}
+
 function SocialReport() {
   const { t } = useTranslation()
   return (
@@ -374,12 +370,20 @@ function SocialReport() {
         </div>
         <ActivityRings />
       </div>
-      <MetricGrid columns={3}>
-        {socialMediaManagerCardData.engagementCards.map((card) => (
-          <MetricItem key={card.icon} label={card.icon} value={card.value}>
-            <MiniLineChart points={card.points} fillPoints={`${card.points} 112,58 4,58`} tone={card.tone === 'pink' ? 'pink' : 'blue'} />
-          </MetricItem>
-        ))}
+      <MetricGrid columns={4}>
+        {socialMediaManagerCardData.engagementCards.map((card) => {
+          const icon = PLATFORM_ICONS[card.iconKey] ?? {}
+          return (
+            <PlatformEngagementCard
+              key={card.id}
+              iconSrc={icon.src}
+              iconAlt={icon.alt}
+              delta={card.value}
+              points={card.points}
+              tone={card.tone}
+            />
+          )
+        })}
       </MetricGrid>
       <MetricGrid columns={3}>
         {socialMediaStrategyCardData.reasonColumns.map((metric) => (
@@ -409,14 +413,11 @@ function WebsiteReport() {
         ))}
       </MetricGrid>
       <div className="reports-page__gauge-pair">
-        <WebsiteArcGauge
-          value={trafficQualityCardData.gauge.current}
-          label={trafficQualityCardData.gauge.label}
-          progress={trafficQualityCardData.gauge.progress}
-          compact
-        />
-        {pagePerformanceCardData.gauges.map((gauge) => (
-          <WebsiteArcGauge key={gauge.label} value={gauge.value} label={gauge.label} progress={gauge.progress} compact />
+        {[trafficQualityCardData.gauge, ...pagePerformanceCardData.gauges].map((gauge) => (
+          <div key={gauge.label} className="reports-page__gauge-item">
+            <SemiCircleGauge label={String(gauge.value ?? gauge.current)} progress={gauge.progress} tone="blue" />
+            <span className="reports-page__gauge-caption">{gauge.label}</span>
+          </div>
         ))}
       </div>
       <FlowRows rows={websiteTrafficCardData.sourceMix} />

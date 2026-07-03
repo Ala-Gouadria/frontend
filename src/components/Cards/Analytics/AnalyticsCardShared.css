@@ -53,12 +53,12 @@
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  background: linear-gradient(180deg, #dff15d 0%, #80ad07 100%);
+  background: linear-gradient(96.85deg, #1877F2 3.59%, #6DA3FF 94.78%);
   color: #fff;
   font-size: 0.68rem;
   font-weight: 700;
   box-shadow:
-    0 8px 14px rgba(138, 177, 18, 0.22),
+    0 8px 14px rgba(24, 119, 242, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
   animation: analyticsStatusPulse 1.9s ease-in-out infinite alternate;
 }
@@ -95,20 +95,20 @@
 .analytics-card__panel {
   overflow: hidden;
   border-radius: 18px;
-  background: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
-  padding: 0 7px 7px;
-  box-shadow: 0 12px 24px rgba(255, 106, 0, 0.24);
+  background: linear-gradient(97.16deg, #98BEFE 2.09%, #FFDFEA 98.89%);
+  padding: 0 5px 5px;
+  box-shadow: 0 12px 24px rgba(152, 190, 254, 0.24);
   transition: transform 190ms ease, box-shadow 190ms ease;
 }
 
 .analytics-card__panel:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 30px rgba(255, 106, 0, 0.3);
+  box-shadow: 0 16px 30px rgba(152, 190, 254, 0.3);
 }
 
 .analytics-card__panel--green {
-  background: linear-gradient(90deg, #D5E64C 0%, #5F8F00 100%);
-  box-shadow: 0 12px 24px rgba(95, 143, 0, 0.22);
+  background: linear-gradient(97.13deg, #CBC6FF 2.65%, #B49FE4 100%);
+  box-shadow: 0 12px 24px rgba(180, 159, 228, 0.28);
 }
 
 .analytics-card__panel--red {
@@ -120,11 +120,15 @@
   min-height: 34px;
   padding: 11px 14px;
   background: transparent;
-  color: #fff;
+  color: #000000;
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   font-family: "Poppins", Manrope, "Segoe UI", sans-serif;
+}
+
+.analytics-card__panel--red .analytics-card__panel-title {
+  color: #ffffff;
 }
 
 .analytics-card__panel-body {
@@ -345,7 +349,7 @@
 }
 
 .analytics-card__gauge-wrap .semi-circle-gauge__value {
-  color: #0f1116;
+  color: var(--gauge-text, #0f1116);
 }
 
 .analytics-card__gauge-wrap .semi-circle-gauge__svg {
@@ -371,13 +375,13 @@
 @keyframes analyticsStatusPulse {
   from {
     box-shadow:
-      0 8px 14px rgba(138, 177, 18, 0.22),
+      0 8px 14px rgba(24, 119, 242, 0.22),
       inset 0 1px 0 rgba(255, 255, 255, 0.35);
   }
   to {
     box-shadow:
-      0 10px 18px rgba(138, 177, 18, 0.32),
-      0 0 0 4px rgba(194, 225, 51, 0.1),
+      0 10px 18px rgba(24, 119, 242, 0.32),
+      0 0 0 4px rgba(24, 119, 242, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.42);
   }
 }

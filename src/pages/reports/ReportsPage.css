@@ -328,7 +328,7 @@
 }
 
 .reports-page .reports-page__analytics-dots .dotted-data-bars__dot {
-  r: 1.35px;
+  r: 0.6px;
 }
 
 .reports-page .mini-line-chart,
@@ -378,7 +378,11 @@
 }
 
 .reports-page__legend-dot--blue {
-  background: linear-gradient(180deg, #5ba1ff 0%, #2e7fff 100%);
+  background: #1877F2;
+}
+
+.reports-page__legend-dot--purple {
+  background: #9389E8;
 }
 
 .reports-page__legend-dot--orange {
@@ -386,7 +390,7 @@
 }
 
 .reports-page__legend-dot--red {
-  background: linear-gradient(180deg, #ff8a8a 0%, #f04444 100%);
+  background: #FF4D4D;
 }
 
 .reports-page .stacked-bars {
@@ -499,6 +503,18 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
+}
+
+.reports-page__gauge-item {
+  display: grid;
+  justify-items: center;
+}
+
+.reports-page__gauge-caption {
+  margin-top: -10px;
+  font-size: 15px;
+  color: #6d727b;
+  text-align: center;
 }
 
 .reports-page__automation-top {

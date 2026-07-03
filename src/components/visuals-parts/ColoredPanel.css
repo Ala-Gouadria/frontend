@@ -1,10 +1,10 @@
 .colored-panel {
-  --colored-panel-bg: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
-  --colored-panel-shadow: rgba(255, 106, 0, 0.24);
+  --colored-panel-bg: linear-gradient(97.16deg, #98BEFE 2.09%, #FFDFEA 98.89%);
+  --colored-panel-shadow: rgba(152, 190, 254, 0.24);
 
   overflow: hidden;
   border-radius: 18px;
-  padding: 0 7px 7px;
+  padding: 0 5px 5px;
   background: var(--colored-panel-bg);
   box-shadow: 0 12px 24px var(--colored-panel-shadow);
   transition: transform 190ms ease, box-shadow 190ms ease;
@@ -16,13 +16,13 @@
 }
 
 .colored-panel--orange {
-  --colored-panel-bg: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
-  --colored-panel-shadow: rgba(255, 106, 0, 0.24);
+  --colored-panel-bg: linear-gradient(97.16deg, #98BEFE 2.09%, #FFDFEA 98.89%);
+  --colored-panel-shadow: rgba(152, 190, 254, 0.24);
 }
 
 .colored-panel--green {
-  --colored-panel-bg: linear-gradient(90deg, #D5E64C 0%, #5F8F00 100%);
-  --colored-panel-shadow: rgba(95, 143, 0, 0.22);
+  --colored-panel-bg: linear-gradient(97.13deg, #CBC6FF 2.65%, #B49FE4 100%);
+  --colored-panel-shadow: rgba(180, 159, 228, 0.28);
 }
 
 .colored-panel--red {
@@ -33,11 +33,15 @@
 .colored-panel__title {
   min-height: 34px;
   padding: 11px 14px;
-  color: #ffffff;
+  color: #000000;
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   font-family: "Poppins", Manrope, "Segoe UI", sans-serif;
+}
+
+.colored-panel--red .colored-panel__title {
+  color: #ffffff;
 }
 
 .colored-panel__body {

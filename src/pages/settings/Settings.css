@@ -18,12 +18,12 @@
   z-index: 5;
   width: min(1020px, calc(var(--vw) - 520px));
   margin: 62px 0 0;
-  margin-left: clamp(180px, 18.9vw, 363px);
+  margin-inline-start: clamp(180px, 18.9vw, 363px);
   animation: settingsPageIn 540ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .settings-header {
-  padding-left: 8px;
+  padding-inline-start: 8px;
 }
 
 .settings-header h1 {
@@ -81,13 +81,13 @@
 
 .settings-row--interactive {
   cursor: pointer;
-  transition: background 160ms ease, padding-left 160ms ease;
+  transition: background 160ms ease, padding-inline-start 160ms ease;
 }
 
 .settings-row--interactive:hover,
 .settings-row--interactive:focus-visible {
   background: #fbfbfb;
-  padding-left: 24px;
+  padding-inline-start: 24px;
   outline: none;
 }
 
@@ -353,7 +353,7 @@
 @media (max-width: 1100px) {
   .settings-content {
     width: calc(var(--vw) - 180px);
-    margin-left: 120px;
+    margin-inline-start: 120px;
   }
 }
 

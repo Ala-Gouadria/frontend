@@ -73,12 +73,3 @@
   font-weight: 700;
 }
 
-/* Taller segments, sharp 90° corners ───────────────────────────────────── */
-.task-execution-card__task .segmented-striped-bar {
-  gap: 5px;
-}
-
-.task-execution-card__task .segmented-striped-bar__segment {
-  height: 26px;
-  border-radius: 0;
-}

@@ -276,7 +276,7 @@
   background: transparent;
   color: #111111;
   cursor: pointer;
-  text-align: left;
+  text-align: start;
 }
 
 .nora-history-item:hover,

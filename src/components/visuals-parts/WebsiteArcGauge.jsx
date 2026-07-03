@@ -31,10 +31,11 @@ export function WebsiteArcGauge({
   const cy = compact ? 94 : 156
   const radius = compact ? 82 : 154
   const cap = arcPoint(cx, cy, radius, safeProgress)
-  const viewBox = compact ? '0 0 200 118' : '0 0 360 192'
+  const viewBox = compact ? '0 0 200 120' : '0 0 360 192'
   const path = compact
     ? 'M 18 94 A 82 82 0 0 1 182 94'
     : 'M 26 156 A 154 154 0 0 1 334 156'
+  const dashFilled = `${safeProgress * 100} 100`
 
   return (
     <div
@@ -42,32 +43,44 @@ export function WebsiteArcGauge({
       data-tooltip={`${label}: ${value} (${Math.round(safeProgress * 100)}%)`}
       title={`${label}: ${value}`}
     >
-      <svg className="website-arc-gauge__svg" viewBox={viewBox} aria-hidden="true">
-        {Array.from({ length: compact ? 17 : 0 }).map((_, index) => {
-          const tickProgress = index / 16
-          const outer = arcPoint(cx, cy, radius - 16, tickProgress)
-          const inner = arcPoint(cx, cy, radius - 23, tickProgress)
-
-          return (
-            <line
-              key={`tick-${index}`}
-              x1={outer.x}
-              y1={outer.y}
-              x2={inner.x}
-              y2={inner.y}
-              className="website-arc-gauge__tick"
-              style={{ '--tick-index': index }}
-            />
-          )
-        })}
+      <svg className="website-arc-gauge__svg" viewBox={viewBox} aria-hidden="true" overflow="visible">
+        {compact ? (
+          <>
+            {/* Wide diffuse glow — progress side only (matches Figma layered bloom) */}
+            <path d={path} className="website-arc-gauge__glow website-arc-gauge__glow--3" pathLength="100" strokeDasharray={dashFilled} />
+            <path d={path} className="website-arc-gauge__glow website-arc-gauge__glow--2" pathLength="100" strokeDasharray={dashFilled} />
+            <path d={path} className="website-arc-gauge__glow website-arc-gauge__glow--1" pathLength="100" strokeDasharray={dashFilled} />
+            {/* Tick dividers across full arc */}
+            {Array.from({ length: 24 }).map((_, index) => {
+              const tickProgress = index / 23
+              const outer = arcPoint(cx, cy, radius + 2, tickProgress)
+              const inner = arcPoint(cx, cy, radius - 10, tickProgress)
+              return (
+                <line
+                  key={`tick-${index}`}
+                  x1={outer.x}
+                  y1={outer.y}
+                  x2={inner.x}
+                  y2={inner.y}
+                  className="website-arc-gauge__tick"
+                  style={{ '--tick-index': index }}
+                />
+              )
+            })}
+          </>
+        ) : (
+          Array.from({ length: 0 }).map(() => null)
+        )}
+        {/* Faint track — full arc (unfilled side visual) */}
         <path d={path} className="website-arc-gauge__track" />
+        {/* Solid progress arc on top */}
         <path
           d={path}
           className="website-arc-gauge__progress"
           pathLength="100"
-          strokeDasharray={`${safeProgress * 100} 100`}
+          strokeDasharray={dashFilled}
         />
-        <circle cx={cap.x} cy={cap.y} r={compact ? 5 : 15} className="website-arc-gauge__cap" />
+        <circle cx={cap.x} cy={cap.y} r={compact ? 12 : 15} className="website-arc-gauge__cap" />
       </svg>
       <div className="website-arc-gauge__text">
         <strong>{value}</strong>

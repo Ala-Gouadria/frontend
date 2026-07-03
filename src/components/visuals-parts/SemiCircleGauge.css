@@ -1,73 +1,87 @@
 .semi-circle-gauge {
-  /* ---- Green (default) ---- */
-  --gauge-track:      rgba(190, 210, 80, 0.22);
+  /* ---- Blue (default) ---- */
+  --gauge-track-0: rgba(24, 119, 242, 0.20);
+  --gauge-track-1: rgba(24, 119, 242, 0.20);
+  --gauge-track-2: rgba(9, 169, 81, 0.16);
 
-  /* progress band gradient: pale lime → vivid → deep green */
-  --gauge-progress-0: #D4DE7C;
-  --gauge-progress-1: #C0D24A;
-  --gauge-progress-2: #A8C230;
-  --gauge-progress-3: #94B420;
-  --gauge-progress-4: #7EA214;
+  /* filled band: translucent start → #3787F7 → #A2B8F7 */
+  --gauge-band-0: rgba(55, 135, 247, 0.28);
+  --gauge-band-1: rgba(55, 135, 247, 0.72);
+  --gauge-band-2: #3787F7;
+  --gauge-band-3: #A2B8F7;
+  --gauge-band-glow: rgba(55, 135, 247, 0.50);
 
-  /* knob radial fill — muted, less saturated than the band */
-  --gauge-knob-0: #DDE2AE;
-  --gauge-knob-1: #C0C862;
-  --gauge-knob-2: #A0AA3A;
+  --gauge-tick: rgba(255, 255, 255, 0.10);
 
-  --gauge-cap-ring: #ffffff;
+  --gauge-knob-0: #7db0f8;
+  --gauge-knob-1: #3787F7;
+  --gauge-knob-2: #1877F2;
+  --gauge-ring: #ffffff;
 
-  --gauge-text:       #1a1a1a;
-  --gauge-text-muted: rgba(27, 28, 32, 0.38);
+  --gauge-text: #2c3036;
+  --gauge-text-muted: rgba(27, 28, 32, 0.34);
 
   position: relative;
   display: grid;
   justify-items: center;
   width: 100%;
   padding: 2px 0 0;
-
-  /* lets the title + value scale with the component width */
   container-type: inline-size;
-
   font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
 }
 
-.semi-circle-gauge--blue {
-  --gauge-track:      rgba(147, 197, 253, 0.22);
-  --gauge-progress-0: #BFDBFE;
-  --gauge-progress-1: #93C5FD;
-  --gauge-progress-2: #60A5FA;
-  --gauge-progress-3: #3B82F6;
-  --gauge-progress-4: #2563EB;
-  --gauge-knob-0: #DBEAFE;
-  --gauge-knob-1: #93C5FD;
-  --gauge-knob-2: #3B82F6;
+.semi-circle-gauge--green {
+  --gauge-track-0: rgba(150, 190, 40, 0.10);
+  --gauge-track-1: rgba(150, 190, 40, 0.12);
+  --gauge-track-2: rgba(150, 190, 40, 0.12);
+  --gauge-band-0: rgba(196, 210, 90, 0.35);
+  --gauge-band-1: rgba(168, 194, 48, 0.75);
+  --gauge-band-2: #9ab32a;
+  --gauge-band-3: #84a014;
+  --gauge-band-glow: rgba(150, 190, 40, 0.50);
+  --gauge-knob-0: #cbdb7a;
+  --gauge-knob-1: #b6c855;
+  --gauge-knob-2: #84a014;
 }
 
 .semi-circle-gauge--orange {
-  --gauge-track:      rgba(253, 186, 116, 0.22);
-  --gauge-progress-0: #FED7AA;
-  --gauge-progress-1: #FDBA74;
-  --gauge-progress-2: #FB923C;
-  --gauge-progress-3: #F97316;
-  --gauge-progress-4: #EA580C;
-  --gauge-knob-0: #FFEDD5;
-  --gauge-knob-1: #FDBA74;
-  --gauge-knob-2: #F97316;
+  --gauge-track-0: rgba(249, 115, 22, 0.10);
+  --gauge-track-1: rgba(249, 115, 22, 0.12);
+  --gauge-track-2: rgba(249, 115, 22, 0.12);
+  --gauge-band-0: rgba(253, 186, 116, 0.35);
+  --gauge-band-1: rgba(251, 146, 60, 0.78);
+  --gauge-band-2: #f97316;
+  --gauge-band-3: #ea580c;
+  --gauge-band-glow: rgba(249, 115, 22, 0.50);
+  --gauge-knob-0: #fdba74;
+  --gauge-knob-1: #fb923c;
+  --gauge-knob-2: #ea580c;
 }
 
 .semi-circle-gauge__title {
   justify-self: start;
-  margin: 0 0 3cqw;
+  text-align: start;
+  width: 100%;
+  margin: 0 0 2cqw;
   font-size: clamp(0.95rem, 3.7cqw, 2.2rem);
-  line-height: 1.1;
-  font-weight: 500;
+  line-height: 1.15;
+  font-weight: 400;
   letter-spacing: -0.01em;
   color: #111111;
 }
 
-.semi-circle-gauge__svg {
+.semi-circle-gauge__chart {
+  position: relative;
   width: 100%;
-  height: auto;
+  max-width: 510px;
+  aspect-ratio: 2 / 1;
+}
+
+.semi-circle-gauge__svg {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
   display: block;
   overflow: visible;
 }
@@ -76,9 +90,8 @@
   animation: semiGaugeIn 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.semi-circle-gauge__cap-ring {
-  fill: var(--gauge-cap-ring);
-  filter: drop-shadow(0 3px 10px rgba(120, 140, 20, 0.18));
+.semi-circle-gauge__ring {
+  fill: var(--gauge-ring);
   animation: semiGaugeCap 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-box: fill-box;
   transform-origin: center;
@@ -91,24 +104,30 @@
 }
 
 .semi-circle-gauge__value {
+  position: absolute;
+  left: 50%;
+  top: 66%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  margin: 0;
   font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif;
-  font-size: 38px;
-  font-weight: 700;
-  letter-spacing: -0.005em;
-  dominant-baseline: middle;
+  font-size: clamp(1.2rem, 5.4cqw, 2.8rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
   pointer-events: none;
 }
 
 .semi-circle-gauge__current {
-  fill: var(--gauge-text);
-  font-weight: 800;
+  color: var(--gauge-text);
+  font-weight: 600;
 }
 
 .semi-circle-gauge__target {
-  fill: var(--gauge-text-muted);
-  font-size: 33px;
-  font-weight: 400;
-  font-style: italic;
+  color: var(--gauge-text-muted);
+  font-weight: 500;
 }
 
 @keyframes semiGaugeIn {

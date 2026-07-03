@@ -45,43 +45,83 @@ import {
   SocialMediaStrategyCard,
   PerformanceTrackingCard,
 } from '../../components/Cards/Social Media Stuffs'
+
+// ─── Mock data (passed explicitly to the data: propData cards) ────────────────
+import {
+  automationExecutionCardData,
+  systemMonitoringCardData,
+  taskExecutionCardData,
+  workflowAutomationCardData,
+} from '../../api/automationExecutionMockData'
+import {
+  analyticsReportingCardData,
+  campaignPerformanceCardData,
+  conversionFunnelCardData,
+  performanceSummaryCardData,
+  portfolioAnalyticsCardData,
+  salesReportCardData,
+  trafficSourceBreakdownCardData,
+} from '../../api/analyticsMockData'
+import {
+  conversionSignalsCardData,
+  pagePerformanceCardData,
+  seoInsightsCardData,
+  trafficQualityCardData,
+  userBehaviorCardData,
+  websiteTrafficCardData,
+  websiteTrafficStatusCardData,
+} from '../../api/websiteTrafficMockData'
+import {
+  leadGenerationCardData,
+  leadScoringCardData,
+  pipelineTrackingCardData,
+  revenueFeedbackCardData,
+  salesAndLeadsCardData,
+} from '../../api/salesAndLeadsMockData'
+
 import './AnalyticsCardsPreview.css'
 
+// ─── Card sections ───────────────────────────────────────────────────────────
+// Two patterns exist in this codebase:
+//   A) { data: propData } cards  → pass data={mockData} to pin mock data explicitly
+//   B) individual-prop cards     → useRealData={false} alone works (defaults = mock values)
+
 const automationCards = [
-  { name: 'Automation & Execution', Component: AutomationExecutionCard },
-  { name: 'Task Execution',         Component: TaskExecutionCard },
-  { name: 'System Monitoring',      Component: SystemMonitoringCard },
-  { name: 'Workflow Automation',    Component: WorkflowAutomationCard },
+  { name: 'Automation & Execution', Component: AutomationExecutionCard, data: automationExecutionCardData },
+  { name: 'Task Execution',         Component: TaskExecutionCard,        data: taskExecutionCardData },
+  { name: 'System Monitoring',      Component: SystemMonitoringCard,     data: systemMonitoringCardData },
+  { name: 'Workflow Automation',    Component: WorkflowAutomationCard,   data: workflowAutomationCardData },
 ]
 
 const analyticsCards = [
-  { name: 'Campaign Performance',      Component: CampaignPerformanceCard },
-  { name: 'Performance Summary',       Component: PerformanceSummaryCard },
-  { name: 'Conversion Funnel',         Component: ConversionFunnelCard },
-  { name: 'Analytics & Reporting',     Component: AnalyticsReportingCard },
-  { name: 'Sales Report',              Component: SalesReportCard },
-  { name: 'Traffic Source Breakdown',  Component: TrafficSourceBreakdownCard },
-  { name: 'Portfolio Analytics',       Component: PortfolioAnalyticsCard },
+  { name: 'Campaign Performance',      Component: CampaignPerformanceCard,     data: campaignPerformanceCardData },
+  { name: 'Performance Summary',       Component: PerformanceSummaryCard,      data: performanceSummaryCardData },
+  { name: 'Conversion Funnel',         Component: ConversionFunnelCard,        data: conversionFunnelCardData },
+  { name: 'Analytics & Reporting',     Component: AnalyticsReportingCard,      data: analyticsReportingCardData },
+  { name: 'Sales Report',              Component: SalesReportCard,             data: salesReportCardData },
+  { name: 'Traffic Source Breakdown',  Component: TrafficSourceBreakdownCard,  data: trafficSourceBreakdownCardData },
+  { name: 'Portfolio Analytics',       Component: PortfolioAnalyticsCard,      data: portfolioAnalyticsCardData },
 ]
 
 const websiteCards = [
-  { name: 'Website & Traffic',  Component: WebsiteTrafficStatusCard },
-  { name: 'SEO Insights',       Component: SEOInsightsCard },
-  { name: 'User Behavior',      Component: UserBehaviorCard },
-  { name: 'Traffic Quality',    Component: TrafficQualityCard },
-  { name: 'Website Traffic',    Component: WebsiteTrafficCard },
-  { name: 'Page Performance',   Component: PagePerformanceCard },
-  { name: 'Conversion Signals', Component: ConversionSignalsCard },
+  { name: 'Website & Traffic',  Component: WebsiteTrafficStatusCard, data: websiteTrafficStatusCardData },
+  { name: 'SEO Insights',       Component: SEOInsightsCard,          data: seoInsightsCardData },
+  { name: 'User Behavior',      Component: UserBehaviorCard,         data: userBehaviorCardData },
+  { name: 'Traffic Quality',    Component: TrafficQualityCard,       data: trafficQualityCardData },
+  { name: 'Website Traffic',    Component: WebsiteTrafficCard,       data: websiteTrafficCardData },
+  { name: 'Page Performance',   Component: PagePerformanceCard,      data: pagePerformanceCardData },
+  { name: 'Conversion Signals', Component: ConversionSignalsCard,    data: conversionSignalsCardData },
 ]
 
 const salesLeadsCards = [
-  { name: 'Lead Generation',  Component: LeadGenerationCard },
-  { name: 'Lead Scoring',     Component: LeadScoringCard },
-  { name: 'Sales and Leads',  Component: SalesAndLeadsCard },
-  { name: 'Revenue Feedback', Component: RevenueFeedbackCard },
-  { name: 'Pipeline Tracking',Component: PipelineTrackingCard },
+  { name: 'Lead Generation',   Component: LeadGenerationCard,   data: leadGenerationCardData },
+  { name: 'Lead Scoring',      Component: LeadScoringCard,      data: leadScoringCardData },
+  { name: 'Sales and Leads',   Component: SalesAndLeadsCard,    data: salesAndLeadsCardData },
+  { name: 'Revenue Feedback',  Component: RevenueFeedbackCard,  data: revenueFeedbackCardData },
+  { name: 'Pipeline Tracking', Component: PipelineTrackingCard, data: pipelineTrackingCardData },
 ]
 
+// Pattern B — individual-prop cards: defaults already match mock data
 const strategyCards = [
   { name: 'Strategy & Intelligence', Component: StrategyIntelligenceCard },
   { name: 'Competitor Tracking',     Component: CompetitorTrackingCard },
@@ -100,34 +140,38 @@ const socialMediaCards = [
   { name: 'Performance Tracking',    Component: PerformanceTrackingCard },
 ]
 
+function CardSlot({ card, index }) {
+  const { Component, data } = card
+  return (
+    <div
+      className="analytics-cards-preview__item"
+      style={{ '--preview-index': index }}
+    >
+      {/* data prop overrides API fetch; useRealData=false skips all hook transforms */}
+      <Component useRealData={false} {...(data ? { data } : {})} />
+    </div>
+  )
+}
+
 function PreviewGrid({ title, cards, startIndex = 0 }) {
   return (
     <section className="analytics-cards-preview__section" aria-label={`${title} previews`}>
       <h2 className="analytics-cards-preview__section-title">{title}</h2>
       <div className="analytics-cards-preview__grid">
-        {cards.map((card, index) => {
-          const PreviewCard = card.Component
-          return (
-            <div
-              className="analytics-cards-preview__item"
-              key={card.name}
-              style={{ '--preview-index': startIndex + index }}
-            >
-              <PreviewCard />
-            </div>
-          )
-        })}
+        {cards.map((card, index) => (
+          <CardSlot key={card.name} card={card} index={startIndex + index} />
+        ))}
       </div>
     </section>
   )
 }
 
 export default function AnalyticsCardsPreview() {
-  const automationCount   = automationCards.length
-  const websiteCount      = websiteCards.length
-  const analyticsCount    = analyticsCards.length
-  const strategyCount     = strategyCards.length
-  const salesLeadsCount   = salesLeadsCards.length
+  const automationCount  = automationCards.length
+  const websiteCount     = websiteCards.length
+  const analyticsCount   = analyticsCards.length
+  const strategyCount    = strategyCards.length
+  const salesLeadsCount  = salesLeadsCards.length
 
   return (
     <main className="analytics-cards-preview">

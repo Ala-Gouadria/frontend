@@ -101,9 +101,10 @@ export const socialMediaManagerCardData = {
   },
   breakdownLabel: 'Engagement Breakdown',
   engagementCards: [
-    { icon: 'f', value: '+ 32%', tone: 'blue', points: '4,38 18,38 25,42 34,35 46,37 58,31 70,32 78,19 86,39 98,22 108,35' },
-    { icon: 'in', value: '+ 32%', tone: 'blue', points: '4,39 20,39 31,46 41,34 52,34 60,27 74,29 82,15 90,39 100,19 108,34' },
-    { icon: 'ig', value: '+ 24%', tone: 'pink', points: '4,16 18,40 31,34 46,36 56,34 68,37 80,30 90,31 98,18 106,38 112,24' },
+    { id: 'facebook',  iconKey: 'facebook',  value: '+ 32%', tone: 'facebook',  points: '0,36 12,40 24,34 36,44 48,30 60,38 72,22 84,40 96,18 108,36 120,28 132,42 144,24 158,36 172,30' },
+    { id: 'linkedin',  iconKey: 'linkedin',  value: '+ 32%', tone: 'linkedin',  points: '0,40 14,38 26,44 38,32 52,36 64,26 76,34 88,18 100,40 112,22 124,36 136,30 148,42 160,26 172,34' },
+    { id: 'instagram', iconKey: 'instagram', value: '+ 24%', tone: 'instagram', points: '0,22 12,42 26,32 38,38 50,28 64,40 76,24 90,36 102,16 116,38 128,26 142,40 154,22 166,36 172,28' },
+    { id: 'tiktok',    iconKey: 'tiktok',    value: '+ 24%', tone: 'tiktok',    points: '0,30 14,38 28,24 40,42 54,28 66,36 80,20 92,40 106,24 118,38 132,26 144,42 156,22 168,34 172,28' },
   ],
   metrics: {
     primary: {
