@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import './SocialMediaStuffsCardShared.css'
 import './ImageGenerationCard.css'
-import { ActivityProgressPill, AiInsight, AiActionButton, NoraImageLoader } from '../../visuals-parts'
+import { ActivityProgressPill, AiInsight, AiActionButton, DashedCircle, NoraImageLoader } from '../../visuals-parts'
 import { useSocialData } from '../../../hooks/useAnalyticsData'
 import { socialApi } from '../../../api/social.js'
 import { resolveAuthedImageUrl } from '../../../api/authedImage.js'
@@ -198,7 +198,7 @@ export function ImageGenerationCard({
         <div className="smc-card__upcoming-body">
           {data.upcomingBatch.map(item => (
             <div key={item.label} className="smc-card__upcoming-row">
-              <span className="smc-card__upcoming-dot" />
+              <DashedCircle className="smc-card__upcoming-dot" />
               <span className="smc-card__upcoming-label">{item.label}</span>
               <span className="smc-card__upcoming-count">{item.count}</span>
             </div>

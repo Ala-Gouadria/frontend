@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import './SocialMediaStuffsCardShared.css'
 import './SocialMediaStrategyCard.css'
-import { ActivityProgressPill, DottedDataBars, AiInsight, AiActionButton } from '../../visuals-parts'
+import { ActivityProgressPill, DashedCircle, DottedDataBars, AiInsight, AiActionButton } from '../../visuals-parts'
 import { useSocialData } from '../../../hooks/useAnalyticsData'
 import { useSocialPostCounts } from '../../../hooks/useSocialPosts'
 import { seriesToColumns } from '../../../lib/socialCardData'
@@ -228,7 +228,7 @@ export function SocialMediaStrategyCard({
         <div className="smc-card__upcoming-body">
           {data.upcomingPlans.map((plan, i) => (
             <div key={i} className="smc-card__upcoming-row">
-              <span className="smc-card__upcoming-dot" />
+              <DashedCircle className="smc-card__upcoming-dot" />
               <span className="smc-card__upcoming-label">{plan}</span>
             </div>
           ))}

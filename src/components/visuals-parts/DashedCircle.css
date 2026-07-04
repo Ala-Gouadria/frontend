@@ -1,0 +1,17 @@
+.dashed-circle {
+  flex-shrink: 0;
+  transform-origin: center;
+  animation: dashedCircleSpin var(--dashed-circle-duration, 3s) linear infinite;
+}
+
+@keyframes dashedCircleSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashed-circle {
+    animation: none;
+  }
+}

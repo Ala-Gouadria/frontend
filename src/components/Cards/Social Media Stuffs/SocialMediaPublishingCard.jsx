@@ -5,6 +5,7 @@ import {
   ActivityProgressPill,
   AiActionButton,
   AiInsight,
+  DashedCircle,
   SocialPlatformBadge,
   SocialPostPreview,
 } from '../../visuals-parts'
@@ -153,7 +154,7 @@ export function SocialMediaPublishingCard({
         <div className="smc-card__upcoming-body">
           {data.upcomingBatch.map((item) => (
             <div key={item.label} className="smc-card__upcoming-row">
-              <span className="smc-card__upcoming-dot" />
+              <DashedCircle className="smc-card__upcoming-dot" />
               <span className="smc-card__upcoming-label">{item.label}</span>
               <span className="smc-card__upcoming-count">{item.count}</span>
             </div>
