@@ -62,6 +62,7 @@ export function SemiCircleGauge({
   target = 700,
   progress,
   label,
+  caption,
   title,
   tone = 'blue',
   bandWidth = 44,
@@ -123,7 +124,7 @@ export function SemiCircleGauge({
               <stop offset="40%"  stopColor="var(--gauge-band-1)" />
               <stop offset="75%"  stopColor="var(--gauge-band-2)" />
               <stop offset="92%"  stopColor="var(--gauge-band-3)" />
-              <stop offset="100%" stopColor="rgba(9, 169, 81, 0.15)" />
+              <stop offset="100%" stopColor="var(--gauge-band-tip, rgba(9, 169, 81, 0.15))" />
             </linearGradient>
 
             {/* knob fill — flat linear gradient, light top-left to primary blue */}
@@ -169,7 +170,7 @@ export function SemiCircleGauge({
               strokeLinecap="round"
               pathLength="100"
               strokeDasharray={dash}
-              style={{ filter: 'blur(3px)' }}
+              style={{ filter: 'blur(var(--gauge-band-blur, 3px))' }}
               className="semi-circle-gauge__progress"
             />
 
@@ -205,8 +206,11 @@ export function SemiCircleGauge({
         </svg>
 
         <div className="semi-circle-gauge__value">
-          <span className="semi-circle-gauge__current">{currentLabel}</span>
-          {targetLabel ? <span className="semi-circle-gauge__target">/{targetLabel}</span> : null}
+          <span className="semi-circle-gauge__number">
+            <span className="semi-circle-gauge__current">{currentLabel}</span>
+            {targetLabel ? <span className="semi-circle-gauge__target">/{targetLabel}</span> : null}
+          </span>
+          {caption ? <span className="semi-circle-gauge__caption">{caption}</span> : null}
         </div>
       </div>
     </div>

@@ -14,3 +14,29 @@
   gap: 14px;
   font-size: 0.8rem;
 }
+
+/* Blue value ("9.7K") over a dark caption ("Organic clicks") — matches Figma */
+.seo-insights-card__gauge {
+  --gauge-value: #1877f2;
+
+  /* Track — Figma "fade blue" (#1877F2 · 10%), no green tail */
+  --gauge-track-0: rgba(24, 119, 242, 0.10);
+  --gauge-track-1: rgba(24, 119, 242, 0.10);
+  --gauge-track-2: rgba(24, 119, 242, 0.10);
+
+  /* Filled band — Figma "TheBlue" gradient (#1877F2 → #6DA3FF).
+     Hold the deep blue across most of the arc; only lighten near the knob.
+     A tighter blur keeps the fill vivid instead of washed-out. */
+  --gauge-band-0: rgba(24, 119, 242, 0.55);
+  --gauge-band-1: #1877f2;
+  --gauge-band-2: #2b81f4;
+  --gauge-band-3: #5697f8;
+  --gauge-band-tip: #6da3ff;
+  --gauge-band-glow: rgba(24, 119, 242, 0.5);
+  --gauge-band-blur: 1.6px;
+
+  /* Knob — Main Blue */
+  --gauge-knob-0: #6da3ff;
+  --gauge-knob-1: #3d8bf6;
+  --gauge-knob-2: #1877f2;
+}

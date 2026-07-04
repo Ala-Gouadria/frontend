@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { WebsiteArcGauge } from '../../visuals-parts'
+import { SemiCircleGauge } from '../../visuals-parts'
 import { seoInsightsCardData } from '../../../api/websiteTrafficMockData'
 import { useSeoData } from '../../../hooks/useAnalyticsData'
 import {
@@ -109,7 +109,13 @@ export function SEOInsightsCard({ data: propData, useRealData = true }) {
     <article className={`website-card seo-insights-card ${loading ? 'loading' : ''}`}>
       <CardHeader title={data.title} subtitle={data.subtitle} status={data.status} />
       <TrendRow label={data.trendLabel} value={data.trendValue} delta={data.trendDelta} chart={data.topChart} />
-      <WebsiteArcGauge value={data.gauge.current} label={data.gauge.label} progress={data.gauge.progress} />
+      <SemiCircleGauge
+        className="seo-insights-card__gauge"
+        label={data.gauge.current}
+        caption={data.gauge.label}
+        progress={data.gauge.progress > 1 ? data.gauge.progress / 100 : data.gauge.progress}
+        tone="blue"
+      />
 
       <section className="seo-insights-card__keywords">
         <div className="seo-insights-card__head">
