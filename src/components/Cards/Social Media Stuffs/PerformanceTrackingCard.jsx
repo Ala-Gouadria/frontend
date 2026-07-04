@@ -1,9 +1,12 @@
 import { useMemo } from 'react'
 import './SocialMediaStuffsCardShared.css'
 import './PerformanceTrackingCard.css'
-import { MiniLineChart, DottedDataBars, StripedBars, AiInsight, AiActionButton } from '../../visuals-parts'
+import { MiniLineChart, DottedDataBars, StripedBars, AiInsight, AiActionButton, PlatformPerformance } from '../../visuals-parts'
 import { useSocialData } from '../../../hooks/useAnalyticsData'
 import { seriesToColumns, topPostsToPerformers } from '../../../lib/socialCardData'
+import facebookIcon from '../../../assets/icons/Social-Media-Card-Icon/fb.svg'
+import linkedinIcon from '../../../assets/icons/Social-Media-Card-Icon/in.svg'
+import instagramIcon from '../../../assets/icons/Social-Media-Card-Icon/instagram.svg'
 
 const defaultMetrics = [
   { label: 'Reach',  value: '+34k', tone: 'good',
@@ -21,9 +24,9 @@ const defaultPerformers = [
 ]
 
 const defaultPlatforms = [
-  { id: 'fb', label: 'f', color: '#4267B2', bgColor: 'rgba(66,103,178,0.1)', delta: '+34%', deltaGood: true },
-  { id: 'li', label: 'in', color: '#0077B5', bgColor: 'rgba(0,119,181,0.1)', delta: '+44%', deltaGood: true },
-  { id: 'ig', label: '◎', color: '#E1306C', bgColor: 'rgba(225,48,108,0.1)', delta: '-12%', deltaGood: false },
+  { id: 'fb', iconSrc: facebookIcon, iconAlt: 'Facebook', bgColor: 'rgba(24,119,242,0.2)', deltaColor: '#1877F2', delta: '+34%', deltaGood: true },
+  { id: 'li', iconSrc: linkedinIcon, iconAlt: 'LinkedIn', bgColor: '#BFEBFF', deltaColor: '#007EBB', delta: '+44%', deltaGood: true },
+  { id: 'ig', iconSrc: instagramIcon, iconAlt: 'Instagram', bgColor: '#FFC4DE', deltaColor: '#E54F6F', delta: '-12%', deltaGood: false },
 ]
 
 // Transform real API data to card data format
@@ -44,7 +47,7 @@ function transformApiData(apiData, defaults) {
         { label: 'No data', value: 0, tone: 'green' },
       ],
       platforms: [
-        { id: 'none', label: '-', color: '#888', bgColor: 'rgba(136,136,136,0.1)', delta: '0%', deltaGood: true },
+        { id: 'none', label: '-', color: '#888', bgColor: 'rgba(136,136,136,0.1)', deltaColor: '#888', delta: '0%', deltaGood: true },
       ],
       aiText: 'No social media data available. Connect your social accounts to see performance tracking.',
     }
@@ -103,13 +106,13 @@ function transformApiData(apiData, defaults) {
   const platformsArray = Object.entries(platforms).map(([name, data]) => {
     const engagementChange = ((data.engagement || 0) / (data.followers || 1)) * 100
     const platformMap = {
-      facebook: { id: 'fb', label: 'f', color: '#4267B2', bgColor: 'rgba(66,103,178,0.1)' },
-      instagram: { id: 'ig', label: '◎', color: '#E1306C', bgColor: 'rgba(225,48,108,0.1)' },
-      linkedin: { id: 'li', label: 'in', color: '#0077B5', bgColor: 'rgba(0,119,181,0.1)' },
-      twitter: { id: 'tw', label: '𝕏', color: '#1DA1F2', bgColor: 'rgba(29,161,242,0.1)' },
+      facebook: { id: 'fb', iconSrc: facebookIcon, iconAlt: 'Facebook', bgColor: 'rgba(24,119,242,0.2)', deltaColor: '#1877F2' },
+      instagram: { id: 'ig', iconSrc: instagramIcon, iconAlt: 'Instagram', bgColor: '#FFC4DE', deltaColor: '#E54F6F' },
+      linkedin: { id: 'li', iconSrc: linkedinIcon, iconAlt: 'LinkedIn', bgColor: '#BFEBFF', deltaColor: '#007EBB' },
+      twitter: { id: 'tw', label: '𝕏', color: '#1DA1F2', bgColor: 'rgba(29,161,242,0.1)', deltaColor: '#1DA1F2' },
     }
 
-    const config = platformMap[name.toLowerCase()] || { id: name, label: name[0], color: '#888', bgColor: 'rgba(136,136,136,0.1)' }
+    const config = platformMap[name.toLowerCase()] || { id: name, label: name[0], color: '#888', bgColor: 'rgba(136,136,136,0.1)', deltaColor: '#888' }
 
     return {
       ...config,
@@ -226,14 +229,7 @@ export function PerformanceTrackingCard({
       {/* Platform performance */}
       <div>
         <p className="analytics-card__section-title">Platform Performance</p>
-        <div className="pt-card__platforms">
-          {data.platforms.map(p => (
-            <span key={p.id} className="pt-card__platform-badge" style={{ '--p-color': p.color, '--p-bg': p.bgColor }}>
-              <span className="pt-card__platform-icon">{p.label}</span>
-              <span className={`pt-card__platform-delta ${p.deltaGood ? 'pt-card__good' : 'pt-card__bad'}`}>{p.delta}</span>
-            </span>
-          ))}
-        </div>
+        <PlatformPerformance platforms={data.platforms} />
       </div>
 
       <AiInsight>{data.aiText}</AiInsight>

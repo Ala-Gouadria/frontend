@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import './SocialMediaStuffsCardShared.css'
 import './SocialMediaPublishingCard.css'
 import {
+  ActivityProgressPill,
   AiActionButton,
   AiInsight,
   SocialPlatformBadge,
@@ -126,11 +127,11 @@ export function SocialMediaPublishingCard({
 
       <div>
         <p className="analytics-card__section-title smp-card__section-title">Current Batch</p>
-        <div className="smp-card__batch-bar">
-          <span className="smp-card__batch-dot" />
-          <span className="smp-card__batch-label">{data.batchLabel}</span>
-          <span className="smp-card__batch-count">{data.batchProgress}/{data.batchTotal}</span>
-        </div>
+        <ActivityProgressPill
+          label={data.batchLabel}
+          progress={data.batchTotal ? (data.batchProgress / data.batchTotal) * 100 : 0}
+          value={`${data.batchProgress}/${data.batchTotal}`}
+        />
       </div>
 
       <div className="smp-card__platforms" aria-label="Publishing platforms">

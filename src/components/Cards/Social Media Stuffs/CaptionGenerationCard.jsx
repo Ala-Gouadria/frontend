@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import './SocialMediaStuffsCardShared.css'
 import './CaptionGenerationCard.css'
-import { AiInsight, AiActionButton } from '../../visuals-parts'
+import { ActivityProgressPill, AiInsight, AiActionButton } from '../../visuals-parts'
 import { useSocialData } from '../../../hooks/useAnalyticsData'
 import { socialApi } from '../../../api/social.js'
 import { setDraftCaption } from '../../../lib/contentDraftStore.js'
@@ -145,11 +145,11 @@ export function CaptionGenerationCard({
 
       <div>
         <p className="analytics-card__section-title">Current Batch</p>
-        <div className="smp-card__batch-bar">
-          <span className="smp-card__batch-dot" />
-          <span className="smp-card__batch-label">{data.batchLabel}</span>
-          <span className="smp-card__batch-count">{data.batchProgress}/{data.batchTotal}</span>
-        </div>
+        <ActivityProgressPill
+          label={data.batchLabel}
+          progress={data.batchTotal ? (data.batchProgress / data.batchTotal) * 100 : 0}
+          value={`${data.batchProgress}/${data.batchTotal}`}
+        />
       </div>
 
       <div className="cg-card__caption-panel">

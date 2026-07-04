@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import './SocialMediaStuffsCardShared.css'
 import './SocialMediaStrategyCard.css'
-import { DottedDataBars, AiInsight, AiActionButton } from '../../visuals-parts'
+import { ActivityProgressPill, DottedDataBars, AiInsight, AiActionButton } from '../../visuals-parts'
 import { useSocialData } from '../../../hooks/useAnalyticsData'
 import { useSocialPostCounts } from '../../../hooks/useSocialPosts'
 import { seriesToColumns } from '../../../lib/socialCardData'
@@ -180,11 +180,10 @@ export function SocialMediaStrategyCard({
 
       <div>
         <p className="analytics-card__section-title">Current execution</p>
-        <div className="smp-card__batch-bar">
-          <span className="smp-card__batch-dot" />
-          <span className="smp-card__batch-label">{data.executionLabel}</span>
-          <span className="smp-card__batch-count">{data.executionPct}%</span>
-        </div>
+        <ActivityProgressPill
+          label={data.executionLabel}
+          progress={data.executionPct}
+        />
       </div>
 
       <div className="sms-card__counters">

@@ -37,37 +37,5 @@
   color: rgba(24,24,27,0.44);
 }
 
-.pt-card__platforms {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.pt-card__platform-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: var(--p-bg);
-  font-size: 0.74rem;
-}
-
-.pt-card__platform-icon {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--p-color);
-  color: #fff;
-  font-size: 0.58rem;
-  font-weight: 800;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.pt-card__platform-delta {
-  font-size: 0.74rem;
-  font-weight: 700;
-}
+/* Platform Performance badges now live in the reusable
+   visuals-parts/PlatformPerformance component. */
