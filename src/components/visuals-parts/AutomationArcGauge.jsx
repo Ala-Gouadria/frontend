@@ -32,14 +32,35 @@ function arcPoint(progress, offset = 0) {
   }
 }
 
+// True outward normal at a point on the ellipse, so ticks sit perpendicular to
+// the arc (evenly radial) instead of skewing/colliding near the ends.
+function tickSegment(t, gap, len) {
+  const a  = START_ANGLE + (END_ANGLE - START_ANGLE) * t
+  const px = CX + RX * Math.cos(a)
+  const py = CY - RY * Math.sin(a)
+  let nx = RY * Math.cos(a)
+  let ny = -RX * Math.sin(a)
+  const m = Math.hypot(nx, ny) || 1
+  nx /= m
+  ny /= m
+  const startD = HALF_STROKE + gap
+  return {
+    x1: px + nx * startD,
+    y1: py + ny * startD,
+    x2: px + nx * (startD + len),
+    y2: py + ny * (startD + len),
+  }
+}
+
 const ARC_START = arcPoint(0)
 const ARC_END   = arcPoint(1)
 const FULL_PATH = `M ${ARC_START.x.toFixed(2)} ${ARC_START.y.toFixed(2)} A ${RX} ${RY} 0 0 1 ${ARC_END.x.toFixed(2)} ${ARC_END.y.toFixed(2)}`
 
-const TICK_COUNT = 17
-const TICK_GAP   = 10  // gap between arc outer edge and tick start
-const MAJOR_LEN  = 22  // progress-side tick length
-const MINOR_LEN  = 14  // unfilled-side tick length
+const HALF_STROKE = 8   // half of the 16px arc stroke
+const TICK_COUNT  = 17
+const TICK_GAP    = 14  // clear distance between the arc edge and tick start
+const MAJOR_LEN   = 12  // progress-side tick length (short)
+const MINOR_LEN   = 9   // unfilled-side tick length (short)
 
 const LABEL_Y = 152  // text sits inside the bowl, just above the arc ends
 
@@ -84,13 +105,12 @@ export function AutomationArcGauge({ progress = 0.7, label = '70% In Progress', 
           const t       = i / (TICK_COUNT - 1)
           const isMuted = t > safeProgress + 0.025
           const len     = isMuted ? MINOR_LEN : MAJOR_LEN
-          const inner   = arcPoint(t, TICK_GAP)
-          const outer   = arcPoint(t, TICK_GAP + len)
+          const seg     = tickSegment(t, TICK_GAP, len)
           return (
             <line
               key={i}
-              x1={inner.x} y1={inner.y}
-              x2={outer.x} y2={outer.y}
+              x1={seg.x1} y1={seg.y1}
+              x2={seg.x2} y2={seg.y2}
               className={classNames(
                 'automation-arc-gauge__tick',
                 isMuted && 'automation-arc-gauge__tick--muted',

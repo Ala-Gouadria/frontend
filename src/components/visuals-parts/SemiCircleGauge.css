@@ -1,20 +1,27 @@
 .semi-circle-gauge {
-  /* ---- Blue (default) ---- */
-  --gauge-track-0: rgba(24, 119, 242, 0.20);
-  --gauge-track-1: rgba(24, 119, 242, 0.20);
-  --gauge-track-2: rgba(9, 169, 81, 0.16);
+  /* ---- Blue (default) — flat, no blur (Figma) ---- */
+  --gauge-value: #1877F2;                    /* Main Blue */
 
-  /* filled band: translucent start → #3787F7 → #A2B8F7 */
-  --gauge-band-0: rgba(55, 135, 247, 0.28);
-  --gauge-band-1: rgba(55, 135, 247, 0.72);
-  --gauge-band-2: #3787F7;
-  --gauge-band-3: #A2B8F7;
-  --gauge-band-glow: rgba(55, 135, 247, 0.50);
+  /* unfilled track — "fade blue": #1877F2 · 10% */
+  --gauge-track-0: rgba(24, 119, 242, 0.10);
+  --gauge-track-1: rgba(24, 119, 242, 0.10);
+  --gauge-track-2: rgba(24, 119, 242, 0.10);
+
+  /* filled band — "TheBlue": linear-gradient(97deg, #1877F2 → #6DA3FF), flat/opaque */
+  --gauge-band-0: #1877F2;
+  --gauge-band-1: #2E86F4;
+  --gauge-band-2: #4E96F8;
+  --gauge-band-3: #6DA3FF;
+  --gauge-band-tip: #6DA3FF;
+  --gauge-band-glow: transparent;
+  --gauge-band-blur: 0px;
+  --gauge-glow-opacity: 0;
 
   --gauge-tick: rgba(255, 255, 255, 0.10);
 
-  --gauge-knob-0: #7db0f8;
-  --gauge-knob-1: #3787F7;
+  /* knob — "TheBlue" */
+  --gauge-knob-0: #6DA3FF;
+  --gauge-knob-1: #3d8bf6;
   --gauge-knob-2: #1877F2;
   --gauge-ring: #ffffff;
 
@@ -141,8 +148,13 @@
 .semi-circle-gauge__caption {
   font-size: clamp(0.78rem, 3cqw, 1.15rem);
   font-weight: 500;
-  color: var(--gauge-text);
   line-height: 1.1;
+  /* "Dark Button": linear-gradient(105deg, #000 18.5%, #747474 81.5%) */
+  background: linear-gradient(105deg, #000 18.5%, #747474 81.5%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #000;
 }
 
 @keyframes semiGaugeIn {

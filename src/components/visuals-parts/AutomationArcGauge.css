@@ -52,7 +52,7 @@
 /* Progress side — major, solid blue */
 .automation-arc-gauge__tick {
   stroke: #2F80FF;
-  stroke-width: 3;
+  stroke-width: 2.5;
   stroke-linecap: round;
   animation: automationTickIn 480ms ease both;
   animation-delay: calc(var(--tick-index) * 16ms);

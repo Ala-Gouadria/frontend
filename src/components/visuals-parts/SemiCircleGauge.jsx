@@ -74,7 +74,6 @@ export function SemiCircleGauge({
   const knobGradId   = 'k'  + uid
   const fadeMaskId   = 'm'  + uid
   const fadeGradId   = 'f'  + uid
-  const tickBlurId   = 'tb' + uid
 
   const safeTarget = Number(target)
   const derived =
@@ -133,10 +132,6 @@ export function SemiCircleGauge({
               <stop offset="100%" stopColor="var(--gauge-knob-2)" />
             </linearGradient>
 
-            {/* soft blur for the segment separators */}
-            <filter id={tickBlurId} x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="1.6" />
-            </filter>
           </defs>
 
           <g mask={`url(#${fadeMaskId})`}>
@@ -149,19 +144,7 @@ export function SemiCircleGauge({
               strokeLinecap="round"
             />
 
-            {/* single very soft glow hugging the filled band */}
-            <path
-              d={path}
-              fill="none"
-              stroke="var(--gauge-band-glow)"
-              strokeWidth={bandWidth + 10}
-              strokeLinecap="round"
-              pathLength="100"
-              strokeDasharray={dash}
-              style={{ filter: 'blur(8px)', opacity: 'var(--gauge-glow-opacity, 0.3)' }}
-            />
-
-            {/* filled band — slightly blurred so the edges stay diffuse like the Figma */}
+            {/* filled band — flat, crisp edges (no blur) */}
             <path
               d={path}
               fill="none"
@@ -170,12 +153,11 @@ export function SemiCircleGauge({
               strokeLinecap="round"
               pathLength="100"
               strokeDasharray={dash}
-              style={{ filter: 'blur(var(--gauge-band-blur, 3px))' }}
               className="semi-circle-gauge__progress"
             />
 
             {/* segment separators — Figma: #FFFFFF · 10%, only visible on the filled band */}
-            <g filter={`url(#${tickBlurId})`}>
+            <g>
               {ticks.map((tp) => {
                 const t = tickAt(tp, bandWidth - 2)
                 const filled = tp <= value + 0.005

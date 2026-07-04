@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { WebsiteArcGauge } from '../../visuals-parts'
+import { SemiCircleGauge } from '../../visuals-parts'
 import { trafficQualityCardData } from '../../../api/websiteTrafficMockData'
 import { useTrafficData } from '../../../hooks/useAnalyticsData'
 import {
@@ -118,7 +118,13 @@ export function TrafficQualityCard({ data: propData, useRealData = true }) {
     <article className={`website-card traffic-quality-card ${loading ? 'loading' : ''}`}>
       <CardHeader title={data.title} subtitle={data.subtitle} status={data.status} />
       <TrendRow label={data.trendLabel} value={data.trendValue} delta={data.trendDelta} chart={data.topChart} />
-      <WebsiteArcGauge value={data.gauge.current} label={data.gauge.label} progress={data.gauge.progress} />
+      <SemiCircleGauge
+        className="traffic-quality-card__gauge"
+        label={data.gauge.current}
+        caption={data.gauge.label}
+        progress={data.gauge.progress > 1 ? data.gauge.progress / 100 : data.gauge.progress}
+        tone="blue"
+      />
 
       <MetricDots title={data.panelTitle} metrics={data.panelMetrics} columns={2} panel="green" />
 
