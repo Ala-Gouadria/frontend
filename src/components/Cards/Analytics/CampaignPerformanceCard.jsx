@@ -116,6 +116,7 @@ export function CampaignPerformanceCard({ data: propData, useRealData = true }) 
           upperSeries={data.spendChart.upperSeries}
           lowerSeries={data.spendChart.lowerSeries}
           activeIndex={data.spendChart.activeIndex}
+          tone="blue"
           className="analytics-card__area-chart"
         />
       </section>

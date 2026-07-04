@@ -28,18 +28,20 @@
 }
 
 .area-revenue-chart--blue {
-  --area-revenue-top: #A2B8F7;
+  /* Figma "Dash Blue 01": linear-gradient(90deg, #3787F7 0%, #A2B8F7 100%) */
+  --area-revenue-top: #3787F7;
   --area-revenue-mid: #6FA0F7;
-  --area-revenue-bottom: #3787F7;
-  --area-revenue-line: #3787F7;
-  --area-revenue-soft-line: #3787F7;
-  --area-revenue-dot: #3787F7;
-  --area-revenue-dot-fill: #3787F7;
+  --area-revenue-bottom: #A2B8F7;
+  /* Rails/connector lines — Main Blue at 50% (#1877F280); dots — Main Blue */
+  --area-revenue-line: #1877F2;
+  --area-revenue-soft-line: rgba(24, 119, 242, 0.5);
+  --area-revenue-dot: #1877F2;
+  --area-revenue-dot-fill: #1877F2;
   --area-revenue-badge: #E6EEFE;
-  --area-revenue-badge-text: #1E4DAF;
+  --area-revenue-badge-text: #1877F2;
   --area-revenue-glow-color: rgba(55, 135, 247, 0.25);
-  --area-revenue-focus: rgba(55, 135, 247, 0.92);
-  --area-revenue-badge-shadow: rgba(55, 135, 247, 0.22);
+  --area-revenue-focus: rgba(24, 119, 242, 0.5);
+  --area-revenue-badge-shadow: rgba(24, 119, 242, 0.22);
 }
 
 .area-revenue-chart__title {
