@@ -8,7 +8,7 @@
 }
 
 .pt-card__trend-arrow {
-  color: #5d9700;
+  color: #1877F2;
   font-size: 1rem;
   font-weight: 700;
 }
@@ -16,10 +16,10 @@
 .pt-card__trend-label {
   font-size: 0.78rem;
   font-weight: 700;
-  color: #5d9700;
+  color: #1877F2;
 }
 
-.pt-card__good    { color: #5d9700 !important; }
+.pt-card__good    { color: #1877F2 !important; }
 .pt-card__bad     { color: #e33f48 !important; }
 .pt-card__neutral { color: #f07b1a !important; }
 

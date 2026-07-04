@@ -19,7 +19,7 @@
 .lead-scoring-card__delta {
   font-size: 0.72rem;
   font-weight: 500;
-  color: #5d9700;
+  color: #1877F2;
 }
 
 .lead-scoring-card__sparkline {
@@ -101,7 +101,7 @@
 }
 
 .lead-scoring-card__score--high {
-  color: #5d9700;
+  color: #1877F2;
 }
 
 .lead-scoring-card__score--mid {
@@ -124,13 +124,13 @@
 .lead-scoring-card__source-name {
   font-size: 0.86rem;
   font-weight: 800;
-  color: #5d9700;
+  color: #1877F2;
 }
 
 .lead-scoring-card__source-conversion {
   font-size: 0.74rem;
   font-weight: 700;
-  color: #5d9700;
+  color: #1877F2;
 }
 
 /* ── Striped bar overrides ── */

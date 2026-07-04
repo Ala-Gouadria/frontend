@@ -18,7 +18,7 @@
 .sales-and-leads-card__revenue-arrow {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #5d9700;
+  color: #1877F2;
   line-height: 1;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .sales-and-leads-card__revenue-value--good {
-  color: #5d9700;
+  color: #1877F2;
 }
 
 .sales-and-leads-card__sparkline {

@@ -83,8 +83,8 @@
 }
 
 .analytics-card__value--good {
-  color: #5d9700;
-  text-shadow: 0 6px 14px rgba(119, 166, 0, 0.12);
+  color: #1877F2;
+  text-shadow: 0 6px 14px rgba(24, 119, 242, 0.12);
 }
 
 .analytics-card__value--bad {
@@ -173,7 +173,7 @@
 
 .analytics-card__mini-stat strong {
   font-size: 0.72rem;
-  color: #619800;
+  color: #1877F2;
 }
 
 .analytics-card__section-title {
@@ -248,7 +248,7 @@
 }
 
 .analytics-card__source-delta--good {
-  color: #0aa95b;
+  color: #1877F2;
 }
 
 .analytics-card__source-delta--bad {

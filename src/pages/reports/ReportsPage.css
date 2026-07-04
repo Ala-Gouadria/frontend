@@ -460,6 +460,10 @@
   font-size: 10px;
 }
 
+.reports-page__flow-row small {
+  color: rgba(27, 28, 32, 0.45);
+}
+
 .reports-page__risk-row .mini-line-chart {
   height: 49px;
 }
@@ -501,7 +505,7 @@
 
 .reports-page__gauge-pair {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 18px;
 }
 
@@ -617,6 +621,39 @@
 
 .reports-page__compare-card .reports-page__export-button--wide {
   margin-top: 8px;
+}
+
+.reports-page__toolbar-dates {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.reports-page__date-range {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.reports-page__date-range label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(27, 28, 32, 0.6);
+}
+
+.reports-page__date-range input {
+  min-height: 26px;
+  padding: 2px 8px;
+  border: 1px solid rgba(27, 28, 32, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1b1c20;
 }
 
 @keyframes reportsPageIn {

@@ -147,19 +147,21 @@ html.is-rtl {
   letter-spacing: -0.12px;
 }
 
-/* ── Card title: Urbanist Medium 16px (Figma spec) ─────────────────── */
+/* ── Card title: Delight Semi Bold 18px + Dark Button gradient (Figma spec) ── */
 .analytics-card__title,
-.website-card__title {
-  font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif !important;
-  font-weight: 500 !important;
-  font-size: 16px !important;
+.website-card__title,
+.smm-card__title,
+.smp-card__title {
+  font-family: "Delight", "Urbanist", "Poppins", "Segoe UI", sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
   line-height: 22px !important;
   letter-spacing: -0.18px !important;
-  background: none !important;
-  -webkit-background-clip: border-box !important;
-  background-clip: border-box !important;
-  -webkit-text-fill-color: #000000 !important;
-  color: #000000 !important;
+  background: linear-gradient(105deg, #000 18.5%, #747474 81.5%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
 }
 
 /* ── Card description/subtitle ─────────────────────────────────────── */

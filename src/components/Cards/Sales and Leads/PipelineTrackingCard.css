@@ -24,7 +24,7 @@
 .pipeline-tracking-card__delta {
   font-size: 0.72rem;
   font-weight: 500;
-  color: #5d9700;
+  color: #1877F2;
 }
 
 .pipeline-tracking-card__sparkline {
@@ -76,7 +76,7 @@
 }
 
 .pipeline-tracking-card__stage-value--good {
-  color: #5d9700;
+  color: #1877F2;
 }
 
 .pipeline-tracking-card__stage-value--bad {
