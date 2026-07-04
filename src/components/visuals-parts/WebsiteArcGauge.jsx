@@ -46,15 +46,11 @@ export function WebsiteArcGauge({
       <svg className="website-arc-gauge__svg" viewBox={viewBox} aria-hidden="true" overflow="visible">
         {compact ? (
           <>
-            {/* Wide diffuse glow — progress side only (matches Figma layered bloom) */}
-            <path d={path} className="website-arc-gauge__glow website-arc-gauge__glow--3" pathLength="100" strokeDasharray={dashFilled} />
-            <path d={path} className="website-arc-gauge__glow website-arc-gauge__glow--2" pathLength="100" strokeDasharray={dashFilled} />
-            <path d={path} className="website-arc-gauge__glow website-arc-gauge__glow--1" pathLength="100" strokeDasharray={dashFilled} />
             {/* Tick dividers across full arc */}
             {Array.from({ length: 24 }).map((_, index) => {
               const tickProgress = index / 23
-              const outer = arcPoint(cx, cy, radius + 2, tickProgress)
-              const inner = arcPoint(cx, cy, radius - 10, tickProgress)
+              const outer = arcPoint(cx, cy, radius + 15, tickProgress)
+              const inner = arcPoint(cx, cy, radius + 9, tickProgress)
               return (
                 <line
                   key={`tick-${index}`}

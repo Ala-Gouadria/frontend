@@ -168,7 +168,7 @@ export const pagePerformanceCardData = {
   subtitle: 'Speed, load health, and page-level issues',
   status: 'Active',
   gauges: [
-    { value: '2.9s', label: 'Avg. load', progress: 0.38 },
+    { value: '2.9s', label: 'Avg. load', progress: 0.59 },
     { value: '93', label: 'Perf. score', progress: 0.84 },
   ],
   leftTitle: 'Revenue by source',

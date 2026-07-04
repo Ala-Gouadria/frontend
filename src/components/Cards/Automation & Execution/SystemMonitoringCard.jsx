@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import {
   AiActionButton,
   AiInsight,
+  ColoredPanel,
   DottedDataBars,
   TaskProgressBar,
 } from '../../visuals-parts'
@@ -105,25 +106,19 @@ export function SystemMonitoringCard({ data: propData, useRealData = true }) {
       </section>
 
       {/* ── Reasons panel ── */}
-      <section className="system-monitoring-card__panel">
-        <h3>{data.panelTitle}</h3>
-        <div className="system-monitoring-card__metrics">
-          {data.summaryMetrics.map((metric) => (
-            <div
-              key={metric.label}
-              className="system-monitoring-card__metric"
-              data-tooltip={`${metric.label}: ${metric.value}`}
-            >
-              <span>{metric.label}</span>
-              <strong>{metric.value}</strong>
-              <DottedDataBars
-                columns={metric.columns}
-                tone={metric.label === 'Incidents' ? 'red' : 'ink'}
-              />
-            </div>
-          ))}
-        </div>
-      </section>
+      <ColoredPanel title={data.panelTitle} bodyClassName="system-monitoring-card__metrics">
+        {data.summaryMetrics.map((metric) => (
+          <div
+            key={metric.label}
+            className="system-monitoring-card__metric"
+            data-tooltip={`${metric.label}: ${metric.value}`}
+          >
+            <span>{metric.label}</span>
+            <strong>{metric.value}</strong>
+            <DottedDataBars columns={metric.columns} tone="ink" />
+          </div>
+        ))}
+      </ColoredPanel>
 
       {/* ── Service health ── */}
       <section className="system-monitoring-card__services">

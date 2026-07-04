@@ -22,32 +22,9 @@
 }
 
 /* ── Reasons panel ───────────────────────────────────────────────────────── */
-.system-monitoring-card__panel {
-  overflow: hidden;
-  border-radius: 18px;
-  background: linear-gradient(90deg, #FFAA5A 17.79%, #FF6A00 100%);
-  padding: 0 5px 5px;
-  box-shadow: 0 10px 24px rgba(255, 106, 0, 0.24);
-}
-
-.system-monitoring-card__panel h3 {
-  margin: 0;
-  padding: 13px 14px 11px;
-  background: transparent;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: #ffffff;
-  font-family: "Poppins", Manrope, "Segoe UI", sans-serif;
-}
-
 .system-monitoring-card__metrics {
-  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
-  padding: 12px 12px 14px;
-  background: #fff;
-  border-radius: 14px;
 }
 
 .system-monitoring-card__metric {
@@ -76,10 +53,6 @@
 
 .system-monitoring-card__metric .dotted-data-bars__dot--visible {
   fill: #7d8388;
-}
-
-.system-monitoring-card__metric .dotted-data-bars--red .dotted-data-bars__dot--visible {
-  fill: #ff8d8d;
 }
 
 /* ── Service health ──────────────────────────────────────────────────────── */

@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
+import { QualityBlocks } from '../../visuals-parts'
 import { websiteTrafficCardData } from '../../../api/websiteTrafficMockData'
 import { useTrafficData } from '../../../hooks/useAnalyticsData'
 import {
   BlockLegend,
-  BlockMix,
   CardFooter,
   CardHeader,
   MetricDots,
@@ -160,7 +160,7 @@ export function WebsiteTrafficCard({ data: propData, useRealData = true }) {
       <section className="website-traffic-card__device">
         <h3>{data.deviceTitle}</h3>
         <BlockLegend items={data.deviceLegend} />
-        <BlockMix blocks={data.deviceBlocks} segments={18} />
+        <QualityBlocks blocks={data.deviceBlocks} />
       </section>
 
       <section className="website-traffic-card__countries">

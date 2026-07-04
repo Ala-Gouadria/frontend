@@ -116,20 +116,3 @@ export function BlockLegend({ items }) {
     </div>
   )
 }
-
-export function BlockMix({ blocks, segments = 18 }) {
-  return (
-    <div className="website-card__block-mix">
-      {blocks.flatMap((block) =>
-        Array.from({ length: block.count }).map((_, index) => (
-          <span
-            key={`${block.tone}-${index}`}
-            className={`website-card__mix-segment website-card__mix-segment--${block.tone}`}
-            style={{ '--mix-index': index, '--mix-total': segments }}
-            title={`${block.tone} segment ${index + 1}`}
-          />
-        )),
-      )}
-    </div>
-  )
-}

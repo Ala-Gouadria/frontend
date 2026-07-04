@@ -115,7 +115,6 @@
 .website-arc-gauge--compact .website-arc-gauge__svg {
   height: 120px;
   overflow: visible;
-  /* Extra top space so the outermost glow (26px above arc) isn't clipped */
   margin-top: 20px;
 }
 
@@ -125,52 +124,22 @@
   stroke-width: 10;
 }
 
-/* Bloom layers — progress side only (dasharray set in JSX) */
-.website-arc-gauge__glow {
-  fill: none;
-  stroke-linecap: round;
-  animation: websiteArcGrow 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* Outermost — widest, most transparent */
-.website-arc-gauge__glow--3 {
-  stroke: rgba(24, 119, 242, 0.07);
-  stroke-width: 52;
-}
-
-.website-arc-gauge__glow--2 {
-  stroke: rgba(24, 119, 242, 0.13);
-  stroke-width: 34;
-}
-
-/* Innermost — narrowest, most opaque bloom */
-.website-arc-gauge__glow--1 {
-  stroke: rgba(24, 119, 242, 0.22);
-  stroke-width: 20;
-}
-
-/* Solid progress arc */
+/* Single solid progress arc — no glow/bloom */
 .website-arc-gauge--compact .website-arc-gauge__progress {
   stroke: #1877F2;
-  stroke-width: 11;
-  filter: drop-shadow(0 4px 16px rgba(24, 119, 242, 0.60));
+  stroke-width: 8;
 }
 
-/* Cap dot — #1877F2 fill, white border (from Figma inspector) */
+/* Cap dot — plain solid blue, no border/shadow */
 .website-arc-gauge--compact .website-arc-gauge__cap {
   fill: #1877F2;
-  stroke: #ffffff;
-  stroke-width: 3;
-  filter: drop-shadow(0 3px 10px rgba(24, 119, 242, 0.50));
-  transition:
-    transform 160ms ease,
-    filter 160ms ease;
+  transition: transform 160ms ease;
   transform-origin: center;
 }
 
-/* White semi-transparent tick dividers across the arc */
+/* Blue tick dividers across the arc */
 .website-arc-gauge--compact .website-arc-gauge__tick {
-  stroke: rgba(255, 255, 255, 0.28);
+  stroke: rgba(24, 119, 242, 0.45);
   stroke-width: 1.5;
   stroke-linecap: round;
   animation: websiteGaugeTick 520ms ease both;
@@ -196,13 +165,11 @@
 
 /* Hover */
 .website-arc-gauge--compact:hover .website-arc-gauge__progress {
-  stroke-width: 12;
-  filter: drop-shadow(0 6px 20px rgba(24, 119, 242, 0.72));
+  stroke-width: 9;
 }
 
 .website-arc-gauge--compact:hover .website-arc-gauge__cap {
   transform: scale(1.1);
-  filter: drop-shadow(0 5px 14px rgba(24, 119, 242, 0.60));
 }
 
 
