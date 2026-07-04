@@ -158,7 +158,7 @@ export function SemiCircleGauge({
               strokeLinecap="round"
               pathLength="100"
               strokeDasharray={dash}
-              style={{ filter: 'blur(8px)', opacity: 0.3 }}
+              style={{ filter: 'blur(8px)', opacity: 'var(--gauge-glow-opacity, 0.3)' }}
             />
 
             {/* filled band — slightly blurred so the edges stay diffuse like the Figma */}

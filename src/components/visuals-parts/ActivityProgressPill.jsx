@@ -116,13 +116,13 @@ export function ActivityProgressPill({
         >
           <defs>
             <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#cce43e" />
-              <stop offset="100%" stopColor="#4f8d00" />
+              <stop offset="3.59%" stopColor="#1877F2" />
+              <stop offset="94.78%" stopColor="#6DA3FF" />
             </linearGradient>
           </defs>
           <path
             d={pillPath}
-            stroke="#eff8bb"
+            stroke="rgba(24, 119, 242, 0.15)"
             strokeWidth={sw}
             fill="none"
           />
@@ -139,7 +139,7 @@ export function ActivityProgressPill({
               cx={dotPos.x}
               cy={dotPos.y}
               r={5.5}
-              fill="#cce43e"
+              fill="#1877F2"
               className="activity-progress-pill__dot-svg"
             />
           )}

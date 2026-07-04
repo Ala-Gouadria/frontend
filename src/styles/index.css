@@ -147,18 +147,18 @@ html.is-rtl {
   letter-spacing: -0.12px;
 }
 
-/* ── Card title: Delight Semi Bold 18px ────────────────────────────── */
+/* ── Card title: Urbanist Medium 16px (Figma spec) ─────────────────── */
 .analytics-card__title,
 .website-card__title {
-  font-family: "Delight", "Poppins", "Segoe UI", sans-serif !important;
-  font-weight: 600 !important;
-  font-size: 18px !important;
+  font-family: "Urbanist", "Poppins", "Segoe UI", sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
   line-height: 22px !important;
   letter-spacing: -0.18px !important;
-  background: linear-gradient(105.26deg, #000000 18.5%, #747474 81.5%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  -webkit-text-fill-color: #000000 !important;
   color: #000000 !important;
 }
 

@@ -33,7 +33,9 @@
   --gauge-band-3: #5697f8;
   --gauge-band-tip: #6da3ff;
   --gauge-band-glow: rgba(24, 119, 242, 0.5);
-  --gauge-band-blur: 1.6px;
+  /* Crisp band — no blur, no glow bleed — matches the clean fill in Figma img 2 */
+  --gauge-band-blur: 0px;
+  --gauge-glow-opacity: 0;
 
   /* Knob — Main Blue */
   --gauge-knob-0: #6da3ff;
