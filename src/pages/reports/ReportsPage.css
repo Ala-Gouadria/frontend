@@ -13,7 +13,7 @@
   z-index: 2;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 54px 0 150px;
+  padding: 54px 90px 150px;
 }
 
 .reports-page__content {
@@ -209,6 +209,11 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 70px;
   row-gap: 66px;
+  justify-content: center;
+}
+
+.reports-page__single-layout:has(> :only-child) {
+  grid-template-columns: minmax(0, 640px);
 }
 
 .reports-page__section {
@@ -490,7 +495,7 @@
 .reports-page__workflow-head strong,
 .reports-page__rings-row strong,
 .reports-page__automation-top strong {
-  color: #78a30c;
+  color: #1877F2;
   font-size: 11px;
   font-weight: 800;
 }
