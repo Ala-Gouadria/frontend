@@ -13,11 +13,11 @@
   z-index: 2;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 64px 42px 150px 132px;
+  padding: 64px 132px 150px 132px;
 }
 
 .events-page__content {
-  width: min(1320px, calc(var(--vw) - 260px));
+  width: min(1320px, calc(var(--vw) - 264px));
   margin: 0 auto;
   animation: eventsPageIn 480ms cubic-bezier(.22,1,.36,1) both;
 }

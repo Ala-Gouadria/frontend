@@ -102,7 +102,7 @@ function formatZoomPercent(currentScale, initialScale) {
   return `${Math.max(1, Math.round((currentScale / initialScale) * 100))}%`
 }
 
-export default function BottomAITools({ scale, initialScale, mode = 'hand', onModeChange, onTaskOpen }) {
+export default function BottomAITools({ scale, initialScale, mode = 'hand', onModeChange, onTaskOpen, onZoom }) {
   const { zoomIn, zoomOut, resetTransform } = useControls()
   const [zoomPercent, setZoomPercent] = useState(() => formatZoomPercent(scale ?? initialScale, initialScale))
   const [isZooming, setIsZooming] = useState(false)
@@ -115,7 +115,9 @@ export default function BottomAITools({ scale, initialScale, mode = 'hand', onMo
 
   const handleZoom = (direction) => {
     setIsZooming(true)
-    if (direction === 'in') {
+    if (onZoom) {
+      onZoom(direction)
+    } else if (direction === 'in') {
       zoomIn(0.08, 180, 'easeOut')
     } else {
       zoomOut(0.08, 180, 'easeOut')

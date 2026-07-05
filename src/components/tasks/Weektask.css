@@ -473,6 +473,8 @@
   flex-shrink: 0;
 }
 
+/* Shape/dot/halo values now live in .pill-btn--compact (see PillButton.css).
+ * Only the two rules that stretch the pill to fill its wrapper stay here. */
 .wt-pill-btn-wrap {
   min-width: 0;
 }
@@ -482,35 +484,8 @@
   width: 100% !important;
 }
 
-.wt-pill-btn-wrap .pill-wrap::before {
-  inset: -6px;
-  filter: blur(13px);
-  opacity: 0.4;
-}
-
 .wt-pill-btn-wrap .pill-btn {
   width: 100% !important;
-  padding: 0 14px 0 20px;
-  border-radius: 11px !important;
-  animation: none !important;
-  transform: none !important;
-}
-
-.wt-pill-btn-wrap .pill-btn__label {
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0;
-}
-
-.wt-pill-btn-wrap .pill-btn__dots {
-  grid-template-columns: repeat(5, 2.5px);
-  grid-template-rows: repeat(5, 2.5px);
-  gap: 2.5px;
-}
-
-.wt-pill-btn-wrap .pill-btn__dot {
-  width: 2.5px;
-  height: 2.5px;
 }
 
 .wt-pill-btn-wrap--decline .pill-btn {

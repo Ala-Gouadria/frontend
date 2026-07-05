@@ -753,45 +753,29 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
   const MIN_SCALE = 0.5
   const MAX_SCALE = 1.8
 
-  const handleWheelZoom = useCallback((event) => {
+  // Zoom always pivots on the Nora avatar's world coordinates so the avatar
+  // stays anchored at the same screen position while the rest of the canvas
+  // scales toward/away from it. Screen anchor = current avatar position on
+  // screen (positionX + AVATAR.x * scale), which is preserved across the zoom.
+  const zoomAroundAvatar = useCallback((factor) => {
     const ctx = transformRef.current
-    const container = zoomContainerRef.current
-    if (!ctx || !container) return
-
-    // Only react to non-pinch wheel; ctrl+wheel is the browser pinch-zoom proxy
-    // and should also pivot on cursor, so we accept it too.
-    event.preventDefault()
-
+    if (!ctx) return
     const { scale, positionX, positionY } = ctx.state
-    const rect = container.getBoundingClientRect()
-    const appScale = parseFloat(
-      getComputedStyle(document.documentElement).getPropertyValue('--app-scale')
-    ) || 1
-
-    // event.clientX/Y and rect.left/top are both in visual-viewport pixels.
-    // Divide by appScale to land in the layout coordinate system that the
-    // library's positionX/Y and scale operate in.
-    const cursorX = (event.clientX - rect.left) / appScale
-    const cursorY = (event.clientY - rect.top) / appScale
-
-    // The world (canvas) coordinate currently under the cursor.
-    const worldX = (cursorX - positionX) / scale
-    const worldY = (cursorY - positionY) / scale
-
-    // Exponential step gives the same zoom feel across mouse wheels (deltaY≈100
-    // per notch) and trackpads (deltaY ranging from ~1 to ~50 per frame). Tweak
-    // 0.0015 to make zoom faster/slower.
-    const factor = Math.exp(-event.deltaY * 0.0015)
     const nextScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale * factor))
     if (nextScale === scale) return
-
-    // Solve for new position so that worldX/Y projects back to the same
-    // cursor pixel under the new scale: cursor = position + world * scale
-    const nextPositionX = cursorX - worldX * nextScale
-    const nextPositionY = cursorY - worldY * nextScale
-
+    const avatarScreenX = positionX + AVATAR.x * scale
+    const avatarScreenY = positionY + AVATAR.y * scale
+    const nextPositionX = avatarScreenX - AVATAR.x * nextScale
+    const nextPositionY = avatarScreenY - AVATAR.y * nextScale
     ctx.setTransform(nextPositionX, nextPositionY, nextScale, 0)
   }, [])
+
+  const handleWheelZoom = useCallback((event) => {
+    if (!transformRef.current) return
+    event.preventDefault()
+    const factor = Math.exp(-event.deltaY * 0.0015)
+    zoomAroundAvatar(factor)
+  }, [zoomAroundAvatar])
 
   useEffect(() => {
     const el = zoomContainerRef.current
@@ -947,6 +931,7 @@ export default function IntelligenceMap({ activeNavId = 'stars', onNavigate }) {
               initialScale={INITIAL_SCALE}
               mode={toolMode}
               onTaskOpen={handleTaskToggle}
+              onZoom={(direction) => zoomAroundAvatar(direction === 'in' ? 1.08 : 1 / 1.08)}
               onModeChange={(nextMode) => {
                 if (nextMode === 'ask-nora') { handleWorkspaceToggle(); return }
                 setToolMode(nextMode)

@@ -5,9 +5,10 @@
   padding: 20px 16px 16px;
   display: grid;
   gap: 14px;
-  border: 1px solid rgba(24, 24, 27, 0.08);
-  border-radius: 12px;
-  background: #fff;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 17px;
+  background: #FFFFFF;
   box-shadow: 0 12px 24px rgba(24, 24, 27, 0.1);
   color: #171719;
   font-family: "Poppins", Manrope, "Segoe UI", sans-serif;

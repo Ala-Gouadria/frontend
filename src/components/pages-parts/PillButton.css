@@ -154,31 +154,41 @@
   opacity: 1;
 }
 
+/* ── Compact shape recipe ─────────────────────────────────────────────
+ * Standardised from the Weektask ACCEPTED/DECLINE pills so every
+ * compact PillButton across the app renders with the same silhouette,
+ * halo geometry, and dot sizing. Colour variants (--accepted / --decline
+ * / --primary) remain independent and continue to override background
+ * + glow tint. */
 .pill-btn--compact {
-  padding: 0 11px 0 16px;
+  padding: 0 14px 0 20px;
   gap: 7px;
+  border-radius: 11px;
+  animation: none;
+  transform: none;
 }
 
 .pill-btn--compact .pill-btn__label {
-  font-size: clamp(9px, calc(var(--pill-height, 92px) * 0.29), 16px);
+  font-size: 12px;
   font-weight: 800;
+  letter-spacing: 0;
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.48);
 }
 
 .pill-btn--compact .pill-btn__dots {
-  grid-template-columns: repeat(5, clamp(2px, calc(var(--pill-height, 92px) * 0.085), 2.6px));
-  grid-template-rows: repeat(5, clamp(2px, calc(var(--pill-height, 92px) * 0.085), 2.6px));
-  gap: 2px;
+  grid-template-columns: repeat(5, 2.5px);
+  grid-template-rows: repeat(5, 2.5px);
+  gap: 2.5px;
 }
 
 .pill-btn--compact .pill-btn__dot {
-  width: clamp(2px, calc(var(--pill-height, 92px) * 0.085), 2.6px);
-  height: clamp(2px, calc(var(--pill-height, 92px) * 0.085), 2.6px);
+  width: 2.5px;
+  height: 2.5px;
   box-shadow: 0 0 3px rgba(255, 255, 255, 0.45);
 }
 
 .pill-wrap--compact::before {
-  inset: -5px;
-  filter: blur(10px);
-  opacity: 0.62;
+  inset: -6px;
+  filter: blur(13px);
+  opacity: 0.4;
 }

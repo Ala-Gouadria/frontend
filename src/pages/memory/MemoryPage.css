@@ -13,11 +13,11 @@
   z-index: 2;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 64px 42px 150px 132px;
+  padding: 64px 132px 150px 132px;
 }
 
 .memory-page__content {
-  width: min(1324px, calc(var(--vw) - 260px));
+  width: min(1324px, calc(var(--vw) - 264px));
   margin: 0 auto;
   animation: memoryPageIn 480ms cubic-bezier(.22,1,.36,1) both;
 }
@@ -404,7 +404,7 @@
 
 @media (max-width: 860px) {
   .memory-page__viewport {
-    padding: 90px 18px 145px 94px;
+    padding: 90px 18px 145px 18px;
   }
 
   .memory-page__content {

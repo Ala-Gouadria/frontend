@@ -147,9 +147,17 @@
   -webkit-font-smoothing: subpixel-antialiased;
 }
 
-.intelligence-map-card-shell .analytics-card {
+/* Full-bleed + Figma container spec applied to every card shell on the map.
+ * Selector list covers the three root class names in use across the six shared
+ * card CSS files (analytics-card, automation-card, website-card). */
+.intelligence-map-card-shell .analytics-card,
+.intelligence-map-card-shell .automation-card,
+.intelligence-map-card-shell .website-card {
   width: 100%;
-  border: 1px solid rgba(24, 24, 27, 0.05);
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 17px;
+  background: #FFFFFF;
   box-shadow: 0 4px 16px rgba(24, 24, 27, 0.06);
 }
 

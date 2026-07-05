@@ -29,10 +29,18 @@ export default function PillButton({
   variant,
   type = 'button',
 }) {
-  const isCompact =
-    compact !== undefined
-      ? compact
-      : typeof width === 'string' && width.endsWith('px') && parseInt(width, 10) < 300
+  const isCompact = (() => {
+    if (compact !== undefined) return compact
+    // Auto-compact when the pill is small in either dimension.
+    // Height is the reliable signal (a "100%" width can still be a compact pill).
+    const px = (value) =>
+      typeof value === 'string' && value.endsWith('px') ? parseInt(value, 10) : NaN
+    const heightPx = px(height)
+    const widthPx = px(width)
+    if (!Number.isNaN(heightPx) && heightPx < 64) return true
+    if (!Number.isNaN(widthPx) && widthPx < 300) return true
+    return false
+  })()
   const resolvedVariant = inferVariant(children, variant)
 
   return (
