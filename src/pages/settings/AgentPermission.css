@@ -1,0 +1,135 @@
+.settings-workspace--agent-permission {
+  background: #f4f4f2;
+}
+
+.agent-perm-heading h1 {
+  font-family: 'Delight', 'Urbanist', system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 100%;
+  letter-spacing: 0.03em;
+  margin: 0;
+  background: linear-gradient(105deg, #000 18.5%, #747474 81.5%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.agent-perm-heading p {
+  font-family: 'Urbanist', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0.03em;
+  color: rgba(0, 0, 0, 0.5);
+  margin: 8px 0 0;
+}
+
+.agent-perm-card {
+  margin-top: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  padding: 4px 22px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.agent-perm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  min-height: 64px;
+}
+
+.agent-perm-row:last-child {
+  border-bottom: none;
+}
+
+.agent-perm-row__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Geist', 'Urbanist', system-ui, -apple-system, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000;
+}
+
+.agent-perm-info-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  line-height: 0;
+}
+
+.agent-perm-info-btn:hover {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.agent-perm-info-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+/* Toggle */
+.agent-perm-toggle {
+  width: 49px;
+  height: 30px;
+  padding: 3px;
+  border-radius: 999px;
+  background: #d9d9d9;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: background 180ms ease;
+  flex-shrink: 0;
+}
+
+.agent-perm-toggle span {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: block;
+  transition: transform 180ms ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.agent-perm-toggle--on {
+  background: #5fcf66;
+}
+
+.agent-perm-toggle--on span {
+  transform: translateX(19px);
+}
+
+/* RTL flip for the toggle thumb travel */
+[dir='rtl'] .agent-perm-toggle--on span {
+  transform: translateX(-19px);
+}
+
+@media (max-width: 720px) {
+  .agent-perm-card {
+    padding: 4px 14px;
+  }
+
+  .agent-perm-row {
+    padding: 14px 0;
+    min-height: 56px;
+  }
+
+  .agent-perm-heading h1 {
+    font-size: 22px;
+  }
+}

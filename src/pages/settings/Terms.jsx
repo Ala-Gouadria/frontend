@@ -4,6 +4,7 @@ import MainNav from '../../components/layout/MainNav'
 import Photo from '../../components/layout/Photo'
 import ProjectList from '../../components/layout/ProjectList'
 import { BottomAIStatusTools } from '../../components/bottom-ai/BottomAITools'
+import './SettingsWorkspace.css'
 import './Terms.css'
 
 // Structural metadata only — all display text comes from the `terms`
@@ -60,6 +61,14 @@ const SCROLL_SPY_IDS = [
   'refund-policy',
   'disclaimer',
 ]
+
+function BackIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path d="M8 4 3 10l5 6M15 4l-5 6 5 6" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 
 function TermsSection({ section, id }) {
   return (
@@ -164,6 +173,11 @@ export default function Terms({ initialSection = 'privacy-policy', onNavigate })
       <ProjectList onNavigate={onNavigate} />
 
       <section className="terms-shell">
+        <button type="button" className="workspace-back-button" onClick={() => onNavigate?.('settings')}>
+          <BackIcon />
+          <span>{t('terms.backToSettings')}</span>
+        </button>
+
         <header className="terms-heading">
           <h1>{t('terms.title')}</h1>
           <p>{t('terms.subtitle')}</p>

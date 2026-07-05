@@ -13,6 +13,7 @@
     "upgrade": "Upgrade",
     "integration": "Integration",
     "teamManagement": "Team Management",
+    "agentPermission": "Agent Permission",
     "paymentMethod": "Payment Method",
     "billingHistory": "Billing History",
     "reportBug": "Report a Bug",
@@ -278,6 +279,28 @@
     "loadingWorkspace": "Loading Nora workspace...",
     "loadingConversation": "Loading conversation..."
   },
+  "agentPermission": {
+    "title": "Agent Permission",
+    "subtitle": "Manage all your agent permission here",
+    "backToSettings": "Back to Settings",
+    "moreInfo": "More info",
+    "items": {
+      "analytics": "Analytics & Reporting",
+      "social": "Social Media Manager",
+      "strategy": "Strategy & Intelligence",
+      "sales": "Sales & Leads",
+      "website": "Website & Traffic",
+      "automation": "Automation & Execution"
+    },
+    "tips": {
+      "analytics": "Grant access to analytics dashboards and reports.",
+      "social": "Allow the agent to manage social media accounts and posts.",
+      "strategy": "Enable market and competitor intelligence tools.",
+      "sales": "Access to leads, pipeline and sales data.",
+      "website": "Monitor website performance and traffic sources.",
+      "automation": "Run automated workflows and scheduled tasks."
+    }
+  },
   "integrations": {
     "title": "Integration",
     "subtitle": "Manage your Integrations",
@@ -441,6 +464,7 @@
   "terms": {
     "title": "Terms",
     "subtitle": "Understand the terms, responsibilities, platform usage policies, and conditions that govern access to NORA and its services.",
+    "backToSettings": "Back to Settings",
     "tocTitle": "Table of contents",
     "lastUpdated": "Last updated: [05/11/2026]",
     "toc": {

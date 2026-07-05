@@ -105,6 +105,7 @@ export default function Settings({ onNavigate }) {
   const workspaceRows = [
     { label: t('settings.integration'), view: 'settings-integrations' },
     { label: t('settings.teamManagement'), view: 'settings-team' },
+    { label: t('settings.agentPermission'), view: 'settings-agent-permission' },
   ]
 
   const billingRows = [

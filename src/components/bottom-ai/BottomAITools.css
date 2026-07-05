@@ -9,6 +9,11 @@
   /* Centered control dock: keep its internal order/design fixed (LTR)
      so RTL does not reverse and break the segmented pills. */
   direction: ltr;
+
+  /* Theme tokens — Figma */
+  --bottom-ai-dark-button: linear-gradient(105deg, #000 18.5%, #747474 81.5%);
+  --bottom-ai-nora-main: linear-gradient(97deg, #1877F2 6.35%, #6DA3FF 42.96%, #FFDFEA 94.89%);
+  --bottom-ai-blue-tint: #1877F21A; /* Analyzing pill background */
 }
 
 .bottom-ai-tools__row {
@@ -215,6 +220,14 @@
   white-space: nowrap;
 }
 
+.bottom-ai-tools__pill .bottom-ai-tools__label {
+  background: var(--bottom-ai-dark-button);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
 .bottom-ai-tools__pill--reset {
   height: 37px;
   padding: 0 18px;
@@ -271,10 +284,18 @@
   border: 3px solid transparent;
   background:
     linear-gradient(#ffffff, #ffffff) padding-box,
-    linear-gradient(135deg, #f472b6, #a855f7, #6366f1, #3b82f6) border-box;
+    var(--bottom-ai-nora-main) border-box;
   box-shadow:
-    0 8px 22px rgba(168, 85, 247, 0.25),
+    0 8px 22px rgba(24, 119, 242, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.bottom-ai-tools__pill--ask--active .bottom-ai-tools__label {
+  background: var(--bottom-ai-nora-main);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .bottom-ai-tools__pill--ask--active .bottom-ai-tools__logo-icon {
@@ -332,7 +353,7 @@
 .bottom-ai-tools__task-ring {
   width: 22px;
   height: 22px;
-  border: 2px solid #b5d42d;
+  border: 2px solid #1877F2;
   border-radius: 50%;
   border-top-color: transparent;
   flex-shrink: 0;
@@ -345,7 +366,7 @@
   position: relative;
   overflow: hidden;
   justify-content: flex-start;
-  background: linear-gradient(90deg, #f5fbeb 0%, #e8f4d4 55%, #edf9df 100%);
+  background: var(--bottom-ai-blue-tint);
   border-radius: 0;
   transition: transform 0.16s ease;
 }
@@ -353,7 +374,7 @@
 .bottom-ai-tools__analyzing-fill {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #d4e4a8 0%, #e2f0c0 100%);
+  background: linear-gradient(90deg, rgba(24, 119, 242, 0.18) 0%, rgba(109, 163, 255, 0.22) 100%);
   transform: translateX(-100%);
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;

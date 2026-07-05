@@ -20,6 +20,7 @@ import Settings from '../pages/settings/Settings'
 import Integrations from '../pages/settings/Integrations'
 import Team from '../pages/settings/Team'
 import Terms from '../pages/settings/Terms'
+import AgentPermission from '../pages/settings/AgentPermission'
 import Notifications from '../pages/notifications/Notifications'
 import Assets from '../pages/assets/Assets'
 import ActivityLog from '../pages/activityLog/activityLog'
@@ -263,6 +264,11 @@ export default function App() {
       return
     }
 
+    if (id === 'settings-agent-permission') {
+      navigateTo('settings-agent-permission')
+      return
+    }
+
     if (id === 'settings-terms') {
       setTermsInitialSection('terms-conditions')
       navigateTo('settings-terms')
@@ -387,6 +393,10 @@ export default function App() {
 
   if (view === 'settings-team') {
     return <Team onNavigate={handleNavigation} />
+  }
+
+  if (view === 'settings-agent-permission') {
+    return <AgentPermission onNavigate={handleNavigation} />
   }
 
   if (view === 'settings-terms') {
